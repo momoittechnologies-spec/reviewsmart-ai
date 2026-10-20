@@ -6,8 +6,8 @@ import type { Metadata } from "next";
 import { MessageCircle, Sparkles, Clock } from "lucide-react";
 import { getAppUrl } from "@/lib/utils";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+// Cache dynamic business review portal with 60s ISR for instant mobile tap performance
+export const revalidate = 60;
 
 export async function generateMetadata({
   params,

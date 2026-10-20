@@ -13,6 +13,10 @@
 # production
 /build
 
+# release packages
+*.zip
+logs/
+
 # misc
 .DS_Store
 *.pem
@@ -47,5 +51,3 @@ next-env.d.ts
 /desktop/out/
 /desktop/node_modules/
 /desktop/prisma/generated-client/
-
-
