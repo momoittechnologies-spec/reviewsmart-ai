@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://reviewsmart.online"),
+  metadataBase: new URL("https://www.reviewsmart.online"),
   title: "ReviewSmart AI - Smart Google Review Cards & AI Reputation Platform 🇮🇳",
   description:
     "Empower local Indian businesses to get 100+ 5-star Google reviews in Telugu, Hindi, English, Tamil, and Kannada with luxury NFC acrylic standees, smart QR cards, and private negative review shield.",
@@ -21,18 +21,18 @@ export const metadata: Metadata = {
     "Local business SEO India",
     "Review management tool",
   ],
-  authors: [{ name: "ReviewSmart AI Team", url: "https://reviewsmart.online" }],
+  authors: [{ name: "ReviewSmart AI Team", url: "https://www.reviewsmart.online" }],
   creator: "ReviewSmart AI",
   publisher: "ReviewSmart AI",
   category: "Business Application",
   alternates: {
-    canonical: "https://reviewsmart.online",
+    canonical: "https://www.reviewsmart.online",
   },
   openGraph: {
     title: "ReviewSmart AI - Smart Google Review Cards & AI Reputation Platform 🇮🇳",
     description:
       "Get 100+ 5-Star Google Reviews in Telugu, Hindi & English with Luxury NFC Counter Standees & AI Cards. Lifetime Pass at just ₹2,999.",
-    url: "https://reviewsmart.online",
+    url: "https://www.reviewsmart.online",
     siteName: "ReviewSmart AI",
     locale: "en_IN",
     type: "website",
@@ -72,7 +72,7 @@ const jsonLdSchema = {
   "name": "ReviewSmart AI",
   "operatingSystem": "All",
   "applicationCategory": "BusinessApplication",
-  "url": "https://reviewsmart.online",
+  "url": "https://www.reviewsmart.online",
   "offers": {
     "@type": "Offer",
     "price": "2999",
