@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error("Lead capture error:", error);
     return NextResponse.json(
-      { error: "Failed to record lead. Please contact support." },
+      { error: "Failed to record lead. Please contact support.", details: error?.message || String(error) },
       { status: 500 }
     );
   }
