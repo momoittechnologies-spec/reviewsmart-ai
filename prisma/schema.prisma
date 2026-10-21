@@ -196,3 +196,21 @@ model GeneratedReviewMemory {
   @@index([createdAt])
 }
 
+
+// 🌟 ONLINE LEAD CAPTURE (Hero Customizer, Growth Calculator & WhatsApp Funnel) 🌟
+model LeadCapture {
+  id           String   @id @default(cuid())
+  businessName String
+  city         String?
+  category     String?
+  phone        String
+  source       String   @default("HERO_CUSTOMIZER") // "HERO_CUSTOMIZER" | "GAP_CALCULATOR" | "WHATSAPP_DOCK"
+  notes        String?
+  status       String   @default("NEW")            // "NEW" | "CONTACTED" | "CONVERTED" | "LOST"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([phone])
+  @@index([status])
+  @@index([createdAt])
+}
