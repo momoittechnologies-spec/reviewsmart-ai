@@ -1458,11 +1458,24 @@ export default function ReviewExperience({
         Open Google
       </a>
 
-      {/* ─── FOOTER BRANDING (Standalone Mode Only) ───────────────────────── */}
+      {/* ─── VIRAL INBOUND LEAD CAPTURE BADGE (Standalone Mode Only) ─────── */}
       {!embedded && (
-        <div className="mt-8 text-center text-xs text-slate-500 flex items-center justify-center gap-1 relative z-10">
-          Powered by <span className="font-bold text-slate-300">ReviewSmart AI</span>
-          <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
+        <div className="mt-8 text-center relative z-10 space-y-2">
+          <a
+            href="https://www.reviewsmart.online?ref=public_card"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/90 hover:bg-slate-800 border border-amber-400/40 hover:border-amber-400/70 text-xs font-semibold text-slate-300 hover:text-white transition shadow-lg shadow-black/30 group active:scale-95"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-12 transition" />
+            <span>Want this Smart Review Standee for your shop?</span>
+            <span className="text-amber-400 font-bold underline underline-offset-2">
+              ReviewSmart AI &rarr;
+            </span>
+          </a>
+          <p className="text-[10px] text-slate-500">
+            Powered by ReviewSmart AI &bull; Smart NFC Google Review Cards 🇮🇳
+          </p>
         </div>
       )}
 

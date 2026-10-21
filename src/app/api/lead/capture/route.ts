@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -67,5 +68,51 @@ export async function POST(req: NextRequest) {
       { error: "Failed to record lead. Please contact support.", details: error?.message || String(error) },
       { status: 500 }
     );
+  }
+}
+
+export async function GET() {
+  try {
+    const user = await getSessionUser();
+    if (!user || (user.role !== "SUPER_ADMIN" && user.role !== "MARKETING_AGENT")) {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
+    const leads = await prisma.leadCapture.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 200,
+    });
+
+    return NextResponse.json({ success: true, leads });
+  } catch (err: any) {
+    console.error("Lead fetch error:", err);
+    return NextResponse.json({ error: err.message || "Failed to fetch leads" }, { status: 500 });
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  try {
+    const user = await getSessionUser();
+    if (!user || (user.role !== "SUPER_ADMIN" && user.role !== "MARKETING_AGENT")) {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
+    const { id, status, notes } = await req.json();
+    if (!id) {
+      return NextResponse.json({ error: "Missing lead ID" }, { status: 400 });
+    }
+
+    const updated = await prisma.leadCapture.update({
+      where: { id },
+      data: {
+        ...(status ? { status } : {}),
+        ...(notes !== undefined ? { notes } : {}),
+      },
+    });
+
+    return NextResponse.json({ success: true, lead: updated });
+  } catch (err: any) {
+    console.error("Lead update error:", err);
+    return NextResponse.json({ error: err.message || "Failed to update lead" }, { status: 500 });
   }
 }
