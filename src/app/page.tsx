@@ -57,7 +57,7 @@ import confetti from "canvas-confetti";
 import BrandLogo, { BrandIcon } from "@/components/brand/BrandLogo";
 import HeroCustomizer from "@/components/landing/HeroCustomizer";
 import ReviewGapCalculator from "@/components/landing/ReviewGapCalculator";
-import StickyMobileCta from "@/components/landing/StickyMobileCta";
+import MobileAppDock from "@/components/landing/MobileAppDock";
 
 // ─── 6 INDIAN LANGUAGES DEFINITION ──────────────────────────────────────────
 type LanguageKey = "ALL" | "ENGLISH" | "HINDI" | "TELUGU" | "TAMIL" | "KANNADA" | "MALAYALAM";
@@ -679,10 +679,10 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* 4-Step Illustrated Roadmap Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* 4-Step Illustrated Roadmap Grid (Swipeable on Mobile) */}
+          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
             {/* Step 1 */}
-            <div className="p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
+            <div className="w-[260px] xs:w-[280px] shrink-0 snap-center sm:w-auto p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 font-black text-sm flex items-center justify-center border border-emerald-200">
@@ -701,7 +701,7 @@ export default function HomePage() {
             </div>
 
             {/* Step 2 */}
-            <div className="p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
+            <div className="w-[260px] xs:w-[280px] shrink-0 snap-center sm:w-auto p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 font-black text-sm flex items-center justify-center border border-emerald-200">
@@ -720,7 +720,7 @@ export default function HomePage() {
             </div>
 
             {/* Step 3 */}
-            <div className="p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
+            <div className="w-[260px] xs:w-[280px] shrink-0 snap-center sm:w-auto p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 font-black text-sm flex items-center justify-center border border-emerald-200">
@@ -739,7 +739,7 @@ export default function HomePage() {
             </div>
 
             {/* Step 4 */}
-            <div className="p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
+            <div className="w-[260px] xs:w-[280px] shrink-0 snap-center sm:w-auto p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 font-black text-sm flex items-center justify-center border border-emerald-200">
@@ -1737,16 +1737,19 @@ export default function HomePage() {
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
               Trusted by Merchants Across South &amp; North India
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Click any store below to experience their live public review portal:
+            <p className="text-xs sm:text-sm text-slate-500 flex items-center justify-center gap-2">
+              <span>Click any store below to experience their live public review portal:</span>
+              <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full sm:hidden">
+                Swipe &rarr;
+              </span>
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
             {DEMO_PRESETS.map((m) => (
               <div
                 key={m.id}
-                className="p-5 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 hover:shadow-md transition flex flex-col justify-between"
+                className="w-[270px] xs:w-[290px] shrink-0 snap-center sm:w-auto p-5 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 hover:shadow-md transition flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
@@ -1959,7 +1962,7 @@ export default function HomePage() {
         </div>
       </footer>
 
-      <StickyMobileCta />
+      <MobileAppDock />
     </div>
   );
 }
