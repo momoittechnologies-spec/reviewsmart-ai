@@ -256,7 +256,7 @@ const DISPLAY_THEMES = {
 
 export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [selectedDemoIndex, setSelectedDemoIndex] = useState(0);
+  const [selectedDemoIndex, setSelectedDemoIndex] = useState(1);
   const [selectedLang, setSelectedLang] = useState<LanguageKey>("ENGLISH");
   const [demoStars, setDemoStars] = useState(5);
   const [hoveredStar, setHoveredStar] = useState(0);
@@ -542,7 +542,7 @@ export default function HomePage() {
               FAQ
             </a>
             <Link
-              href="/r/momo-it-technologies"
+              href="/r/mana-tours-travels"
               target="_blank"
               className="flex items-center gap-1 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-3 py-1 rounded-full transition hover:bg-indigo-100/80"
             >
@@ -633,7 +633,7 @@ export default function HomePage() {
             </a>
             <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
               <Link
-                href="/r/momo-it-technologies"
+                href="/r/mana-tours-travels"
                 target="_blank"
                 onClick={() => setMobileMenuOpen(false)}
                 className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition"

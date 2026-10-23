@@ -84,7 +84,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
             Pricing (₹2,999)
           </Link>
           <Link
-            href="/r/momo-it-technologies"
+            href="/r/mana-tours-travels"
             target="_blank"
             className={`flex items-center gap-1 font-semibold text-xs px-2.5 py-1 rounded-full border transition ${
               isDark
@@ -92,7 +92,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                 : "text-emerald-700 bg-emerald-50 border-emerald-200 hover:bg-emerald-100"
             }`}
           >
-            Live Demo (Momo IT)
+            Live Demo (Mana Tours)
           </Link>
         </nav>
 
@@ -196,7 +196,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
             Lifetime Pass (₹2,999)
           </Link>
           <Link
-            href="/r/momo-it-technologies"
+            href="/r/mana-tours-travels"
             target="_blank"
             onClick={() => setMobileMenuOpen(false)}
             className={`flex items-center justify-between text-sm font-semibold px-3 py-2 rounded-xl border ${
@@ -205,7 +205,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                 : "text-emerald-700 bg-emerald-50 border-emerald-200"
             }`}
           >
-            Live Demo (Momo IT)
+            Live Demo (Mana Tours)
             <ExternalLink className="w-4 h-4" />
           </Link>
           <div className={`pt-2 border-t flex flex-col gap-2 ${isDark ? "border-white/8" : "border-slate-100"}`}>

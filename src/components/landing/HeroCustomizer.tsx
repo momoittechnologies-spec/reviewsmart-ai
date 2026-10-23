@@ -100,18 +100,18 @@ const THEMES: Record<string, ThemeOption> = {
 };
 
 const POPULAR_PRESETS = [
+  { name: "MANA TOURS & TRAVELS", city: "Kadapa, AP", category: "Tours & Travels" },
+  { name: "MOMO IT Technologies", city: "Kadapa, AP", category: "Software, Cloud & AI Solutions" },
   { name: "Sri Guru Fashions", city: "Kadapa, AP", category: "Clothing & Menswear" },
-  { name: "Aroma Spices Multi-Cuisine", city: "Kadapa, AP", category: "Restaurant & Cafe" },
-  { name: "AS Refrigerations", city: "Kadapa & Bangalore", category: "AC & Appliance Repair" },
-  { name: "Apex Smile Dental", city: "Indiranagar, Bangalore", category: "Dental Clinic" },
-  { name: "Luxe Glow Salon & Spa", city: "Jubilee Hills, Hyderabad", category: "Beauty & Wellness" },
-  { name: "VR Gold Jewellers", city: "R.S. Road, Kadapa", category: "Gold & Jewellery" },
+  { name: "VR Gold Jewellers", city: "Kadapa, AP", category: "Gold & Jewellery" },
+  { name: "AS Refrigeration", city: "Kadapa, AP", category: "AC & Appliance Repair" },
+  { name: "City Grafix", city: "Kadapa, AP", category: "Digital Printing & Signage" },
 ];
 
 export default function HeroCustomizer() {
-  const [businessName, setBusinessName] = useState("Your Business Name");
-  const [city, setCity] = useState("Hyderabad / Bangalore / Kadapa");
-  const [category, setCategory] = useState("Retail & Store");
+  const [businessName, setBusinessName] = useState("MANA TOURS & TRAVELS");
+  const [city, setCity] = useState("Kadapa, Andhra Pradesh");
+  const [category, setCategory] = useState("Tours & Travels");
   const [activeThemeKey, setActiveThemeKey] = useState<string>("royal-gold");
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -231,8 +231,11 @@ export default function HeroCustomizer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           {/* LEFT COLUMN: Headings, Value proposition & Instant lead input */}
           <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
-            <h1 className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight text-slate-900 leading-[1.12] sm:leading-[1.1]">
-              Collect <span className="bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-600 bg-clip-text text-transparent underline decoration-amber-400/60 decoration-wavy underline-offset-4">100+ 5-Star</span> Google Reviews Every Month.
+            <h1 className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight text-slate-900 leading-[1.18] sm:leading-[1.15]">
+              Turn Walk-In Customers Into{" "}
+              <span className="bg-gradient-to-r from-amber-500 via-amber-600 to-orange-500 bg-clip-text text-transparent block sm:inline mt-1 sm:mt-0">
+                5-Star Google Reviews.
+              </span>
             </h1>
 
             <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
@@ -282,16 +285,29 @@ export default function HeroCustomizer() {
               {/* Quick Try Presets */}
               <div className="pt-1 flex flex-wrap items-center gap-1.5 justify-start">
                 <span className="text-[10px] text-slate-500 font-bold">Quick Try:</span>
-                {POPULAR_PRESETS.map((p) => (
-                  <button
-                    key={p.name}
-                    type="button"
-                    onClick={() => handleSelectPreset(p)}
-                    className="text-[10px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold border border-slate-200 transition active:scale-95"
-                  >
-                    {p.name.split(" ")[0]}
-                  </button>
-                ))}
+                {POPULAR_PRESETS.map((p) => {
+                  const shortLabel = p.name.startsWith("MANA")
+                    ? "MANA"
+                    : p.name.startsWith("MOMO")
+                    ? "MOMO IT"
+                    : p.name.startsWith("VR")
+                    ? "VR Gold"
+                    : p.name.startsWith("City")
+                    ? "City Grafix"
+                    : p.name.startsWith("AS")
+                    ? "AS Ref"
+                    : p.name.split(" ")[0];
+                  return (
+                    <button
+                      key={p.name}
+                      type="button"
+                      onClick={() => handleSelectPreset(p)}
+                      className="text-[10px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold border border-slate-200 transition active:scale-95"
+                    >
+                      {shortLabel}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Primary Call to Action Button */}
@@ -301,8 +317,8 @@ export default function HeroCustomizer() {
                   onClick={() => setIsModalOpen(true)}
                   className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm tracking-wide shadow-xl shadow-emerald-600/25 active:scale-95 transition flex items-center justify-center gap-2"
                 >
-                  <Gift className="w-4 h-4 text-emerald-200" />
-                  <span>Get Free 3D Design &amp; ₹500 Voucher</span>
+                  <Sparkles className="w-4 h-4 text-emerald-200" />
+                  <span>Get Free 3D Standee Design on WhatsApp</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
@@ -485,15 +501,15 @@ export default function HeroCustomizer() {
             {!submitSuccess ? (
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center mb-4 text-white shadow-lg shadow-emerald-500/25">
-                  <Gift className="w-6 h-6" />
+                  <Sparkles className="w-6 h-6" />
                 </div>
 
                 <h3 className="text-xl font-black text-slate-900 tracking-tight">
-                  Get Your Free 3D Standee Design &amp; ₹500 Launch Voucher
+                  Get Your Free 3D Standee Design on WhatsApp
                 </h3>
 
                 <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  We will send a high-resolution 3D proof for <strong>{businessName}</strong> and your ₹500 discount voucher directly to your WhatsApp.
+                  We will generate and send a high-resolution 3D proof with your shop name, logo, and custom QR code for <strong>{businessName}</strong> directly to your WhatsApp.
                 </p>
 
                 <form onSubmit={handleSubmitLead} className="mt-5 space-y-3.5">
