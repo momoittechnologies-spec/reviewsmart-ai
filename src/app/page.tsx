@@ -370,7 +370,7 @@ export default function HomePage() {
       if (slug === "momo-it-technologies") {
         setTimeout(() => {
           window.open(
-            "https://www.google.com/search?q=MOMO+IT+Technologies+Kadapa#lrd=0x3bb37317ff959877:0x3e4c56a877f06294,3",
+            "https://share.google/K9uqux6IBsMG2AeeZ",
             "_blank",
             "noopener,noreferrer"
           );

@@ -215,7 +215,9 @@ export default function ReviewExperience({
       return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Vijaya's Yummy Food Kadugodi Bengaluru")}`;
     }
     if (business.slug === "momo-it-technologies") {
-      return "https://www.google.com/search?q=MOMO+IT+Technologies+Kadapa#lrd=0x3bb37317ff959877:0x3e4c56a877f06294,3";
+      return (business.googleReviewUrl && !business.googleReviewUrl.includes("#lrd=0x3bb37317ff959877"))
+        ? business.googleReviewUrl
+        : "https://share.google/K9uqux6IBsMG2AeeZ";
     }
 
     // 1. Official g.page/r/.../review shortlink opens the write-review dialog directly
