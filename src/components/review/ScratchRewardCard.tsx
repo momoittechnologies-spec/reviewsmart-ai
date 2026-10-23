@@ -181,8 +181,10 @@ export default function ScratchRewardCard({
   const waUrl = getWaClaimUrl();
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-      <div className="bg-slate-900 border-2 border-amber-400 rounded-3xl p-5 sm:p-6 max-w-sm w-full shadow-2xl relative text-center overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn">
+      <div className="bg-slate-900 border-t-2 sm:border-2 border-amber-400 rounded-t-[32px] sm:rounded-3xl p-5 sm:p-6 max-w-sm sm:max-w-md w-full shadow-2xl relative text-center max-h-[88vh] overflow-y-auto animate-slideUp">
+        {/* Mobile Drag Indicator Handle */}
+        <div className="w-12 h-1.5 bg-slate-700 rounded-full mx-auto mb-3 sm:hidden" />
         {/* Close Button */}
         <button
           type="button"

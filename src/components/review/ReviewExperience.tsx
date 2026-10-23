@@ -739,7 +739,7 @@ export default function ReviewExperience({
       className={
         embedded
           ? "w-full mx-auto text-slate-100 flex flex-col justify-between transition-all relative"
-          : "w-full max-w-lg md:max-w-xl mx-auto min-h-screen sm:min-h-0 text-slate-100 flex flex-col justify-between px-3 sm:px-6 py-3 sm:py-8 pb-16 transition-all relative"
+          : "w-full max-w-lg md:max-w-xl mx-auto min-h-screen sm:min-h-0 text-slate-100 flex flex-col justify-between px-3 sm:px-6 py-3 sm:py-8 pb-12 sm:pb-16 transition-all relative overflow-x-hidden"
       }
     >
       {/* Ambient Top Glow */}
@@ -750,11 +750,11 @@ export default function ReviewExperience({
         />
       )}
 
-      <div className="space-y-3.5 sm:space-y-5 relative z-10">
+      <div className="space-y-3.5 sm:space-y-5 relative z-10 w-full max-w-full">
         {/* ─── STORE PROFILE CARD (Standalone Mode Only) ─────────────────────── */}
         {!embedded && (
           <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-4 sm:p-6 border border-slate-800 shadow-xl text-center">
-            <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 mb-3">
+            <div className="relative mx-auto w-16 h-16 sm:w-20 sm:h-20 mb-2.5 sm:mb-3">
               <div
                 className="w-full h-full rounded-2xl bg-white border-2 flex items-center justify-center p-2 overflow-hidden shadow-lg"
                 style={{ borderColor: business.primaryColor || "#4f46e5" }}
@@ -779,7 +779,7 @@ export default function ReviewExperience({
               </div>
             </div>
 
-            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+            <h1 className="text-lg sm:text-2xl font-black text-white tracking-tight">
               {business.name}
             </h1>
 
@@ -916,7 +916,7 @@ export default function ReviewExperience({
             Tap the stars to rate your experience
           </p>
 
-          <div className="flex items-center justify-center gap-1.5 sm:gap-3 py-1">
+          <div className="flex items-center justify-center gap-1 xs:gap-1.5 sm:gap-3 py-1">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
@@ -928,7 +928,7 @@ export default function ReviewExperience({
                 aria-label={`Rate ${star} stars`}
               >
                 <Star
-                  className={`w-9 h-9 sm:w-11 sm:h-11 transition-all ${
+                  className={`w-8 h-8 xs:w-9 xs:h-9 sm:w-11 sm:h-11 transition-all ${
                     (hoverRating || rating) >= star
                       ? "text-amber-400 fill-amber-400 drop-shadow-[0_0_14px_rgba(251,191,36,0.7)] scale-105"
                       : "text-slate-700 hover:text-slate-500"
@@ -961,7 +961,7 @@ export default function ReviewExperience({
 
         {/* ─── 1-3 STARS: TRANSPARENT RESOLUTION (100% GOOGLE POLICY COMPLIANT) ─ */}
         {isNeedsImprovement && (
-          <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-5 sm:p-6 border border-amber-500/30 shadow-2xl animate-fadeIn space-y-4">
+          <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-4 sm:p-6 border border-amber-500/30 shadow-2xl animate-fadeIn space-y-4">
             {feedbackSubmitted ? (
               <div className="text-center py-6 space-y-3">
                 <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-2 border border-emerald-500/40">
@@ -1256,7 +1256,7 @@ export default function ReviewExperience({
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+                <div className="grid grid-cols-3 gap-1 sm:gap-2">
                   {reviewOptions.map((opt) => {
                     const isSelected = selectedOptionId === opt.id;
                     return (
@@ -1264,13 +1264,13 @@ export default function ReviewExperience({
                         key={opt.id}
                         type="button"
                         onClick={() => handleSelectOption(opt)}
-                        className={`p-2 sm:p-2.5 rounded-xl border text-center transition-all ${
+                        className={`p-1.5 sm:p-2.5 rounded-xl border text-center transition-all ${
                           isSelected
                             ? "border-amber-400 bg-amber-400/15 text-white font-bold shadow"
                             : "border-slate-800 bg-slate-800/50 text-slate-400 hover:text-slate-200"
                         }`}
                       >
-                        <span className="text-[10px] sm:text-xs block truncate font-bold">{opt.headline || opt.tone}</span>
+                        <span className="text-[9.5px] xs:text-[10px] sm:text-xs block truncate font-bold">{opt.headline || opt.tone}</span>
                         {opt.languageMix === "TELUGU_SCRIPT" && (
                           <span className="text-[8px] text-amber-400 block font-semibold">తెలుగు</span>
                         )}
@@ -1372,10 +1372,13 @@ export default function ReviewExperience({
         </div>
       )}
 
-      {/* ─── CELEBRATION MODAL ────────────────────────────────────────────── */}
+      {/* ─── CELEBRATION MODAL (NATIVE APP-LIKE BOTTOM SHEET ON MOBILE) ────── */}
       {showCopyModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-fadeIn">
-          <div className="bg-slate-900 border-2 border-amber-400/70 rounded-3xl p-4 sm:p-6 max-w-sm w-full shadow-2xl relative text-center max-h-[92vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn">
+          <div className="bg-slate-900 border-t-2 sm:border-2 border-amber-400/70 rounded-t-[32px] sm:rounded-3xl p-5 sm:p-6 max-w-sm sm:max-w-md w-full shadow-2xl relative text-center max-h-[88vh] overflow-y-auto animate-slideUp">
+            {/* Mobile Drag Indicator Handle */}
+            <div className="w-12 h-1.5 bg-slate-700 rounded-full mx-auto mb-3 sm:hidden" />
+
             {/* Close Button */}
             <button
               type="button"
@@ -1386,11 +1389,11 @@ export default function ReviewExperience({
             </button>
 
             {/* Celebration Icon */}
-            <div className="w-16 h-16 rounded-full bg-amber-400/15 border-2 border-amber-400 text-amber-400 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-amber-400/20">
-              <Sparkles className="w-8 h-8 animate-bounce" />
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-400/15 border-2 border-amber-400 text-amber-400 flex items-center justify-center mx-auto mb-2.5 shadow-lg shadow-amber-400/20">
+              <Sparkles className="w-7 h-7 sm:w-8 sm:h-8 animate-bounce" />
             </div>
 
-            <h3 className="text-xl font-black text-white tracking-tight">
+            <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
               Review Copied! 🎉
             </h3>
             <p className="text-xs text-emerald-400 font-bold mt-0.5 flex items-center justify-center gap-1.5">
@@ -1561,12 +1564,12 @@ export default function ReviewExperience({
 
       {/* ─── 1-CLICK WHATSAPP INVITE MODAL ─────────────────────────────────── */}
       {showInviteModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-          <div className="relative max-w-md w-full">
+        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fadeIn">
+          <div className="relative max-w-md w-full max-h-[90vh] overflow-y-auto rounded-t-[32px] sm:rounded-3xl animate-slideUp">
             <button
               type="button"
               onClick={() => setShowInviteModal(false)}
-              className="absolute -top-3 -right-3 z-10 w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center border border-slate-700 shadow"
+              className="absolute top-3 right-3 sm:-top-3 sm:-right-3 z-10 w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center border border-slate-700 shadow"
             >
               <X className="w-4 h-4" />
             </button>

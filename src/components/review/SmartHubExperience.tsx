@@ -125,7 +125,7 @@ export default function SmartHubExperience({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto px-4 py-4 sm:py-6 flex flex-col items-center">
+    <div className="w-full max-w-md mx-auto px-3 sm:px-4 py-4 sm:py-6 flex flex-col items-center overflow-x-hidden">
       {/* ─── HUB HEADER CARD ─────────────────────────────────────────────────── */}
       <div className="w-full bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-3xl p-5 shadow-2xl relative overflow-hidden text-center flex flex-col items-center">
         {/* Ambient Top Glow */}

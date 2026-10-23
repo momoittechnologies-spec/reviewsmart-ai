@@ -188,7 +188,7 @@ export default function LoginPage() {
         </div>
 
         {/* Glass Card */}
-        <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] backdrop-blur-xl">
+        <div className="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-7 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] backdrop-blur-xl">
 
           {/* Auth Mode Pill Toggle */}
           <div className="bg-slate-100 border border-slate-200/80 p-1 rounded-2xl mb-6 flex items-center gap-1">
@@ -289,7 +289,7 @@ export default function LoginPage() {
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center justify-between gap-2 xs:gap-3">
                   {[0, 1, 2, 3].map((idx) => {
                     const digit = pin[idx] || "";
                     return (
@@ -304,7 +304,7 @@ export default function LoginPage() {
                         onChange={(e) => handlePinDigitChange(idx, e.target.value)}
                         onKeyDown={(e) => handlePinKeyDown(idx, e)}
                         onPaste={handlePinPaste}
-                        className={`w-14 h-14 text-center text-2xl font-black rounded-2xl border-2 transition-all duration-150 focus:outline-none focus:scale-105 ${
+                        className={`w-12 h-12 xs:w-14 xs:h-14 text-center text-xl xs:text-2xl font-black rounded-2xl border-2 transition-all duration-150 focus:outline-none focus:scale-105 ${
                           digit
                             ? "border-indigo-600 bg-indigo-50/80 text-indigo-950 shadow-sm ring-2 ring-indigo-100"
                             : "border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100"
