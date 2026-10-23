@@ -138,7 +138,7 @@ const DEMO_PRESETS: DemoPreset[] = [
     location: "Indiranagar, Bengaluru",
     icon: Stethoscope,
     color: "#0284c7",
-    slug: "momo-it-technologies",
+    slug: "apex-smile-dental",
     chips: ["Painless Treatment", "Experienced Doctors", "Ultra Clean Clinic", "Clear Explanation", "Fair Pricing"],
     reviews: {
       ALL: "Exceptional dental care and highly skilled doctors at Apex Smile! Completely painless root canal and cleaning. The clinic is spotless and modern. Highly satisfied!",
@@ -194,22 +194,29 @@ const DEMO_PRESETS: DemoPreset[] = [
   {
     id: "tech",
     name: "MOMO IT Technologies",
-    category: "Software & AI Solutions",
-    location: "Krishnapuram, Andhra Pradesh",
+    category: "Software, Cloud & AI Solutions",
+    location: "Krishnapuram, Kadapa, AP",
     icon: Laptop,
     color: "#4f46e5",
     slug: "momo-it-technologies",
-    chips: ["Fast Delivery", "Professional Team", "Cutting Edge AI", "Great Support", "Reliable"],
+    chips: [
+      "Web & SaaS Products",
+      "Mobile App Development",
+      "QA & Automation Testing",
+      "Business ERP Systems",
+      "Custom AI Solutions",
+      "UI/UX Design",
+    ],
     reviews: {
-      ALL: "Exceptional software development and AI engineering services. Momo IT delivered our custom app ahead of schedule with flawless quality and excellent ongoing support!",
-      ENGLISH: "Exceptional software development and AI engineering services. Momo IT delivered our custom app ahead of schedule with flawless quality and excellent ongoing support!",
-      HINDI: "शानदार सॉफ्टवेयर और AI सॉल्यूशंस! मोमो आईटी ने तय समय से पहले बहुत ही बेहतरीन क्वालिटी का एप्लिकेशन तैयार किया। कस्टमर सपोर्ट भी बहुत शानदार है।",
-      TELUGU: "సాఫ్ట్‌వేర్ డెవలప్‌మెంట్ మరియు ఏఐ సొల్యూషన్స్ అద్భుతంగా అందించారు! ఎంతో సమయపాలనతో, ఉన్నతమైన నాణ్యతతో ప్రాజెక్ట్ డెలివరీ చేశారు. గ్రేట్ టీమ్!",
-      TAMIL: "சிறந்த மென்பொருள் மற்றும் ஏஐ தொழில்நுட்ப சேவைகள்! தரமான செயலியை குறித்த நேரத்திற்கு முன்பே தயார் செய்து கொடுத்தார்கள். சிறந்த வாடிக்கையாளர் சேவை!",
-      KANNADA: "ಅತ್ಯುತ್ತಮ ಸಾಫ್ಟ್‌ವೇರ್ ಮತ್ತು ಎಐ ತಂತ್ರಜ್ಞಾನ ಸೇವೆಗಳು! ಗುಣಮಟ್ಟದ ಆಪ್ ಅನ್ನು ನಿಗದಿತ ಸಮಯಕ್ಕಿಂತ ಮೊದಲೇ ನೀಡಿದ್ದಾರೆ. ಅತ್ಯುತ್ತಮ ಬೆಂಬಲ!",
-      MALAYALAM: "മികച്ച സോഫ്റ്റ്‌വെയർ, AI സൊല്യൂഷനുകൾ! കൃത്യസമയത്ത് മികച്ച ക്വാളിറ്റിയോടെ പ്രൊജക്റ്റ് പൂർത്തിയാക്കി. കസ്റ്റമർ സപ്പോർട്ടും മികച്ചതാണ്!",
+      ALL: "Outstanding software engineering and AI solutions by MOMO IT Technologies! They built our custom web platform and mobile app with rock-solid quality, seamless UI, and timely delivery. Highly recommended!",
+      ENGLISH: "Outstanding software engineering and AI solutions by MOMO IT Technologies! They built our custom web platform and mobile app with rock-solid quality, seamless UI, and timely delivery. Highly recommended!",
+      HINDI: "मोमो आईटी टेक्नोलॉजीज की कस्टम वेब, मोबाइल ऐप और QA ऑटोमेशन सेवाएं वास्तव में बेहतरीन हैं! समय पर हाई-क्वालिटी सॉफ्टवेयर डिलीवरी और शानदार टेक्निकल सपोर्ट।",
+      TELUGU: "మోమో ఐటీ టెక్నాలజీస్ అందించిన సాఫ్ట్‌వేర్, వెబ్ & మొబైల్ యాప్ డెవలప్‌మెంట్ మరియు క్యూఏ ఆటోమేషన్ సేవలు అత్యుత్తమం! ఆధునిక టెక్నాలజీతో సూపర్ క్వాలిటీ ప్రాజెక్ట్ అందించారు. హైలీ రికమెండెడ్!",
+      TAMIL: "மோமோ ஐடி டெக்னாலஜிஸின் மென்பொருள், செயலி வடிவமைப்பு மற்றும் ஏஐ தொழில்நுட்ப சேவைகள் மிகச் சிறப்பானது! தரமான மற்றும் விரைவான சேவை.",
+      KANNADA: "ಮೊಮೊ ಐಟಿ ಟೆಕ್ನಾಲಜೀಸ್ ಅತ್ಯುತ್ತಮ ಸಾಫ್ಟ್‌ವೇರ್, ವೆಬ್ ಮತ್ತು ಮೊಬೈಲ್ ಆಪ್‌ಗಳನ್ನು ಅಭಿವೃದ್ಧಿಪಡಿಸಿದೆ! ಅತ್ಯುತ್ತಮ ಗುಣಮಟ್ಟ ಮತ್ತು ವಿಶ್ವಾಸಾರ್ಹ ಸೇವೆ.",
+      MALAYALAM: "മോമോ ഐടി ടെക്നോളജീസിന്റെ സോഫ്റ്റ്‌വെയർ, മൊബൈൽ ആപ്പ് ഡെവലപ്‌മെന്റും കസ്റ്റമർ സപ്പോർട്ടും അതിശയകരമാണ്! മികച്ച നിലവಾರമുള്ള സേവനങ്ങൾ.",
     },
-    author: "Rajesh G.",
+    author: "Rajesh K.",
   },
 ];
 
@@ -350,12 +357,29 @@ export default function HomePage() {
     "https://wa.me/918639831132?text=" +
     encodeURIComponent("Hi ReviewSmart AI team! I don't have a Google Business Profile yet. Please help me create, verify and set up my shop on Google Maps for free with the ₹2,999 Lifetime Pass.");
 
-  const handleCopyReview = (text: string) => {
+  const handleCopyReview = (text: string, slug?: string) => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(text);
       setCopiedDraft(true);
-      confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
-      setTimeout(() => setCopiedDraft(false), 2200);
+      try {
+        confetti({ particleCount: 60, spread: 65, origin: { y: 0.7 } });
+      } catch {}
+      setTimeout(() => setCopiedDraft(false), 2400);
+
+      // If user clicked Copy & Post, open the verified Google Review popup
+      if (slug === "momo-it-technologies") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJd5iV_xdzszsRMOGZeUo3C8A",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug) {
+        setTimeout(() => {
+          window.open(`/r/${slug}`, "_blank", "noopener,noreferrer");
+        }, 550);
+      }
     }
   };
 
@@ -945,18 +969,26 @@ export default function HomePage() {
                       <div className="flex items-center gap-2 pt-1">
                         <button
                           type="button"
-                          onClick={() => handleCopyReview(activeReviewText)}
+                          onClick={() => handleCopyReview(activeReviewText, activeDemo.slug)}
                           className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition active:scale-95"
                         >
                           {copiedDraft ? (
                             <>
                               <Check className="w-4 h-4 text-emerald-300" />
-                              <span>Copied to Clipboard!</span>
+                              <span>
+                                {activeDemo.slug === "momo-it-technologies"
+                                  ? "Copied! Opening Google Review..."
+                                  : "Copied to Clipboard!"}
+                              </span>
                             </>
                           ) : (
                             <>
                               <Sparkles className="w-4 h-4 text-amber-300" />
-                              <span>Copy &amp; Post Review</span>
+                              <span>
+                                {activeDemo.slug === "momo-it-technologies"
+                                  ? "Copy & Post on Google Maps"
+                                  : "Copy & Post Review"}
+                              </span>
                             </>
                           )}
                         </button>
@@ -965,10 +997,11 @@ export default function HomePage() {
                           href={`/r/${activeDemo.slug}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-white/10 transition flex items-center justify-center"
-                          title="View live demo page"
+                          className="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-white/10 transition flex items-center justify-center gap-1.5 text-xs font-semibold"
+                          title="Open full interactive customer review portal"
                         >
-                          <ExternalLink className="w-4 h-4" />
+                          <span>Live Portal</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                       </div>
                     </div>

@@ -264,7 +264,7 @@ export default function ReviewExperience({
   // Universal HTTPS Google Maps Profile Link (opens Maps app naturally via Android/iOS App Links without Play Store fallback)
   const getMapsAppUrl = () => {
     if (business.slug === "momo-it-technologies") {
-      return "https://share.google/INwCMhfHs91L6B0m6";
+      return "https://www.google.com/maps?cid=13838215073033216304";
     }
     const placeId = getResolvedPlaceId();
     if (placeId) {
