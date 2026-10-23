@@ -50,6 +50,8 @@ import {
   Volume2,
   VolumeX,
   Mic,
+  Menu,
+  X,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import BrandLogo, { BrandIcon } from "@/components/brand/BrandLogo";
@@ -253,6 +255,7 @@ const DISPLAY_THEMES = {
 };
 
 export default function HomePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedDemoIndex, setSelectedDemoIndex] = useState(0);
   const [selectedLang, setSelectedLang] = useState<LanguageKey>("ENGLISH");
   const [demoStars, setDemoStars] = useState(5);
@@ -539,7 +542,7 @@ export default function HomePage() {
               FAQ
             </a>
             <Link
-              href="/r/sri-guru-fashions-393a"
+              href="/r/momo-it-technologies"
               target="_blank"
               className="flex items-center gap-1 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-3 py-1 rounded-full transition hover:bg-indigo-100/80"
             >
@@ -551,21 +554,106 @@ export default function HomePage() {
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/login"
-              className="text-xs font-bold text-slate-700 hover:text-slate-900 px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 transition flex items-center gap-1.5"
+              className="text-xs font-bold text-slate-700 hover:text-slate-900 px-3 py-2 sm:px-3.5 sm:py-2 rounded-xl border border-slate-200 hover:bg-slate-50 transition flex items-center gap-1.5"
             >
               <Lock className="w-3.5 h-3.5 text-indigo-600" />
-              <span>Login</span>
+              <span className="hidden xs:inline">Login</span>
             </Link>
 
             <a
               href="#pricing"
-              className="px-4 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-700 hover:to-purple-700 text-white text-xs font-bold transition shadow-md shadow-indigo-600/20 active:scale-95 flex items-center gap-1.5"
+              className="px-3.5 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-700 hover:to-purple-700 text-white text-xs font-bold transition shadow-md shadow-indigo-600/20 active:scale-95 flex items-center gap-1.5 shrink-0"
             >
               <Zap className="w-3.5 h-3.5 text-amber-300" />
-              <span>₹2,999 Lifetime</span>
+              <span>₹2,999<span className="hidden sm:inline"> Lifetime</span></span>
             </a>
+
+            {/* Mobile / Tablet Hamburger Toggle */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              className="lg:hidden p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition active:scale-95"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5 text-slate-900" /> : <Menu className="w-5 h-5 text-slate-900" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-2xl px-4 py-4 space-y-1.5 shadow-2xl animate-fadeIn">
+            <a
+              href="#demo"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
+            >
+              <Globe className="w-4 h-4 text-indigo-600" />
+              <span>6-Language Simulator</span>
+            </a>
+            <a
+              href="#gmb-setup"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-emerald-700 hover:bg-emerald-50 transition border border-emerald-100 bg-emerald-50/40"
+            >
+              <Sparkles className="w-4 h-4 text-emerald-600" />
+              <span>Free Google Business Profile Setup</span>
+            </a>
+            <a
+              href="#ranking-boost"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
+            >
+              <TrendingUp className="w-4 h-4 text-blue-600" />
+              <span>Google Maps Ranking Booster</span>
+            </a>
+            <a
+              href="#hardware"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
+            >
+              <Printer className="w-4 h-4 text-amber-600" />
+              <span>3D Standee Studio &amp; PDF Exports</span>
+            </a>
+            <a
+              href="#pricing"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
+            >
+              <Zap className="w-4 h-4 text-amber-500" />
+              <span>₹2,999 Lifetime Pricing</span>
+            </a>
+            <a
+              href="#faq"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
+            >
+              <HelpCircle className="w-4 h-4 text-purple-600" />
+              <span>Frequently Asked Questions</span>
+            </a>
+            <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
+              <Link
+                href="/r/momo-it-technologies"
+                target="_blank"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition"
+              >
+                <Play className="w-3.5 h-3.5 text-indigo-600" />
+                <span>Test Live Customer Review Portal</span>
+              </Link>
+              <a
+                href={whatsappInquiryUrl}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold transition"
+              >
+                <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                <span>WhatsApp Instant Demo &amp; Support</span>
+              </a>
+            </div>
+          </div>
+        )}
       </nav>
 
       <HeroCustomizer />
@@ -821,29 +909,31 @@ export default function HomePage() {
           </div>
 
           {/* 1. Language Tabs Bar */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
-            <span className="text-xs font-bold text-slate-500 mr-2 flex items-center gap-1">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 mb-6">
+            <span className="text-xs font-bold text-slate-500 flex items-center gap-1 shrink-0">
               <Globe className="w-3.5 h-3.5 text-indigo-600" /> Select Language:
             </span>
-            {LANGUAGES.map((lang) => {
-              const isSelected = selectedLang === lang.key;
-              return (
-                <button
-                  key={lang.key}
-                  type="button"
-                  onClick={() => setSelectedLang(lang.key)}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
-                    isSelected
-                      ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-600/25 border border-indigo-500 scale-105"
-                      : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
-                  }`}
-                >
-                  <span>{lang.flag}</span>
-                  <span>{lang.native}</span>
-                  <span className="text-[10px] opacity-75 hidden sm:inline">({lang.label})</span>
-                </button>
-              );
-            })}
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+              {LANGUAGES.map((lang) => {
+                const isSelected = selectedLang === lang.key;
+                return (
+                  <button
+                    key={lang.key}
+                    type="button"
+                    onClick={() => setSelectedLang(lang.key)}
+                    className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold flex items-center gap-1 sm:gap-1.5 transition-all ${
+                      isSelected
+                        ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-600/25 border border-indigo-500 scale-105"
+                        : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
+                    }`}
+                  >
+                    <span>{lang.flag}</span>
+                    <span>{lang.native}</span>
+                    <span className="text-[10px] opacity-75 hidden sm:inline">({lang.label})</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* 2. Industry Selector Tabs */}
@@ -1210,9 +1300,8 @@ export default function HomePage() {
                       style={{ perspective: "1200px" }}
                     >
                       <div
-                        className={`relative w-64 sm:w-72 rounded-3xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-2 ${currentTheme.border} text-center transition-all duration-500 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)]`}
+                        className={`relative w-64 sm:w-72 rounded-3xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-2 ${currentTheme.border} text-center transition-all duration-500 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] [transform:none] sm:[transform:rotateY(-7deg)_rotateX(4deg)]`}
                         style={{
-                          transform: "rotateY(-7deg) rotateX(4deg)",
                           transformStyle: "preserve-3d",
                         }}
                       >
@@ -1266,8 +1355,7 @@ export default function HomePage() {
                       </div>
 
                       <div
-                        className="w-56 sm:w-64 h-5 rounded-b-2xl bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 backdrop-blur-md border border-slate-300 shadow-md -mt-2.5"
-                        style={{ transform: "rotateY(-7deg) rotateX(28deg)" }}
+                        className="w-56 sm:w-64 h-5 rounded-b-2xl bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 backdrop-blur-md border border-slate-300 shadow-md -mt-2.5 [transform:none] sm:[transform:rotateY(-7deg)_rotateX(28deg)]"
                       />
                     </div>
                   );
@@ -1280,10 +1368,9 @@ export default function HomePage() {
                       style={{ perspective: "1200px" }}
                     >
                       <div
-                        className={`relative w-56 sm:w-60 rounded-2xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-2 ${currentTheme.border} text-center transition-all duration-500 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)]`}
+                        className={`relative w-56 sm:w-60 rounded-2xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-2 ${currentTheme.border} text-center transition-all duration-500 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] [transform:none] sm:[transform:rotateY(7deg)_rotateX(4deg)]`}
                         style={{
                           aspectRatio: "54 / 85.6",
-                          transform: "rotateY(7deg) rotateX(4deg)",
                           transformStyle: "preserve-3d",
                         }}
                       >
@@ -1330,10 +1417,9 @@ export default function HomePage() {
                     style={{ perspective: "1200px" }}
                   >
                     <div
-                      className={`relative w-64 sm:w-72 rounded-2xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-4 border-slate-700/80 text-center transition-all duration-500 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.4)] ring-1 ${currentTheme.border}`}
+                      className={`relative w-64 sm:w-72 rounded-2xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-4 border-slate-700/80 text-center transition-all duration-500 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.4)] ring-1 ${currentTheme.border} [transform:none] sm:[transform:rotateY(-4deg)_rotateX(2deg)]`}
                       style={{
                         aspectRatio: "210 / 297",
-                        transform: "rotateY(-4deg) rotateX(2deg)",
                         transformStyle: "preserve-3d",
                       }}
                     >
@@ -1559,14 +1645,17 @@ export default function HomePage() {
 
           {/* Honest Comparison Table */}
           <div className="mt-14 overflow-hidden rounded-3xl bg-white border border-slate-200/90 shadow-sm">
-            <div className="p-5 sm:p-6 bg-slate-50 border-b border-slate-200">
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 text-center">
+            <div className="p-4 sm:p-6 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2">
+              <h3 className="text-sm sm:text-lg font-bold text-slate-900 text-center sm:text-left">
                 Honest Comparison: ReviewSmart AI vs Monthly Subscription Tools
               </h3>
+              <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-full lg:hidden shrink-0">
+                Swipe horizontally &rarr;
+              </span>
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs sm:text-sm">
+              <table className="w-full min-w-[500px] text-left text-xs sm:text-sm">
                 <thead>
                   <tr className="border-b border-slate-200 text-slate-600 bg-slate-50/80">
                     <th className="py-3.5 px-4 font-bold">Feature / Cost</th>
@@ -1848,7 +1937,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── FOOTER ───────────────────────────────────────────────────────── */}
-      <footer className="border-t border-slate-200 py-8 px-4 sm:px-6 bg-slate-100 text-xs text-slate-600">
+      <footer className="border-t border-slate-200 pt-8 pb-28 sm:pb-8 px-4 sm:px-6 bg-slate-100 text-xs text-slate-600">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <BrandLogo href="/" size="sm" theme="light" />
           <p className="text-center text-slate-500">

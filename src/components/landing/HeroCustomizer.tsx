@@ -370,7 +370,7 @@ export default function HeroCustomizer() {
             >
               {/* Luxury Acrylic Standee Card */}
               <div
-                className={`relative w-[280px] sm:w-80 rounded-[28px] bg-gradient-to-b ${theme.bgGradient} p-5 sm:p-6 border-2 ${theme.borderClass} text-center transition-all duration-500 [transform:none] sm:[transform:rotateY(-6deg)_rotateX(4deg)]`}
+                className={`relative w-[270px] xs:w-[280px] sm:w-80 max-w-[calc(100vw-36px)] rounded-[28px] bg-gradient-to-b ${theme.bgGradient} p-5 sm:p-6 border-2 ${theme.borderClass} text-center transition-all duration-500 [transform:none] sm:[transform:rotateY(-6deg)_rotateX(4deg)]`}
                 style={{
                   transformStyle: "preserve-3d",
                 }}
@@ -465,8 +465,8 @@ export default function HeroCustomizer() {
 
       {/* LEAD CAPTURE MODAL (High-Converting WhatsApp Mockup Funnel) */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-md rounded-3xl bg-white border border-slate-200 p-6 sm:p-7 shadow-2xl text-left">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-md rounded-3xl bg-white border border-slate-200 p-5 sm:p-7 shadow-2xl text-left max-h-[92vh] overflow-y-auto">
             {/* Close Button */}
             <button
               type="button"
