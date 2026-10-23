@@ -38,7 +38,6 @@ import {
   translateSpokenRegionalToEnglish,
   getIndustryPhotoObservation,
 } from "@/lib/vision-voice-translator";
-import VoiceReviewInput, { SupportedSpeechLang } from "./VoiceReviewInput";
 import PhotoVisionInput from "./PhotoVisionInput";
 import ScratchRewardCard from "./ScratchRewardCard";
 import WhatsAppInviteGenerator from "./WhatsAppInviteGenerator";
@@ -111,17 +110,12 @@ export default function ReviewExperience({
   const [isEditingDraft, setIsEditingDraft] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Futuristic Feature 1: AI Photo-to-Review Vision Engine state
+  // AI Photo-to-Review Vision Engine state
   const [snappedPhotoBase64, setSnappedPhotoBase64] = useState<string | null>(null);
   const [snappedPhotoMimeType, setSnappedPhotoMimeType] = useState<string>("image/jpeg");
   const [snappedPhotoPreview, setSnappedPhotoPreview] = useState<string | null>(null);
 
-  // Futuristic Feature 6: Regional Voice-to-Polished-English/Native Translator state
-  const [spokenDialectCode, setSpokenDialectCode] = useState<SupportedSpeechLang | undefined>(undefined);
-  const [isVoiceTranslated, setIsVoiceTranslated] = useState<boolean>(false);
-
-  // Express 1-Tap & Automation state (default expanded for zero-friction mobile access)
-  const [isStudioExpanded, setIsStudioExpanded] = useState(true);
+  // Automation & Modal state
   const [hasOpenedGoogle, setHasOpenedGoogle] = useState(false);
   const [showRewardCard, setShowRewardCard] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -191,6 +185,8 @@ export default function ReviewExperience({
       placeId = "ChIJz-6hOcbQVaYRELARxZjPbrE";
     } else if (business.slug === "karthik-tattoo-studio" && !placeId) {
       placeId = "ChIJk9Nc0StzszsRzi_A87Em9Kw";
+    } else if (business.slug === "momo-it-technologies" && !placeId) {
+      placeId = "ChIJd5iV_xdzszsRlGLwd6hWTD4";
     }
 
     if (!placeId && rawUrl) {
@@ -219,7 +215,7 @@ export default function ReviewExperience({
       return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Vijaya's Yummy Food Kadugodi Bengaluru")}`;
     }
     if (business.slug === "momo-it-technologies") {
-      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("MOMO IT Technologies Krishnapuram Kadapa")}`;
+      return "https://search.google.com/local/writereview?placeid=ChIJd5iV_xdzszsRlGLwd6hWTD4";
     }
 
     // 1. Official g.page/r/.../review shortlink opens the write-review dialog directly
@@ -265,7 +261,7 @@ export default function ReviewExperience({
   // Universal HTTPS Google Maps Profile Link (opens Maps app naturally via Android/iOS App Links without Play Store fallback)
   const getMapsAppUrl = () => {
     if (business.slug === "momo-it-technologies") {
-      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("MOMO IT Technologies Krishnapuram Kadapa")}`;
+      return "https://share.google/K9uqux6IBsMG2AeeZ";
     }
     const placeId = getResolvedPlaceId();
     if (placeId) {
@@ -291,19 +287,17 @@ export default function ReviewExperience({
     }).catch(() => {});
   }, [business.id, business.slug]);
 
-  // Dynamic client-side synthesis: zero hardcoded templates, non-repeating, supports Photo Vision & Voice Translation
+  // Dynamic client-side synthesis: zero hardcoded templates, non-repeating, supports Photo Vision
   const buildInstantDrafts = (
     tags: string[] = selectedTags,
     note: string = customNote,
     lang: LanguageMode = languageMode,
-    hasPhoto: boolean = Boolean(snappedPhotoBase64),
-    spokenLang: SupportedSpeechLang | undefined = spokenDialectCode,
-    voiceFlag: boolean = isVoiceTranslated
+    hasPhoto: boolean = Boolean(snappedPhotoBase64)
   ): ReviewOption[] => {
     const staffMention = staff ? ` Special thanks to ${staff} for the attentive service!` : "";
-    const detectedDialect = detectScriptLanguage(note || "", spokenLang);
+    const detectedDialect = detectScriptLanguage(note || "");
     const englishSafeNote = note
-      ? translateSpokenRegionalToEnglish(note, spokenLang)
+      ? translateSpokenRegionalToEnglish(note)
       : "";
     const combinedEnglishNote = englishSafeNote
       ? `${englishSafeNote} ${staffMention}`.trim()
@@ -322,8 +316,8 @@ export default function ReviewExperience({
       languageMode: lang,
     });
 
-    // If customer spoke in a regional dialect, provide both Polished English (Option 1) and Native Script (Option 2)
-    if ((voiceFlag || (note && hasNonLatinScript(note))) && detectedDialect) {
+    // If customer typed in a regional script, provide both Polished English and Native Script
+    if (note && hasNonLatinScript(note) && detectedDialect) {
       const nativeNote = hasNonLatinScript(note) ? note : undefined;
       const nativeSynthesized = synthesizeUniqueReviews({
         businessName: business.name,
@@ -431,41 +425,6 @@ export default function ReviewExperience({
     };
   }, [hasOpenedGoogle]);
 
-  const handleExpressPostGoogle = async () => {
-    await handleOpenCopyModal(editableDraftText);
-  };
-
-  const handleVoiceTranscript = (spokenText: string, spokenLang?: SupportedSpeechLang) => {
-    const combined = customNote ? `${customNote} ${spokenText}`.trim() : spokenText.trim();
-    setCustomNote(combined);
-    setSpokenDialectCode(spokenLang);
-    setIsVoiceTranslated(true);
-
-    const updated = buildInstantDrafts(
-      selectedTags,
-      combined,
-      languageMode,
-      Boolean(snappedPhotoBase64),
-      spokenLang,
-      true
-    );
-    setReviewOptions(updated);
-    setSelectedOptionId(1);
-    if (updated[0]) {
-      setEditableDraftText(updated[0].text);
-      copyToClipboard(updated[0].text);
-    }
-    triggerAiGeneration(
-      selectedTags,
-      combined,
-      languageMode,
-      snappedPhotoBase64,
-      snappedPhotoMimeType,
-      spokenLang,
-      true
-    );
-  };
-
   const handlePhotoCaptured = (base64Data: string, mimeType: string, previewUrl: string) => {
     setSnappedPhotoBase64(base64Data);
     setSnappedPhotoMimeType(mimeType);
@@ -475,9 +434,7 @@ export default function ReviewExperience({
       selectedTags,
       customNote,
       languageMode,
-      true,
-      spokenDialectCode,
-      isVoiceTranslated
+      true
     );
     setReviewOptions(updated);
     setSelectedOptionId(1);
@@ -490,9 +447,7 @@ export default function ReviewExperience({
       customNote,
       languageMode,
       base64Data,
-      mimeType,
-      spokenDialectCode,
-      isVoiceTranslated
+      mimeType
     );
   };
 
@@ -503,9 +458,7 @@ export default function ReviewExperience({
       selectedTags,
       customNote,
       languageMode,
-      false,
-      spokenDialectCode,
-      isVoiceTranslated
+      false
     );
     setReviewOptions(updated);
     setSelectedOptionId(1);
@@ -586,15 +539,13 @@ export default function ReviewExperience({
     triggerAiGeneration(selectedTags, customNote, newMode);
   };
 
-  // AI generation from server with memory check, Gemini Vision, and Regional Voice Translation
+  // AI generation from server with memory check and Gemini Vision
   const triggerAiGeneration = async (
     tags: string[] = selectedTags,
     note: string = customNote,
     lang: LanguageMode = languageMode,
     photoBase64: string | null = snappedPhotoBase64,
-    photoMime: string = snappedPhotoMimeType,
-    spokenLang: SupportedSpeechLang | undefined = spokenDialectCode,
-    voiceFlag: boolean = isVoiceTranslated
+    photoMime: string = snappedPhotoMimeType
   ) => {
     setIsGenerating(true);
     const controller = new AbortController();
@@ -620,8 +571,6 @@ export default function ReviewExperience({
           languageMode: lang,
           imageBase64: photoBase64 || undefined,
           imageMimeType: photoBase64 ? photoMime : undefined,
-          spokenLanguage: spokenLang,
-          isVoiceInput: voiceFlag,
         }),
       });
 
@@ -1006,57 +955,6 @@ export default function ReviewExperience({
               )}
             </div>
           )}
-
-          {/* ─── EXPRESS 1-TAP HERO ACTION CARD ─────────────────────────────── */}
-          {rating >= 4 && (
-            <div className="mt-4 pt-3 border-t border-slate-800 text-left space-y-3 animate-fadeIn">
-              <div className="bg-gradient-to-br from-amber-500/20 via-slate-950 to-indigo-950/60 border-2 border-amber-400/80 rounded-2xl p-4 space-y-3 shadow-xl">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-                    <Zap className="w-4 h-4 fill-amber-400 text-amber-400 animate-pulse" />
-                    Express 1-Tap Google Post
-                  </span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                    ⚡ Instant (&lt;3s)
-                  </span>
-                </div>
-
-                {/* Live Snippet Box */}
-                <div className="bg-slate-900/90 border border-amber-400/30 rounded-xl p-3 text-xs text-slate-200 leading-relaxed italic select-none">
-                  &ldquo;{editableDraftText || reviewOptions[0]?.text || `Great experience at ${business.name}! Highly recommended.`}&rdquo;
-                </div>
-
-                {/* Primary 1-Tap Post Button */}
-                <button
-                  type="button"
-                  onClick={handleExpressPostGoogle}
-                  className="w-full py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 active:scale-98 text-slate-950 font-black text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-xl shadow-amber-950/60 transition cursor-pointer"
-                >
-                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.28-2.1 3.665-5.2 3.665-9.12z" />
-                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.28 21.43 7.37 24 12 24z" />
-                    <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.13z" />
-                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.28 2.57 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
-                  </svg>
-                  <span>⚡ 1-Tap Copy &amp; Post on Google</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </button>
-
-                <div className="flex items-center justify-between text-[11px] pt-1">
-                  <span className="text-slate-400">
-                    ✅ Copies text &amp; opens Google Maps
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setIsStudioExpanded((prev) => !prev)}
-                    className="text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 underline underline-offset-2"
-                  >
-                    <span>{isStudioExpanded ? "Hide Studio ▲" : "Customize / Telugu / Voice ▼"}</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* ─── 1-3 STARS: TRANSPARENT RESOLUTION (100% GOOGLE POLICY COMPLIANT) ─ */}
@@ -1182,9 +1080,7 @@ export default function ReviewExperience({
         {isPositive && (
           <div
             ref={reviewSectionRef}
-            className={`bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-5 sm:p-6 border border-amber-400/30 shadow-2xl transition-all duration-300 space-y-4 ${
-              isStudioExpanded ? "block animate-fadeIn" : "hidden sm:block"
-            }`}
+            className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-5 sm:p-6 border border-amber-400/30 shadow-2xl transition-all duration-300 space-y-4 animate-fadeIn"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -1328,18 +1224,17 @@ export default function ReviewExperience({
               onPhotoRemoved={handlePhotoRemoved}
             />
 
-            {/* Futuristic Feature 6: Regional Voice-to-Polished-English/Native Translator & Custom Note */}
-            <div className="space-y-2">
-              <VoiceReviewInput
-                onTranscript={handleVoiceTranscript}
-                languageMode={languageMode}
-              />
+            {/* Custom Note or Specific Service Detail */}
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-bold text-slate-300 flex items-center justify-between">
+                <span>Add a personal note or project detail (optional):</span>
+              </label>
               <input
                 type="text"
                 value={customNote}
                 onChange={(e) => handleNoteChange(e.target.value)}
-                placeholder={industry.placeholder}
-                className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                placeholder={industry.placeholder || "e.g. Built our project on time with fantastic support"}
+                className="w-full text-xs p-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
               />
             </div>
 
@@ -1355,8 +1250,6 @@ export default function ReviewExperience({
                   <p className="text-xs text-slate-300 font-medium">
                     {snappedPhotoBase64
                       ? "Gemini Vision is analyzing your photo & crafting reviews..."
-                      : isVoiceTranslated
-                      ? "Gemini AI is translating your voice into English & Native reviews..."
                       : "Gemini AI is crafting authentic review variations..."}
                   </p>
                 </div>
@@ -1376,9 +1269,6 @@ export default function ReviewExperience({
                         }`}
                       >
                         <span className="text-[10px] block truncate font-bold">{opt.headline || opt.tone}</span>
-                        {opt.languageMix === "ENGLISH" && isVoiceTranslated && (
-                          <span className="text-[8px] text-emerald-400 block font-semibold">English</span>
-                        )}
                         {opt.languageMix === "TELUGU_SCRIPT" && (
                           <span className="text-[8px] text-amber-400 block font-semibold">తెలుగు</span>
                         )}
@@ -1656,25 +1546,7 @@ export default function ReviewExperience({
         </div>
       )}
 
-      {/* ─── STICKY MOBILE 1-TAP BOTTOM BAR ───────────────────────────────── */}
-      {rating >= 4 && !showCopyModal && !showRewardCard && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 p-3 bg-slate-950/95 backdrop-blur-xl border-t border-amber-400/40 shadow-2xl flex items-center justify-between gap-2 max-w-lg mx-auto sm:hidden animate-slideUp">
-          <div className="flex-1 truncate">
-            <span className="text-[10px] text-amber-400 font-bold block">🌟 5-Star Ready</span>
-            <span className="text-xs text-white font-semibold truncate block">
-              {editableDraftText ? editableDraftText.slice(0, 36) + "..." : "Auto-copied keyword review"}
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={handleExpressPostGoogle}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-lg shrink-0 active:scale-95 cursor-pointer"
-          >
-            <Zap className="w-3.5 h-3.5 fill-slate-950 text-slate-950" />
-            <span>Post 1-Tap</span>
-          </button>
-        </div>
-      )}
+
 
       {/* ─── SCRATCH REWARD CARD MODAL ─────────────────────────────────────── */}
       {showRewardCard && (

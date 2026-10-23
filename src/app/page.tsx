@@ -370,8 +370,7 @@ export default function HomePage() {
       if (slug === "momo-it-technologies") {
         setTimeout(() => {
           window.open(
-            "https://www.google.com/maps/search/?api=1&query=" +
-              encodeURIComponent("MOMO IT Technologies Krishnapuram Kadapa"),
+            "https://search.google.com/local/writereview?placeid=ChIJd5iV_xdzszsRlGLwd6hWTD4",
             "_blank",
             "noopener,noreferrer"
           );
@@ -1027,7 +1026,7 @@ export default function HomePage() {
                               <Sparkles className="w-4 h-4 text-amber-300" />
                               <span>
                                 {activeDemo.slug === "momo-it-technologies"
-                                  ? "Copy & Post on Google Maps"
+                                  ? "Copy & Post Review on Google"
                                   : "Copy & Post Review"}
                               </span>
                             </>
