@@ -133,7 +133,7 @@ export default async function PublicReviewPage({
   const waActivationUrl = `https://wa.me/918639831132?text=${waActivationText}`;
 
   return (
-    <main className="min-h-screen w-full bg-slate-950 flex flex-col items-center justify-center p-0 sm:py-8 sm:px-4 selection:bg-amber-500 selection:text-slate-950 relative">
+    <main className="min-h-screen w-full bg-slate-950 flex flex-col items-center justify-start sm:justify-center p-0 sm:py-8 sm:px-4 selection:bg-amber-500 selection:text-slate-950 relative">
       {/* 24-Hour Live Evaluation Banner (discreet top pill) */}
       {isDemoActive && business.demoExpiresAt && (
         <div className="w-full max-w-sm px-4 pt-3 pb-1 sm:pt-0 no-print">

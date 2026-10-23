@@ -370,7 +370,7 @@ export default function HomePage() {
       if (slug === "momo-it-technologies") {
         setTimeout(() => {
           window.open(
-            "https://search.google.com/local/writereview?placeid=ChIJd5iV_xdzszsRlGLwd6hWTD4",
+            "https://www.google.com/search?q=MOMO+IT+Technologies+Kadapa#lrd=0x3bb37317ff959877:0x3e4c56a877f06294,3",
             "_blank",
             "noopener,noreferrer"
           );
@@ -859,7 +859,7 @@ export default function HomePage() {
                     setSelectedDemoIndex(idx);
                     setDemoStars(5);
                   }}
-                  className={`px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 transition-all ${
+                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-bold flex items-center gap-1.5 sm:gap-2 transition-all ${
                     isSelected
                       ? "bg-slate-900 text-white shadow-md font-extrabold scale-105"
                       : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
@@ -877,8 +877,7 @@ export default function HomePage() {
             {/* Left 3D Smartphone View (lg:col-span-6) */}
             <div className="lg:col-span-6 flex justify-center" style={{ perspective: "1000px" }}>
               <div
-                className="w-full max-w-sm rounded-[2.5rem] bg-slate-900 border-4 border-slate-800 p-6 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35),0_0_30px_rgba(99,102,241,0.15)] text-center relative overflow-hidden transition-all duration-300"
-                style={{ transform: "rotateY(-4deg)" }}
+                className="w-full max-w-sm rounded-[2.5rem] bg-slate-900 border-4 border-slate-800 p-5 sm:p-6 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35),0_0_30px_rgba(99,102,241,0.15)] text-center relative overflow-hidden transition-all duration-300 [transform:none] lg:[transform:rotateY(-4deg)]"
               >
                 {/* Phone Speaker pill */}
                 <div className="w-20 h-3.5 bg-slate-800 rounded-full mx-auto mb-4 border border-slate-700 flex items-center justify-center gap-1.5">

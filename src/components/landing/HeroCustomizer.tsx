@@ -370,9 +370,8 @@ export default function HeroCustomizer() {
             >
               {/* Luxury Acrylic Standee Card */}
               <div
-                className={`relative w-72 sm:w-80 rounded-[28px] bg-gradient-to-b ${theme.bgGradient} p-6 border-2 ${theme.borderClass} text-center transition-all duration-500`}
+                className={`relative w-[280px] sm:w-80 rounded-[28px] bg-gradient-to-b ${theme.bgGradient} p-5 sm:p-6 border-2 ${theme.borderClass} text-center transition-all duration-500 [transform:none] sm:[transform:rotateY(-6deg)_rotateX(4deg)]`}
                 style={{
-                  transform: `rotateY(-6deg) rotateX(4deg)`,
                   transformStyle: "preserve-3d",
                 }}
               >

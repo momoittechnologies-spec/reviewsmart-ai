@@ -215,7 +215,7 @@ export default function ReviewExperience({
       return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Vijaya's Yummy Food Kadugodi Bengaluru")}`;
     }
     if (business.slug === "momo-it-technologies") {
-      return "https://search.google.com/local/writereview?placeid=ChIJd5iV_xdzszsRlGLwd6hWTD4";
+      return "https://www.google.com/search?q=MOMO+IT+Technologies+Kadapa#lrd=0x3bb37317ff959877:0x3e4c56a877f06294,3";
     }
 
     // 1. Official g.page/r/.../review shortlink opens the write-review dialog directly
@@ -737,7 +737,7 @@ export default function ReviewExperience({
       className={
         embedded
           ? "w-full mx-auto text-slate-100 flex flex-col justify-between transition-all relative"
-          : "w-full max-w-lg mx-auto min-h-screen sm:min-h-0 text-slate-100 flex flex-col justify-between p-3.5 sm:p-6 pb-16 transition-all relative"
+          : "w-full max-w-lg md:max-w-xl mx-auto min-h-screen sm:min-h-0 text-slate-100 flex flex-col justify-between px-3 sm:px-6 py-3 sm:py-8 pb-16 transition-all relative"
       }
     >
       {/* Ambient Top Glow */}
@@ -748,10 +748,10 @@ export default function ReviewExperience({
         />
       )}
 
-      <div className="space-y-4 sm:space-y-5 relative z-10">
+      <div className="space-y-3.5 sm:space-y-5 relative z-10">
         {/* ─── STORE PROFILE CARD (Standalone Mode Only) ─────────────────────── */}
         {!embedded && (
-          <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-5 sm:p-6 border border-slate-800 shadow-xl text-center">
+          <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-4 sm:p-6 border border-slate-800 shadow-xl text-center">
             <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 mb-3">
               <div
                 className="w-full h-full rounded-2xl bg-white border-2 flex items-center justify-center p-2 overflow-hidden shadow-lg"
@@ -906,7 +906,7 @@ export default function ReviewExperience({
         )}
 
         {/* ─── STAR RATING SECTION ──────────────────────────────────────────── */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-5 sm:p-6 border border-slate-800 shadow-xl text-center space-y-3">
+        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-4 sm:p-6 border border-slate-800 shadow-xl text-center space-y-3">
           <h2 className="text-base sm:text-lg font-black text-white tracking-tight">
             How was your visit today?
           </h2>
@@ -914,7 +914,7 @@ export default function ReviewExperience({
             Tap the stars to rate your experience
           </p>
 
-          <div className="flex items-center justify-center gap-2 sm:gap-3 py-1">
+          <div className="flex items-center justify-center gap-1.5 sm:gap-3 py-1">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
@@ -926,7 +926,7 @@ export default function ReviewExperience({
                 aria-label={`Rate ${star} stars`}
               >
                 <Star
-                  className={`w-10 h-10 sm:w-11 sm:h-11 transition-all ${
+                  className={`w-9 h-9 sm:w-11 sm:h-11 transition-all ${
                     (hoverRating || rating) >= star
                       ? "text-amber-400 fill-amber-400 drop-shadow-[0_0_14px_rgba(251,191,36,0.7)] scale-105"
                       : "text-slate-700 hover:text-slate-500"
@@ -1080,7 +1080,7 @@ export default function ReviewExperience({
         {isPositive && (
           <div
             ref={reviewSectionRef}
-            className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-5 sm:p-6 border border-amber-400/30 shadow-2xl transition-all duration-300 space-y-4 animate-fadeIn"
+            className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-4 sm:p-6 border border-amber-400/30 shadow-2xl transition-all duration-300 space-y-4 animate-fadeIn"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -1254,7 +1254,7 @@ export default function ReviewExperience({
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-3 gap-1.5">
+                <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                   {reviewOptions.map((opt) => {
                     const isSelected = selectedOptionId === opt.id;
                     return (
@@ -1262,13 +1262,13 @@ export default function ReviewExperience({
                         key={opt.id}
                         type="button"
                         onClick={() => handleSelectOption(opt)}
-                        className={`p-2.5 rounded-xl border text-center transition-all ${
+                        className={`p-2 sm:p-2.5 rounded-xl border text-center transition-all ${
                           isSelected
                             ? "border-amber-400 bg-amber-400/15 text-white font-bold shadow"
                             : "border-slate-800 bg-slate-800/50 text-slate-400 hover:text-slate-200"
                         }`}
                       >
-                        <span className="text-[10px] block truncate font-bold">{opt.headline || opt.tone}</span>
+                        <span className="text-[10px] sm:text-xs block truncate font-bold">{opt.headline || opt.tone}</span>
                         {opt.languageMix === "TELUGU_SCRIPT" && (
                           <span className="text-[8px] text-amber-400 block font-semibold">తెలుగు</span>
                         )}
@@ -1372,8 +1372,8 @@ export default function ReviewExperience({
 
       {/* ─── CELEBRATION MODAL ────────────────────────────────────────────── */}
       {showCopyModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-slate-900 border-2 border-amber-400/70 rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl relative text-center">
+        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-fadeIn">
+          <div className="bg-slate-900 border-2 border-amber-400/70 rounded-3xl p-4 sm:p-6 max-w-sm w-full shadow-2xl relative text-center max-h-[92vh] overflow-y-auto">
             {/* Close Button */}
             <button
               type="button"
