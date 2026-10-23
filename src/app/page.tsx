@@ -92,106 +92,6 @@ interface DemoPreset {
 
 const DEMO_PRESETS: DemoPreset[] = [
   {
-    id: "fashion",
-    name: "Sri Guru Fashions",
-    category: "Clothing & Menswear",
-    location: "Kadapa, Andhra Pradesh",
-    icon: Shirt,
-    color: "#4f46e5",
-    slug: "sri-guru-fashions-393a",
-    chips: ["Exclusive Menswear", "Latest Trends", "Premium Fabric", "Reasonable Prices", "Polite Staff"],
-    reviews: {
-      ALL: "Sri Guru Fashions has the best menswear collection in Kadapa! Found stylish shirts, trousers, and festive menswear at great prices. The fabric quality is top-notch and staff is very polite. Highly recommended!",
-      ENGLISH: "Sri Guru Fashions has the best menswear collection in Kadapa! Found stylish shirts, trousers, and festive menswear at great prices. The fabric quality is top-notch and staff is very polite. Highly recommended!",
-      HINDI: "श्री गुरु फैशन्स में पुरुषों के कपड़ों का बहुत ही शानदार और लेटेस्ट कलेक्शन है! कपड़े की क्वालिटी बहुत बढ़िया है और दाम भी एकदम सही हैं। स्टाफ का व्यवहार बहुत विनम्र है। बहुत अच्छा अनुभव!",
-      TELUGU: "శ్రీ గురు ఫ్యాషన్స్‌లో బట్టల క్వాలిటీ అద్భుతంగా ఉంది! లేటెస్ట్ ట్రెండ్స్, బెస్ట్ రేట్స్ మరియు స్టాఫ్ చాలా మర్యాదగా మాట్లాడారు. కడపలో షాపింగ్ చేయడానికి బెస్ట్ మెన్స్‌వేర్ షాప్!",
-      TAMIL: "ஸ்ரீ குரு ஃபேஷன்ஸில் ஆடைகளின் தரம் மிக அருமையாக உள்ளது! சிறந்த கலெக்ஷன் மற்றும் நியாயமான விலை. ஊழியர்களின் உபசரிப்பு மிக நன்று! அனைவரும் கண்டிப்பாக சென்று பாருங்கள்.",
-      KANNADA: "ಶ್ರೀ ಗುರು ಫ್ಯಾಷನ್ಸ್‌ನಲ್ಲಿ ಬಟ್ಟೆಗಳ ಕ್ವಾಲಿಟಿ ತುಂಬಾ ಚೆನ್ನಾಗಿದೆ! ಲೇಟೆಸ್ಟ್ ಡಿಸೈನ್ಸ್ ಮತ್ತು ಸಮಂಜಸವಾದ ಬೆಲೆಗಳು. ಸಿಬ್ಬಂದಿಯ ನಡವಳಿಕೆ ತುಂಬಾ ವಿನಮ್ರವಾಗಿದೆ. ಶಾಪಿಂಗ್‌ಗೆ ಉತ್ತಮ ತಾಣ!",
-      MALAYALAM: "ശ്രീ ഗുരു ഫാഷൻസിൽ മികച്ച തുണിത്തരങ്ങളും ട്രെൻഡി കളക്ഷനുകളും ലഭ്യമാണ്! ന്യായമായ വിലയും ജീവനക്കാരുടെ മികച്ച പെരുമാറ്റവും. ഷോപ്പിംഗിനായി തീർച്ചയായും ശുപാർശ ചെയ്യുന്നു!",
-    },
-    author: "Karthik R.",
-  },
-  {
-    id: "food",
-    name: "Vijaya's Yummy Food",
-    category: "Restaurant & Cloud Kitchen",
-    location: "Kadugodi, Bengaluru",
-    icon: UtensilsCrossed,
-    color: "#ea580c",
-    slug: "vijayas-yummy-food-0900",
-    chips: ["Delicious Taste", "Fast Service", "Clean Kitchen", "Polite Staff", "Value for Money"],
-    reviews: {
-      ALL: "Delicious food with exceptional flavor and authentic home-style taste at Vijaya's Yummy Food! Fast delivery, hygienic packing, and wonderful hospitality. 5 stars!",
-      ENGLISH: "Delicious food with exceptional flavor and authentic home-style taste at Vijaya's Yummy Food! Fast delivery, hygienic packing, and wonderful hospitality. 5 stars!",
-      HINDI: "विजय'स यम्मी फूड का खाना सच में बहुत ही स्वादिष्ट और शुद्ध है! घर जैसा स्वाद, साफ-सुथरी रसोई और तुरंत सर्विस। सभी डिशेज बहुत लाजवाब थीं। 5 स्टार अनुभव!",
-      TELUGU: "విజయస్ యమ్మీ ఫుడ్ లో ప్రతి వంటకం ఎంతో రుచిగా మరియు స్వచ్ఛంగా ఉంది! వేడి వేడి ఆహారం, పరిశుభ్రమైన వాతావరణం మరియు ఫాస్ట్ సర్వీస్. కుటుంబంతో కలిసి తినడానికి బెస్ట్ ప్లేస్!",
-      TAMIL: "விஜயாஸ் யம்மி உணவகத்தில் உணவு மிகவும் சுவையாகவும் தரமாகவும் உள்ளது! சுத்தமான சமையல் மற்றும் சிறந்த சேவை. வீட்டுச் சாப்பாடு போன்ற உணர்வு!",
-      KANNADA: "ವಿಜಯಾಸ್ ಯಮ್ಮಿ ಫುಡ್‌ನಲ್ಲಿ ಊಟ ಮತ್ತು ತಿಂಡಿಗಳು ತುಂಬಾ ರುಚಿಕರವಾಗಿವೆ! ಮನೆಯೂಟದ ಸವಿ, ಶುಚಿತ್ವ ಮತ್ತು ತ್ವರಿತ ಸೇವೆ. ಅದ್ಭುತ ಅನುಭವ!",
-      MALAYALAM: "വിജയാസ് യമ്മി ഫുഡിലെ ഭക്ഷണം അതീവ രുചികരവും വൃത്തിയുള്ളതുമാണ്! നാടൻ രുചിയും മികച്ച സർവീസും. കുടുംബത്തോടൊപ്പം കഴിക്കാൻ ഏറ്റവും മികച്ചത്!",
-    },
-    author: "Kiran R.",
-  },
-  {
-    id: "clinic",
-    name: "Apex Smile Dental Care",
-    category: "Dental & Healthcare Clinic",
-    location: "Indiranagar, Bengaluru",
-    icon: Stethoscope,
-    color: "#0284c7",
-    slug: "apex-smile-dental",
-    chips: ["Painless Treatment", "Experienced Doctors", "Ultra Clean Clinic", "Clear Explanation", "Fair Pricing"],
-    reviews: {
-      ALL: "Exceptional dental care and highly skilled doctors at Apex Smile! Completely painless root canal and cleaning. The clinic is spotless and modern. Highly satisfied!",
-      ENGLISH: "Exceptional dental care and highly skilled doctors at Apex Smile! Completely painless root canal and cleaning. The clinic is spotless and modern. Highly satisfied!",
-      HINDI: "एपेक्स स्माइल में बहुत ही कुशल और अनुभवी डॉक्टर्स हैं! बिल्कुल दर्द रहित इलाज, क्लीनिक की बेहतरीन सफाई और हर बात को बहुत तसल्ली से समझाया। बहुत ही संतोषजनक!",
-      TELUGU: "డాక్టర్ల అనుభవం మరియు చికిత్స చాలా బాగుంది! ఎలాంటి నొప్పి లేకుండా ట్రీట్మెంట్ పూర్తి చేశారు. అత్యాధునిక పరికరాలు మరియు అత్యంత పరిశుభ్రమైన క్లినిక్!",
-      TAMIL: "மிகவும் திறமையான மருத்துவர்கள் மற்றும் வலி இல்லாத சிகிச்சை! கிளினிக் மிக சுத்தமாகவும் நவீன வசதிகளுடனும் உள்ளது. மிக்க நன்றி!",
-      KANNADA: "ಅತ್ಯುತ್ತಮ ದಂತ ಚಿಕಿತ್ಸೆ ಮತ್ತು ನುರಿತ ವೈದ್ಯರು! ಯಾವುದೇ ನೋವಿಲ್ಲದೆ ಚಿಕಿತ್ಸೆ ನೀಡಿದರು. ಕ್ಲಿನಿಕ್ ತುಂಬಾ ಸ್ವಚ್ಛ ಮತ್ತು ಆಧುನಿಕವಾಗಿದೆ!",
-      MALAYALAM: "മികച്ച ദന്തചികിത്സയും പരിചയസമ്പന്നരായ ഡോക്ടർമാരും! വേദനയില്ലാത്ത ചികിത്സയും മികച്ച ക്ലിനിക്ക് അന്തരീക്ഷവും. വളരെ സംതൃപ്തനാണ്!",
-    },
-    author: "Dr. Arvind S.",
-  },
-  {
-    id: "salon",
-    name: "Luxe Glow Salon & Spa",
-    category: "Salon, Hair & Beauty Spa",
-    location: "Jubilee Hills, Hyderabad",
-    icon: Scissors,
-    color: "#db2777",
-    slug: "anand-fashion-studio-bf84",
-    chips: ["Trendy Haircut", "Branded Products", "Relaxing Ambience", "Skilled Stylists", "Great Hospitality"],
-    reviews: {
-      ALL: "Outstanding haircut, styling and grooming at Luxe Glow! Premium ambience, branded organic products, and skilled stylists who listen carefully to your preferences.",
-      ENGLISH: "Outstanding haircut, styling and grooming at Luxe Glow! Premium ambience, branded organic products, and skilled stylists who listen carefully to your preferences.",
-      HINDI: "लाजवाब हेयर कट और ग्रूमिंग सर्विस! बहुत ही लग्जरी और शांत माहौल, ब्रांडेड प्रोडक्ट्स और बहुत ही हुनरमंद स्टाइलिस्ट। पूरा पैसा वसूल!",
-      TELUGU: "హెయిర్ కట్ మరియు స్టైలింగ్ సూపర్ గా చేశారు! ప్రొఫెషనల్ స్టాఫ్, ఆహ్లాదకరమైన వాతావరణం మరియు బ్రాండెడ్ ప్రొడక్ట్స్ వాడారు. చాలా హ్యాపీ!",
-      TAMIL: "சிறந்த ஹேர் கட் மற்றும் அழகு பராமரிப்பு! ஆடம்பரமான சூழல், அனுபவம் வாய்ந்த ஸ்டைலிஸ்ட்டுகள். மிகவும் திருப்திகரமாக இருந்தது!",
-      KANNADA: "ತುಂಬಾ ಉತ್ತಮವಾದ ಹೇರ್ ಕಟಿಂಗ್ ಮತ್ತು ಬ್ಯೂಟಿ ಸರ್ವಿಸ್! ಐಷಾರಾಮಿ ಪರಿಸರ ಮತ್ತು ನುರಿತ ಸಿಬ್ಬಂದಿ. ಪೂರ್ಣ ತೃಪ್ತಿ ಸಿಕ್ಕಿದೆ!",
-      MALAYALAM: "മികച്ച ഹെയർ സ്റ്റൈലിംഗും സൗന്ദര്യ സംരക്ഷണവും! പ്രൊഫഷണൽ ജീവനക്കാരും മനോഹരമായ ആംബിയൻസും. മികച്ച അനുഭവം!",
-    },
-    author: "Ananya M.",
-  },
-  {
-    id: "gold",
-    name: "VR GOLD - Kadapa",
-    category: "Gold & Jewellery Evaluation",
-    location: "Kadapa, Andhra Pradesh",
-    icon: Coins,
-    color: "#d97706",
-    slug: "vrgold",
-    chips: ["Sell Gold for Cash", "Computerized Purity Test", "Live Market Bullion Rate", "Zero Deduction", "Instant 2-Min Transfer"],
-    reviews: {
-      ALL: "Evaluated and sold old gold at VR GOLD! German computerized purity testing with live bullion rates and instant bank transfer in 2 minutes. Completely transparent and trustworthy!",
-      ENGLISH: "Evaluated and sold old gold at VR GOLD! German computerized purity testing with live bullion rates and instant bank transfer in 2 minutes. Completely transparent and trustworthy!",
-      HINDI: "कंप्यूटराइज्ड जर्मन मशीन पर पारदर्शी गोल्ड टेस्टिंग और लाइव मार्केट रेट! सिर्फ 2 मिनट में बिना किसी कटौती के तुरंत पेमेंट। पूरी तरह से भरोसेमंद!",
-      TELUGU: "జర్మన్ కంప్యూటరైజ్డ్ మిషన్ ద్వారా పారదర్శకమైన గోల్డ్ టెస్టింగ్ మరియు లైవ్ మార్కెట్ రేట్! ఎలాంటి కోతలు లేకుండా కేవలం 2 నిమిషాల్లో ఇన్స్టంట్ పేమెంట్!",
-      TAMIL: "ஜெர்மன் மெஷின் மூலம் துல்லியமான தங்கம் பரிசோதனை மற்றும் நேரடி சந்தை விலை! 2 நிமிடத்தில் உடனடி பணம். நம்பகமான சேவை!",
-      KANNADA: "ಜರ್ಮನ್ ಕಂಪ್ಯೂಟರೈಸ್ಡ್ ಯಂತ್ರದ ಮೂಲಕ ನಿಖರವಾದ ಚಿನ್ನದ ಪರೀಕ್ಷೆ ಮತ್ತು ಲೈವ್ ದರ! ಕೇವಲ 2 ನಿಮಿಷದಲ್ಲಿ ಸಂಪೂರ್ಣ ಪಾರದರ್ಶಕ ಹಣ ಸಂದಾಯ!",
-      MALAYALAM: "കമ്പ്യൂട്ടറൈസ്ഡ് മെഷീൻ വഴി കൃത്യമായ സ്വർണ്ണ പരിശോധനയും തത്സമയ മാർക്കറ്റ് വിലയും! 2 മിനിറ്റിനുള്ളിൽ തുക അക്കൗണ്ടിൽ ലഭിച്ചു. വിശ്വസനീയം!",
-    },
-    author: "Prasad R.",
-  },
-  {
     id: "tech",
     name: "MOMO IT Technologies",
     category: "Software, Cloud & AI Solutions",
@@ -214,9 +114,109 @@ const DEMO_PRESETS: DemoPreset[] = [
       TELUGU: "మోమో ఐటీ టెక్నాలజీస్ అందించిన సాఫ్ట్‌వేర్, వెబ్ & మొబైల్ యాప్ డెవలప్‌మెంట్ మరియు క్యూఏ ఆటోమేషన్ సేవలు అత్యుత్తమం! ఆధునిక టెక్నాలజీతో సూపర్ క్వాలిటీ ప్రాజెక్ట్ అందించారు. హైలీ రికమెండెడ్!",
       TAMIL: "மோமோ ஐடி டெக்னாலஜிஸின் மென்பொருள், செயலி வடிவமைப்பு மற்றும் ஏஐ தொழில்நுட்ப சேவைகள் மிகச் சிறப்பானது! தரமான மற்றும் விரைவான சேவை.",
       KANNADA: "ಮೊಮೊ ಐಟಿ ಟೆಕ್ನಾಲಜೀಸ್ ಅತ್ಯುತ್ತಮ ಸಾಫ್ಟ್‌ವೇರ್, ವೆಬ್ ಮತ್ತು ಮೊಬೈಲ್ ಆಪ್‌ಗಳನ್ನು ಅಭಿವೃದ್ಧಿಪಡಿಸಿದೆ! ಅತ್ಯುತ್ತಮ ಗುಣಮಟ್ಟ ಮತ್ತು ವಿಶ್ವಾಸಾರ್ಹ ಸೇವೆ.",
-      MALAYALAM: "മോമോ ഐടി ടെക്നോളജീസിന്റെ സോഫ്റ്റ്‌വെയർ, മൊബൈൽ ആപ്പ് ഡെവലപ്‌മെന്റും കസ്റ്റമർ സപ്പോർട്ടും അതിശയകരമാണ്! മികച്ച നിലവಾರമുള്ള സേവനങ്ങൾ.",
+      MALAYALAM: "മോമോ ഐടി ടെക്നോളജീസിന്റെ സോഫ്റ്റ്‌വെയർ, മൊബൈൽ ആപ്പ് ഡെവലപ്‌മെന്റും കസ്റ്റമർ സപ്പോർട്ടും അതിശയകരമാണ്! മികച്ച നിലവാരമുള്ള സേവനങ്ങൾ.",
     },
     author: "Rajesh K.",
+  },
+  {
+    id: "travel",
+    name: "MANA TOURS & TRAVELS",
+    category: "Tours, Travels & Taxi Service",
+    location: "Kadapa, Andhra Pradesh",
+    icon: Truck,
+    color: "#0284c7",
+    slug: "mana-tours-travels",
+    chips: ["Safe Drivers", "Clean AC Cabs", "On-Time Pickup", "Affordable Rates", "24/7 Service"],
+    reviews: {
+      ALL: "Booked an outstation trip with MANA Tours & Travels in Kadapa! Brand new clean AC cab, extremely professional driver, and completely transparent billing. Best travel agency in town!",
+      ENGLISH: "Booked an outstation trip with MANA Tours & Travels in Kadapa! Brand new clean AC cab, extremely professional driver, and completely transparent billing. Best travel agency in town!",
+      HINDI: "माना टूर्स एंड ट्रैवल्स के साथ बहुत ही सुरक्षित और आरामदायक सफर रहा! साफ-सुथरी गाड़ी, समय के पाबंद ड्राइवर और बहुत ही किफायती किराया। कड़पा में बेस्ट सर्विस!",
+      TELUGU: "మానా టూర్స్ & ట్రావెల్స్ లో ప్రయాణం చాలా సేఫ్ మరియు కంఫర్టబుల్ గా జరిగింది! డ్రైవర్ సమయపాలన పాటించారు, క్లీన్ వెహికల్ మరియు సరసమైన ఛార్జీలు. సూపర్ ట్రావెల్స్!",
+      TAMIL: "மானா டூர்ஸ் & டிராவல்ஸ் மூலம் அருமையான பயணம்! சுத்தமான வாகனம், சரியான நேரத்திற்கு வந்தார்கள், நியாயமான கட்டணம். மிகச் சிறந்த சேவை!",
+      KANNADA: "ಮಾನಾ ಟೂರ್ಸ್ & ಟ್ರಾವೆಲ್ಸ್‌ನೊಂದಿಗೆ ಅತ್ಯುತ್ತಮ ಪ್ರಯಾಣದ ಅನುಭವ! ಸ್ವಚ್ಛವಾದ ವಾಹನ ಮತ್ತು ಸಮಯಕ್ಕೆ ಸರಿಯಾಗಿ ಬಂದ ಚಾಲಕರು. ಸಮಂಜಸವಾದ ದರಗಳು!",
+      MALAYALAM: "മാന ടൂർസ് & ട്രാവൽസ് വഴി മികച്ച യാത്രാനുഭവം! വൃത്തിയുള്ള വാഹനം, കൃത്യസമയത്ത് ഡ്രൈവർ എത്തി, ന്യായമായ നിരക്ക്. തികച്ചും ശുപാർശ ചെയ്യുന്നു!",
+    },
+    author: "Venkat S.",
+  },
+  {
+    id: "gold",
+    name: "VR GOLD - Kadapa",
+    category: "Gold & Jewellery Evaluation",
+    location: "Kadapa, Andhra Pradesh",
+    icon: Coins,
+    color: "#d97706",
+    slug: "vrgold",
+    chips: ["Sell Gold for Cash", "Computerized Purity Test", "Live Market Bullion Rate", "Zero Deduction", "Instant 2-Min Transfer"],
+    reviews: {
+      ALL: "Evaluated and sold old gold at VR GOLD! German computerized purity testing with live bullion rates and instant bank transfer in 2 minutes. Completely transparent and trustworthy!",
+      ENGLISH: "Evaluated and sold old gold at VR GOLD! German computerized purity testing with live bullion rates and instant bank transfer in 2 minutes. Completely transparent and trustworthy!",
+      HINDI: "कंप्यूटराइज्ड जर्मन मशीन पर पारदर्शी गोल्ड टेस्टिंग और लाइव मार्केट रेट! सिर्फ 2 मिनट में बिना किसी कटौती के तुरंत पेमेंट। पूरी तरह से भरोसेमंद!",
+      TELUGU: "జర్మన్ కంప్యూటరైజ్డ్ మిషన్ ద్వారా పారదర్శకమైన గోల్డ్ టెస్టింగ్ మరియు లైవ్ మార్కెట్ రేట్! ఎలాంటి కోతలు లేకుండా కేవలం 2 నిమిషాల్లో ఇన్స్టంట్ పేమెంట్!",
+      TAMIL: "ஜெர்மன் மெஷின் மூலம் துல்லியமான தங்கம் பரிசோதனை மற்றும் நேரடி சந்தை விலை! 2 நிமிடத்தில் உடனடி பணம். நம்பகமான சேவை!",
+      KANNADA: "ಜರ್ಮನ್ ಕಂಪ್ಯೂಟರೈಸ್ಡ್ ಯಂತ್ರದ ಮೂಲಕ ನಿಖರವಾದ ಚಿನ್ನದ ಪರೀಕ್ಷೆ ಮತ್ತು ಲೈವ್ ದರ! ಕೇವಲ 2 ನಿಮಿಷದಲ್ಲಿ ಸಂಪೂರ್ಣ ಪಾರದರ್ಶಕ ಹಣ ಸಂದಾಯ!",
+      MALAYALAM: "കമ്പ്യൂട്ടറൈസ്ഡ് മെഷീൻ വഴി കൃത്യമായ സ്വർണ്ണ പരിശോധനയും തത്സമയ മാർക്കറ്റ് വിലയും! 2 മിനിറ്റിനുള്ളിൽ തുക അക്കൗണ്ടിൽ ലഭിച്ചു. വിശ്വസനീയം!",
+    },
+    author: "Prasad R.",
+  },
+  {
+    id: "hvac",
+    name: "AS Refrigeration",
+    category: "AC Repair & HVAC Services",
+    location: "Kadapa, Andhra Pradesh",
+    icon: ShieldCheck,
+    color: "#059669",
+    slug: "as-refrigeration",
+    chips: ["Quick AC Repair", "Expert Technicians", "Genuine Spare Parts", "Gas Leak Fix", "Reasonable Charges"],
+    reviews: {
+      ALL: "Prompt and reliable AC servicing by AS Refrigeration! The technician arrived within 30 minutes, identified the gas leak quickly, and fixed the cooling perfectly at very honest charges.",
+      ENGLISH: "Prompt and reliable AC servicing by AS Refrigeration! The technician arrived within 30 minutes, identified the gas leak quickly, and fixed the cooling perfectly at very honest charges.",
+      HINDI: "ए.एस. रेफ्रिजरेशन की एसी सर्विस सच में बहुत तेज और बेहतरीन है! टेक्नीशियन तुरंत आए, बहुत ईमानदारी से काम किया और कूलिंग की समस्या पूरी तरह ठीक कर दी।",
+      TELUGU: "ఏఎస్ రిఫ్రిజిరేషన్ వారు కేవలం 30 నిమిషాల్లో వచ్చి ఏసీ కూలింగ్ సమస్యను పూర్తిగా పరిష్కరించారు! అనుభవజ్ఞులైన టెక్నీషియన్స్ మరియు సరసమైన ఛార్జీలు.",
+      TAMIL: "ஏஎஸ் ரெஃப்ரிஜிரேஷன் அவர்களின் ஏசி பழுதுபார்க்கும் சேவை மிக அருமை! உடனே வந்து திறமையாக சரிசெய்தார்கள். நியாயமான கட்டணம்!",
+      KANNADA: "ಎಎಸ್ ರೆಫ್ರಿಜರೇಷನ್ ಅವರ ಎಸಿ ಸರ್ವಿಸ್ ತುಂಬಾ ತೃಪ್ತಿಕರವಾಗಿದೆ! ತಕ್ಷಣವೇ ಬಂದು ಸಮಸ್ಯೆಯನ್ನು ಸರಿಪಡಿಸಿದರು. ಅತ್ಯುತ್ತಮ ಸೇವೆ!",
+      MALAYALAM: "എ.എസ് റെഫ്രിജറേഷന്റെ എസി സർവീസ് വളരെ മികച്ചതാണ്! കൃത്യസമയത്ത് എത്തി തകരാറുകൾ പരിഹരിച്ചു. ന്യായമായ നിരക്കുകൾ!",
+    },
+    author: "Syed M.",
+  },
+  {
+    id: "fashion",
+    name: "Sri Guru Fashions",
+    category: "Clothing & Menswear",
+    location: "Kadapa, Andhra Pradesh",
+    icon: Shirt,
+    color: "#db2777",
+    slug: "sri-guru-fashions-393a",
+    chips: ["Exclusive Menswear", "Latest Trends", "Premium Fabric", "Reasonable Prices", "Polite Staff"],
+    reviews: {
+      ALL: "Sri Guru Fashions has the best menswear collection in Kadapa! Found stylish shirts, trousers, and festive menswear at great prices. The fabric quality is top-notch and staff is very polite. Highly recommended!",
+      ENGLISH: "Sri Guru Fashions has the best menswear collection in Kadapa! Found stylish shirts, trousers, and festive menswear at great prices. The fabric quality is top-notch and staff is very polite. Highly recommended!",
+      HINDI: "श्री गुरु फैशन्स में पुरुषों के कपड़ों का बहुत ही शानदार और लेटेस्ट कलेक्शन है! कपड़े की क्वालिटी बहुत बढ़िया है और दाम भी एकदम सही हैं। स्टाफ का व्यवहार बहुत विनम्र है। बहुत अच्छा अनुभव!",
+      TELUGU: "శ్రీ గురు ఫ్యాషన్స్‌లో బట్టల క్వాలిటీ అద్భుతంగా ఉంది! లేటెస్ట్ ట్రెండ్స్, బెస్ట్ రేట్స్ మరియు స్టాఫ్ చాలా మర్యాదగా మాట్లాడారు. కడపలో షాపింగ్ చేయడానికి బెస్ట్ మెన్స్‌వేర్ షాప్!",
+      TAMIL: "ஸ்ரீ குரு ஃபேஷன்ஸில் ஆடைகளின் தரம் மிக அருமையாக உள்ளது! சிறந்த கலெக்ஷன் மற்றும் நியாயமான விலை. ஊழியர்களின் உபசரிப்பு மிக நன்று! அனைவரும் கண்டிப்பாக சென்று பாருங்கள்.",
+      KANNADA: "ಶ್ರೀ ಗುರು ಫ್ಯಾಷನ್ಸ್‌ನಲ್ಲಿ ಬಟ್ಟೆಗಳ ಕ್ವಾಲಿಟಿ ತುಂಬಾ ಚೆನ್ನಾಗಿದೆ! ಲೇಟೆಸ್ಟ್ ಡಿಸೈನ್ಸ್ ಮತ್ತು ಸಮಂಜಸವಾದ ಬೆಲೆಗಳು. ಸಿಬ್ಬಂದಿಯ ನಡವಳಿಕೆ ತುಂಬಾ ವಿನಮ್ರವಾಗಿದೆ. ಶಾಪಿಂಗ್‌ಗೆ ಉತ್ತಮ ತಾಣ!",
+      MALAYALAM: "ശ്രീ ഗുരു ഫാഷൻസിൽ മികച്ച തുണിത്തരങ്ങളും ട്രെൻഡി കളക്ഷനുകളും ലഭ്യമാണ്! ന്യായമായ വിലയും ജീവനക്കാരുടെ മികച്ച പെരുമാറ്റവും. ഷോപ്പിംഗിനായി തീർച്ചയായും ശുപാർಶ ചെയ്യുന്നു!",
+    },
+    author: "Karthik R.",
+  },
+  {
+    id: "print",
+    name: "City Grafix",
+    category: "Digital Printing & Signage",
+    location: "Kadapa, Andhra Pradesh",
+    icon: Printer,
+    color: "#8b5cf6",
+    slug: "citygrafix",
+    chips: ["High Quality Printing", "Fast Delivery", "Creative Graphic Design", "Reasonable Cost", "Polite Staff"],
+    reviews: {
+      ALL: "City Grafix delivered our store vinyl banners and visiting cards in record time with stunning print resolution and color vibrancy. The design team was patient and very creative!",
+      ENGLISH: "City Grafix delivered our store vinyl banners and visiting cards in record time with stunning print resolution and color vibrancy. The design team was patient and very creative!",
+      HINDI: "सिटी ग्राफिक्स से हमने बैनर्स और कार्ड्स प्रिंट करवाए। बहुत ही शानदार प्रिंट क्वालिटी, तुरंत डिलीवरी और बहुत ही वाजिब दाम। डिजाइनिंग टीम भी बहुत हुनरमंद है।",
+      TELUGU: "సిటీ గ్రాఫిక్స్ లో ప్రింటింగ్ క్వాలిటీ మరియు కలర్స్ ఎంతో అద్భుతంగా వచ్చాయి! చాలా తక్కువ సమయంలో మా బ్యానర్స్ రెడీ చేసి ఇచ్చారు. కడపలో బెస్ట్ ప్రింటింగ్ షాప్!",
+      TAMIL: "சிட்டி கிராபிக்ஸ் அவர்களின் பிரிண்டிங் தரம் மிகவும் உயர்தரமாக உள்ளது! குறித்த நேரத்தில் செய்து தந்தார்கள். சிறந்த சேவை!",
+      KANNADA: "ಸಿಟಿ ಗ್ರಾಫಿಕ್ಸ್‌ನಲ್ಲಿ ಮುದ್ರಣ ಗುಣಮಟ್ಟ ಮತ್ತು ವಿನ್ಯಾಸ ಅದ್ಭುತವಾಗಿದೆ! ಕಡಿಮೆ ಸಮಯದಲ್ಲಿ ಕೆಲಸ ಮುಗಿಸಿಕೊಟ್ಟಿದ್ದಾರೆ. ಧನ್ಯವಾದಗಳು!",
+      MALAYALAM: "സിറ്റി ഗ്രാഫിക്സിന്റെ പ്രിന്റിംഗ് ക്വാളിറ്റിയും ഡിസൈനിംഗും വളരെ മികച്ചതാണ്! സമയബന്ധിതമായ ഡെലിവറിയും ന്യായമായ നിരക്കും!",
+    },
+    author: "Obul Reddy C.",
   },
 ];
 
@@ -357,7 +357,7 @@ export default function HomePage() {
     "https://wa.me/918639831132?text=" +
     encodeURIComponent("Hi ReviewSmart AI team! I don't have a Google Business Profile yet. Please help me create, verify and set up my shop on Google Maps for free with the ₹2,999 Lifetime Pass.");
 
-  const handleCopyReview = (text: string, slug?: string) => {
+    const handleCopyReview = (text: string, slug?: string) => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(text);
       setCopiedDraft(true);
@@ -366,18 +366,59 @@ export default function HomePage() {
       } catch {}
       setTimeout(() => setCopiedDraft(false), 2400);
 
-      // If user clicked Copy & Post, open the verified Google Review popup
+      // If user clicked Copy & Post, open the verified Google review destination
       if (slug === "momo-it-technologies") {
         setTimeout(() => {
           window.open(
-            "https://search.google.com/local/writereview?placeid=ChIJd5iV_xdzszsRMOGZeUo3C8A",
+            "https://www.google.com/maps/search/?api=1&query=" +
+              encodeURIComponent("MOMO IT Technologies Krishnapuram Kadapa"),
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug === "mana-tours-travels") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJz-6hOcbQVaYRELARxZjPbrE",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug === "vrgold") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJHUVe5u5zszsR-sspZhPvhms",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug === "as-refrigeration") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJuX7dAX5zszsROYSpGZLNNfw",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug === "sri-guru-fashions-393a") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJ-_3HayRzszsRhE95URiMOqc",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug === "citygrafix") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJx7MuneJzszsRhKHkYyndOs4",
             "_blank",
             "noopener,noreferrer"
           );
         }, 550);
       } else if (slug) {
         setTimeout(() => {
-          window.open(`/r/${slug}`, "_blank", "noopener,noreferrer");
+          window.open("/r/" + slug, "_blank", "noopener,noreferrer");
         }, 550);
       }
     }

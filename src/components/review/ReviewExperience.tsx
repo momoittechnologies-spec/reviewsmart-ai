@@ -175,9 +175,7 @@ export default function ReviewExperience({
     let placeId = (business.googlePlaceId || "").trim();
     const rawUrl = (business.googleReviewUrl || "").trim();
 
-    if (business.slug === "momo-it-technologies" && !placeId) {
-      placeId = "ChIJd5iV_xdzszsRMOGZeUo3C8A";
-    } else if (business.slug === "as-refrigeration" && !placeId) {
+    if (business.slug === "as-refrigeration" && !placeId) {
       placeId = "ChIJuX7dAX5zszsROYSpGZLNNfw";
     } else if (business.slug === "sushmas-fashion-beauty" && !placeId) {
       placeId = "ChIJbzsJc9NzszsRtBUfS0gXCHk";
@@ -204,7 +202,7 @@ export default function ReviewExperience({
       }
     }
 
-    if (placeId === "ChIJfx1E9GgPujkRcPNEzcyHcJI") {
+    if (placeId === "ChIJfx1E9GgPujkRcPNEzcyHcJI" || placeId === "ChIJd5iV_xdzszsRMOGZeUo3C8A") {
       return "";
     }
 
@@ -219,6 +217,9 @@ export default function ReviewExperience({
     // 0. Known coordinate / non-writereview place IDs fallback to clean Google Maps search
     if (business.slug.includes("vijaya")) {
       return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Vijaya's Yummy Food Kadugodi Bengaluru")}`;
+    }
+    if (business.slug === "momo-it-technologies") {
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("MOMO IT Technologies Krishnapuram Kadapa")}`;
     }
 
     // 1. Official g.page/r/.../review shortlink opens the write-review dialog directly
@@ -264,7 +265,7 @@ export default function ReviewExperience({
   // Universal HTTPS Google Maps Profile Link (opens Maps app naturally via Android/iOS App Links without Play Store fallback)
   const getMapsAppUrl = () => {
     if (business.slug === "momo-it-technologies") {
-      return "https://www.google.com/maps?cid=13838215073033216304";
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("MOMO IT Technologies Krishnapuram Kadapa")}`;
     }
     const placeId = getResolvedPlaceId();
     if (placeId) {
