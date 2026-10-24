@@ -456,6 +456,19 @@ export default function SmartHubExperience({
         <p className="text-[11px] text-slate-500 font-medium">
           Powered by ReviewSmart AI · Smart Business Hub
         </p>
+        <a
+          href="https://www.momoittechnologies.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-[10px] text-slate-400 hover:text-slate-200 transition mt-0.5"
+        >
+          <img
+            src="https://www.momoittechnologies.com/logo.svg"
+            alt="MOMO IT Technologies"
+            className="w-3.5 h-3.5 rounded object-contain"
+          />
+          <span>Technology Partner: MOMO IT TECHNOLOGIES</span>
+        </a>
       </footer>
     </div>
   );

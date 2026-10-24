@@ -1366,8 +1366,22 @@ export default function ReviewExperience({
               ReviewSmart AI &rarr;
             </span>
           </a>
-          <p className="text-[10px] text-slate-500">
-            Powered by ReviewSmart AI &bull; Smart NFC Google Review Cards 🇮🇳
+          <p className="text-[10px] text-slate-500 flex items-center justify-center gap-1.5 flex-wrap">
+            <span>Powered by ReviewSmart AI &bull; Smart NFC Google Review Cards 🇮🇳</span>
+            <span>&bull;</span>
+            <a
+              href="https://www.momoittechnologies.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-slate-400 hover:text-slate-200 transition"
+            >
+              <img
+                src="https://www.momoittechnologies.com/logo.svg"
+                alt="MOMO IT Technologies"
+                className="w-3.5 h-3.5 rounded object-contain inline"
+              />
+              <span className="font-semibold">Tech Partner: MOMO IT TECHNOLOGIES</span>
+            </a>
           </p>
         </div>
       )}

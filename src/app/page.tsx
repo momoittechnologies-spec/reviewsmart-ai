@@ -1941,23 +1941,68 @@ export default function HomePage() {
 
       {/* ─── FOOTER ───────────────────────────────────────────────────────── */}
       <footer className="border-t border-slate-200 pt-8 pb-28 sm:pb-8 px-4 sm:px-6 bg-slate-100 text-xs text-slate-600">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <BrandLogo href="/" size="sm" theme="light" />
-          <p className="text-center text-slate-500">
-            &copy; {new Date().getFullYear()} ReviewSmart AI &bull; Pan-India Google Review Engine &bull; All Rights Reserved.
-          </p>
-          <div className="flex items-center gap-4">
-            <a
-              href="https://wa.me/918639831132"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-slate-900 transition flex items-center gap-1 font-medium"
-            >
-              <MessageCircle className="w-3.5 h-3.5 text-emerald-600" /> WhatsApp
-            </a>
-            <Link href="/login" className="hover:text-slate-900 transition flex items-center gap-1 font-medium">
-              <Lock className="w-3.5 h-3.5 text-indigo-600" /> Merchant Login
-            </Link>
+        <div className="max-w-6xl mx-auto space-y-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-200/80">
+            <BrandLogo href="/" size="sm" theme="light" />
+
+            {/* Official Technology Partner Pill */}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                Technology Partner:
+              </span>
+              <a
+                href="https://www.momoittechnologies.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 shadow-sm hover:shadow-md transition-all group"
+                title="MOMO IT Technologies - Official Website"
+              >
+                <img
+                  src="https://www.momoittechnologies.com/logo.svg"
+                  alt="MOMO IT Technologies Logo"
+                  className="w-5 h-5 rounded-md object-contain group-hover:scale-110 transition-transform"
+                />
+                <span className="font-black text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">
+                  MOMO IT TECHNOLOGIES
+                </span>
+                <span className="text-[11px] text-slate-400 group-hover:text-indigo-500 transition-colors hidden sm:inline">
+                  &bull; www.momoittechnologies.com
+                </span>
+                <ExternalLink className="w-3 h-3 text-slate-400 group-hover:text-indigo-600 transition-colors shrink-0" />
+              </a>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <a
+                href="https://wa.me/918639831132"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-slate-900 transition flex items-center gap-1 font-medium"
+              >
+                <MessageCircle className="w-3.5 h-3.5 text-emerald-600" /> WhatsApp
+              </a>
+              <Link href="/login" className="hover:text-slate-900 transition flex items-center gap-1 font-medium">
+                <Lock className="w-3.5 h-3.5 text-indigo-600" /> Merchant Login
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-center text-slate-500 text-[11px]">
+            <p>
+              &copy; {new Date().getFullYear()} ReviewSmart AI &bull; Pan-India Google Review Engine &bull; All Rights Reserved.
+            </p>
+            <p>
+              Official Technology Partner:{" "}
+              <a
+                href="https://www.momoittechnologies.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-slate-700 hover:text-indigo-600 underline underline-offset-2 transition inline-flex items-center gap-1"
+              >
+                <span>MOMO IT TECHNOLOGIES</span>
+                <span className="text-slate-400 font-normal">(www.momoittechnologies.com)</span>
+              </a>
+            </p>
           </div>
         </div>
       </footer>
