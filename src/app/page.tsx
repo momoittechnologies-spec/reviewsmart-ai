@@ -1905,36 +1905,59 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── FINAL CTA BANNER (HIGH-CONVERTING LUXURY CONTRAST) ────────────── */}
-      <section className="py-20 px-4 sm:px-6 relative overflow-hidden bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-t border-slate-200 text-center text-white">
-        <div className="max-w-3xl mx-auto space-y-6">
-          <BrandIcon size="xl" className="mx-auto drop-shadow-2xl" />
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight">
-            Ready to Dominate Google Maps in Your City?
+      {/* ─── FINAL CTA BANNER (OPTION A: HIGH-CONVERSION RETAIL CLOSER) ───── */}
+      <section className="py-16 sm:py-20 px-4 sm:px-6 relative overflow-hidden bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-t border-slate-800 text-center text-white">
+        <div className="max-w-3xl mx-auto space-y-6 relative z-10">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold shadow-lg backdrop-blur-md">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <span>🏪 48-Hour Doorstep Delivery Across India</span>
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
+            Want ReviewSmart AI For Your Business?
           </h2>
+
           <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
-            Join forward-thinking shop owners and healthcare professionals across India. Activate your ₹2,999 Lifetime Pass in 2 minutes &bull; Free GMB Setup Included!
+            Get your custom 3D acrylic NFC + QR standee delivered straight to your counter. Turn walk-in customers into authentic 5-star Google reviews. Zero monthly subscriptions &bull; Flat ₹2,999 Lifetime Pass.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
-            <Link
-              href="/dashboard/billing?plan=ONLINE_LIFETIME"
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-2xl shadow-emerald-500/30 transition active:scale-98"
-            >
-              <Zap className="w-4 h-4" />
-              <span>Get Lifetime Pass (₹2,999)</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+          {/* Value Highlights Chips */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
+            <span className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 font-semibold">
+              ⚡ 1-Tap Google Reviews
+            </span>
+            <span className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 font-semibold">
+              🇮🇳 6 Regional Languages
+            </span>
+            <span className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 font-semibold">
+              🛡️ Private Feedback Shield
+            </span>
+            <span className="px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 font-bold">
+              ✨ ₹2,999 Lifetime Pass
+            </span>
+          </div>
 
+          {/* Action CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
             <a
-              href={whatsappDirectBuyUrl}
+              href="https://wa.me/918639831132?text=Hi%20ReviewSmart%20AI!%20I%20want%20to%20order%20the%20ReviewSmart%20AI%203D%20NFC%20%2B%20QR%20Standee%20for%20my%20business%20(%E2%82%B92%2C999%20Lifetime%20Pass).%20Please%20guide%20me%20with%20the%20next%20steps."
               target="_blank"
-              rel="noreferrer"
-              className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm flex items-center justify-center gap-2 border border-white/20 transition"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-2xl shadow-emerald-500/30 transition transform active:scale-98"
             >
-              <MessageCircle className="w-4 h-4 text-emerald-400" />
-              <span>Instant WhatsApp Activation</span>
+              <MessageCircle className="w-5 h-5 fill-slate-950" />
+              <span>👉 Order Your Standee on WhatsApp</span>
+              <ArrowRight className="w-4 h-4" />
             </a>
+
+            <Link
+              href="/r/mana-tours-travels"
+              className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm flex items-center justify-center gap-2 border border-white/20 transition transform active:scale-98"
+            >
+              <Play className="w-4 h-4 fill-white" />
+              <span>▶ Test Live Demo First</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -1965,9 +1988,6 @@ export default function HomePage() {
                 <span className="font-black text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">
                   MOMO IT TECHNOLOGIES
                 </span>
-                <span className="text-[11px] text-slate-400 group-hover:text-indigo-500 transition-colors hidden sm:inline">
-                  &bull; www.momoittechnologies.com
-                </span>
                 <ExternalLink className="w-3 h-3 text-slate-400 group-hover:text-indigo-600 transition-colors shrink-0" />
               </a>
             </div>
@@ -1997,10 +2017,9 @@ export default function HomePage() {
                 href="https://www.momoittechnologies.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-bold text-slate-700 hover:text-indigo-600 underline underline-offset-2 transition inline-flex items-center gap-1"
+                className="font-bold text-slate-700 hover:text-indigo-600 underline underline-offset-2 transition"
               >
-                <span>MOMO IT TECHNOLOGIES</span>
-                <span className="text-slate-400 font-normal">(www.momoittechnologies.com)</span>
+                MOMO IT TECHNOLOGIES
               </a>
             </p>
           </div>
