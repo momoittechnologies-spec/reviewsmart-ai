@@ -243,6 +243,24 @@ export default function WhatsAppInviteGenerator({
           )}
         </button>
       </div>
+
+      {/* Minimal Technology Partner */}
+      <div className="pt-2 border-t border-slate-800 text-center flex items-center justify-center gap-1.5 text-[10px] text-slate-500">
+        <span>Technology Partner:</span>
+        <a
+          href="https://www.momoittechnologies.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-slate-400 hover:text-slate-200 font-semibold transition"
+        >
+          <img
+            src="https://www.momoittechnologies.com/logo.svg"
+            alt="MOMO IT Technologies"
+            className="w-3.5 h-3.5 rounded object-contain"
+          />
+          <span>MOMO IT TECHNOLOGIES</span>
+        </a>
+      </div>
     </div>
   );
 }
