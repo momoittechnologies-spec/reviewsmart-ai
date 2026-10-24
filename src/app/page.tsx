@@ -1978,7 +1978,7 @@ export default function HomePage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 shadow-sm hover:shadow-md transition-all group"
-                title="MOMO IT Technologies - Official Website"
+                title="MOMO IT Technologies"
               >
                 <img
                   src="https://www.momoittechnologies.com/logo.svg"
@@ -2007,20 +2007,9 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-center text-slate-500 text-[11px]">
+          <div className="text-center text-slate-500 text-[11px]">
             <p>
               &copy; {new Date().getFullYear()} ReviewSmart AI &bull; Pan-India Google Review Engine &bull; All Rights Reserved.
-            </p>
-            <p>
-              Official Technology Partner:{" "}
-              <a
-                href="https://www.momoittechnologies.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold text-slate-700 hover:text-indigo-600 underline underline-offset-2 transition"
-              >
-                MOMO IT TECHNOLOGIES
-              </a>
             </p>
           </div>
         </div>
