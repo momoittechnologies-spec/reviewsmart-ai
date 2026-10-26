@@ -118,6 +118,46 @@ export default function AdminMerchantsPage() {
     gmbNotes: "",
   });
   const [savingEdit, setSavingEdit] = useState(false);
+  const [adminEnrichingDna, setAdminEnrichingDna] = useState(false);
+  const [adminDnaNotice, setAdminDnaNotice] = useState<string | null>(null);
+
+  const handleAdminEnrichDna = async () => {
+    if (!editForm.businessId || !editForm.businessName) return;
+    setAdminEnrichingDna(true);
+    setAdminDnaNotice(null);
+
+    try {
+      const res = await fetch("/api/business/enrich-dna", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          businessId: editForm.businessId,
+          businessName: editForm.businessName,
+          category: editForm.category,
+          googleAddress: editForm.googleAddress,
+          website: editForm.website,
+          autoSave: true,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Enrichment failed");
+
+      if (data.dna) {
+        setEditForm((prev: any) => ({
+          ...prev,
+          tagline: data.dna.tagline || prev.tagline,
+          category: data.dna.category || prev.category,
+        }));
+        setAdminDnaNotice("Enriched! Specialties: " + (data.dna.signatureItems?.join(", ") || ""));
+        setTimeout(() => setAdminDnaNotice(null), 6000);
+      }
+    } catch (e: any) {
+      alert(e.message || "Failed to auto-enrich");
+    } finally {
+      setAdminEnrichingDna(false);
+    }
+  };
   const [editError, setEditError] = useState("");
 
   // Delete Modal state
@@ -1250,9 +1290,34 @@ export default function AdminMerchantsPage() {
               {/* Store & Review Card Details */}
               {editForm.businessId && (
                 <div className="space-y-3 bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
-                    🏢 Store Review Card (/r/{editForm.slug})
-                  </span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                      🏢 Store Review Card (/r/{editForm.slug})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleAdminEnrichDna}
+                      disabled={adminEnrichingDna}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold shadow-sm transition disabled:opacity-50"
+                    >
+                      {adminEnrichingDna ? (
+                        <>
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                          <span>Enriching...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-3 h-3 text-amber-300" />
+                          <span>Auto-Enrich DNA ✨</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  {adminDnaNotice && (
+                    <div className="p-2.5 bg-emerald-950/60 border border-emerald-500/40 rounded-xl text-emerald-300 text-[11px]">
+                      {adminDnaNotice}
+                    </div>
+                  )}
 
                   <div>
                     <label className="block text-[11px] font-semibold text-slate-300 mb-1">

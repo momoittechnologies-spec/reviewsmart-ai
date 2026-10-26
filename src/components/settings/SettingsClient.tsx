@@ -143,6 +143,60 @@ export default function SettingsClient({ business }: { business: BusinessData })
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
+  // DNA Enrichment states
+  const [enrichingDna, setEnrichingDna] = useState(false);
+  const [dnaSuccessNotice, setDnaSuccessNotice] = useState<string | null>(null);
+
+  const handleAutoEnrichDna = async () => {
+    if (!form.name || form.name.trim().length < 2) {
+      alert("Please enter a business name first.");
+      return;
+    }
+    setEnrichingDna(true);
+    setDnaSuccessNotice(null);
+
+    try {
+      const res = await fetch("/api/business/enrich-dna", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          businessId: business.id,
+          businessName: form.name,
+          category: form.category,
+          googleAddress: form.googleAddress,
+          instagram: form.instagram,
+          website: form.website,
+          autoSave: false,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to auto-enrich business DNA");
+      }
+
+      if (data.dna) {
+        const { tagChips, keywords, tagline, tone, signatureItems } = data.dna;
+        setForm((prev) => ({
+          ...prev,
+          tagChips: tagChips.join(", "),
+          keywords: keywords,
+          tagline: tagline || prev.tagline,
+          reviewPromptTone: tone || prev.reviewPromptTone,
+        }));
+        setSelectedChips(tagChips.slice(0, 2));
+        setDnaSuccessNotice(
+          "Discovered " + (signatureItems?.length || 4) + " signature specialties: " + (signatureItems?.join(", ") || "") + "!"
+        );
+        setTimeout(() => setDnaSuccessNotice(null), 6000);
+      }
+    } catch (err: any) {
+      alert(err.message || "Failed to auto-enrich business DNA");
+    } finally {
+      setEnrichingDna(false);
+    }
+  };
+
   const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -918,10 +972,43 @@ export default function SettingsClient({ business }: { business: BusinessData })
 
             {/* 3. AI Compliment Chips & SEO Keywords */}
             <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
-              <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-indigo-600" />
-                AI Compliment Chips &amp; SEO Keywords
-              </h2>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                <div>
+                  <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-indigo-600" />
+                    AI Compliment Chips &amp; SEO Keywords
+                  </h2>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Dynamic chips and keywords tailored to your actual products and services.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleAutoEnrichDna}
+                  disabled={enrichingDna}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-md shadow-indigo-100 disabled:opacity-50 transition-all cursor-pointer"
+                >
+                  {enrichingDna ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      Scanning Products &amp; Services...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                      Auto-Enrich Business DNA ✨
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {dnaSuccessNotice && (
+                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center gap-2 text-emerald-800 text-xs animate-fadeIn">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                  <span>{dnaSuccessNotice}</span>
+                </div>
+              )}
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
