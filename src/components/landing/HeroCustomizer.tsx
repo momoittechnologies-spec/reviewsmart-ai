@@ -32,6 +32,7 @@ import {
   ExternalLink,
   Lock,
   Search,
+  AlertTriangle,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import QRCode from "qrcode";
@@ -165,6 +166,14 @@ export default function HeroCustomizer() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderError, setOrderError] = useState("");
   const [copiedUpi, setCopiedUpi] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
+  const upiPhoneNumber = "8639831132";
+
+  const handleCopyPhone = async () => {
+    await copyToClipboard(upiPhoneNumber);
+    setCopiedPhone(true);
+    setTimeout(() => setCopiedPhone(false), 2500);
+  };
   const [paymentQrUrl, setPaymentQrUrl] = useState<string>("");
 
   // Success Confirmation State
@@ -1105,8 +1114,8 @@ export default function HeroCustomizer() {
                       </div>
                     </div>
 
-                    {/* Step 2: Payment via UPI QR */}
-                    <div className="p-4 rounded-2xl bg-slate-900 text-white space-y-3">
+                    {/* Step 2: Payment via UPI */}
+                    <div className="p-4 rounded-2xl bg-slate-900 text-white space-y-3.5">
                       <div className="flex items-center justify-between">
                         <div className="text-[11px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
                           <CreditCard className="w-3.5 h-3.5" />
@@ -1117,36 +1126,94 @@ export default function HeroCustomizer() {
                         </span>
                       </div>
 
-                      <div className="flex flex-col sm:flex-row items-center gap-4 bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                      {/* Important Warning Banner for Mobile PhonePe/GPay Gallery Limit */}
+                      <div className="p-3 bg-amber-500/15 border border-amber-500/30 rounded-xl text-amber-200 text-[11px] leading-relaxed space-y-1">
+                        <div className="font-bold flex items-center gap-1.5 text-amber-300">
+                          <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                          <span>Paying on Mobile Phone (PhonePe / GPay / Paytm)?</span>
+                        </div>
+                        <p className="text-slate-300 text-[10px]">
+                          NPCI &amp; PhonePe limit screenshot QR gallery scans to ₹2,000 max. To pay ₹2,999 smoothly without any limits, <strong>pay directly to Mobile Number or UPI ID below!</strong>
+                        </p>
+                      </div>
+
+                      {/* Payment Options Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {/* Option 1: Pay to Mobile Number */}
+                        <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                          <div className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
+                            <Smartphone className="w-3 h-3 text-emerald-400" />
+                            <span>Option 1: Pay to Mobile Number</span>
+                          </div>
+                          <div>
+                            <div className="text-[11px] text-slate-300">PhonePe / GPay / Paytm:</div>
+                            <div className="flex items-center justify-between mt-1">
+                              <span className="font-mono text-sm font-black text-emerald-400">8639831132</span>
+                              <button
+                                type="button"
+                                onClick={handleCopyPhone}
+                                className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[10px] font-bold transition flex items-center gap-1 cursor-pointer"
+                              >
+                                {copiedPhone ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                                <span>{copiedPhone ? "Copied" : "Copy"}</span>
+                              </button>
+                            </div>
+                            <span className="text-[10px] text-slate-500 block mt-0.5">Name: DAMERLA MOHAN</span>
+                          </div>
+                          <p className="text-[10px] text-slate-400 leading-tight">
+                            👉 Open UPI app &rarr; Tap <strong>&quot;To Mobile Number&quot;</strong> &rarr; Enter 8639831132 &rarr; Pay ₹2,999.
+                          </p>
+                        </div>
+
+                        {/* Option 2: Pay to UPI ID */}
+                        <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                          <div className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1">
+                            <CreditCard className="w-3 h-3 text-amber-400" />
+                            <span>Option 2: Pay to UPI ID</span>
+                          </div>
+                          <div>
+                            <div className="text-[11px] text-slate-300">BHIM / Any Bank UPI ID:</div>
+                            <div className="flex items-center justify-between mt-1">
+                              <span className="font-mono text-xs font-bold text-amber-300 truncate mr-1">{upiId}</span>
+                              <button
+                                type="button"
+                                onClick={handleCopyUpi}
+                                className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[10px] font-bold transition flex items-center gap-1 cursor-pointer shrink-0"
+                              >
+                                {copiedUpi ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                                <span>{copiedUpi ? "Copied" : "Copy"}</span>
+                              </button>
+                            </div>
+                            <span className="text-[10px] text-slate-500 block mt-0.5">Name: DAMERLA MOHAN</span>
+                          </div>
+                          <p className="text-[10px] text-slate-400 leading-tight">
+                            👉 Open UPI app &rarr; Tap <strong>&quot;To UPI ID&quot;</strong> &rarr; Paste &apos;{upiId}&apos; &rarr; Pay ₹2,999.
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Direct UPI App Intent Trigger & QR Code */}
+                      <div className="flex flex-col sm:flex-row items-center gap-3 bg-slate-950 p-3 rounded-xl border border-slate-800">
                         {paymentQrUrl && (
-                          <div className="bg-white p-2 rounded-xl shrink-0">
-                            <img src={paymentQrUrl} alt="UPI QR" className="w-24 h-24 object-contain" />
+                          <div className="bg-white p-1.5 rounded-lg shrink-0">
+                            <img src={paymentQrUrl} alt="UPI QR" className="w-20 h-20 object-contain" />
                           </div>
                         )}
-
                         <div className="text-left space-y-1.5 flex-1">
-                          <div className="text-[11px] text-slate-400">Scan with GPay, PhonePe, or Paytm:</div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold text-amber-300">{upiId}</span>
-                            <button
-                              type="button"
-                              onClick={handleCopyUpi}
-                              className="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold transition flex items-center gap-1 cursor-pointer"
-                            >
-                              {copiedUpi ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
-                              <span>{copiedUpi ? "Copied" : "Copy"}</span>
-                            </button>
-                          </div>
-
+                          <div className="text-[11px] text-slate-300 font-semibold">Scanning from another phone or laptop?</div>
+                          <p className="text-[10px] text-slate-400 leading-tight">
+                            Scan the QR code with your camera app. (If on mobile, use Option 1 or 2 above).
+                          </p>
                           <a
                             href={upiDeepLink}
-                            className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 underline pt-0.5"
+                            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 underline pt-0.5"
                           >
                             <span>Open UPI App on Phone &rarr;</span>
                           </a>
                         </div>
                       </div>
 
+                      {/* Step 3: Enter 12-digit UTR */}
                       <div>
                         <label className="block text-[11px] font-bold text-slate-300 mb-1">
                           Enter 12-Digit UPI Ref / UTR Number *
