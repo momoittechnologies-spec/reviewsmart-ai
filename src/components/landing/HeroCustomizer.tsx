@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   Sparkles,
@@ -31,6 +31,7 @@ import {
   Copy,
   ExternalLink,
   Lock,
+  Search,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import QRCode from "qrcode";
@@ -48,6 +49,20 @@ interface ThemeOption {
   qrColorDark: string;
   dotColor: string;
   textColor: string;
+}
+
+interface GoogleSearchResult {
+  name: string;
+  branchName: string;
+  address: string;
+  category: string;
+  googlePlaceId?: string;
+  placeId?: string;
+  googleReviewUrl: string;
+  rating?: number;
+  reviewCount?: string;
+  suggestedTags?: string[];
+  logoUrl?: string | null;
 }
 
 const THEMES: Record<string, ThemeOption> = {
@@ -122,6 +137,21 @@ export default function HeroCustomizer() {
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
   const [isNfcSimulating, setIsNfcSimulating] = useState(false);
 
+  // Google Places Live Search State (Modal & Hero)
+  const [modalSearchResults, setModalSearchResults] = useState<GoogleSearchResult[]>([]);
+  const [isSearchingModal, setIsSearchingModal] = useState(false);
+  const [isModalDropdownOpen, setIsModalDropdownOpen] = useState(false);
+  const [verifiedGoogleProfile, setVerifiedGoogleProfile] = useState<GoogleSearchResult | null>(null);
+
+  const [heroSearchResults, setHeroSearchResults] = useState<GoogleSearchResult[]>([]);
+  const [isSearchingHero, setIsSearchingHero] = useState(false);
+  const [isHeroDropdownOpen, setIsHeroDropdownOpen] = useState(false);
+
+  const modalDebounceRef = useRef<NodeJS.Timeout | null>(null);
+  const heroDebounceRef = useRef<NodeJS.Timeout | null>(null);
+  const modalSearchContainerRef = useRef<HTMLDivElement | null>(null);
+  const heroSearchContainerRef = useRef<HTMLDivElement | null>(null);
+
   // Modal & Self-Onboarding Flow State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"instant_order" | "whatsapp_proof">("instant_order");
@@ -150,6 +180,20 @@ export default function HeroCustomizer() {
   const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent("ReviewSmart AI")}&am=2999&cu=INR&tn=${encodeURIComponent(
     `ReviewSmart 3D Standee - ${businessName.slice(0, 20)}`
   )}`;
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (modalSearchContainerRef.current && !modalSearchContainerRef.current.contains(e.target as Node)) {
+        setIsModalDropdownOpen(false);
+      }
+      if (heroSearchContainerRef.current && !heroSearchContainerRef.current.contains(e.target as Node)) {
+        setIsHeroDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Generate Review Card Preview QR code
   useEffect(() => {
@@ -192,6 +236,7 @@ export default function HeroCustomizer() {
     setBusinessName(preset.name);
     setCity(preset.city);
     setCategory(preset.category);
+    setVerifiedGoogleProfile(null);
   };
 
   const handleSimulateNfcTap = () => {
@@ -206,6 +251,91 @@ export default function HeroCustomizer() {
     await copyToClipboard(upiId);
     setCopiedUpi(true);
     setTimeout(() => setCopiedUpi(false), 2500);
+  };
+
+  // Google Places Search Handlers (Modal)
+  const handleModalBusinessSearch = (val: string) => {
+    setBusinessName(val);
+    if (modalDebounceRef.current) clearTimeout(modalDebounceRef.current);
+
+    if (!val || val.trim().length < 2) {
+      setModalSearchResults([]);
+      setIsModalDropdownOpen(false);
+      setIsSearchingModal(false);
+      return;
+    }
+
+    setIsSearchingModal(true);
+    setIsModalDropdownOpen(true);
+
+    modalDebounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/business/search-google?query=${encodeURIComponent(val.trim())}`);
+        const data = await res.json();
+        if (data.success && Array.isArray(data.results)) {
+          setModalSearchResults(data.results);
+        } else {
+          setModalSearchResults([]);
+        }
+      } catch (err) {
+        console.error("Google Places search error:", err);
+        setModalSearchResults([]);
+      } finally {
+        setIsSearchingModal(false);
+      }
+    }, 300);
+  };
+
+  // Google Places Search Handlers (Hero)
+  const handleHeroBusinessSearch = (val: string) => {
+    setBusinessName(val);
+    if (heroDebounceRef.current) clearTimeout(heroDebounceRef.current);
+
+    if (!val || val.trim().length < 2) {
+      setHeroSearchResults([]);
+      setIsHeroDropdownOpen(false);
+      setIsSearchingHero(false);
+      return;
+    }
+
+    setIsSearchingHero(true);
+    setIsHeroDropdownOpen(true);
+
+    heroDebounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/business/search-google?query=${encodeURIComponent(val.trim())}`);
+        const data = await res.json();
+        if (data.success && Array.isArray(data.results)) {
+          setHeroSearchResults(data.results);
+        } else {
+          setHeroSearchResults([]);
+        }
+      } catch (err) {
+        console.error("Hero search error:", err);
+        setHeroSearchResults([]);
+      } finally {
+        setIsSearchingHero(false);
+      }
+    }, 300);
+  };
+
+  // When user selects a matching Google Business Profile
+  const handleSelectGoogleProfile = (profile: GoogleSearchResult) => {
+    setBusinessName(profile.name);
+    setGoogleMapsUrl(profile.googleReviewUrl);
+    setCategory(profile.category || category);
+
+    if (profile.address) {
+      setDeliveryAddress(profile.address);
+      const addressParts = profile.address.split(",");
+      if (addressParts.length > 1) {
+        setCity(addressParts.slice(-2).join(",").trim());
+      }
+    }
+
+    setVerifiedGoogleProfile(profile);
+    setIsModalDropdownOpen(false);
+    setIsHeroDropdownOpen(false);
   };
 
   // 1. Direct Self-Serve Order Submission
@@ -259,7 +389,9 @@ export default function HeroCustomizer() {
           amount: 2999,
           customerPhone: phone.trim(),
           packageTier: "EXECUTIVE_STANDEE",
-          notes: `Delivery Address: ${deliveryAddress.trim()}, Pincode: ${pincode.trim()} | Theme: ${theme.name}`,
+          notes: `Delivery Address: ${deliveryAddress.trim()}, Pincode: ${pincode.trim()} | Theme: ${theme.name}${
+            verifiedGoogleProfile ? ` | Verified GMB: ${verifiedGoogleProfile.name}` : ""
+          }`,
         }),
       });
 
@@ -314,7 +446,7 @@ export default function HeroCustomizer() {
           category,
           phone,
           source: "HERO_3D_CUSTOMIZER",
-          notes: `Theme: ${theme.name}`,
+          notes: `Theme: ${theme.name}${verifiedGoogleProfile ? ` | Verified GMB: ${verifiedGoogleProfile.name}` : ""}`,
         }),
       });
 
@@ -393,17 +525,89 @@ export default function HeroCustomizer() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-left">
-                    Your Shop / Clinic Name
+                {/* Hero Store Name Input with Google Places Autocomplete */}
+                <div ref={heroSearchContainerRef} className="relative">
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-left flex items-center justify-between">
+                    <span>Shop / Clinic Name</span>
+                    <span className="text-[10px] text-indigo-600 font-semibold flex items-center gap-1">
+                      <Search className="w-2.5 h-2.5" /> Google Search
+                    </span>
                   </label>
-                  <input
-                    type="text"
-                    value={businessName}
-                    onChange={(e) => setBusinessName(e.target.value)}
-                    placeholder="e.g. Sri Krishna Sweets"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold focus:outline-none focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 transition"
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={businessName}
+                      onChange={(e) => handleHeroBusinessSearch(e.target.value)}
+                      onFocus={() => {
+                        if (heroSearchResults.length > 0) setIsHeroDropdownOpen(true);
+                      }}
+                      placeholder="e.g. Sri Krishna Sweets"
+                      className="w-full pl-3.5 pr-8 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold focus:outline-none focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 transition"
+                    />
+                    <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+                      {isSearchingHero ? (
+                        <Loader2 className="w-3.5 h-3.5 text-indigo-600 animate-spin" />
+                      ) : (
+                        <Search className="w-3.5 h-3.5 text-slate-400" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Hero Google Places Dropdown */}
+                  {isHeroDropdownOpen && (
+                    <div className="absolute left-0 right-0 top-full mt-1.5 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-800 animate-fadeIn text-left max-h-56 overflow-y-auto">
+                      <div className="px-3 py-1.5 bg-slate-950 text-[10px] font-bold text-slate-400 flex items-center justify-between">
+                        <span>{isSearchingHero ? "Searching Google Maps..." : `Google Places (${heroSearchResults.length})`}</span>
+                        <span className="text-amber-400 font-normal">Tap to link</span>
+                      </div>
+
+                      {isSearchingHero && heroSearchResults.length === 0 && (
+                        <div className="p-3 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
+                          <Loader2 className="w-3 h-3 animate-spin text-amber-400" />
+                          <span>Finding matching Google profiles...</span>
+                        </div>
+                      )}
+
+                      {!isSearchingHero && heroSearchResults.length === 0 && businessName.trim().length >= 2 && (
+                        <div className="p-3 text-center text-xs text-slate-400">
+                          No exact match found on Google Maps. Keep typing!
+                        </div>
+                      )}
+
+                      {heroSearchResults.map((r, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handleSelectGoogleProfile(r)}
+                          className="w-full p-2.5 text-left hover:bg-slate-800 flex items-start gap-2.5 transition text-xs group cursor-pointer"
+                        >
+                          <div className="w-6 h-6 rounded-lg bg-amber-400/10 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-400/20">
+                            <MapPin className="w-3.5 h-3.5" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-1">
+                              <span className="text-xs font-bold text-white group-hover:text-amber-300 truncate">
+                                {r.name}
+                              </span>
+                              {r.rating && (
+                                <span className="text-[10px] font-bold text-amber-400 shrink-0">
+                                  ★ {r.rating} {r.reviewCount ? `(${r.reviewCount})` : ""}
+                                </span>
+                              )}
+                            </div>
+                            {r.branchName && (
+                              <span className="text-[10px] font-semibold text-indigo-400 block truncate">
+                                {r.branchName}
+                              </span>
+                            )}
+                            <span className="text-[10px] text-slate-400 block truncate mt-0.5">
+                              {r.address}
+                            </span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -744,23 +948,103 @@ export default function HeroCustomizer() {
 
                     {/* Step 1: Business & Delivery Address */}
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                        <Truck className="w-3.5 h-3.5 text-indigo-600" />
-                        <span>Step 1: Store &amp; Delivery Details</span>
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          <Truck className="w-3.5 h-3.5 text-indigo-600" />
+                          <span>Step 1: Store &amp; Delivery Details</span>
+                        </div>
+                        {verifiedGoogleProfile && (
+                          <span className="text-[10px] text-emerald-700 bg-emerald-100/90 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Google Verified
+                          </span>
+                        )}
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                            Store / Business Name *
+                        {/* Store / Business Name with Google Places Typeahead Search */}
+                        <div ref={modalSearchContainerRef} className="relative">
+                          <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center justify-between">
+                            <span>Store / Business Name *</span>
+                            <span className="text-[10px] text-indigo-600 font-semibold flex items-center gap-1">
+                              <Search className="w-2.5 h-2.5" /> Google Places
+                            </span>
                           </label>
-                          <input
-                            type="text"
-                            required
-                            value={businessName}
-                            onChange={(e) => setBusinessName(e.target.value)}
-                            className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                          />
+                          <div className="relative">
+                            <input
+                              type="text"
+                              required
+                              value={businessName}
+                              onChange={(e) => handleModalBusinessSearch(e.target.value)}
+                              onFocus={() => {
+                                if (modalSearchResults.length > 0) setIsModalDropdownOpen(true);
+                              }}
+                              placeholder="Search your business on Google Maps..."
+                              className="w-full pl-3 pr-8 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            />
+                            <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+                              {isSearchingModal ? (
+                                <Loader2 className="w-3.5 h-3.5 text-indigo-600 animate-spin" />
+                              ) : (
+                                <Search className="w-3.5 h-3.5 text-slate-400" />
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Dropdown matching Google Business Profile Results */}
+                          {isModalDropdownOpen && (
+                            <div className="absolute left-0 right-0 top-full mt-1.5 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-800 animate-fadeIn max-h-60 overflow-y-auto">
+                              <div className="px-3 py-2 bg-slate-950 text-[10px] font-bold text-slate-400 flex items-center justify-between">
+                                <span>{isSearchingModal ? "Searching Google Maps..." : `Google Maps Profiles (${modalSearchResults.length})`}</span>
+                                <span className="text-amber-400 font-normal">Tap to auto-fill</span>
+                              </div>
+
+                              {isSearchingModal && modalSearchResults.length === 0 && (
+                                <div className="p-4 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
+                                  <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400" />
+                                  <span>Searching Google Maps live profiles...</span>
+                                </div>
+                              )}
+
+                              {!isSearchingModal && modalSearchResults.length === 0 && businessName.trim().length >= 2 && (
+                                <div className="p-3 text-center text-xs text-slate-400">
+                                  No matching profile found. You can continue typing manually!
+                                </div>
+                              )}
+
+                              {modalSearchResults.map((r, idx) => (
+                                <button
+                                  key={idx}
+                                  type="button"
+                                  onClick={() => handleSelectGoogleProfile(r)}
+                                  className="w-full p-2.5 text-left hover:bg-slate-800 flex items-start gap-2.5 transition text-xs group cursor-pointer"
+                                >
+                                  <div className="w-6 h-6 rounded-lg bg-amber-400/10 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-400/20">
+                                    <MapPin className="w-3.5 h-3.5" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center justify-between gap-1">
+                                      <span className="text-xs font-bold text-white group-hover:text-amber-300 truncate">
+                                        {r.name}
+                                      </span>
+                                      {r.rating && (
+                                        <span className="text-[10px] font-bold text-amber-400 shrink-0 flex items-center gap-0.5">
+                                          ★ {r.rating} {r.reviewCount ? `(${r.reviewCount})` : ""}
+                                        </span>
+                                      )}
+                                    </div>
+                                    {r.branchName && (
+                                      <span className="text-[10px] font-semibold text-indigo-400 block truncate">
+                                        {r.branchName}
+                                      </span>
+                                    )}
+                                    <span className="text-[10px] text-slate-400 block truncate mt-0.5">
+                                      {r.address}
+                                    </span>
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          )}
                         </div>
 
                         <div>
@@ -783,6 +1067,28 @@ export default function HeroCustomizer() {
                           </div>
                         </div>
                       </div>
+
+                      {/* Verified Google Profile Badge banner */}
+                      {verifiedGoogleProfile && (
+                        <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs flex items-center justify-between text-emerald-900 animate-fadeIn">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                            <div className="truncate">
+                              <span className="font-bold">{verifiedGoogleProfile.name}</span>
+                              <span className="text-[10px] text-emerald-700 block truncate">
+                                {verifiedGoogleProfile.address}
+                              </span>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setVerifiedGoogleProfile(null)}
+                            className="text-[10px] text-emerald-700 hover:text-emerald-900 font-bold underline shrink-0 ml-2 cursor-pointer"
+                          >
+                            Change
+                          </button>
+                        </div>
+                      )}
 
                       <div>
                         <label className="block text-[11px] font-bold text-slate-700 mb-1">
