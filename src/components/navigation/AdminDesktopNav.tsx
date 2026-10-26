@@ -23,10 +23,10 @@ export default function AdminDesktopNav() {
       active: pathname === "/admin",
     },
     {
-      label: "Local Lead Hunter 🎯",
-      href: "/admin/leads",
+      label: "AI Growth Engine 🚀",
+      href: "/admin/growth",
       icon: Compass,
-      active: pathname.startsWith("/admin/leads"),
+      active: pathname.startsWith("/admin/growth"),
     },
     {
       label: "Merchants",

@@ -23,10 +23,10 @@ export default function AdminMobileBottomNav() {
       active: pathname === "/admin",
     },
     {
-      label: "Leads 🎯",
-      href: "/admin/leads",
+      label: "Growth 🚀",
+      href: "/admin/growth",
       icon: Compass,
-      active: pathname.startsWith("/admin/leads"),
+      active: pathname.startsWith("/admin/growth"),
     },
     {
       label: "Merchants",
