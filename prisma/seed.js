@@ -10,7 +10,7 @@ async function main() {
   await prisma.platformSetting.upsert({
     where: { id: "default" },
     update: {
-      upiId: "momopedeals@oksbi",
+      upiId: "8639831132-2@ybl",
       upiPayeeName: "Damerla Mohan",
       supportEmail: "momopedeals@gmail.com",
       digitalPrice: 299,
@@ -22,7 +22,7 @@ async function main() {
       platformName: "ReviewSmart AI",
       supportEmail: "momopedeals@gmail.com",
       currencySymbol: "₹",
-      upiId: "momopedeals@oksbi",
+      upiId: "8639831132-2@ybl",
       upiPayeeName: "Damerla Mohan",
       digitalPrice: 299,
       physicalPrice: 1999,

@@ -185,10 +185,17 @@ export default function HeroCustomizer() {
   } | null>(null);
 
   const theme = THEMES[selectedTheme] || THEMES["royal-gold"];
-  const upiId = "momopedeals@oksbi";
-  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent("ReviewSmart AI")}&am=2999&cu=INR&tn=${encodeURIComponent(
-    `ReviewSmart 3D Standee - ${businessName.slice(0, 20)}`
-  )}`;
+  const upiId = "8639831132-2@ybl";
+  const upiPayee = "Damerla Mohan";
+  const upiNote = `ReviewSmart 3D Standee - ${businessName.slice(0, 16) || "Order"}`;
+  const upiEncodedNote = encodeURIComponent(upiNote);
+  const upiEncodedPayee = encodeURIComponent(upiPayee);
+
+  // YouPI-PG Multi-App Protocol Deep Links (Direct App Handoff — No ₹2,000 Gallery limit)
+  const phonePeDeepLink = `phonepe://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}`;
+  const gpayDeepLink = `tez://upi/pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}`;
+  const paytmDeepLink = `paytmmp://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}`;
+  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}`;
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -1133,8 +1140,49 @@ export default function HeroCustomizer() {
                           <span>Paying on Mobile Phone (PhonePe / GPay / Paytm)?</span>
                         </div>
                         <p className="text-slate-300 text-[10px]">
-                          NPCI &amp; PhonePe limit screenshot QR gallery scans to ₹2,000 max. To pay ₹2,999 smoothly without any limits, <strong>pay directly to Mobile Number or UPI ID below!</strong>
+                          NPCI &amp; PhonePe limit screenshot QR gallery scans to ₹2,000 max. To pay ₹2,999 smoothly without any limits, <strong>tap your app below or pay directly to Mobile Number or UPI ID!</strong>
                         </p>
+                      </div>
+
+                      {/* Multi-App Instant 1-Tap Pay Launchers (Inspired by YouPI-PG) */}
+                      <div>
+                        <div className="text-[10px] uppercase font-bold text-slate-400 mb-2 flex items-center gap-1">
+                          <Zap className="w-3 h-3 text-amber-400" />
+                          <span>1-Tap Launch Payment App (Direct Handoff — No ₹2,000 Limit):</span>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                          <a
+                            href={phonePeDeepLink}
+                            className="p-2.5 rounded-xl bg-purple-700/80 hover:bg-purple-600 border border-purple-500/40 text-white text-center transition flex flex-col items-center justify-center gap-0.5 group active:scale-95 shadow-sm"
+                          >
+                            <span className="text-xs font-black group-hover:text-amber-300">🟣 PhonePe</span>
+                            <span className="text-[9px] text-purple-200">Tap to Pay ₹2,999</span>
+                          </a>
+
+                          <a
+                            href={gpayDeepLink}
+                            className="p-2.5 rounded-xl bg-blue-600/80 hover:bg-blue-500 border border-blue-400/40 text-white text-center transition flex flex-col items-center justify-center gap-0.5 group active:scale-95 shadow-sm"
+                          >
+                            <span className="text-xs font-black group-hover:text-amber-300">🔵 Google Pay</span>
+                            <span className="text-[9px] text-blue-200">Tap to Pay ₹2,999</span>
+                          </a>
+
+                          <a
+                            href={paytmDeepLink}
+                            className="p-2.5 rounded-xl bg-sky-700/80 hover:bg-sky-600 border border-sky-400/40 text-white text-center transition flex flex-col items-center justify-center gap-0.5 group active:scale-95 shadow-sm"
+                          >
+                            <span className="text-xs font-black group-hover:text-amber-300">🟦 Paytm</span>
+                            <span className="text-[9px] text-sky-200">Tap to Pay ₹2,999</span>
+                          </a>
+
+                          <a
+                            href={upiDeepLink}
+                            className="p-2.5 rounded-xl bg-emerald-700/80 hover:bg-emerald-600 border border-emerald-500/40 text-white text-center transition flex flex-col items-center justify-center gap-0.5 group active:scale-95 shadow-sm"
+                          >
+                            <span className="text-xs font-black group-hover:text-amber-300">🟢 Any UPI</span>
+                            <span className="text-[9px] text-emerald-200">CRED / BHIM</span>
+                          </a>
+                        </div>
                       </div>
 
                       {/* Payment Options Grid */}
@@ -1202,32 +1250,44 @@ export default function HeroCustomizer() {
                         <div className="text-left space-y-1.5 flex-1">
                           <div className="text-[11px] text-slate-300 font-semibold">Scanning from another phone or laptop?</div>
                           <p className="text-[10px] text-slate-400 leading-tight">
-                            Scan the QR code with your camera app. (If on mobile, use Option 1 or 2 above).
+                            Scan the QR code with your camera app.
                           </p>
                           <a
                             href={upiDeepLink}
                             className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 underline pt-0.5"
                           >
-                            <span>Open UPI App on Phone &rarr;</span>
+                            <span>Open Universal UPI &rarr;</span>
                           </a>
                         </div>
                       </div>
 
                       {/* Step 3: Enter 12-digit UTR */}
                       <div>
-                        <label className="block text-[11px] font-bold text-slate-300 mb-1">
-                          Enter 12-Digit UPI Ref / UTR Number *
-                        </label>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="block text-[11px] font-bold text-slate-300">
+                            Enter 12-Digit UPI Ref / UTR Number *
+                          </label>
+                          {utrNumber.length === 12 ? (
+                            <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+                              <Check className="w-3 h-3" /> 12 / 12 Digits
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-slate-400 font-mono">
+                              {utrNumber.length} / 12 Digits
+                            </span>
+                          )}
+                        </div>
                         <input
                           type="text"
                           required
+                          maxLength={12}
                           value={utrNumber}
-                          onChange={(e) => setUtrNumber(e.target.value.trim())}
+                          onChange={(e) => setUtrNumber(e.target.value.replace(/\D/g, "").slice(0, 12))}
                           placeholder="e.g. 429810294812"
                           className="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs font-mono font-bold focus:outline-none focus:ring-2 focus:ring-emerald-400"
                         />
                         <p className="text-[10px] text-slate-400 mt-1">
-                          Found in your payment app under &quot;Transaction Details&quot; or &quot;UPI Ref No.&quot;
+                          Found in your payment app (PhonePe / GPay / Paytm) under &quot;Transaction Details&quot; or &quot;UPI Ref No.&quot;
                         </p>
                       </div>
                     </div>

@@ -6,9 +6,24 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const settings = await prisma.platformSetting.findUnique({
+    let settings = await prisma.platformSetting.findUnique({
       where: { id: "default" },
     });
+    // Auto-migrate legacy UPI ID to official YesBank/PhonePe native handle
+    if (settings && (settings.upiId === "momopedeals@oksbi" || !settings.upiId)) {
+      try {
+        settings = await prisma.platformSetting.update({
+          where: { id: "default" },
+          data: {
+            upiId: "8639831132-2@ybl",
+            supportWhatsapp: settings.supportWhatsapp || "+918639831132",
+            upiPayeeName: settings.upiPayeeName || "Damerla Mohan",
+          },
+        });
+      } catch (e) {
+        console.warn("Auto-migrate legacy UPI ID in DB:", e);
+      }
+    }
     return NextResponse.json({ settings });
   } catch (error) {
     console.error("Settings get error:", error);
@@ -31,7 +46,7 @@ export async function PUT(req: NextRequest) {
         supportEmail: body.supportEmail || "momopedeals@gmail.com",
         supportWhatsapp: body.supportWhatsapp || "+918639831132",
         currencySymbol: body.currencySymbol || "₹",
-        upiId: body.upiId || "momopedeals@oksbi",
+        upiId: body.upiId || "8639831132-2@ybl",
         upiPayeeName: body.upiPayeeName || "Damerla Mohan",
         minNegotiatedPrice: Number(body.minNegotiatedPrice) || 1999,
         commissionRate: Number(body.commissionRate) || 0.40,
@@ -42,7 +57,7 @@ export async function PUT(req: NextRequest) {
         supportEmail: body.supportEmail || "momopedeals@gmail.com",
         supportWhatsapp: body.supportWhatsapp || "+918639831132",
         currencySymbol: body.currencySymbol || "₹",
-        upiId: body.upiId || "momopedeals@oksbi",
+        upiId: body.upiId || "8639831132-2@ybl",
         upiPayeeName: body.upiPayeeName || "Damerla Mohan",
         minNegotiatedPrice: Number(body.minNegotiatedPrice) || 1999,
         commissionRate: Number(body.commissionRate) || 0.40,

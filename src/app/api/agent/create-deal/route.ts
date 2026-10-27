@@ -192,7 +192,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Format UPI deep link
-    const upiId = platformSettings?.upiId || "momopedeals@oksbi";
+    const upiId = platformSettings?.upiId && platformSettings.upiId !== "momopedeals@oksbi" ? platformSettings.upiId : "8639831132-2@ybl";
     const upiPayee = platformSettings?.upiPayeeName || "Damerla Mohan";
     const upiNote = `RS-${cleanPhone.slice(-4)}-${session.agentCode || "AGT"}`;
     const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(upiPayee)}&am=${finalAmount}&cu=INR&tn=${encodeURIComponent(upiNote)}`;

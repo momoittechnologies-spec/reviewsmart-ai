@@ -93,7 +93,16 @@ export default function BillingClient({
     }
   }, []);
 
-  const upiId = settings?.upiId || "momopedeals@oksbi";
+  const rawUpiId = settings?.upiId;
+  const upiId = rawUpiId && rawUpiId !== "momopedeals@oksbi" ? rawUpiId : "8639831132-2@ybl";
+  const upiPhoneNumber = "8639831132";
+  const [copiedPhone, setCopiedPhone] = useState(false);
+
+  const handleCopyPhone = async () => {
+    await copyToClipboard(upiPhoneNumber);
+    setCopiedPhone(true);
+    setTimeout(() => setCopiedPhone(false), 2500);
+  };
   const upiPayee = settings?.upiPayeeName || "Damerla Mohan";
   const addonPrice = 999;
 
@@ -113,10 +122,13 @@ export default function BillingClient({
 
   const transactionNote = `ReviewSmart-Lifetime-${business?.slug || "Activation"}`;
 
-  // Standard UPI URI Scheme
-  const upiUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(
-    upiPayee
-  )}&am=${currentAmount}&cu=INR&tn=${encodeURIComponent(transactionNote)}`;
+  // Multi-App UPI Intent Links (Inspired by YouPI-PG)
+  const encodedPayee = encodeURIComponent(upiPayee);
+  const encodedNote = encodeURIComponent(transactionNote);
+  const phonePeUri = `phonepe://pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}`;
+  const gpayUri = `tez://upi/pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}`;
+  const paytmUri = `paytmmp://pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}`;
+  const upiUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}`;
 
   useEffect(() => {
     QRCode.toDataURL(upiUri, {
@@ -481,42 +493,91 @@ export default function BillingClient({
               </span>
             </div>
 
-            {/* UPI Details & Mobile 1-Tap button */}
-            <div className="space-y-3 flex-1 text-center sm:text-left">
-              <div>
-                <span className="text-[11px] font-semibold text-slate-500 block">
-                  Official UPI ID:
-                </span>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-xs font-mono font-bold text-slate-800 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200">
-                    {upiId}
+            {/* UPI Details & Multi-App 1-Tap Launchers */}
+            <div className="space-y-3.5 flex-1 text-center sm:text-left">
+              {/* Payment Addresses (Mobile & UPI ID) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="p-2.5 rounded-xl bg-white border border-slate-200">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                    PhonePe / Mobile Number:
                   </span>
-                  <button
-                    type="button"
-                    onClick={handleCopyUpi}
-                    className="p-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-semibold flex items-center gap-1 transition"
-                  >
-                    {copiedUpi ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                    {copiedUpi ? "Copied" : "Copy"}
-                  </button>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-xs font-mono font-black text-slate-800">
+                      {upiPhoneNumber}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleCopyPhone}
+                      className="px-2 py-1 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-[10px] font-bold flex items-center gap-1 transition"
+                    >
+                      {copiedPhone ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                      {copiedPhone ? "Copied" : "Copy"}
+                    </button>
+                  </div>
                 </div>
-                <span className="text-[11px] text-slate-400 mt-1 block">
-                  Payee Name: <strong className="text-slate-700">{upiPayee}</strong>
-                </span>
+
+                <div className="p-2.5 rounded-xl bg-white border border-slate-200">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                    Official UPI ID:
+                  </span>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-xs font-mono font-bold text-slate-800 truncate mr-1">
+                      {upiId}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleCopyUpi}
+                      className="px-2 py-1 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-[10px] font-bold flex items-center gap-1 transition shrink-0"
+                    >
+                      {copiedUpi ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                      {copiedUpi ? "Copied" : "Copy"}
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              {/* Mobile 1-Tap Trigger (Opens Google Pay / PhonePe / Paytm on mobile) */}
-              <div className="pt-2">
-                <a
-                  href={upiUri}
-                  className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-200 transition"
-                >
-                  <Smartphone className="w-4 h-4" />
-                  Tap to Pay ₹{currentAmount} on Google Pay / PhonePe
-                </a>
-                <span className="text-[10px] text-slate-400 block text-center mt-1">
-                  (Works directly on mobile phones)
+              <div className="text-[11px] text-slate-500">
+                Payee Name: <strong className="text-slate-800">{upiPayee}</strong>
+              </div>
+
+              {/* Multi-App Instant 1-Tap Pay Launchers (Inspired by YouPI-PG) */}
+              <div className="space-y-1.5 pt-1">
+                <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                  1-Tap App Launchers (Direct Bank Rails — No ₹2,000 Limit):
                 </span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                  <a
+                    href={phonePeUri}
+                    className="p-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-center transition flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-sm"
+                  >
+                    <span className="text-[11px] font-black">🟣 PhonePe</span>
+                    <span className="text-[8px] text-purple-200">Pay ₹{currentAmount}</span>
+                  </a>
+
+                  <a
+                    href={gpayUri}
+                    className="p-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-center transition flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-sm"
+                  >
+                    <span className="text-[11px] font-black">🔵 Google Pay</span>
+                    <span className="text-[8px] text-blue-200">Pay ₹{currentAmount}</span>
+                  </a>
+
+                  <a
+                    href={paytmUri}
+                    className="p-2 rounded-xl bg-sky-700 hover:bg-sky-800 text-white text-center transition flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-sm"
+                  >
+                    <span className="text-[11px] font-black">🟦 Paytm</span>
+                    <span className="text-[8px] text-sky-200">Pay ₹{currentAmount}</span>
+                  </a>
+
+                  <a
+                    href={upiUri}
+                    className="p-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-center transition flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-sm"
+                  >
+                    <span className="text-[11px] font-black">🟢 Any UPI</span>
+                    <span className="text-[8px] text-emerald-200">CRED / BHIM</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -581,7 +642,7 @@ export default function BillingClient({
                     </div>
                     <ol className="list-decimal pl-4 space-y-1 text-slate-700">
                       <li>Open <strong>PhonePe</strong> and tap <strong>History</strong> at bottom right.</li>
-                      <li>Tap the payment of <strong>₹{currentAmount}</strong> to MomoPe / Damerla Mohan.</li>
+                      <li>Tap the payment of <strong>₹{currentAmount}</strong> to Damerla Mohan.</li>
                       <li>Look under <em>Transaction Details</em> for: <span className="font-mono font-bold text-purple-900 bg-purple-100 px-1 py-0.5 rounded">UTR: 4xxxxxxxxxxx (12 Digits)</span>.</li>
                     </ol>
                   </div>
@@ -594,7 +655,7 @@ export default function BillingClient({
                     </div>
                     <ol className="list-decimal pl-4 space-y-1 text-slate-700">
                       <li>Open <strong>Google Pay</strong>, scroll to the bottom &amp; tap <strong>See transaction history</strong>.</li>
-                      <li>Tap the ₹{currentAmount} payment to <strong>momopedeals@oksbi</strong>.</li>
+                      <li>Tap the ₹{currentAmount} payment to <strong>8639831132-2@ybl</strong>.</li>
                       <li>Look for: <span className="font-mono font-bold text-blue-900 bg-blue-100 px-1 py-0.5 rounded">UPI transaction ID: 4xxxxxxxxxxx (12 Digits)</span>.</li>
                     </ol>
                   </div>
