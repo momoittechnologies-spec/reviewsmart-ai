@@ -497,7 +497,7 @@ export const INDUSTRY_CONFIGS: Record<IndustryType, IndustryConfig> = {
       "Fair Pricing",
     ],
     placeholder: "Mention tattoo design (portrait, lettering, tribal), piercing, artist skill or hygiene...",
-    keywords: "karthik tattoo studio kts kadapa professional tattoo artist body piercing ear piercing nose piercing helix piercing custom tattoo portrait tattoo cover up tattoo sterile single use needles hygienic studio wireless tattoo machine pain free tattoo aftercare healing advice",
+    keywords: "professional tattoo artist body piercing ear piercing nose piercing helix piercing custom tattoo portrait tattoo cover up tattoo sterile single use needles hygienic studio wireless tattoo machine pain free tattoo aftercare healing advice",
     reviewDrafts: {
       direct: {
         headline: "Superb Tattoo Detailing & 100% Hygienic Studio!",
@@ -976,9 +976,7 @@ export function detectIndustry(
     hasWord(normName, "tattoos") ||
     hasWord(normName, "piercing") ||
     hasWord(normName, "piercings") ||
-    normName.includes("tattoo studio") ||
-    normName.includes("kts") ||
-    normName.includes("karthik tattoo")
+    normName.includes("tattoo studio")
   ) {
     return INDUSTRY_CONFIGS.TATTOO_STUDIO;
   }

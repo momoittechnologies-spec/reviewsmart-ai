@@ -398,7 +398,7 @@ export const DOMAIN_FENCES: Record<IndustryType, DomainFenceConfig> = {
       "needle", "needles", "sterilized", "hygienic", "hygiene", "clean", "portrait",
       "custom", "lettering", "cover-up", "cover up", "shading", "line work", "finishing",
       "ear piercing", "nose piercing", "helix", "tribal", "painless", "healing",
-      "aftercare", "karthik", "kts", "kadapa", "studio", "wireless machine",
+      "aftercare", "studio", "wireless machine",
       "skin", "design", "fineline", "stencil", "touch-up", "consultation",
       "friendly", "safe", "rate", "price", "pricing", "budget", "care", "advice",
     ],

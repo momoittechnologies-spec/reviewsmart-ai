@@ -183,8 +183,6 @@ export default function ReviewExperience({
       placeId = "ChIJ-_3HayRzszsRhE95URiMOqc";
     } else if (business.slug === "mana-tours-travels" && !placeId) {
       placeId = "ChIJz-6hOcbQVaYRELARxZjPbrE";
-    } else if (business.slug === "karthik-tattoo-studio" && !placeId) {
-      placeId = "ChIJk9Nc0StzszsRzi_A87Em9Kw";
     } else if (business.slug === "momo-it-technologies" && !placeId) {
       placeId = "ChIJd5iV_xdzszsRlGLwd6hWTD4";
     }

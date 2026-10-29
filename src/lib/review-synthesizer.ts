@@ -1089,7 +1089,7 @@ function generateShortDirect(
       ];
     } else if (intent.isPortrait) {
       openers = [
-        `Got a realistic portrait tattoo done by Karthik at ${bName}.`,
+        `Got a realistic portrait tattoo done by the artist at ${bName}.`,
         `The facial detailing and shading on my portrait tattoo are unbelievable!`,
         `Brought a complex portrait photo to ${bName} and the outcome is identical.`,
       ];
@@ -1101,7 +1101,7 @@ function generateShortDirect(
     } else if (intent.isCoverUp) {
       openers = [
         `Came to ${bName} for a cover-up tattoo over an old faded design.`,
-        `Karthik designed a clever cover-up that completely masked my old tattoo.`,
+        `The artist designed a clever cover-up that completely masked my old tattoo.`,
         `Exceptional cover-up tattoo work at ${bName}.`,
       ];
       closers = [
@@ -1642,7 +1642,7 @@ function generateProblemSolution(
           `Looked all over Kadapa for a tattoo artist skilled enough to completely mask an old dark tattoo.`,
         ]);
         solution = pickRandom([
-          `Karthik at ${bName} designed a brilliant custom piece that seamlessly incorporated and masked the old artwork.`,
+          `The team at ${bName} designed a brilliant custom piece that seamlessly incorporated and masked the old artwork.`,
           `He spent two hours refining the stencil overlay and used rich shading to conceal the old ink completely.`,
         ]);
         result = pickRandom([
@@ -1655,7 +1655,7 @@ function generateProblemSolution(
           `Had a very intricate reference artwork and was searching for an artist who could execute crisp, fine line work.`,
         ]);
         solution = pickRandom([
-          `Karthik at ${bName} walked me through the design, opened a sealed sterile needle right in front of me, and maintained hospital-grade hygiene.`,
+          `The artist at ${bName} walked me through the design, opened a sealed sterile needle right in front of me, and maintained hospital-grade hygiene.`,
           `He customized the stencil patiently until the sizing was perfect, and worked with steady, master hands using a wireless machine.`,
         ]);
         result = pickRandom([
@@ -1944,7 +1944,7 @@ function generateOccasionContext(
         `Decided to get inked at ${bName} ${occasion}.`,
       ];
       middles = [
-        `Karthik took time to customize the artwork and executed crisp lines with smooth shading.`,
+        `The artist took time to customize the artwork and executed crisp lines with smooth shading.`,
         `The studio hygiene was impeccable and the wireless machine made the session comfortable.`,
         `The final tattoo looks phenomenal and healed cleanly without any issues.`,
       ];
@@ -2157,7 +2157,7 @@ function generateDetailedReview(
     case "TATTOO_STUDIO":
       opener = pickRandom([
         `Visited ${bName} for our ${item1} session.`,
-        `Consulted with Karthik at ${bName} regarding ${item1}.`,
+        `Consulted with the artist at ${bName} regarding ${item1}.`,
         `Got our ${item1} done after seeing great reviews about their studio in Kadapa.`,
       ]);
       middle = pickRandom([
@@ -2257,7 +2257,7 @@ function generateCasualLocal(
     const openers = [
       `One of the best studios in Kadapa for ${tattooHighlight}.`,
       `If you're planning to get inked or pierced, ${bName} is the go-to place in Kadapa.`,
-      `Locals in Kadapa recommended Karthik at ${bName} for tattooing and they were 100% right.`,
+      `Locals in Kadapa recommended ${bName} for tattooing and they were 100% right.`,
       `Easily among the most skilled and hygienic tattoo artists in Rayalaseema.`,
     ];
     const middles = [
@@ -2454,11 +2454,11 @@ function generateEnthusiastic(
     ];
     const middles = [
       `The attention to detail, razor-sharp linework, and smooth shading completely blew me away.`,
-      `Karthik is exceptionally talented and made sure the stencil sat in the exact perfect spot.`,
+      `The tattoo artist is exceptionally talented and made sure the stencil sat in the exact perfect spot.`,
       `The studio is spotless, needles were fresh single-use, and the healing advice was crystal clear.`,
     ];
     const closers = [
-      `Big thumbs up to Karthik and the team!`,
+      `Big thumbs up to the entire team!`,
       `Will definitely come back for my next tattoo!`,
       `Thank you for creating such a masterpiece on my skin!`,
     ];
@@ -2550,12 +2550,12 @@ function generateFirstTime(
       `First tattoo experience here and was naturally nervous at the start.`,
     ];
     const middles = [
-      `Karthik was super patient, explained the entire process calmly, and opened sealed sterile needles in front of me.`,
+      `The artist was super patient, explained the entire process calmly, and opened sealed sterile needles in front of me.`,
       `The stencil placement was checked multiple times to ensure perfect alignment, and the wireless machine felt surprisingly gentle.`,
       `The studio setup was spotless and hygienic, which gave me immense confidence immediately.`,
     ];
     const closers = [
-      `Definitely won't be my last tattoo with Karthik!`,
+      `Definitely won't be my last tattoo at this studio!`,
       `So relieved and thrilled with how it turned out on my very first try.`,
       `Found my permanent tattoo artist in Kadapa!`,
     ];
@@ -2639,11 +2639,11 @@ function generateRepeatCustomer(
     ];
     const middles = [
       `Their standard of hygiene, needle safety, and artistic execution has never dropped.`,
-      `Karthik is always welcoming, attentive to new design ideas, and gives honest feedback.`,
+      `The team is always welcoming, attentive to new design ideas, and gives honest feedback.`,
       `Clean healing, vibrant ink retention, and razor-sharp linework every single time.`,
     ];
     const closers = [
-      `Always a pleasure getting inked with Karthik.`,
+      `Always a pleasure getting inked here.`,
       `Artistic excellence and strict hygiene keep me coming back.`,
       `The most dependable tattoo studio in Kadapa!`,
     ];
@@ -2779,7 +2779,7 @@ function generateRelief(
       `Was hesitant about getting pierced because my previous piercing elsewhere caused swelling.`,
     ];
     middles = [
-      `Thankfully, Karthik at ${bName} proved my apprehensions completely wrong.`,
+      `Thankfully, the team at ${bName} proved my apprehensions completely wrong.`,
       `He opened brand new sterilized needles right in front of me, worked with gentle precision, and kept checking on my comfort.`,
       `The tattoo lines came out laser-sharp and the healing has been completely smooth without irritation.`,
     ];
@@ -2876,7 +2876,7 @@ function generateFamilyContext(
       : `Visited ${bName} with family to get matching custom tattoos.`;
     middle = intent.isPiercing
       ? `The specialist was extremely gentle, used sterilized equipment, and made the whole piercing calm and pain-free.`
-      : `Karthik customized our tattoo stencils patiently and made everyone feel relaxed in the studio.`;
+      : `The artist customized our tattoo stencils patiently and made everyone feel relaxed in the studio.`;
   } else if (ind === "APPLIANCE_REPAIR") {
     opener = `Called ${bName} to repair our home AC and refrigerator for our family in Kadapa.`;
     middle = `The technician was very polite with our family members, worked quietly and cleanly, and restored chilled cooling instantly.`;
@@ -2923,7 +2923,7 @@ function generateStaffService(
 
   if (ind === "TATTOO_STUDIO") {
     const openers = [
-      `Really appreciated the respectful and patient behavior of Karthik at ${bName}.`,
+      `Really appreciated the respectful and patient behavior of the artist at ${bName}.`,
       `The artist at ${bName} is genuinely polite, humble, and deeply skilled.`,
       `Customer care and personal consultation here are top notch.`,
     ];
@@ -4392,13 +4392,13 @@ function generateTeluguRoman(
           `Studio hygiene chala clean ga undi, aftercare advice clearly explain chesaru.`,
         ]);
         closer = pickRandom([
-          `Kadapa lo best piercing studio, thanks to Karthik!`,
+          `Kadapa lo best piercing studio, thanks to their skilled team!`,
           `Super gentle hands and clean setup. 10/10 recommended!`,
         ]);
       } else {
         opener = pickRandom([
           `${bName} daggara custom tattoo vespinchaanu, detailing and linework super ga vachindi.`,
-          `Kadapa lo best tattoo studio ante ${bName}, Karthik artistic skill top notch.`,
+          `Kadapa lo best tattoo studio ante ${bName}, artistic skill top notch.`,
           `First tattoo experience ikkade, initially fear undindi but chala comfortable ga chesaru.`,
         ]);
         middle = pickRandom([
@@ -5965,7 +5965,7 @@ function generateProceduralFallback(
         starters = [
           `Flawlessly executed custom tattoo artwork at ${bName}.`,
           `Got inked with top precision and hospital-grade hygiene.`,
-          `Karthik delivered incredible tattoo detailing at ${bName}.`,
+          `The artist delivered incredible tattoo detailing at ${bName}.`,
           `Crisp line work and smooth shading on my tattoo.`,
           `Best professional tattoo studio in Kadapa.`,
         ];

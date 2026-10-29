@@ -184,7 +184,7 @@ This business provides cab services, outstation trips, airport transfers, pilgri
 
     const tattooStudioInstruction = industry.type === "TATTOO_STUDIO" ? `
 CRITICAL POSITIONING (TATTOO & BODY PIERCING STUDIO):
-This business is a professional tattoo and body piercing studio (Karthik Tattoo Studio KTS in Kadapa).
+This business is a professional tattoo and body piercing studio.
 - Customers review getting inked or pierced: custom tattoo art, portrait accuracy, fine-line detailing, smooth shading, sterile single-use needles, wireless tattoo machine, studio hygiene, ear/nose/helix piercings done gently with minimal pain, transparent pricing, and clear aftercare healing advice.
 - DO NOT mention gold buying, jewellery, cabs, travel/rental, flex printing, visiting cards, salons/haircuts, restaurants/food, dental/clinics, or software.
 ` : "";
