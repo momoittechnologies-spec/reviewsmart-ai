@@ -192,7 +192,7 @@ Respond strictly in pure JSON without markdown quotes:
 `;
 
       const response = await client.models.generateContent({
-        model: "gemini-3.6-flash",
+        model: "gemini-3.8-flash",
         contents: prompt,
       });
 

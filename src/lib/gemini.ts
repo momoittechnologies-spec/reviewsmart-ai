@@ -108,7 +108,7 @@ export async function generateAiReviews(params: GenerateReviewParams): Promise<R
 
   // 2. Try Gemini AI (Gemini 3.8 Flash & 3.5 Flash-Lite) if API Key is configured
   if (apiKey && apiKey.trim().length > 5) {
-    const modelsToTry = ["gemini-3.8-flash", "gemini-3.5-flash-lite"];
+    const modelsToTry = ["gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-flash-latest"];
 
     const forbiddenList = fence.forbiddenKeywords.slice(0, 15).join(", ");
 
@@ -420,7 +420,7 @@ export async function generateReviewReply(
   const nameGreeting = reviewerName ? ` ${reviewerName}` : "";
 
   if (apiKey && apiKey.trim().length > 5) {
-    const modelsToTry = ["gemini-3.8-flash", "gemini-3.5-flash-lite"];
+    const modelsToTry = ["gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-flash-latest"];
     for (const model of modelsToTry) {
       try {
         const client = new GoogleGenAI({ apiKey });

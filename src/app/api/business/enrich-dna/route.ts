@@ -104,7 +104,7 @@ Return STRICT JSON only without markdown formatting:
 `;
 
         const response = await client.models.generateContent({
-          model: "gemini-1.5-flash",
+          model: "gemini-3.8-flash",
           contents: prompt,
         });
 
