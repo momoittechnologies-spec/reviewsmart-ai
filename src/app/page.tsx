@@ -460,7 +460,7 @@ export default function HomePage() {
     },
     {
       q: "What is the difference between Online and Offline pricing?",
-      a: "Online customers purchasing directly via our website / Meta Ads get instant digital access, the complete 6-language AI review platform, free GMB setup, and full Standee Studio PDF exports for ₹2,999 Lifetime. Offline agent customers work with regional sales partners who provide in-person onboarding, store visits, and custom physical hardware packages with flexible local pricing.",
+      a: "Online customers purchasing directly via our website / Meta Ads get instant digital access, the complete 6-language AI review platform, free GMB setup, and full Standee Studio PDF exports for ₹2,999 Lifetime. Offline clients work directly with our executive team who provide in-person store setup, physical hardware standee kits, and custom multi-outlet onboarding.",
     },
   ];
 
@@ -1720,7 +1720,7 @@ export default function HomePage() {
                 <Store className="w-4 h-4" />
               </div>
               <p>
-                <strong className="text-slate-900">Note for Offline Agent Deals:</strong> Offline clients working with our certified marketing partners in their cities receive on-site store setup and physical hardware standee packs at localized agent pricing. Online customers receive instant full-platform lifetime software access at ₹2,999!
+                <strong className="text-slate-900">Note for Offline Direct Clients:</strong> Offline clients working with our direct executive team receive on-site store setup, physical hardware standee kits, and custom multi-branch onboarding. Online customers receive instant full-platform lifetime software access at ₹2,999!
               </p>
             </div>
           </div>

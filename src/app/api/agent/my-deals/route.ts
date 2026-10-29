@@ -9,7 +9,7 @@ export async function GET() {
     const session = await getSessionUser();
     if (
       !session ||
-      (session.role !== "MARKETING_AGENT" && session.role !== "SUPER_ADMIN")
+      session.role !== "SUPER_ADMIN"
     ) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }

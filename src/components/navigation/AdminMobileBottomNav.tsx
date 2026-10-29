@@ -6,9 +6,8 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
-  UserCheck,
-  IndianRupee,
   Building2,
+  IndianRupee,
   Compass,
 } from "lucide-react";
 
@@ -29,16 +28,16 @@ export default function AdminMobileBottomNav() {
       active: pathname.startsWith("/admin/growth"),
     },
     {
-      label: "Merchants",
+      label: "Clients",
       href: "/admin/merchants",
       icon: Users,
       active: pathname.startsWith("/admin/merchants"),
     },
     {
-      label: "Agents",
-      href: "/admin/agents",
-      icon: UserCheck,
-      active: pathname.startsWith("/admin/agents"),
+      label: "Directory",
+      href: "/admin/businesses",
+      icon: Building2,
+      active: pathname.startsWith("/admin/businesses"),
     },
     {
       label: "Payments",
@@ -51,9 +50,9 @@ export default function AdminMobileBottomNav() {
   const [pendingCount, setPendingCount] = React.useState(0);
 
   React.useEffect(() => {
-    fetch('/api/admin/payments?status=PENDING')
-      .then(res => res.json())
-      .then(data => {
+    fetch("/api/admin/payments?status=PENDING")
+      .then((res) => res.json())
+      .then((data) => {
         if (data.payments) setPendingCount(data.payments.length);
       })
       .catch(() => {});
@@ -97,9 +96,6 @@ export default function AdminMobileBottomNav() {
                 >
                   {item.label}
                 </span>
-                {isActive && (
-                  <div className="absolute -bottom-[max(env(safe-area-inset-bottom),10px)] left-1/2 -translate-x-1/2 w-8 h-1 rounded-t-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)]" />
-                )}
               </Link>
             );
           })}

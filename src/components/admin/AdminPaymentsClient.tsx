@@ -271,7 +271,7 @@ export default function AdminPaymentsClient({
           </div>
           <div>
             <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-              Min Deal Floor (₹) — Agent price cannot go below this
+              Offline Direct Client Price Floor (₹)
             </label>
             <div className="flex gap-2">
               <input
@@ -371,7 +371,7 @@ export default function AdminPaymentsClient({
                   <th className="py-3 px-4 font-semibold">Channel</th>
                   <th className="py-3 px-4 font-semibold">UTR Reference</th>
                   <th className="py-3 px-4 font-semibold">Amount</th>
-                  <th className="py-3 px-4 font-semibold">Commission</th>
+                  <th className="py-3 px-4 font-semibold">Package Tier</th>
                   <th className="py-3 px-4 font-semibold">Status</th>
                   <th className="py-3 px-4 font-semibold text-right">Action</th>
                 </tr>
@@ -404,7 +404,7 @@ export default function AdminPaymentsClient({
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-bold border border-indigo-500/30">
                               <UserCheck className="w-2.5 h-2.5" /> Offline
                             </span>
-                            <div className="text-[10px] text-slate-400 mt-0.5 font-medium">Agent: {p.agentCode}</div>
+                            
                             <div className="text-[10px] text-amber-300 font-bold mt-0.5 flex items-center gap-1">
                               <span>📦</span>
                               <span>{p.packageTier ? getPackageById(p.packageTier).shortName : getPackageByPrice(p.amount).shortName}</span>

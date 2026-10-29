@@ -47,20 +47,7 @@ export async function PATCH(req: NextRequest) {
       // Check permission
       if (user.role === 'SUPER_ADMIN') {
         // permitted
-      } else if (user.role === 'MARKETING_AGENT') {
-        const merchantUser = await prisma.user.findUnique({
-          where: { id: business.userId },
-          select: { referredBy: true },
-        });
-        const payment = await prisma.upiPayment.findFirst({
-          where: {
-            agentId: user.id,
-            OR: [{ businessId: business.id }, { userId: business.userId }],
-          },
-        });
-        if (merchantUser?.referredBy !== user.id && !payment) {
-          return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-        }
+      
       } else if (business.userId !== user.id) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }

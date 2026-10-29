@@ -84,6 +84,10 @@ export default function AdminMerchantsPage() {
   const [createCategory, setCreateCategory] = useState("");
   const [createLogoUrl, setCreateLogoUrl] = useState("");
   const [createType, setCreateType] = useState<"ONLINE" | "OFFLINE">("ONLINE");
+  const [createGoogleReviewUrl, setCreateGoogleReviewUrl] = useState("");
+  const [createGoogleAddress, setCreateGoogleAddress] = useState("");
+  const [createCustomPin, setCreateCustomPin] = useState("");
+  const [createIsPaid, setCreateIsPaid] = useState(true);
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState("");
   const [createdResult, setCreatedResult] = useState<{
@@ -215,6 +219,10 @@ export default function AdminMerchantsPage() {
           businessName: createBusinessName || createName,
           category: createCategory,
           customerType: createType,
+          googleReviewUrl: createGoogleReviewUrl ? createGoogleReviewUrl.trim() : undefined,
+          googleAddress: createGoogleAddress ? createGoogleAddress.trim() : undefined,
+          customPin: createCustomPin ? createCustomPin.trim() : undefined,
+          isPaid: createIsPaid,
           logoUrl: createLogoUrl ? createLogoUrl.trim() : undefined,
         }),
       });
@@ -241,6 +249,10 @@ export default function AdminMerchantsPage() {
       setCreateBusinessName("");
       setCreateCategory("");
       setCreateLogoUrl("");
+      setCreateGoogleReviewUrl("");
+      setCreateGoogleAddress("");
+      setCreateCustomPin("");
+      setCreateIsPaid(true);
       fetchMerchants();
     } catch (err: any) {
       setCreateError(err?.message || "Network error. Please try again.");
@@ -886,13 +898,14 @@ export default function AdminMerchantsPage() {
                 {/* Direct Studio & Customizer Access for Admin */}
                 {biz && (
                   <div className="mb-3.5">
-                    <Link
-                      href={`/agent/manage/${biz.id}`}
+                    <button
+                      type="button"
+                      onClick={() => openEditModal(m)}
                       className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-indigo-600/20 transition transform active:scale-[0.99]"
                     >
                       <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                      <span>🎨 Customise Profile &amp; Print Studio</span>
-                    </Link>
+                      <span>🎨 Edit Store Details &amp; AI Settings</span>
+                    </button>
                   </div>
                 )}
 
@@ -1145,6 +1158,66 @@ export default function AdminMerchantsPage() {
                   </div>
                 </div>
 
+                {/* Google Maps / Review Link */}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    Google Maps / Review URL (Optional)
+                  </label>
+                  <input
+                    type="url"
+                    value={createGoogleReviewUrl}
+                    onChange={(e) => setCreateGoogleReviewUrl(e.target.value)}
+                    placeholder="https://g.page/r/... or Google Maps place link"
+                    className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                  <p className="text-[10px] text-slate-400 mt-0.5">
+                    Leave blank to automatically link via business name search.
+                  </p>
+                </div>
+
+                {/* Google Address / City */}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    Store Location / City (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={createGoogleAddress}
+                    onChange={(e) => setCreateGoogleAddress(e.target.value)}
+                    placeholder="e.g. Kadapa, Andhra Pradesh"
+                    className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+
+                {/* Custom 4-digit PIN */}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    Custom 4-Digit Security PIN (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={4}
+                    value={createCustomPin}
+                    onChange={(e) => setCreateCustomPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                    placeholder="e.g. 1234 (Leave blank to auto-generate)"
+                    className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+
+                {/* Activation Status */}
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-800/80 border border-slate-700">
+                  <div>
+                    <span className="text-xs font-bold text-white block">Activate Card Immediately (Paid)</span>
+                    <span className="text-[10px] text-slate-400">Card goes live instantly for QR and NFC taps</span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={createIsPaid}
+                    onChange={(e) => setCreateIsPaid(e.target.checked)}
+                    className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 bg-slate-900 border-slate-700"
+                  />
+                </div>
+
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
                     Customer Channel *
@@ -1160,7 +1233,7 @@ export default function AdminMerchantsPage() {
                       }`}
                     >
                       <Globe className="w-3.5 h-3.5" />
-                      <span>Online Lead</span>
+                      <span>Online Website Client</span>
                     </button>
                     <button
                       type="button"
@@ -1172,7 +1245,7 @@ export default function AdminMerchantsPage() {
                       }`}
                     >
                       <UserCheck className="w-3.5 h-3.5" />
-                      <span>Offline Store</span>
+                      <span>Offline Field Client</span>
                     </button>
                   </div>
                 </div>

@@ -10,21 +10,6 @@ async function canUserAccessBusiness(
 ): Promise<boolean> {
   if (user.role === "SUPER_ADMIN") return true;
   if (business.userId === user.id) return true;
-  if (user.role === "MARKETING_AGENT") {
-    const merchantUser = await prisma.user.findUnique({
-      where: { id: business.userId },
-      select: { referredBy: true },
-    });
-    if (merchantUser?.referredBy === user.id) return true;
-
-    const payment = await prisma.upiPayment.findFirst({
-      where: {
-        agentId: user.id,
-        OR: [{ businessId: business.id }, { userId: business.userId }],
-      },
-    });
-    if (payment) return true;
-  }
   return false;
 }
 

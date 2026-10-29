@@ -118,7 +118,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Generate random 4-digit PIN
-    const randomPin = Math.floor(1000 + Math.random() * 9000).toString();
+    const finalPin = body.customPin && String(body.customPin).replace(/\D/g, "").length === 4
+      ? String(body.customPin).replace(/\D/g, "")
+      : Math.floor(1000 + Math.random() * 9000).toString();
+    const randomPin = finalPin;
     const hashedPin = await hashPin(randomPin);
     const hashedPassword = await hashPassword(randomPin);
 
@@ -178,7 +181,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       merchant,
-      pin: randomPin,
+      pin: finalPin,
       slug: business?.slug,
       phone: cleanPhone,
       businessName: business?.name,

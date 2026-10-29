@@ -122,11 +122,7 @@ export default function LoginPage() {
       }
 
       const targetPath =
-        data.user?.role === "SUPER_ADMIN"
-          ? "/admin"
-          : data.user?.role === "MARKETING_AGENT"
-          ? "/agent"
-          : "/dashboard";
+        data.user?.role === "SUPER_ADMIN" ? "/admin" : "/dashboard";
       window.location.href = targetPath;
     } catch {
       setError("An unexpected network error occurred. Please try again.");
@@ -183,7 +179,7 @@ export default function LoginPage() {
             </span>
           </h1>
           <p className="text-slate-500 text-xs mt-1.5 font-medium tracking-wide">
-            Invite-only merchant &amp; partner platform
+            Merchant &amp; Client Store Management Platform
           </p>
         </div>
 
@@ -202,7 +198,7 @@ export default function LoginPage() {
               }`}
             >
               <KeyRound className="w-3.5 h-3.5" />
-              <span>User ID &amp; PIN</span>
+              <span>Merchant PIN Login</span>
             </button>
 
             <button
@@ -233,7 +229,7 @@ export default function LoginPage() {
               {/* Mobile Number or Agent Code Field */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-2">
-                  Your Mobile Number or Agent Code
+                  Your 10-Digit Mobile Number
                 </label>
                 <div className="relative">
                   <Smartphone className="w-4 h-4 text-indigo-600 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -243,7 +239,7 @@ export default function LoginPage() {
                     maxLength={16}
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
-                    placeholder="e.g. 9014960900 or MKT-01"
+                    placeholder="e.g. 9876543210"
                     autoComplete="username"
                     autoCapitalize="none"
                     autoCorrect="off"

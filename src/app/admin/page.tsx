@@ -4,22 +4,23 @@ import { prisma } from "@/lib/prisma";
 import {
   IndianRupee,
   Users,
-  UserCheck,
   Receipt,
   Clock,
   Wifi,
-  WifiOff,
+  Store,
   ArrowUpRight,
   Building2,
   TrendingUp,
   Plus,
   ShieldCheck,
-  Award
+  CheckCircle2,
+  Globe,
+  ExternalLink,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-function formatDate(date: Date): string {
+function formatDate(date: Date | string): string {
   const d = new Date(date);
   const dd = String(d.getDate()).padStart(2, "0");
   const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -32,12 +33,12 @@ export default async function AdminOverviewPage() {
   let totalDeals = 0;
   let pendingDeals = 0;
   let totalMerchants = 0;
-  let totalAgents = 0;
+  let totalBusinesses = 0;
   let onlineDeals = 0;
   let offlineDeals = 0;
   let recentPayments: any[] = [];
   let todayRevenue = 0;
-  let agentLeaderboard: any[] = [];
+  let recentBusinesses: any[] = [];
 
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
@@ -48,12 +49,12 @@ export default async function AdminOverviewPage() {
       dealsCount,
       pendingCount,
       merchantsCount,
-      agentsCount,
+      businessesCount,
       onlineCount,
       offlineCount,
       payments,
       todayRevenueResult,
-      leaderboardData
+      businessesList
     ] = await Promise.all([
       prisma.upiPayment.aggregate({
         where: { status: "APPROVED" },
@@ -62,7 +63,7 @@ export default async function AdminOverviewPage() {
       prisma.upiPayment.count(),
       prisma.upiPayment.count({ where: { status: "PENDING" } }),
       prisma.user.count({ where: { role: "BUSINESS_OWNER" } }),
-      prisma.user.count({ where: { role: "MARKETING_AGENT" } }),
+      prisma.business.count(),
       prisma.upiPayment.count({ where: { planType: "ONLINE_DIRECT" } }),
       prisma.upiPayment.count({ where: { planType: "NEGOTIATED_DEAL" } }),
       prisma.upiPayment.findMany({
@@ -81,26 +82,27 @@ export default async function AdminOverviewPage() {
         where: { status: "APPROVED", createdAt: { gte: todayStart } },
         _sum: { amount: true },
       }),
-      prisma.upiPayment.groupBy({
-        by: ['agentCode'],
-        where: { agentCode: { not: null }, status: 'APPROVED' },
-        _sum: { amount: true },
-        _count: { id: true },
-        orderBy: { _sum: { amount: 'desc' } },
-        take: 5,
-      })
+      prisma.business.findMany({
+        orderBy: { createdAt: "desc" },
+        take: 6,
+        include: {
+          user: {
+            select: { name: true, phone: true },
+          },
+        },
+      }),
     ]);
 
     revenue = totalRevenueResult._sum.amount ?? 0;
     totalDeals = dealsCount;
     pendingDeals = pendingCount;
     totalMerchants = merchantsCount;
-    totalAgents = agentsCount;
+    totalBusinesses = businessesCount;
     onlineDeals = onlineCount;
     offlineDeals = offlineCount;
     recentPayments = payments;
     todayRevenue = todayRevenueResult._sum.amount ?? 0;
-    agentLeaderboard = leaderboardData;
+    recentBusinesses = businessesList;
   } catch (err) {
     console.error("AdminOverviewPage data fetch error:", err);
   }
@@ -114,10 +116,10 @@ export default async function AdminOverviewPage() {
         <div>
           <h1 className="text-xl font-black text-white tracking-tight flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-emerald-400" />
-            Platform Overview
+            Platform &amp; Client Overview
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            Live revenue, deal activity, and merchant metrics across the platform.
+            Admin master console for onboarding client businesses, tracking revenue, and managing cards.
           </p>
         </div>
       </div>
@@ -126,24 +128,24 @@ export default async function AdminOverviewPage() {
       <div className="flex flex-wrap items-center gap-3">
         <Link
           href="/admin/merchants"
-          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold flex items-center gap-1.5 shadow-sm border border-slate-700 transition"
+          className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-indigo-600/20 transition active:scale-95"
         >
-          <Plus className="w-3.5 h-3.5 text-blue-400" />
-          Add Merchant
+          <Plus className="w-4 h-4" />
+          <span>Onboard Client Store</span>
         </Link>
         <Link
-          href="/admin/agents"
-          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold flex items-center gap-1.5 shadow-sm border border-slate-700 transition"
+          href="/admin/businesses"
+          className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center gap-2 shadow-sm border border-slate-700 transition"
         >
-          <UserCheck className="w-3.5 h-3.5 text-violet-400" />
-          Create Agent
+          <Building2 className="w-4 h-4 text-blue-400" />
+          <span>All Businesses ({totalBusinesses})</span>
         </Link>
         <Link
           href="/admin/payments?status=PENDING"
-          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold flex items-center gap-1.5 shadow-sm border border-slate-700 transition"
+          className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold flex items-center gap-2 shadow-sm border border-slate-700 transition"
         >
-          <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-          Verify Payments
+          <ShieldCheck className="w-4 h-4 text-amber-400" />
+          <span>Verify Payments ({pendingDeals})</span>
         </Link>
       </div>
 
@@ -167,12 +169,12 @@ export default async function AdminOverviewPage() {
             </div>
           </div>
           <div className="mt-3">
-            <span className="text-2xl font-black text-emerald-400">
+            <span className="text-2xl font-black text-white">
               ₹{revenue.toLocaleString("en-IN")}
             </span>
           </div>
           <div className="flex items-center justify-between mt-1 text-[11px] text-slate-400">
-            <span>All-time approved</span>
+            <span>Approved collections</span>
             <span className="text-emerald-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
               View →
             </span>
@@ -182,8 +184,8 @@ export default async function AdminOverviewPage() {
         {/* Total Deals */}
         <Link
           href="/admin/payments"
-          className="bg-gradient-to-br from-slate-800 to-slate-800/60 hover:bg-slate-750 p-5 rounded-2xl border-y border-r border-slate-700 border-l-[3px] border-l-indigo-500 shadow-sm transition-all group block cursor-pointer relative"
-          title="Click to view all deal transactions"
+          className="bg-gradient-to-br from-slate-800 to-slate-800/60 hover:bg-slate-750 p-5 rounded-2xl border-y border-r border-slate-700 border-l-[3px] border-l-indigo-500 shadow-sm transition-all group block cursor-pointer"
+          title="Click to view all payment transactions"
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-400 group-hover:text-slate-300 transition-colors">
@@ -210,15 +212,15 @@ export default async function AdminOverviewPage() {
           </div>
         </Link>
 
-        {/* Total Merchants */}
+        {/* Total Client Businesses */}
         <Link
-          href="/admin/merchants"
+          href="/admin/businesses"
           className="bg-gradient-to-br from-slate-800 to-slate-800/60 hover:bg-slate-750 p-5 rounded-2xl border-y border-r border-slate-700 border-l-[3px] border-l-blue-500 shadow-sm transition-all group block cursor-pointer"
-          title="Click to manage merchant accounts"
+          title="Click to manage business directory"
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-400 group-hover:text-slate-300 transition-colors">
-              Total Merchants
+              Client Businesses
             </span>
             <div className="flex items-center gap-1">
               <div className="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -227,13 +229,14 @@ export default async function AdminOverviewPage() {
               <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-400 transition-colors" />
             </div>
           </div>
-          <div className="mt-3">
-            <span className="text-2xl font-black text-white">{totalMerchants}</span>
+          <div className="mt-3 flex items-center gap-2">
+            <span className="text-2xl font-black text-white">{totalBusinesses}</span>
+            <span className="text-xs text-slate-400">({totalMerchants} owners)</span>
           </div>
           <div className="flex items-center justify-between mt-1 text-[11px] text-slate-400">
-            <span>Registered businesses</span>
+            <span>Online &amp; Offline stores</span>
             <span className="text-blue-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-              Manage →
+              Directory →
             </span>
           </div>
         </Link>
@@ -246,7 +249,7 @@ export default async function AdminOverviewPage() {
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-400 group-hover:text-slate-300 transition-colors">
-              Today's Revenue
+              Today&apos;s Revenue
             </span>
             <div className="flex items-center gap-1">
               <div className="w-8 h-8 rounded-lg bg-emerald-400/20 text-emerald-300 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -270,7 +273,7 @@ export default async function AdminOverviewPage() {
       </div>
 
       {/* Deal Channel Breakdown */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Online Deals */}
         <Link
           href="/admin/payments?channel=ONLINE"
@@ -283,10 +286,10 @@ export default async function AdminOverviewPage() {
             </div>
             <div>
               <p className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider group-hover:text-slate-300 transition-colors">
-                Online Deals
+                Online Website Deals
               </p>
               <p className="text-xl font-black text-sky-400">{onlineDeals}</p>
-              <p className="text-[10px] text-slate-500">ONLINE_DIRECT channel</p>
+              <p className="text-[10px] text-slate-500">Website direct checkouts</p>
             </div>
           </div>
           <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition-colors" />
@@ -296,87 +299,82 @@ export default async function AdminOverviewPage() {
         <Link
           href="/admin/payments?channel=OFFLINE"
           className="bg-slate-800 hover:bg-slate-750 p-4 rounded-2xl border border-slate-700 hover:border-orange-500/50 flex items-center justify-between gap-4 transition-all group cursor-pointer"
-          title="Click to view offline field agent deals"
+          title="Click to view offline direct client deals"
         >
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <WifiOff className="w-5 h-5" />
+              <Store className="w-5 h-5" />
             </div>
             <div>
               <p className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider group-hover:text-slate-300 transition-colors">
-                Offline Deals
+                Offline In-Person Deals
               </p>
               <p className="text-xl font-black text-orange-400">{offlineDeals}</p>
-              <p className="text-[10px] text-slate-500">NEGOTIATED_DEAL channel</p>
+              <p className="text-[10px] text-slate-500">Admin direct onboarded clients</p>
             </div>
           </div>
           <ArrowUpRight className="w-4 h-4 text-slate-500 group-hover:text-orange-400 transition-colors" />
         </Link>
-
-        {/* Pending Deals */}
-        <Link
-          href="/admin/payments?status=PENDING"
-          className="bg-slate-800 hover:bg-slate-750 p-4 rounded-2xl border border-amber-500/30 hover:border-amber-400 flex items-center justify-between gap-4 transition-all group cursor-pointer shadow-sm shadow-amber-950/20"
-          title="Click to review and approve pending payments"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <Clock className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider group-hover:text-slate-300 transition-colors">
-                Pending Review
-              </p>
-              <p className="text-xl font-black text-amber-400">{pendingDeals}</p>
-              <p className="text-[10px] text-amber-300/80">Awaiting approval</p>
-            </div>
-          </div>
-          <ArrowUpRight className="w-4 h-4 text-amber-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Payments Table */}
-        <div className="lg:col-span-2 bg-slate-800 rounded-3xl border border-slate-700 p-6 shadow-sm flex flex-col">
+      {/* Main Bottom Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Recent Transactions Table */}
+        <div className="lg:col-span-7 bg-slate-800 rounded-3xl border border-slate-700 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-bold text-white flex items-center gap-2">
-              <Receipt className="w-4 h-4 text-emerald-400" />
-              Recent Payments &amp; Deals
-            </h2>
+            <div>
+              <h2 className="text-sm font-bold text-white flex items-center gap-2">
+                <Clock className="w-4 h-4 text-indigo-400" />
+                Recent Payment Transactions
+              </h2>
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                Real-time UPI payments from online checkouts and direct client orders.
+              </p>
+            </div>
+            {pendingDeals > 0 && (
+              <Link
+                href="/admin/payments?status=PENDING"
+                className="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30 animate-pulse"
+              >
+                {pendingDeals} Pending
+              </Link>
+            )}
           </div>
 
-          <div className="overflow-x-auto flex-1">
+          <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="text-[11px] text-slate-400 uppercase tracking-wider border-b border-slate-700">
+              <thead className="text-[11px] text-slate-400 uppercase tracking-wider border-b border-slate-700/80">
                 <tr>
-                  <th className="pb-3 font-semibold">Business</th>
-                  <th className="pb-3 font-semibold">Agent Code</th>
-                  <th className="pb-3 font-semibold">Amount</th>
-                  <th className="pb-3 font-semibold">Status</th>
-                  <th className="pb-3 font-semibold">Date</th>
-                  <th className="pb-3 font-semibold text-right">Action</th>
+                  <th className="pb-2.5 font-semibold">Store / Client</th>
+                  <th className="pb-2.5 font-semibold">Amount</th>
+                  <th className="pb-2.5 font-semibold">Status</th>
+                  <th className="pb-2.5 font-semibold">Date</th>
+                  <th className="pb-2.5 font-semibold text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-700/60">
+              <tbody className="divide-y divide-slate-700/50">
                 {recentPayments.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="py-8 text-center text-slate-500">
-                      No payments recorded yet.
+                    <td colSpan={5} className="py-8 text-center text-slate-500 text-xs">
+                      No payment transactions recorded yet.
                     </td>
                   </tr>
                 ) : (
                   recentPayments.map((pmt) => {
-                    const businessName = pmt.user?.businesses?.[0]?.name ?? "No Business";
-                    const agentCode = pmt.agentCode ?? "—";
-                    const status = pmt.status as string;
+                    const status = pmt.status;
+                    const businessName =
+                      pmt.user?.businesses?.[0]?.name ||
+                      pmt.user?.name ||
+                      pmt.businessName ||
+                      "Client Store";
 
                     return (
-                      <tr key={pmt.id} className="hover:bg-slate-700/50 transition">
-                        <td className="py-3 font-bold text-white whitespace-nowrap">
-                          {businessName}
-                        </td>
-                        <td className="py-3 font-mono text-slate-300">
-                          {agentCode}
+                      <tr key={pmt.id} className="hover:bg-slate-700/30 transition">
+                        <td className="py-3 font-semibold text-white">
+                          <div className="truncate max-w-[150px]">{businessName}</div>
+                          <div className="text-[10px] text-slate-400 font-mono">
+                            {pmt.utrNumber ? `UTR: ${pmt.utrNumber.slice(-6)}` : "UPI QR"}
+                          </div>
                         </td>
                         <td className="py-3 font-bold text-emerald-400 whitespace-nowrap">
                           ₹{pmt.amount.toLocaleString("en-IN")}
@@ -430,51 +428,84 @@ export default async function AdminOverviewPage() {
               href="/admin/payments"
               className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1 group"
             >
-              <span>View All →</span>
+              <span>View All Payments →</span>
             </Link>
           </div>
         </div>
 
-        {/* Live Agent Leaderboard */}
-        <div className="bg-slate-800 rounded-3xl border border-slate-700 p-6 shadow-sm">
+        {/* Recently Onboarded Stores */}
+        <div className="lg:col-span-5 bg-slate-800 rounded-3xl border border-slate-700 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-bold text-white flex items-center gap-2">
-              <Award className="w-4 h-4 text-amber-400" />
-              Live Agent Leaderboard
+              <Store className="w-4 h-4 text-amber-400" />
+              Recently Onboarded Stores
             </h2>
+            <Link
+              href="/admin/merchants"
+              className="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300"
+            >
+              + Onboard Store
+            </Link>
           </div>
-          <div className="space-y-4">
-            {agentLeaderboard.length === 0 ? (
+          <div className="space-y-3">
+            {recentBusinesses.length === 0 ? (
               <div className="py-8 text-center text-slate-500 text-xs">
-                No active agent sales yet.
+                No stores onboarded yet.
               </div>
             ) : (
-              agentLeaderboard.map((agt, idx) => {
-                const rank = idx + 1;
-                let rankBadge = `${rank}️⃣`;
-                if (rank === 1) rankBadge = "🥇";
-                if (rank === 2) rankBadge = "🥈";
-                if (rank === 3) rankBadge = "🥉";
-
-                return (
-                  <div key={agt.agentCode} className="flex items-center justify-between p-3 rounded-2xl bg-slate-700/30 border border-slate-700/50 hover:bg-slate-700/50 transition">
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg">{rankBadge}</span>
-                      <div>
-                        <div className="text-sm font-bold text-white font-mono">{agt.agentCode}</div>
-                        <div className="text-[10px] text-slate-400">{agt._count.id} Deals</div>
-                      </div>
+              recentBusinesses.map((b) => (
+                <div
+                  key={b.id}
+                  className="p-3 rounded-2xl bg-slate-750/50 border border-slate-700/60 hover:border-slate-600 transition flex items-center justify-between gap-3"
+                >
+                  <div className="min-w-0 flex items-center gap-2.5">
+                    <div
+                      className="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs text-white shrink-0 shadow-sm"
+                      style={{ backgroundColor: b.primaryColor || "#4f46e5" }}
+                    >
+                      {b.name.slice(0, 2).toUpperCase()}
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm font-black text-emerald-400">
-                        ₹{(agt._sum.amount ?? 0).toLocaleString("en-IN")}
+                    <div className="min-w-0">
+                      <div className="text-xs font-bold text-white truncate flex items-center gap-1.5">
+                        <span className="truncate">{b.name}</span>
+                        {b.customerType === "ONLINE" ? (
+                          <span className="px-1.5 py-0.2 rounded-full text-[9px] font-extrabold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                            Online
+                          </span>
+                        ) : (
+                          <span className="px-1.5 py-0.2 rounded-full text-[9px] font-extrabold bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                            Offline
+                          </span>
+                        )}
                       </div>
-                      <div className="text-[10px] text-slate-500">Revenue</div>
+                      <div className="text-[10px] text-slate-400 truncate">
+                        Owner: {b.user?.name || "Merchant"} • {b.user?.phone || "Phone"}
+                      </div>
                     </div>
                   </div>
-                );
-              })
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <a
+                      href={`/r/${b.slug}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 transition"
+                      title="Open Public Card"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+              ))
             )}
+          </div>
+          <div className="mt-4 pt-3 border-t border-slate-700/50 flex justify-end">
+            <Link
+              href="/admin/businesses"
+              className="text-xs font-semibold text-amber-400 hover:text-amber-300 transition flex items-center gap-1 group"
+            >
+              <span>View All Businesses →</span>
+            </Link>
           </div>
         </div>
       </div>

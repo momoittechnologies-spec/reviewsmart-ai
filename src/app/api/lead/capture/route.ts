@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     const user = await getSessionUser();
-    if (!user || (user.role !== "SUPER_ADMIN" && user.role !== "MARKETING_AGENT")) {
+    if (!user || user.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
     }
 
@@ -93,7 +93,7 @@ export async function GET() {
 export async function PATCH(req: NextRequest) {
   try {
     const user = await getSessionUser();
-    if (!user || (user.role !== "SUPER_ADMIN" && user.role !== "MARKETING_AGENT")) {
+    if (!user || user.role !== "SUPER_ADMIN") {
       return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
     }
 

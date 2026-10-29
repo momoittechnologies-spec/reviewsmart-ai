@@ -9,9 +9,9 @@ import crypto from "crypto";
 export async function POST(req: NextRequest) {
   try {
     const session = await getSessionUser();
-    if (!session || (session.role !== "MARKETING_AGENT" && session.role !== "SUPER_ADMIN")) {
+    if (!session || session.role !== "SUPER_ADMIN") {
       return NextResponse.json(
-        { error: "Unauthorized. Marketing agent or administrator credentials required." },
+        { error: "Unauthorized. Administrator credentials required." },
         { status: 403 }
       );
     }
@@ -179,7 +179,7 @@ export async function POST(req: NextRequest) {
       data: {
         userId: merchantUser.id,
         businessId: business.id,
-        agentId: session.role === "MARKETING_AGENT" ? session.id : null,
+        agentId: null,
         agentCode: session.agentCode || null,
         planType: "NEGOTIATED_DEAL",
         packageTier: activePackage.id,
@@ -198,9 +198,9 @@ export async function POST(req: NextRequest) {
     const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(upiPayee)}&am=${finalAmount}&cu=INR&tn=${encodeURIComponent(upiNote)}`;
 
     // Preview commission for agent UI
-    const agentCommission = session.role === "MARKETING_AGENT"
-      ? Math.round(finalAmount * commissionRate)
-      : 0;
+    const agentCommission = 0; //
+
+
 
     return NextResponse.json({
       success: true,

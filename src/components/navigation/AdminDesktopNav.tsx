@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
-  UserCheck,
   Building2,
   IndianRupee,
   Compass,
@@ -29,19 +28,13 @@ export default function AdminDesktopNav() {
       active: pathname.startsWith("/admin/growth"),
     },
     {
-      label: "Merchants",
+      label: "Client Stores & Onboarding",
       href: "/admin/merchants",
       icon: Users,
       active: pathname.startsWith("/admin/merchants"),
     },
     {
-      label: "Marketing Agents",
-      href: "/admin/agents",
-      icon: UserCheck,
-      active: pathname.startsWith("/admin/agents"),
-    },
-    {
-      label: "Businesses",
+      label: "All Businesses Directory",
       href: "/admin/businesses",
       icon: Building2,
       active: pathname.startsWith("/admin/businesses"),
@@ -51,7 +44,7 @@ export default function AdminDesktopNav() {
   const isPaymentsActive = pathname.startsWith("/admin/payments");
 
   return (
-    <nav className="bg-slate-800 p-2 rounded-2xl border border-slate-700 shadow-sm space-y-1 text-xs font-medium">
+    <nav className="bg-slate-900/90 backdrop-blur-xl p-2 rounded-2xl border border-slate-800/90 shadow-lg shadow-black/20 space-y-1 text-xs font-medium">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = item.active;
@@ -62,8 +55,8 @@ export default function AdminDesktopNav() {
             href={item.href}
             className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all duration-150 ${
               isActive
-                ? "bg-indigo-600/30 text-white border-l-2 border-indigo-500 pl-2.5"
-                : "text-slate-400 hover:text-white hover:bg-slate-800"
+                ? "bg-indigo-600/30 text-white border-l-2 border-indigo-500 pl-2.5 font-bold shadow-sm"
+                : "text-slate-400 hover:text-white hover:bg-slate-800/70"
             }`}
           >
             <Icon
@@ -76,7 +69,7 @@ export default function AdminDesktopNav() {
         );
       })}
 
-      <div className="pt-1 mt-1 border-t border-slate-700">
+      <div className="pt-1 mt-1 border-t border-slate-700/80">
         <Link
           href="/admin/payments"
           className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl font-bold transition-all duration-150 ${

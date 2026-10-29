@@ -133,15 +133,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                   Owner Panel
                 </Link>
               )}
-              {user.role === "MARKETING_AGENT" ? (
-                <Link
-                  href="/agent"
-                  className="text-xs font-bold px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-md shadow-indigo-600/20 flex items-center gap-1.5 active:scale-95"
-                >
-                  <LayoutDashboard className="w-3.5 h-3.5" />
-                  Agent POS
-                </Link>
-              ) : (
+              {user.role !== "SUPER_ADMIN" && (
                 <Link
                   href="/dashboard"
                   className="text-xs font-bold px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-md shadow-indigo-600/20 flex items-center gap-1.5 active:scale-95"
@@ -264,15 +256,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                     Admin Console
                   </Link>
                 )}
-                {user.role === "MARKETING_AGENT" ? (
-                  <Link
-                    href="/agent"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-full text-center py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-md"
-                  >
-                    Agent POS
-                  </Link>
-                ) : (
+                {user.role !== "SUPER_ADMIN" && (
                   <Link
                     href="/dashboard"
                     onClick={() => setMobileMenuOpen(false)}

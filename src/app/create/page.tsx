@@ -8,16 +8,12 @@ export default async function CreatePage() {
     redirect("/#customizer");
   }
 
+  if (user.role === "SUPER_ADMIN") {
+    redirect("/admin/merchants");
+  }
+
   if (user.role === "BUSINESS_OWNER") {
     redirect("/dashboard");
-  }
-
-  if (user.role === "MARKETING_AGENT") {
-    redirect("/agent");
-  }
-
-  if (user.role === "SUPER_ADMIN") {
-    redirect("/admin");
   }
 
   redirect("/#customizer");

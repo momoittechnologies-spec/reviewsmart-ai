@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const user = await getSessionUser();
@@ -18,8 +20,6 @@ export async function GET() {
           name: true,
           role: true,
           userIdTag: true,
-          agentCode: true,
-          commissionRate: true,
           phone: true,
           customerType: true,
           isActive: true,
@@ -37,41 +37,34 @@ export async function GET() {
         },
       });
 
-      let agentStats = null;
-      if (fullUser?.role === "MARKETING_AGENT" || user.role === "MARKETING_AGENT") {
-        const payments = await prisma.upiPayment.findMany({
-          where: { agentId: user.id },
-          select: { amount: true, status: true, commission: true },
-        });
-
-        const dealsClosed = payments.filter((p) => p.status === "APPROVED").length;
-        const totalRevenue = payments
-          .filter((p) => p.status === "APPROVED")
-          .reduce((sum, p) => sum + p.amount, 0);
-        const totalCommission = payments
-          .filter((p) => p.status === "APPROVED")
-          .reduce((sum, p) => sum + (p.commission || 0), 0);
-        const pendingDeals = payments.filter((p) => p.status === "PENDING").length;
-
-        agentStats = {
-          dealsClosed,
-          totalRevenue,
-          totalCommission,
-          pendingDeals,
-        };
-      }
-
       return NextResponse.json({
         user: {
-          ...(fullUser || user),
-          agentStats,
+          id: user.id,
+          email: user.email,
+          name: fullUser?.name || user.name,
+          role: fullUser?.role || user.role,
+          phone: fullUser?.phone,
+          userIdTag: fullUser?.userIdTag,
+          customerType: fullUser?.customerType,
+          isActive: fullUser?.isActive ?? true,
+          businesses: fullUser?.businesses || [],
         },
       });
-    } catch (dbErr) {
-      console.warn("DB lookup in /api/auth/me failed, falling back to session user:", dbErr);
-      return NextResponse.json({ user });
+    } catch {
+      return NextResponse.json({
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+        },
+      });
     }
-  } catch {
-    return NextResponse.json({ user: null }, { status: 401 });
+  } catch (error) {
+    console.error("Auth check error:", error);
+    return NextResponse.json(
+      { error: "Authentication check failed" },
+      { status: 500 }
+    );
   }
 }
