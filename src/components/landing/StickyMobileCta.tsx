@@ -40,13 +40,13 @@ export default function StickyMobileCta() {
           <span className="truncate">WhatsApp Demo</span>
         </a>
 
-        {/* Claim ₹2,999 Pass */}
+        {/* Buy Now ₹2,999 Pass */}
         <a
-          href="#pricing"
-          className="flex-1 py-3 px-3 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 text-white font-black text-xs tracking-wide shadow-md shadow-indigo-600/20 flex items-center justify-center gap-1.5 transition active:scale-95"
+          href="#customizer"
+          className="flex-1 py-3 px-3 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white font-black text-xs tracking-wide shadow-md shadow-emerald-600/25 flex items-center justify-center gap-1.5 transition active:scale-95"
         >
           <Zap className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-          <span className="truncate">₹2,999 Lifetime</span>
+          <span className="truncate">Buy Now &bull; ₹2,999</span>
         </a>
       </div>
     </div>

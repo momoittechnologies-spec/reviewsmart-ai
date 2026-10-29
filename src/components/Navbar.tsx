@@ -154,14 +154,13 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
               >
                 Sign In
               </Link>
-              <a
-                href="https://wa.me/918639831132?text=Hi%20ReviewSmart%20AI%2C%20I%20am%20interested%20in%20ReviewSmart%20AI%20for%20my%20business."
-                target="_blank"
-                rel="noreferrer"
-                className="text-xs font-bold px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-sm"
+              <Link
+                href="/#customizer"
+                className="text-xs font-black px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white hover:from-emerald-500 hover:to-teal-500 transition shadow-md shadow-emerald-600/20 active:scale-95 flex items-center gap-1.5"
               >
-                Get Started
-              </a>
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span>Order Now &bull; ₹2,999</span>
+              </Link>
             </div>
           )}
         </div>
@@ -260,15 +259,14 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                 >
                   Sign In (User ID &amp; PIN)
                 </Link>
-                <a
-                  href="https://wa.me/918639831132?text=Hi%20ReviewSmart%20AI%2C%20I%20am%20interested%20in%20ReviewSmart%20AI%20for%20my%20business."
-                  target="_blank"
-                  rel="noreferrer"
+                <Link
+                  href="/#customizer"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-md transition"
+                  className="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white font-black text-xs shadow-md transition flex items-center justify-center gap-1.5"
                 >
-                  Get Started via WhatsApp
-                </a>
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Order Now &bull; ₹2,999</span>
+                </Link>
               </div>
             )}
           </div>

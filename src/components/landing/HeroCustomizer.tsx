@@ -155,7 +155,6 @@ export default function HeroCustomizer() {
 
   // Modal & Self-Onboarding Flow State
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState<"instant_order" | "whatsapp_proof">("instant_order");
 
   // Instant Order Form State
   const [phone, setPhone] = useState("");
@@ -443,52 +442,6 @@ export default function HeroCustomizer() {
     }
   };
 
-  // 2. WhatsApp Proof Request
-  const handleSubmitWhatsAppProof = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!phone || phone.trim().length < 10) {
-      alert("Please enter a valid 10-digit WhatsApp phone number.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      await fetch("/api/lead/capture", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          businessName,
-          city,
-          category,
-          phone,
-          source: "HERO_3D_CUSTOMIZER",
-          notes: `Theme: ${theme.name}${verifiedGoogleProfile ? ` | Verified GMB: ${verifiedGoogleProfile.name}` : ""}`,
-        }),
-      });
-
-      confetti({ particleCount: 80, spread: 70, origin: { y: 0.5 } });
-
-      const whatsappMsg = encodeURIComponent(
-        `Hi ReviewSmart AI Team! I just customized my Luxury Acrylic Standee for *${businessName}* (${city}). Please send me the 3D design mockups, delivery timeline, and the ₹2,999 Lifetime Pass activation details.`
-      );
-
-      setTimeout(() => {
-        window.open(`https://wa.me/918639831132?text=${whatsappMsg}`, "_blank");
-        setIsModalOpen(false);
-      }, 1000);
-    } catch (err) {
-      console.error(err);
-      window.open(
-        `https://wa.me/918639831132?text=Hi%20ReviewSmart,%20I%20want%20to%20order%20the%20NFC%20standee%20for%20${encodeURIComponent(
-          businessName
-        )}`,
-        "_blank"
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div id="customizer" className="relative pt-6 pb-16 sm:pt-10 sm:pb-24 overflow-hidden bg-gradient-to-b from-[#fafbfe] via-slate-50 to-white">
       {/* Ambient background glow behind Hero */}
@@ -668,32 +621,47 @@ export default function HeroCustomizer() {
                 })}
               </div>
 
-              {/* Primary Call to Action Button */}
-              <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
+              {/* Ultra High-Conversion Buy Now / Order Now CTA */}
+              <div className="pt-2 space-y-2.5">
                 <button
                   type="button"
-                  onClick={() => {
-                    setModalMode("instant_order");
-                    setIsModalOpen(true);
-                  }}
-                  className="w-full sm:flex-1 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm tracking-wide shadow-xl shadow-emerald-600/25 active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer"
+                  onClick={() => setIsModalOpen(true)}
+                  className="group relative w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm sm:text-base tracking-wide shadow-[0_12px_40px_rgba(16,185,129,0.35)] ring-2 ring-emerald-400/40 hover:ring-emerald-400/70 hover:shadow-[0_16px_50px_rgba(16,185,129,0.45)] active:scale-[0.98] transition-all duration-200 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 cursor-pointer overflow-hidden"
                 >
-                  <Sparkles className="w-4 h-4 text-emerald-200" />
-                  <span>Order 3D Standee &bull; ₹2,999</span>
-                  <ArrowRight className="w-4 h-4" />
+                  {/* Subtle Shimmer Light Sweep */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none" />
+
+                  <div className="flex items-center gap-2">
+                    <span className="p-1.5 rounded-xl bg-amber-400/20 text-amber-300 border border-amber-300/30">
+                      <Sparkles className="w-4 h-4 animate-spin" />
+                    </span>
+                    <span className="text-white text-base sm:text-lg font-black tracking-tight">
+                      BUY NOW &bull; ₹2,999
+                    </span>
+                  </div>
+
+                  <span className="hidden sm:inline text-emerald-200 font-normal text-xs">&bull;</span>
+
+                  <div className="flex items-center gap-1.5 text-emerald-100 text-xs sm:text-sm font-bold">
+                    <span>Claim Lifetime Pass</span>
+                    <ArrowRight className="w-4 h-4 text-emerald-200 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setModalMode("whatsapp_proof");
-                    setIsModalOpen(true);
-                  }}
-                  className="w-full sm:w-auto py-3.5 px-5 rounded-2xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Get WhatsApp Proof</span>
-                </button>
+                {/* Purchase Trust Badges */}
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-1.5 text-[11px] text-slate-500 font-semibold pt-0.5">
+                  <span className="flex items-center gap-1 text-emerald-700 font-bold">
+                    <Truck className="w-3.5 h-3.5 text-emerald-600" /> Free Doorstep Delivery
+                  </span>
+                  <span className="hidden sm:inline">&bull;</span>
+                  <span className="flex items-center gap-1 text-indigo-700 font-bold">
+                    <Zap className="w-3.5 h-3.5 text-amber-500" /> ₹0 Recurring AMC Forever
+                  </span>
+                  <span className="hidden sm:inline">&bull;</span>
+                  <span className="flex items-center gap-1 text-slate-700 font-bold">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Instant Card Activation
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -839,6 +807,15 @@ export default function HeroCustomizer() {
             <p className="text-[11px] text-slate-500 mt-2 text-center font-medium">
               Crystal Acrylic A6 Counter Standee &bull; Built-in High-Frequency NTAG213 NFC chip &bull; No Battery Needed
             </p>
+            {/* Quick Buy Standee CTA */}
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              className="mt-3 w-full max-w-xs py-3 px-5 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 hover:from-slate-800 hover:to-indigo-900 text-white font-black text-xs shadow-lg border border-slate-700/80 transition active:scale-95 flex items-center justify-center gap-2 group cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-12 transition-transform" />
+              <span>Order This Custom Standee Now &rarr;</span>
+            </button>
           </div>
         </div>
       </div>
@@ -915,44 +892,16 @@ export default function HeroCustomizer() {
               </div>
             ) : (
               <div>
-                {/* Mode Selector Tabs */}
-                <div className="flex items-center gap-2 p-1 bg-slate-100 rounded-2xl mb-6">
-                  <button
-                    type="button"
-                    onClick={() => setModalMode("instant_order")}
-                    className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                      modalMode === "instant_order"
-                        ? "bg-white text-slate-900 shadow-sm"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <Zap className="w-3.5 h-3.5 text-amber-500" />
-                    <span>Instant Order &bull; ₹2,999</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setModalMode("whatsapp_proof")}
-                    className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                      modalMode === "whatsapp_proof"
-                        ? "bg-white text-slate-900 shadow-sm"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Free Proof on WhatsApp</span>
-                  </button>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase tracking-wider">
+                    Official Store Checkout
+                  </span>
+                  <span className="text-[10px] text-amber-700 font-bold bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+                    🔥 70% Off Launch Deal
+                  </span>
                 </div>
 
-                {orderError && (
-                  <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
-                    {orderError}
-                  </div>
-                )}
-
-                {/* ── MODE 1: SELF-SERVE ORDER & UPI CHECKOUT ────────────── */}
-                {modalMode === "instant_order" && (
-                  <form onSubmit={handleInstantSelfServeOrder} className="space-y-4">
+                <form onSubmit={handleInstantSelfServeOrder} className="space-y-4">
                     <div>
                       <h3 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
                         <span>Claim Your 3D NFC Standee &bull; Lifetime Pass</span>
@@ -1295,7 +1244,7 @@ export default function HeroCustomizer() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm tracking-wide shadow-xl shadow-emerald-600/30 transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                      className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm sm:text-base tracking-wide shadow-xl shadow-emerald-600/35 transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                     >
                       {isSubmitting ? (
                         <>
@@ -1304,82 +1253,17 @@ export default function HeroCustomizer() {
                         </>
                       ) : (
                         <>
-                          <CheckCircle2 className="w-4 h-4" />
-                          <span>Complete Order &amp; Activate My Standee &rarr;</span>
-                        </>
-                      )}
-                    </button>
-                  </form>
-                )}
-
-                {/* ── MODE 2: FREE PROOF ON WHATSAPP ───────────────────── */}
-                {modalMode === "whatsapp_proof" && (
-                  <form onSubmit={handleSubmitWhatsAppProof} className="space-y-4">
-                    <div>
-                      <h3 className="text-xl font-black text-slate-900 tracking-tight">
-                        Get Free 3D Standee Proof on WhatsApp
-                      </h3>
-                      <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                        We will send a high-resolution 3D proof with your shop name, logo, and custom QR code for <strong>{businessName}</strong> directly to your WhatsApp before you pay anything.
-                      </p>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-800 mb-1">
-                        Business Name:
-                      </label>
-                      <input
-                        type="text"
-                        value={businessName}
-                        onChange={(e) => setBusinessName(e.target.value)}
-                        required
-                        className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold focus:outline-none focus:bg-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-800 mb-1">
-                        WhatsApp Phone Number:
-                      </label>
-                      <div className="flex">
-                        <span className="inline-flex items-center px-3.5 rounded-l-xl border border-r-0 border-slate-200 bg-slate-100 text-slate-600 text-xs font-bold">
-                          +91
-                        </span>
-                        <input
-                          type="tel"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          placeholder="e.g. 9876543210"
-                          required
-                          maxLength={10}
-                          className="w-full px-4 py-2.5 rounded-r-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold focus:outline-none focus:bg-white focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 font-mono"
-                        />
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-emerald-600/25 transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Generating Proof...</span>
-                        </>
-                      ) : (
-                        <>
-                          <MessageCircle className="w-4 h-4" />
-                          <span>Send My Free 3D Design on WhatsApp &rarr;</span>
+                          <CheckCircle2 className="w-5 h-5 text-emerald-200" />
+                          <span>CONFIRM &amp; ORDER NOW (₹2,999) &rarr;</span>
                         </>
                       )}
                     </button>
 
-                    <p className="text-[10px] text-slate-500 text-center">
-                      🔒 No spam. 100% Free. Direct 1-on-1 support from MOMO IT Technologies team.
+                    <p className="text-[10px] text-slate-400 text-center flex items-center justify-center gap-1.5 pt-1">
+                      <Lock className="w-3 h-3 text-emerald-400" />
+                      <span>Zero-Risk Guarantee &bull; 100% Secure Peer-to-Bank UPI Payment &bull; Instant Support</span>
                     </p>
                   </form>
-                )}
               </div>
             )}
           </div>

@@ -107,21 +107,22 @@ export default function MobileAppDock() {
         </button>
 
         {/* TAB 3: CENTER HERO ACTION (ORDER NOW) */}
-        <a
-          href={whatsappOrderUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={triggerHaptic}
-          className="flex flex-col items-center justify-center -mt-4 py-1 relative group"
+        <button
+          type="button"
+          onClick={() => {
+            triggerHaptic();
+            scrollToSection("customizer");
+          }}
+          className="flex flex-col items-center justify-center -mt-4 py-1 relative group cursor-pointer"
           aria-label="Order 3D Standee"
         >
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-500 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/35 border-2 border-white transition-all transform active:scale-90 group-hover:scale-105">
-            <Sparkles className="w-5 h-5 fill-slate-950 animate-pulse" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-500/35 border-2 border-white transition-all transform active:scale-90 group-hover:scale-105">
+            <Sparkles className="w-5 h-5 fill-white text-white animate-pulse" />
           </div>
-          <span className="text-[9.5px] font-black text-amber-600 tracking-tight mt-0.5 whitespace-nowrap">
-            Order Now
+          <span className="text-[9.5px] font-black text-emerald-700 tracking-tight mt-0.5 whitespace-nowrap">
+            Buy Now
           </span>
-        </a>
+        </button>
 
         {/* TAB 4: PRICING (HIGH-CONVERSION) */}
         <button
