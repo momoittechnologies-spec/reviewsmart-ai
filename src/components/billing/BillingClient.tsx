@@ -68,7 +68,6 @@ export default function BillingClient({
   // Form
   const [utrNumber, setUtrNumber] = useState("");
   const [customerPhone, setCustomerPhone] = useState(business?.phone || "");
-  const [referralCode, setReferralCode] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -80,18 +79,6 @@ export default function BillingClient({
   const [uploadingImage, setUploadingImage] = useState(false);
   const [showUtrGuide, setShowUtrGuide] = useState(false);
   const [selectedAppGuide, setSelectedAppGuide] = useState<"phonepe" | "gpay" | "paytm">("phonepe");
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const ref = params.get("ref") || params.get("agent") || localStorage.getItem("reviewsmart_ref");
-      if (ref) {
-        const clean = ref.trim().toUpperCase();
-        setReferralCode(clean);
-        localStorage.setItem("reviewsmart_ref", clean);
-      }
-    }
-  }, []);
 
   const rawUpiId = settings?.upiId;
   const upiId = rawUpiId && rawUpiId !== "momopedeals@oksbi" ? rawUpiId : "8639831132-2@ybl";
@@ -227,7 +214,6 @@ export default function BillingClient({
           utrNumber: utrNumber.trim(),
           screenshotUrl: screenshotData,
           customerPhone,
-          agentCode: referralCode ? referralCode.trim().toUpperCase() : undefined,
         }),
       });
 
@@ -898,17 +884,6 @@ export default function BillingClient({
                 We will send your login credentials &amp; welcome kit to this WhatsApp number.
               </span>
             </div>
-
-            {referralCode ? (
-              <div className="p-2.5 rounded-xl bg-indigo-50 border border-indigo-200 text-[11px] text-indigo-900 flex items-center justify-between">
-                <span className="font-medium">
-                  Partner Referral Code: <strong className="font-mono text-indigo-700">{referralCode}</strong>
-                </span>
-                <span className="text-[10px] bg-indigo-200 text-indigo-800 px-2 py-0.5 rounded-full font-bold">
-                  ✓ Attributed
-                </span>
-              </div>
-            ) : null}
 
             <button
               type="submit"

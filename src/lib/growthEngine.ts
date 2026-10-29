@@ -1,3 +1,6 @@
+// DEPRECATED - use gmbDataFetcher.ts instead. This file is kept for reference only.
+// No code imports from this module anymore.
+
 export interface PanIndiaLead {
   id: string;
   name: string;

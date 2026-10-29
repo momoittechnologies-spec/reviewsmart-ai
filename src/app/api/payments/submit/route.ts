@@ -15,7 +15,6 @@ export async function POST(req: NextRequest) {
       planType,
       packageTier,
       customerPhone,
-      agentCode: requestedAgentCode,
       screenshotUrl,
     } = await req.json();
 
@@ -39,7 +38,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 1. Guard against duplicate UTR submission
+    // Guard against duplicate UTR submission
     const existingPayment = await prisma.upiPayment.findFirst({
       where: { utrNumber: cleanUtr },
     });
@@ -72,52 +71,13 @@ export async function POST(req: NextRequest) {
         ? "EXECUTIVE_STANDEE"
         : "STARTER_PVC");
 
-    // 2. Resolve Agent Referral Attribution (e.g. from ?ref=MKT-01)
-    let attributedAgentId: string | null = null;
-    let attributedAgentCode: string | null = null;
-    let precalculatedCommission: number | null = null;
-
-    const candidateCode = requestedAgentCode ? String(requestedAgentCode).trim().toUpperCase() : null;
-    if (candidateCode) {
-      const agentUser = await prisma.user.findFirst({
-        where: {
-          OR: [
-            { agentCode: candidateCode },
-            { userIdTag: candidateCode },
-          ],
-          role: "MARKETING_AGENT",
-        },
-        select: { id: true, agentCode: true, commissionRate: true, isActive: true },
-      });
-
-      if (agentUser && agentUser.isActive) {
-        attributedAgentId = agentUser.id;
-        attributedAgentCode = agentUser.agentCode || candidateCode;
-        const rate = agentUser.commissionRate != null ? agentUser.commissionRate : 0.30;
-        precalculatedCommission = Math.round(paymentAmount * rate * 100) / 100;
-
-        // Associate merchant user with referring agent if not already set
-        const dbUser = await prisma.user.findUnique({
-          where: { id: user.id },
-          select: { referredBy: true },
-        });
-
-        if (dbUser && !dbUser.referredBy) {
-          await prisma.user.update({
-            where: { id: user.id },
-            data: { referredBy: agentUser.id },
-          });
-        }
-      }
-    }
-
     const payment = await prisma.upiPayment.create({
       data: {
         userId: user.id,
         businessId: business?.id,
-        agentId: attributedAgentId,
-        agentCode: attributedAgentCode,
-        commission: precalculatedCommission,
+        agentId: null,
+        agentCode: null,
+        commission: null,
         planType: planType || "ONLINE_DIRECT",
         packageTier: resolvedTier,
         amount: paymentAmount,

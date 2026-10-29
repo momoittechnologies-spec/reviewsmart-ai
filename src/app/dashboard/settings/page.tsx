@@ -1,30 +1,68 @@
 import React from "react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import SettingsClient from "@/components/settings/SettingsClient";
-import { Sparkles, Globe, ShieldCheck } from "lucide-react";
+import { Sparkles, Globe, ShieldCheck, ArrowLeft } from "lucide-react";
 
 export default async function SettingsPage({
   searchParams,
 }: {
-  searchParams?: { branchId?: string };
+  searchParams?: { branchId?: string; businessId?: string };
 }) {
   const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const business = searchParams?.branchId
-    ? await prisma.business.findFirst({
-        where: { id: searchParams.branchId, userId: user.id },
-      })
-    : await prisma.business.findFirst({
-        where: { userId: user.id },
-      });
+  const isSuperAdmin = user.role === "SUPER_ADMIN";
+  const targetId = searchParams?.businessId || searchParams?.branchId;
+
+  let business: any = null;
+
+  if (isSuperAdmin && targetId) {
+    business = await prisma.business.findFirst({
+      where: {
+        OR: [{ id: targetId }, { slug: targetId }],
+      },
+    });
+  } else if (isSuperAdmin && !targetId) {
+    business = await prisma.business.findFirst({
+      orderBy: { createdAt: "desc" },
+    });
+  } else if (searchParams?.branchId) {
+    business = await prisma.business.findFirst({
+      where: { id: searchParams.branchId, userId: user.id },
+    });
+  } else {
+    business = await prisma.business.findFirst({
+      where: { userId: user.id },
+    });
+  }
 
   const isOnline = business?.customerType === "ONLINE";
 
   return (
     <div className="space-y-6">
+      {/* Super Admin Banner */}
+      {isSuperAdmin && business && (
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-indigo-500/20 to-amber-500/10 border border-amber-500/40 text-amber-200 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="text-base">👑</span>
+            <div>
+              <span className="font-extrabold text-white">Super Admin Settings Mode:</span>{" "}
+              Configuring profile for <strong className="text-amber-300 font-bold">{business.name}</strong>
+            </div>
+          </div>
+          <Link
+            href="/admin/merchants"
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-900 text-amber-300 hover:text-white font-bold text-[11px] border border-amber-500/40 flex items-center gap-1.5 transition"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Return to Admin</span>
+          </Link>
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -49,22 +87,16 @@ export default async function SettingsPage({
               </span>
             )}
           </div>
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            {isOnline ? "Customise Your Digital SmartReview AI Card ✨" : "Card & AI SEO Settings ⚙️"}
-          </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Real-time interactive editor with live phone preview. Any edits you make here will be reflected instantly on your customer card.
+          <h1 className="text-xl font-black text-slate-900 tracking-tight">Store &amp; Review Configuration</h1>
+          <p className="text-xs text-slate-500">
+            {isOnline
+              ? "Manage your Google Place ID, direct review link, and business details."
+              : "Field merchant settings, Google Business profile, and custom branding."}
           </p>
         </div>
       </div>
 
-      {business ? (
-        <SettingsClient business={business} />
-      ) : (
-        <div className="p-8 bg-white rounded-3xl border border-slate-200 text-center">
-          <p className="text-xs text-slate-500">No business profile found to configure.</p>
-        </div>
-      )}
+      <SettingsClient business={business} />
     </div>
   );
 }

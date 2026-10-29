@@ -1,6 +1,7 @@
 import React from "react";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { Store, ArrowUpRight, ShieldCheck, Globe, UserCheck, CheckCircle2, Clock } from "lucide-react";
+import { Store, ArrowUpRight, ShieldCheck, Globe, UserCheck, CheckCircle2, Clock, Printer, BarChart3, Settings } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -27,14 +28,22 @@ export default async function AdminBusinessesPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-black text-white tracking-tight flex items-center gap-2">
-          <Store className="w-5 h-5 text-indigo-400" />
-          Client Businesses &amp; Cards ({businesses.length})
-        </h1>
-        <p className="text-xs text-slate-400 mt-0.5">
-          Directory of all live store review pages, client owners, channel source, and traffic activity.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-black text-white tracking-tight flex items-center gap-2">
+            <Store className="w-5 h-5 text-indigo-400" />
+            Client Businesses &amp; Cards ({businesses.length})
+          </h1>
+          <p className="text-xs text-slate-400 mt-0.5">
+            Directory of all live store review pages, client owners, channel source, and direct Standee Studio links.
+          </p>
+        </div>
+        <Link
+          href="/admin/merchants"
+          className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 transition shadow-sm w-fit"
+        >
+          <span>+ Onboard New Store</span>
+        </Link>
       </div>
 
       <div className="bg-slate-800 rounded-3xl border border-slate-700 overflow-hidden shadow-sm">
@@ -48,7 +57,7 @@ export default async function AdminBusinessesPage() {
                 <th className="py-3 px-4 font-semibold">Status</th>
                 <th className="py-3 px-4 font-semibold">Shield Intercepts</th>
                 <th className="py-3 px-4 font-semibold">Created</th>
-                <th className="py-3 px-4 font-semibold text-right">Action</th>
+                <th className="py-3 px-4 font-semibold text-right">Admin Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-700/60">
@@ -111,28 +120,31 @@ export default async function AdminBusinessesPage() {
                     {new Date(b.createdAt).toLocaleDateString()}
                   </td>
                   <td className="py-3 px-4 text-right">
-                    <div className="flex items-center justify-end gap-1.5">
-                      <a
-                        href={`/agent/manage/${b.id}`}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow-sm"
-                        title="Customise Profile & Studio"
+                    <div className="flex items-center justify-end gap-1.5 flex-wrap">
+                      <Link
+                        href={`/dashboard/studio?businessId=${b.id}`}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold transition shadow-sm"
+                        title="Generate Standees & Counter Displays"
                       >
-                        🎨 Studio
-                      </a>
+                        <Printer className="w-3 h-3" />
+                        <span>Standee</span>
+                      </Link>
+                      <Link
+                        href={`/dashboard?businessId=${b.id}`}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-[11px] font-bold transition"
+                        title="Inspect Client Analytics & Feedback"
+                      >
+                        <BarChart3 className="w-3 h-3" />
+                        <span>Dashboard</span>
+                      </Link>
                       <a
                         href={`/r/${b.slug}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-300 text-xs font-semibold transition border border-indigo-500/30"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-700/60 hover:bg-slate-700 text-indigo-300 hover:text-white text-[11px] font-semibold transition border border-indigo-500/20"
                       >
-                        Visit Card
+                        <span>Card</span>
                         <ArrowUpRight className="w-3 h-3" />
-                      </a>
-                      <a
-                        href="/admin/merchants"
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold transition"
-                      >
-                        Manage
                       </a>
                     </div>
                   </td>

@@ -11,26 +11,46 @@ import {
   ExternalLink,
   Truck,
   MessageCircle,
+  ShieldAlert,
+  ArrowLeft,
 } from "lucide-react";
 
 export default async function StudioPage({
   searchParams,
 }: {
-  searchParams?: { branchId?: string };
+  searchParams?: { branchId?: string; businessId?: string };
 }) {
   const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  const business = searchParams?.branchId
-    ? await prisma.business.findFirst({
-        where: { id: searchParams.branchId, userId: user.id },
-      })
-    : await prisma.business.findFirst({
-        where: { userId: user.id },
-      });
+  const isSuperAdmin = user.role === "SUPER_ADMIN";
+  const targetId = searchParams?.businessId || searchParams?.branchId;
+
+  let business: any = null;
+
+  if (isSuperAdmin && targetId) {
+    business = await prisma.business.findFirst({
+      where: {
+        OR: [{ id: targetId }, { slug: targetId }],
+      },
+    });
+  } else if (isSuperAdmin && !targetId) {
+    // If Super Admin opens studio without a business specified, fetch the first active one
+    business = await prisma.business.findFirst({
+      orderBy: { createdAt: "desc" },
+    });
+  } else if (searchParams?.branchId) {
+    business = await prisma.business.findFirst({
+      where: { id: searchParams.branchId, userId: user.id },
+    });
+  } else {
+    business = await prisma.business.findFirst({
+      where: { userId: user.id },
+    });
+  }
 
   if (!business) {
-    redirect("/dashboard/settings");
+    redirect(isSuperAdmin ? "/admin/merchants" : "/dashboard/settings");
   }
 
   const appUrl = getAppUrl();
@@ -43,6 +63,27 @@ export default async function StudioPage({
 
   return (
     <div className="space-y-6">
+      {/* Super Admin Preview Banner */}
+      {isSuperAdmin && (
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-indigo-500/20 to-amber-500/10 border border-amber-500/40 text-amber-200 text-xs no-print">
+          <div className="flex items-center gap-2">
+            <span className="text-base">👑</span>
+            <div>
+              <span className="font-extrabold text-white">Super Admin Standee Studio Mode:</span>{" "}
+              Generating print assets for <strong className="text-amber-300 font-bold">{business.name}</strong>{" "}
+              <span className="font-mono text-slate-400">(/r/{business.slug})</span>
+            </div>
+          </div>
+          <Link
+            href="/admin/merchants"
+            className="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-900 text-amber-300 hover:text-white font-bold text-[11px] border border-amber-500/40 flex items-center gap-1.5 transition"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Return to Admin Clients</span>
+          </Link>
+        </div>
+      )}
+
       {/* Top Banner: Standee Studio Access + Optional Courier Request */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-3xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white border border-slate-800 shadow-xl no-print">
         <div className="space-y-1">
@@ -58,18 +99,28 @@ export default async function StudioPage({
           </p>
         </div>
 
-        <a
-          href={waCourierLink}
-          target="_blank"
-          rel="noreferrer"
-          className="self-start md:self-auto px-4 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg transition active:scale-95 shrink-0"
-        >
-          <Truck className="w-4 h-4" />
-          <span>Order Physical Acrylic Kit Delivery</span>
-        </a>
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <a
+            href={waCourierLink}
+            target="_blank"
+            rel="noreferrer"
+            className="px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-emerald-950/40 transition active:scale-95"
+          >
+            <Truck className="w-3.5 h-3.5 text-emerald-200" />
+            <span>Request Acrylic Standee Courier</span>
+          </a>
+          <a
+            href={reviewUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="px-3 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-xs flex items-center gap-1.5 border border-slate-700 transition"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>Test Live Card</span>
+          </a>
+        </div>
       </div>
 
-      {/* Main Print Studio Component */}
       <PrintStudioClient business={business} reviewUrl={reviewUrl} />
     </div>
   );

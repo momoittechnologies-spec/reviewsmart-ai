@@ -126,12 +126,12 @@ export async function POST(req: NextRequest) {
     const hashedPassword = await hashPassword(randomPin);
 
     // Auto-resolve Google Review URL and Place ID if provided
-    let finalPlaceId = null;
+    let finalPlaceId = body.googlePlaceId ? String(body.googlePlaceId).trim() : null;
     let finalReviewUrl = googleReviewUrl
       ? String(googleReviewUrl).trim()
       : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((businessName || name).trim())}`;
 
-    if (googleReviewUrl) {
+    if (googleReviewUrl && !finalPlaceId) {
       try {
         const resolved = await resolveGoogleMapsUrl(String(googleReviewUrl).trim());
         if (resolved.placeId) {
@@ -142,6 +142,9 @@ export async function POST(req: NextRequest) {
         console.error("Auto-resolving review URL in admin merchant create failed:", err);
       }
     }
+
+    const isPaidValue = body.isPaid !== undefined ? Boolean(body.isPaid) : true;
+    const finalAddress = body.googleAddress ? String(body.googleAddress).trim() : null;
 
     // Create user and initial business
     const merchant = await prisma.user.create({
@@ -162,7 +165,8 @@ export async function POST(req: NextRequest) {
             category: category || "Local Business & Services",
             tagline: "Thank you for visiting! Share your review.",
             customerType: customerType || "ONLINE",
-            isPaid: false,
+            isPaid: isPaidValue,
+            googleAddress: finalAddress,
             phone: cleanPhone,
             whatsapp: cleanPhone,
             logoUrl: logoUrl ? String(logoUrl).trim() : null,

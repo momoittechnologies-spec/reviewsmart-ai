@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
         },
       });
     } else {
-      // Create new lead
+      // Create new lead for Super Admin
       lead = await prisma.leadCapture.create({
         data: {
           businessName: cleanBusiness,
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       leadId: lead.id,
-      message: "Lead captured successfully. Our team will connect on WhatsApp within 15 minutes.",
+      message: "Lead captured successfully.",
     });
   } catch (error: any) {
     console.error("Lead capture error:", error);

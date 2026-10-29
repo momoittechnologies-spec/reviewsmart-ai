@@ -200,11 +200,6 @@ export default function AdminPaymentsClient({
                 <span className="font-bold text-white text-sm">
                   {approvalMsg.msg}
                 </span>
-                {approvalMsg.commission && approvalMsg.commission > 0 && (
-                  <span className="ml-2 font-black text-amber-300">
-                    Agent Commission: ₹{approvalMsg.commission.toFixed(2)}
-                  </span>
-                )}
               </div>
             </div>
             <button onClick={() => setApprovalMsg(null)} className="text-emerald-400 hover:text-white font-bold p-1">✕</button>
@@ -289,11 +284,7 @@ export default function AdminPaymentsClient({
               </button>
             </div>
           </div>
-        </form>
-
-        <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300">
-          <span className="font-bold">Standard Agent Commission: 30%</span> — automatically calculated when approving deals based on each agent&apos;s custom rate (e.g. Madhu MKT-01 at 40%, others at 30%).
-        </div>
+        </form>
       </div>
 
       {/* 2. Payments table */}
@@ -382,10 +373,7 @@ export default function AdminPaymentsClient({
                   const isApproved = p.status === "APPROVED";
                   const storeName = p.user?.businesses?.[0]?.name || "Unassigned";
                   const storeSlug = p.user?.businesses?.[0]?.slug;
-                  const isAgentDeal = p.planType === "NEGOTIATED_DEAL" && p.agentCode;
-                  const previewCommission = isAgentDeal
-                    ? Math.round(p.amount * (p.agentCode === "MKT-01" ? 0.40 : settings.commissionRate || 0.30))
-                    : null;
+                  const isAgentDeal = p.planType === "NEGOTIATED_DEAL";
 
                   return (
                     <tr key={p.id} className={`hover:bg-slate-700/30 transition ${isPending ? "bg-amber-500/5" : ""}`}>
@@ -438,13 +426,7 @@ export default function AdminPaymentsClient({
                         <span className="font-black text-emerald-400 text-sm">₹{p.amount.toLocaleString("en-IN")}</span>
                       </td>
                       <td className="py-3 px-4">
-                        {isApproved && p.commission ? (
-                          <span className="font-bold text-amber-400 text-xs">₹{p.commission?.toLocaleString("en-IN")}</span>
-                        ) : previewCommission ? (
-                          <span className="text-slate-500 text-[10px]">~₹{previewCommission.toLocaleString("en-IN")} (on approval)</span>
-                        ) : (
-                          <span className="text-slate-600 text-[10px]">—</span>
-                        )}
+                        <span className="text-slate-600 text-[10px]">—</span>
                       </td>
                       <td className="py-3 px-4">
                         {isApproved ? (

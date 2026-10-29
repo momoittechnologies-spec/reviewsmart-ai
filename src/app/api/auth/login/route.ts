@@ -17,14 +17,13 @@ export async function POST(req: NextRequest) {
   try {
     let user: any = null;
 
-    // ─── FLOW 1: User ID + PIN (Merchants & Marketing Agents) ────────────────
+    // ─── FLOW 1: User ID + PIN (Merchants) ───────────────────────────────────
     if (userId && pin) {
       const rawId = String(userId).trim();
       const cleanDigits = rawId.replace(/[^0-9]/g, "").slice(-10);
-      const cleanCode = rawId.toUpperCase();
       const cleanPin = String(pin).trim();
 
-      // Must be exactly 4 digits for merchants/agents
+      // Must be exactly 4 digits for merchants
       if (!/^\d{4}$/.test(cleanPin) && cleanPin !== "admin123") {
         return NextResponse.json(
           { error: "PIN must be a 4-digit number." },
@@ -36,8 +35,6 @@ export async function POST(req: NextRequest) {
         where: {
           OR: [
             { userIdTag: rawId },
-            { userIdTag: cleanCode },
-            { agentCode: cleanCode },
             { phone: rawId },
             ...(cleanDigits.length === 10
               ? [
@@ -65,12 +62,19 @@ export async function POST(req: NextRequest) {
         );
       }
 
+      // Block old marketing agent accounts from logging in
+      if (user.role === "MARKETING_AGENT") {
+        return NextResponse.json(
+          { error: "Marketing agent accounts have been decommissioned. Please contact the administrator." },
+          { status: 403 }
+        );
+      }
+
       // Verify PIN
       let isPinValid = false;
       if (user.pinCode) {
         isPinValid = await verifyPin(cleanPin, user.pinCode);
       }
-      // Also try bcrypt password hash (agents created with hashPassword)
       if (!isPinValid && user.password) {
         isPinValid = await verifyPassword(cleanPin, user.password);
       }
@@ -101,15 +105,11 @@ export async function POST(req: NextRequest) {
           name: "Damerla Mohan",
           role: "SUPER_ADMIN",
           userIdTag: "momopedeals",
-          agentCode: null,
           phone: null,
           isActive: true,
-          customerType: "OFFLINE",
           password: "",
           pinCode: null,
         };
-        // For fallback user, accept any password (admin should set proper one via DB)
-        // This only works if DB is unreachable or user not seeded yet
       } else if (!user) {
         return NextResponse.json(
           { error: "Invalid email or password." },
@@ -159,9 +159,7 @@ export async function POST(req: NextRequest) {
       name: user.name,
       role: user.role,
       userIdTag: user.userIdTag,
-      agentCode: user.agentCode,
       phone: user.phone,
-      commissionRate: user.commissionRate,
     });
 
     const response = NextResponse.json({
@@ -172,8 +170,6 @@ export async function POST(req: NextRequest) {
         name: user.name,
         role: user.role,
         userIdTag: user.userIdTag,
-        agentCode: user.agentCode,
-        commissionRate: user.commissionRate,
       },
     });
 
@@ -195,18 +191,14 @@ export async function POST(req: NextRequest) {
     const cleanId = String(email || userId || "").toLowerCase().trim();
     const cleanSecret = String(password || pin || "").trim();
 
-    if (
-      cleanId === "momopedeals@gmail.com" &&
-      cleanSecret.length >= 4
-    ) {
+    if (cleanId === "momopedeals@gmail.com" && cleanSecret.length >= 4) {
       const fallbackUser = {
         id: "cmuemofv70000ehwsj7ofsjju",
         email: "momopedeals@gmail.com",
         name: "Damerla Mohan",
         role: "SUPER_ADMIN",
         userIdTag: "momopedeals",
-        agentCode: null,
-        commissionRate: null,
+        phone: null,
       };
       const token = signToken(fallbackUser);
       const response = NextResponse.json({ success: true, user: fallbackUser });
