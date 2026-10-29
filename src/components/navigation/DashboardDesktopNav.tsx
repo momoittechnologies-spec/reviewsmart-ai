@@ -62,7 +62,7 @@ export default function DashboardDesktopNav({
   ];
 
   return (
-    <nav className="hidden lg:block bg-slate-900 p-2 rounded-2xl border border-slate-800 shadow-sm space-y-1 text-xs font-medium">
+    <nav className="hidden lg:block bg-slate-900/90 backdrop-blur-xl p-2 rounded-2xl border border-slate-800/90 shadow-lg shadow-black/20 space-y-1 text-xs font-medium">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = item.active;

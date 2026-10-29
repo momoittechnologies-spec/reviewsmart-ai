@@ -47,26 +47,78 @@
   --ring: #6366f1;
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
 }
 
-/* Glassmorphism helpers */
+/* ── Modern Glassmorphism & Surface Tokens ── */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
 }
 
 .glass-panel-dark {
-  background: rgba(17, 24, 39, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.4);
+}
+
+.glass-card-amber {
+  background: rgba(24, 24, 27, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  box-shadow: 0 10px 30px -5px rgba(251, 191, 36, 0.1);
+}
+
+/* ── Micro-Interactions & Tactile Press ── */
+.btn-press {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* ── Star Active Glow ── */
+.star-glow-amber {
+  filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.8));
+}
+
+/* ── Animated Shimmer Sweep for CTAs ── */
+.shimmer-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-sweep::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  animation: shimmer 3s infinite;
 }
 
 /* Custom subtle scrollbar */
@@ -83,6 +135,12 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 
 /* Dark inputs & mobile browser autofill text visibility */
@@ -141,7 +199,6 @@ input[type="email"] {
     overflow: visible !important;
   }
 
-  /* Hide navigation, sidebars, headers, floating bars, buttons, and control panels */
   nav,
   aside,
   header,
@@ -153,14 +210,12 @@ input[type="email"] {
     display: none !important;
   }
 
-  /* Reset layout containers to avoid clipping */
   main,
   div,
   section {
     overflow: visible !important;
   }
 
-  /* Visibility isolation for clean printing */
   body * {
     visibility: hidden;
   }
@@ -183,7 +238,6 @@ input[type="email"] {
     display: flex !important;
   }
 
-  /* For A4 poster layout */
   #print-target.table-tent-sheet {
     position: relative !important;
     top: auto !important;
@@ -199,5 +253,13 @@ input[type="email"] {
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fadeIn {
-  animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-slideUp {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

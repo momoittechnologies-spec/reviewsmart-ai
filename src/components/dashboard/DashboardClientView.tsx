@@ -227,7 +227,7 @@ export default function DashboardClientView({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <Link
           href="/dashboard/settings"
-          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-indigo-300 transition group flex flex-col justify-between"
+          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-indigo-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between btn-press"
         >
           <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform">
             <Palette className="w-5 h-5" />
@@ -244,7 +244,7 @@ export default function DashboardClientView({
           href={reviewUrl}
           target="_blank"
           rel="noreferrer"
-          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-indigo-300 transition group flex flex-col justify-between"
+          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-indigo-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between btn-press"
         >
           <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
             <ExternalLink className="w-5 h-5" />
@@ -259,7 +259,7 @@ export default function DashboardClientView({
 
         <Link
           href="/dashboard/assistant"
-          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-purple-300 transition group flex flex-col justify-between"
+          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-purple-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between btn-press"
         >
           <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform">
             <Sparkles className="w-5 h-5" />
@@ -274,7 +274,7 @@ export default function DashboardClientView({
 
         <Link
           href="/dashboard/studio"
-          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-amber-300 transition group flex flex-col justify-between"
+          className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-amber-300 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between btn-press"
         >
           <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-110 transition-transform">
             {isOffline ? <Printer className="w-5 h-5" /> : <Store className="w-5 h-5" />}
@@ -293,7 +293,7 @@ export default function DashboardClientView({
       {/* ─── 3. RESPONSIVE KPI STATS GRID ─────────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Total Scans & Views */}
-        <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-sm">
+        <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500">Total Scans &amp; Views</span>
             <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
@@ -309,7 +309,7 @@ export default function DashboardClientView({
         </div>
 
         {/* AI Reviews Drafted */}
-        <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-sm">
+        <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500">AI Reviews Drafted</span>
             <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
@@ -325,7 +325,7 @@ export default function DashboardClientView({
         </div>
 
         {/* Negative Shield Saves */}
-        <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-sm">
+        <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500">Shield Saves (1-3★)</span>
             <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
@@ -341,7 +341,7 @@ export default function DashboardClientView({
         </div>
 
         {/* Google Redirects */}
-        <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-sm">
+        <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-slate-500">Google Redirects</span>
             <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">

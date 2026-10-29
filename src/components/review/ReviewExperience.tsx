@@ -924,7 +924,7 @@ export default function ReviewExperience({
                 onClick={() => handleRatingClick(star)}
                 onMouseEnter={() => setHoverRating(star)}
                 onMouseLeave={() => setHoverRating(0)}
-                className="p-1 focus:outline-none transform transition-transform active:scale-90 hover:scale-125"
+                className="p-1.5 focus:outline-none transform transition-all duration-150 active:scale-90 hover:scale-125 btn-press"
                 aria-label={`Rate ${star} stars`}
               >
                 <Star
@@ -1326,7 +1326,7 @@ export default function ReviewExperience({
               <button
                 type="button"
                 onClick={() => handleOpenCopyModal(editableDraftText)}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-xl shadow-amber-950/60 transition transform active:scale-98 cursor-pointer"
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-xl shadow-amber-500/25 transition transform active:scale-98 cursor-pointer shimmer-sweep btn-press border border-amber-300/40"
               >
                 <Copy className="w-4 h-4" />
                 <span>Copy Review &amp; Post on Google</span>
@@ -1519,7 +1519,7 @@ export default function ReviewExperience({
                 await copyToClipboard(modalCopiedText);
                 window.location.assign(googleUrl);
               }}
-              className="w-full py-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-xl transition transform active:scale-98 cursor-pointer"
+              className="w-full py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-xl shadow-white/10 transition transform active:scale-98 cursor-pointer btn-press border border-slate-200"
             >
               <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.28-2.1 3.665-5.2 3.665-9.12z" />
