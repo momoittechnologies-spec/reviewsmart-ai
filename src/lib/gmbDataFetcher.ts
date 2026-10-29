@@ -23,6 +23,45 @@ export interface RealBusinessLead {
   isHotLead: boolean;
 }
 
+// Blacklist of corporate franchises & national chains that should NEVER be pitched NFC standees
+const CORPORATE_CHAINS_BLACKLIST = [
+  "kfc",
+  "domino",
+  "pizza hut",
+  "subway",
+  "mcdonald",
+  "burger king",
+  "starbucks",
+  "cafe coffee day",
+  "barbeque nation",
+  "haldiram",
+  "bikanervala",
+  "reliance",
+  "dmart",
+  "d-mart",
+  "apollo pharmacy",
+  "medplus",
+  "lenskart",
+  "trends",
+  "max fashion",
+  "pantaloons",
+  "zudio",
+  "westside",
+  "titan",
+  "tanishq",
+  "kalyan jewellers",
+  "malabar gold",
+  "joyalukkas",
+  "bhima",
+  "lalitha jewellery",
+  "grt jewellers",
+];
+
+export function isCorporateChain(name: string): boolean {
+  const lower = name.toLowerCase();
+  return CORPORATE_CHAINS_BLACKLIST.some((chain) => lower.includes(chain));
+}
+
 // Category keyword mappings for Nominatim & Overpass
 const CATEGORY_SEARCH_TERMS: Record<string, string[]> = {
   "Restaurants & Cafes": ["restaurant", "cafe", "biryani", "dhaba", "food"],
@@ -158,7 +197,7 @@ async function fetchFromNominatim(
         const street = parts[1]?.trim() || city;
         const address = parts.slice(0, 4).join(",").trim() || `${name}, ${city}`;
 
-        if (!name || name.length < 2) continue;
+        if (!name || name.length < 2 || isCorporateChain(name)) continue;
         if (leads.some((l) => l.name.toLowerCase() === name.toLowerCase())) continue;
 
         const lat = item.lat ? Number(item.lat) : null;
@@ -239,7 +278,7 @@ out center 25;
   const elements = (data.elements || []) as any[];
 
   return elements
-    .filter((el: any) => el.tags?.name)
+    .filter((el: any) => el.tags?.name && !isCorporateChain(el.tags.name))
     .slice(0, 25)
     .map((el: any, idx: number) => {
       const osmTags = el.tags || {};

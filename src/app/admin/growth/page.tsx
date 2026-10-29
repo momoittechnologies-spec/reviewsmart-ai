@@ -20,6 +20,12 @@ import {
   Tag,
   ChevronDown,
   ChevronUp,
+  Upload,
+  CheckCircle2,
+  Target,
+  PlusCircle,
+  FileText,
+  Star,
 } from "lucide-react";
 import type { RealBusinessLead } from "@/lib/gmbDataFetcher";
 
@@ -66,6 +72,23 @@ const POPULAR_CATEGORIES = [
   "Clothing & Textiles",
 ];
 
+// Helper to extract rating & review count from lead.notes if stored in hunter format
+function parseHunterNotes(notes: string | null) {
+  if (!notes) return { rating: null, reviewCount: null, deficit: null, mapsUrl: null };
+
+  const ratingMatch = notes.match(/Rating:\s*([0-9.]+)/i);
+  const reviewMatch = notes.match(/Google Reviews:\s*([0-9]+)/i);
+  const deficitMatch = notes.match(/Needs\s*([0-9]+)\s*to reach 100/i);
+  const mapsMatch = notes.match(/Maps:\s*(https?:\/\/[^\s]+)/i);
+
+  return {
+    rating: ratingMatch ? parseFloat(ratingMatch[1]) : null,
+    reviewCount: reviewMatch ? parseInt(reviewMatch[1], 10) : null,
+    deficit: deficitMatch ? parseInt(deficitMatch[1], 10) : null,
+    mapsUrl: mapsMatch ? mapsMatch[1] : null,
+  };
+}
+
 export default function AdminGrowthPage() {
   const [activeTab, setActiveTab] = useState<"radar" | "inbound">("radar");
 
@@ -79,12 +102,23 @@ export default function AdminGrowthPage() {
   const [radarError, setRadarError] = useState("");
   const [dataSourceNote, setDataSourceNote] = useState("");
   const [expandedDossier, setExpandedDossier] = useState<Record<string, boolean>>({});
+  const [addingToCrmId, setAddingToCrmId] = useState<string | null>(null);
 
   // Inbound Leads CRM State
   const [inboundLeads, setInboundLeads] = useState<InboundLead[]>([]);
   const [loadingInbound, setLoadingInbound] = useState(false);
   const [inboundFilter, setInboundFilter] = useState("ALL");
+  const [sourceFilter, setSourceFilter] = useState<"ALL" | "HUNTER" | "WEBSITE">("ALL");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  // Import Modal State
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [importCsvText, setImportCsvText] = useState("");
+  const [importCity, setImportCity] = useState("Kadapa");
+  const [importCategory, setImportCategory] = useState("Local Business");
+  const [importMaxReviews, setImportMaxReviews] = useState("40");
+  const [importingLoading, setImportingLoading] = useState(false);
+  const [importResult, setImportResult] = useState<string | null>(null);
 
   // Initial Scan on load
   useEffect(() => {
@@ -165,6 +199,87 @@ export default function AdminGrowthPage() {
     }));
   };
 
+  // 1-Click Add Radar Lead to CRM
+  const addRadarLeadToCrm = async (lead: RealBusinessLead) => {
+    setAddingToCrmId(lead.id);
+    try {
+      const cleanPhone = (lead.phone || "").replace(/[^0-9]/g, "");
+      const res = await fetch("/api/lead/capture", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          businessName: lead.name,
+          city: lead.city,
+          category: selectedCategory,
+          phone: cleanPhone.length >= 10 ? cleanPhone : `000${Math.floor(1000000 + Math.random() * 9000000)}`,
+          source: "MARKET_RADAR_TARGET",
+          notes: `Added from Market Radar. Address: ${lead.address}. Google Maps: ${lead.googleMapsUrl}`,
+        }),
+      });
+
+      if (res.ok) {
+        await fetchInboundLeads();
+        alert(`✅ Added "${lead.name}" to your Target CRM leads!`);
+      }
+    } catch (err) {
+      console.error("Failed to add lead to CRM:", err);
+    } finally {
+      setAddingToCrmId(null);
+    }
+  };
+
+  // Import Leads (CSV / JSON)
+  const handleImportLeads = async () => {
+    if (!importCsvText.trim()) return;
+    setImportingLoading(true);
+    setImportResult(null);
+
+    try {
+      let payload: any = {
+        city: importCity,
+        category: importCategory,
+        maxReviews: parseInt(importMaxReviews, 10) || 50,
+        source: "OPEN_SOURCE_IMPORT",
+      };
+
+      // Check if user pasted JSON or CSV
+      if (importCsvText.trim().startsWith("[") || importCsvText.trim().startsWith("{")) {
+        try {
+          const parsed = JSON.parse(importCsvText.trim());
+          payload.leads = Array.isArray(parsed) ? parsed : [parsed];
+        } catch (e) {
+          payload.csvText = importCsvText;
+        }
+      } else {
+        payload.csvText = importCsvText;
+      }
+
+      const res = await fetch("/api/admin/leads/import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to import leads");
+      }
+
+      setImportResult(`✅ ${data.message}`);
+      await fetchInboundLeads();
+      setTimeout(() => {
+        setShowImportModal(false);
+        setImportCsvText("");
+        setImportResult(null);
+        setActiveTab("inbound");
+      }, 2000);
+    } catch (err: any) {
+      setImportResult(`❌ ${err?.message || "Import error"}`);
+    } finally {
+      setImportingLoading(false);
+    }
+  };
+
   const handleExportCsv = () => {
     if (leads.length === 0) return;
 
@@ -212,9 +327,23 @@ export default function AdminGrowthPage() {
   const displayedLeads = filterHotOnly ? leads.filter((l) => l.isHotLead) : leads;
 
   const filteredInbound = inboundLeads.filter((l) => {
-    if (inboundFilter === "ALL") return true;
-    return l.status === inboundFilter;
+    // 1. Status filter
+    if (inboundFilter !== "ALL" && l.status !== inboundFilter) return false;
+
+    // 2. Source filter
+    if (sourceFilter === "HUNTER") {
+      return l.source === "GOOGLE_MAPS_HUNTER" || l.source === "OPEN_SOURCE_IMPORT";
+    }
+    if (sourceFilter === "WEBSITE") {
+      return l.source !== "GOOGLE_MAPS_HUNTER" && l.source !== "OPEN_SOURCE_IMPORT";
+    }
+
+    return true;
   });
+
+  const hunterLeadCount = inboundLeads.filter(
+    (l) => l.source === "GOOGLE_MAPS_HUNTER" || l.source === "OPEN_SOURCE_IMPORT"
+  ).length;
 
   return (
     <div className="space-y-6 pb-20">
@@ -227,35 +356,32 @@ export default function AdminGrowthPage() {
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              100% Free Open Data Engine
+              100% Free Open-Source Growth Engine
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-              AI Growth Engine 🚀
+              AI Growth &amp; Low-Review Hunter 🚀
             </h1>
             <p className="text-slate-300 text-sm md:text-base max-w-2xl leading-relaxed">
-              Discover real local business leads from{" "}
-              <span className="text-emerald-300 font-semibold">OpenStreetMap &amp; Nominatim</span> with zero API costs and no credit card required — your highest-converting prospects.
+              Target independent local businesses with <strong className="text-emerald-300">few Google reviews (&lt; 40)</strong> that desperately need ReviewSmart AI standees to boost walk-in footfall. Zero paid APIs • Zero billing fees.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="bg-slate-800/80 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-700/60 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
-                🆓
-              </div>
-              <div className="text-left">
-                <div className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">Zero Cost</div>
-                <div className="text-xs font-semibold text-white">100% Free Open Engine</div>
-              </div>
-            </div>
+            <button
+              onClick={() => setShowImportModal(true)}
+              className="bg-indigo-600/90 hover:bg-indigo-500 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-indigo-400/40 text-white font-semibold text-xs flex items-center gap-2 shadow-lg shadow-indigo-600/30 transition-all"
+            >
+              <Upload className="w-4 h-4 text-indigo-200" />
+              Import Scraped Leads
+            </button>
 
             <div className="bg-slate-800/80 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-700/60 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-sm">
-                📍
+              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
+                🎯
               </div>
               <div className="text-left">
-                <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Coverage</div>
-                <div className="text-xs font-semibold text-white">All Indian Cities</div>
+                <div className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">Hunted Targets</div>
+                <div className="text-xs font-semibold text-white">{hunterLeadCount} Low-Review Leads</div>
               </div>
             </div>
           </div>
@@ -286,8 +412,13 @@ export default function AdminGrowthPage() {
                 : "text-slate-400 hover:text-white hover:bg-slate-800/50"
             }`}
           >
-            <Inbox className="w-4 h-4" />
-            Inbound Leads CRM
+            <Target className="w-4 h-4 text-emerald-400" />
+            Target Lead CRM
+            {hunterLeadCount > 0 && (
+              <span className="ml-1 px-2 py-0.5 rounded-full text-[11px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                {hunterLeadCount} Qualified
+              </span>
+            )}
             {inboundLeads.filter((l) => l.status === "NEW").length > 0 && (
               <span className="ml-1 px-2 py-0.5 rounded-full text-[11px] bg-rose-500 text-white font-bold animate-pulse">
                 {inboundLeads.filter((l) => l.status === "NEW").length} NEW
@@ -371,7 +502,7 @@ export default function AdminGrowthPage() {
                   {loadingRadar ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Fetching Real Data...
+                      Scanning Market...
                     </>
                   ) : (
                     <>
@@ -394,10 +525,10 @@ export default function AdminGrowthPage() {
               </div>
             </div>
 
-            {/* Filter Chips */}
+            {/* Filter Chips & Opportunity Advice */}
             <div className="pt-2 flex flex-wrap items-center justify-between gap-3 text-xs border-t border-slate-800">
-              <div className="flex items-center gap-3">
-                <span className="text-slate-400 font-medium">Quick Filters:</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-slate-400 font-medium">Strategy Filter:</span>
                 <button
                   onClick={() => setFilterHotOnly(!filterHotOnly)}
                   className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border transition-all ${
@@ -407,7 +538,7 @@ export default function AdminGrowthPage() {
                   }`}
                 >
                   <Flame className="w-3.5 h-3.5 text-rose-400" />
-                  Hot Leads Only (Score &gt; 60)
+                  High Opportunity (Score &gt; 60)
                 </button>
               </div>
 
@@ -416,6 +547,23 @@ export default function AdminGrowthPage() {
                 <span className="text-indigo-300 font-medium">{customCity || selectedCity}</span>
               </div>
             </div>
+          </div>
+
+          {/* Low-Review Strategy Explanation Banner */}
+          <div className="p-4 bg-slate-900 border border-indigo-500/20 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs text-slate-300">
+            <div className="flex items-center gap-3">
+              <span className="text-xl">💡</span>
+              <div>
+                <strong className="text-white">Why target low-review businesses?</strong> Established businesses with 500+ reviews ignore pitches. Independent shops with <strong>under 40 reviews</strong> are actively losing customers to rivals and buy NFC standees immediately!
+              </div>
+            </div>
+            <Link
+              href="#inbound"
+              onClick={() => setActiveTab("inbound")}
+              className="text-indigo-400 hover:text-indigo-300 font-bold whitespace-nowrap flex items-center gap-1"
+            >
+              View Hunted Leads ({hunterLeadCount}) &rarr;
+            </Link>
           </div>
 
           {/* Data Source Info Banner */}
@@ -439,9 +587,9 @@ export default function AdminGrowthPage() {
             {displayedLeads.map((lead) => {
               const isExpanded = expandedDossier[lead.id] || false;
               const cleanPhone = (lead.phone || "").replace(/[^0-9]/g, "");
-              const waUrl = cleanPhone
-                ? `https://wa.me/91${cleanPhone}`
-                : null;
+              const isAdded = inboundLeads.some(
+                (il) => il.businessName.toLowerCase() === lead.name.toLowerCase()
+              );
 
               return (
                 <div
@@ -464,7 +612,7 @@ export default function AdminGrowthPage() {
                         {lead.isHotLead && (
                           <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 flex items-center gap-1">
                             <Flame className="w-3 h-3 text-rose-400" />
-                            HOT LEAD
+                            HIGH OPPORTUNITY
                           </span>
                         )}
 
@@ -521,7 +669,7 @@ export default function AdminGrowthPage() {
                       {isExpanded ? (
                         <>Hide details <ChevronUp className="w-3.5 h-3.5" /></>
                       ) : (
-                        <>View contact & maps details <ChevronDown className="w-3.5 h-3.5" /></>
+                        <>View contact &amp; maps details <ChevronDown className="w-3.5 h-3.5" /></>
                       )}
                     </button>
 
@@ -558,7 +706,7 @@ export default function AdminGrowthPage() {
 
                   {/* Action Bar */}
                   <div className="p-5 md:p-6 flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       {lead.googleMapsUrl && (
                         <a
                           href={lead.googleMapsUrl}
@@ -567,10 +715,37 @@ export default function AdminGrowthPage() {
                           className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-all"
                         >
                           <MapPin className="w-3.5 h-3.5 text-indigo-400" />
-                          Search on Google Maps
+                          Verify on Google Maps
                           <ExternalLink className="w-3 h-3 text-slate-400" />
                         </a>
                       )}
+
+                      <button
+                        onClick={() => addRadarLeadToCrm(lead)}
+                        disabled={isAdded || addingToCrmId === lead.id}
+                        className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
+                          isAdded
+                            ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20 cursor-default"
+                            : "bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border-indigo-500/30"
+                        }`}
+                      >
+                        {isAdded ? (
+                          <>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                            Tracked in CRM
+                          </>
+                        ) : addingToCrmId === lead.id ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            Adding...
+                          </>
+                        ) : (
+                          <>
+                            <PlusCircle className="w-3.5 h-3.5" />
+                            Add to CRM Targets
+                          </>
+                        )}
+                      </button>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -584,27 +759,17 @@ export default function AdminGrowthPage() {
                         </a>
                       )}
 
-                      {waUrl && (
+                      {cleanPhone && (
                         <a
-                          href={waUrl}
+                          href={`https://wa.me/91${cleanPhone}?text=${encodeURIComponent(
+                            `Hello ${lead.name} team! 👋 I found your business on Google Maps in ${lead.city}. Most customers choose businesses with 100+ reviews. With ReviewSmart AI Smart NFC Standees, customers simply tap and review in 5 seconds. Can we send you a free sample?`
+                          )}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-lg shadow-emerald-600/30"
                         >
                           <MessageCircle className="w-4 h-4" />
-                          WhatsApp
-                        </a>
-                      )}
-
-                      {!cleanPhone && (
-                        <a
-                          href={lead.googleMapsUrl || "#"}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-medium transition-all"
-                        >
-                          Find Contact on Maps
-                          <ExternalLink className="w-3.5 h-3.5" />
+                          WhatsApp Pitch
                         </a>
                       )}
                     </div>
@@ -623,31 +788,80 @@ export default function AdminGrowthPage() {
         </div>
       )}
 
-      {/* ── TAB 2: INBOUND LEADS PIPELINE CRM ───────────────────────── */}
+      {/* ── TAB 2: TARGET LEAD CRM (LOW-REVIEW FOCUSED) ─────────────── */}
       {activeTab === "inbound" && (
         <div className="space-y-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 md:p-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <Inbox className="w-5 h-5 text-indigo-400" />
-                Live Inbound Customer Pipeline
-              </h2>
-              <p className="text-xs text-slate-400">
-                Incoming inquiries submitted through your homepage hero card customizer, pricing calculator, and demo pages.
-              </p>
+          {/* Top Controls Bar */}
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 md:p-6 shadow-xl space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                  <Target className="w-5 h-5 text-emerald-400" />
+                  Target Lead Pipeline &amp; High-Converting CRM
+                </h2>
+                <p className="text-xs text-slate-400">
+                  Targeted local businesses with real Google review deficits. Pitch directly via WhatsApp with tailored review counts!
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() => setShowImportModal(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 text-xs font-semibold border border-indigo-500/40 transition-all"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  Import Scraped Leads
+                </button>
+
+                <button
+                  onClick={fetchInboundLeads}
+                  disabled={loadingInbound}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-all"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${loadingInbound ? "animate-spin" : ""}`} />
+                  Refresh
+                </button>
+              </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <button
-                onClick={fetchInboundLeads}
-                disabled={loadingInbound}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-all"
-              >
-                <RefreshCw className={`w-3.5 h-3.5 ${loadingInbound ? "animate-spin" : ""}`} />
-                Refresh
-              </button>
+            {/* Filter Tabs */}
+            <div className="pt-2 flex flex-wrap items-center justify-between gap-3 text-xs border-t border-slate-800">
+              {/* Source Filter */}
+              <div className="flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700">
+                <button
+                  onClick={() => setSourceFilter("ALL")}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                    sourceFilter === "ALL"
+                      ? "bg-indigo-600 text-white font-bold"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  All Sources ({inboundLeads.length})
+                </button>
+                <button
+                  onClick={() => setSourceFilter("HUNTER")}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                    sourceFilter === "HUNTER"
+                      ? "bg-emerald-600 text-white font-bold"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  🎯 Low-Review Hunter ({hunterLeadCount})
+                </button>
+                <button
+                  onClick={() => setSourceFilter("WEBSITE")}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                    sourceFilter === "WEBSITE"
+                      ? "bg-indigo-600 text-white font-bold"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  🌐 Website Inquiries ({inboundLeads.length - hunterLeadCount})
+                </button>
+              </div>
 
-              <div className="flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700 text-xs">
+              {/* Status Filter */}
+              <div className="flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700">
                 {["ALL", "NEW", "CONTACTED", "DEMO_SENT", "CONVERTED", "LOST"].map((st) => (
                   <button
                     key={st}
@@ -665,16 +879,44 @@ export default function AdminGrowthPage() {
             </div>
           </div>
 
+          {/* Quick Command Hunter Banner */}
+          <div className="p-4 bg-slate-900 border border-emerald-500/30 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs text-slate-300">
+            <div className="space-y-1">
+              <div className="font-bold text-white flex items-center gap-2">
+                <span>⚡ Free Google Maps Lead Hunter CLI Tool</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px]">
+                  Zero API Cost
+                </span>
+              </div>
+              <p className="text-slate-400">
+                Run this command in terminal to scrape any city &amp; category. Discards high-review businesses and saves genuine low-review targets straight into this CRM:
+              </p>
+              <div className="p-2 rounded-lg bg-black/50 font-mono text-emerald-300 text-[11px] select-all">
+                npm run hunt-leads -- --city Kadapa --category &quot;dental clinics&quot; --maxReviews 40
+              </div>
+            </div>
+          </div>
+
+          {/* Leads Grid */}
           {filteredInbound.length === 0 ? (
             <div className="p-12 text-center bg-slate-900/50 rounded-3xl border border-slate-800 text-slate-400 text-sm">
               <Inbox className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-              No inbound leads found for filter &quot;{inboundFilter}&quot;.
+              No leads found matching current filter.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredInbound.map((lead) => {
                 const cleanPhone = lead.phone.replace(/[^0-9]/g, "");
-                const waPitch = `Hello ${lead.businessName}! 👋 Thank you for inquiring about ReviewSmart AI 3D NFC standees. We have prepared your demo and are ready to dispatch. Would you like to confirm your delivery address?`;
+                const isHunter = lead.source === "GOOGLE_MAPS_HUNTER" || lead.source === "OPEN_SOURCE_IMPORT";
+                const { rating, reviewCount, deficit, mapsUrl } = parseHunterNotes(lead.notes);
+
+                // High-Converting WhatsApp Pitch
+                let waPitch = "";
+                if (isHunter && reviewCount !== null) {
+                  waPitch = `Hello ${lead.businessName} team! 👋\n\nI noticed your business on Google Maps has a great ${rating || 4.5}★ rating, but only ${reviewCount} reviews in ${lead.city || "your city"}.\n\nMost customers choose competitors who have 100+ reviews. You are losing walk-in customers every week!\n\nReviewSmart AI provides 3D Smart NFC Standees for your counter. Customers simply tap their phone and leave a 5-star review in 5 seconds without typing or searching.\n\nOur clients usually reach 100+ 5-star reviews in under 30 days.\n\nWould you like to see a free mock-up standee designed for ${lead.businessName}?`;
+                } else {
+                  waPitch = `Hello ${lead.businessName}! 👋 Thank you for inquiring about ReviewSmart AI 3D NFC standees. We have prepared your demo and are ready to dispatch. Would you like to confirm your delivery address?`;
+                }
                 const waLink = `https://wa.me/91${cleanPhone}?text=${encodeURIComponent(waPitch)}`;
 
                 return (
@@ -684,7 +926,18 @@ export default function AdminGrowthPage() {
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+                          {/* Source Badge */}
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
+                              isHunter
+                                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                                : "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
+                            }`}
+                          >
+                            {isHunter ? "🎯 LOW-REVIEW TARGET" : "🌐 WEB INQUIRY"}
+                          </span>
+
                           <span
                             className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
                               lead.status === "NEW"
@@ -696,18 +949,18 @@ export default function AdminGrowthPage() {
                           >
                             {lead.status}
                           </span>
-                          <span className="text-[10px] text-slate-400">
+
+                          <span className="text-[10px] text-slate-500">
                             {new Date(lead.createdAt).toLocaleDateString("en-IN", {
                               day: "numeric",
                               month: "short",
-                              hour: "2-digit",
-                              minute: "2-digit",
                             })}
                           </span>
                         </div>
-                        <h4 className="text-base font-bold text-white">{lead.businessName}</h4>
+
+                        <h4 className="text-base font-bold text-white tracking-tight">{lead.businessName}</h4>
                         <p className="text-xs text-slate-400">
-                          {lead.category || "Retail Store"} • {lead.city || "India"}
+                          {lead.category || "Local Business"} • {lead.city || "India"}
                         </p>
                       </div>
 
@@ -725,36 +978,187 @@ export default function AdminGrowthPage() {
                       </select>
                     </div>
 
+                    {/* Google Reviews Metric Pill */}
+                    {isHunter && reviewCount !== null && (
+                      <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3 flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-3">
+                          {rating !== null && (
+                            <span className="font-bold text-amber-400 flex items-center gap-1">
+                              ⭐ {rating}
+                            </span>
+                          )}
+                          <span className="font-bold text-slate-200">
+                            💬 {reviewCount} Reviews
+                          </span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-bold">
+                          🚨 Needs {deficit || (100 - reviewCount)} to hit 100
+                        </span>
+                      </div>
+                    )}
+
                     {lead.notes && (
-                      <div className="text-xs text-slate-300 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                      <div className="text-xs text-slate-300 bg-slate-950/60 p-3 rounded-xl border border-slate-800 leading-relaxed max-h-24 overflow-y-auto">
                         {lead.notes}
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between gap-3 pt-2 border-t border-slate-800">
-                      <a
-                        href={`tel:+91${cleanPhone}`}
-                        className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white"
-                      >
-                        <Phone className="w-3.5 h-3.5 text-indigo-400" />
-                        +91 {cleanPhone}
-                      </a>
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800">
+                      <div className="flex items-center gap-2">
+                        {cleanPhone && !cleanPhone.startsWith("000") ? (
+                          <a
+                            href={`tel:+91${cleanPhone}`}
+                            className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white"
+                          >
+                            <Phone className="w-3.5 h-3.5 text-indigo-400" />
+                            +91 {cleanPhone}
+                          </a>
+                        ) : (
+                          <span className="text-xs text-slate-500">Phone not on file</span>
+                        )}
 
-                      <a
-                        href={waLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/30 transition-all"
-                      >
-                        <MessageCircle className="w-3.5 h-3.5" />
-                        Connect on WhatsApp
-                      </a>
+                        {mapsUrl && (
+                          <a
+                            href={mapsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-indigo-400 hover:underline text-xs flex items-center gap-1"
+                          >
+                            <MapPin className="w-3 h-3" />
+                            Maps
+                          </a>
+                        )}
+                      </div>
+
+                      {cleanPhone && !cleanPhone.startsWith("000") ? (
+                        <a
+                          href={waLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/30 transition-all"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5" />
+                          WhatsApp Pitch
+                        </a>
+                      ) : (
+                        <a
+                          href={mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lead.businessName + " " + (lead.city || ""))}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-all"
+                        >
+                          Find Contact on Maps
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
                     </div>
                   </div>
                 );
               })}
             </div>
           )}
+        </div>
+      )}
+
+      {/* ── IMPORT MODAL (CSV / JSON FROM OPEN-SOURCE SCRAPERS) ─────── */}
+      {showImportModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2">
+                <Upload className="w-5 h-5 text-indigo-400" />
+                <h3 className="text-lg font-bold text-white">Import Scraped Google Maps Leads</h3>
+              </div>
+              <button
+                onClick={() => setShowImportModal(false)}
+                className="text-slate-400 hover:text-white text-sm"
+              >
+                ✕ Close
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Paste CSV or JSON exported from top open-source tools like{" "}
+              <strong className="text-emerald-300">omkarcloud/google-maps-scraper</strong> or{" "}
+              <strong className="text-emerald-300">gosom/google-maps-scraper</strong>. The system will automatically skip national chains, filter for businesses with few reviews, and compute review deficits!
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div>
+                <label className="block text-slate-400 mb-1">City</label>
+                <input
+                  type="text"
+                  value={importCity}
+                  onChange={(e) => setImportCity(e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2"
+                />
+              </div>
+              <div>
+                <label className="block text-slate-400 mb-1">Category</label>
+                <input
+                  type="text"
+                  value={importCategory}
+                  onChange={(e) => setImportCategory(e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2"
+                />
+              </div>
+              <div>
+                <label className="block text-slate-400 mb-1">Max Reviews Filter</label>
+                <input
+                  type="number"
+                  value={importMaxReviews}
+                  onChange={(e) => setImportMaxReviews(e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2"
+                  placeholder="e.g. 40"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs text-slate-400 mb-1">
+                Paste CSV or JSON text here:
+              </label>
+              <textarea
+                rows={8}
+                value={importCsvText}
+                onChange={(e) => setImportCsvText(e.target.value)}
+                placeholder="name,phone,rating,reviews,address,url&#10;Sri Balaji Clinic,9876543210,4.6,18,Kadapa,https://maps.google.com/..."
+                className="w-full bg-slate-950 border border-slate-800 text-slate-200 font-mono text-xs rounded-xl p-3 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              />
+            </div>
+
+            {importResult && (
+              <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-xs text-slate-200">
+                {importResult}
+              </div>
+            )}
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                onClick={() => setShowImportModal(false)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleImportLeads}
+                disabled={importingLoading || !importCsvText.trim()}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-50"
+              >
+                {importingLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Importing...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    Process &amp; Save Leads
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
