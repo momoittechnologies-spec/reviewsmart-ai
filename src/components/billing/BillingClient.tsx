@@ -97,6 +97,7 @@ export default function BillingClient({
   const upiId = rawUpiId && rawUpiId !== "momopedeals@oksbi" ? rawUpiId : "8639831132-2@ybl";
   const upiPhoneNumber = "8639831132";
   const [copiedPhone, setCopiedPhone] = useState(false);
+  const [paymentTab, setPaymentTab] = useState<"apps" | "qr" | "manual">("apps");
 
   const handleCopyPhone = async () => {
     await copyToClipboard(upiPhoneNumber);
@@ -463,124 +464,216 @@ export default function BillingClient({
             </div>
           </div>
 
-        {/* UPI QR & Intent Payment Card */}
-        <div className="bg-white p-6 rounded-3xl border border-slate-200/70 shadow-sm space-y-4">
-          <div className="flex items-center justify-between">
+        {/* UPI QR & Intent Payment Card (Razorpay/Stripe Standard) */}
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <Smartphone className="w-4 h-4 text-indigo-600" />
-                Step 1: Scan &amp; Pay via UPI
+                <Smartphone className="w-4 h-4 text-emerald-600" />
+                Step 1: Choose Your Payment Mode
               </h3>
-              <p className="text-xs text-slate-400">
-                Amount to Pay: <strong className="text-slate-800">₹{currentAmount}</strong>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Amount to Pay: <strong className="text-slate-900 font-mono text-sm">₹{currentAmount}</strong> &bull; Zero Gateway Cut &bull; Direct Bank Settlement
               </p>
             </div>
-            <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
-              Zero Fees / 100% Secure
-            </span>
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-bold">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>100% Secure Peer-to-Bank</span>
+            </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-6 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-            {/* QR code */}
-            <div className="p-2.5 bg-white rounded-2xl shadow-sm border border-slate-200 flex-shrink-0 text-center">
-              {qrDataUrl ? (
-                <img src={qrDataUrl} alt="UPI QR Code" className="w-44 h-44 object-contain" />
-              ) : (
-                <div className="w-44 h-44 bg-slate-100 animate-pulse rounded-xl" />
-              )}
-              <span className="text-[10px] font-bold text-slate-500 block mt-1">
-                Scan with any UPI App
-              </span>
-            </div>
+          {/* Segmented Payment Mode Tabs */}
+          <div className="grid grid-cols-3 gap-1 p-1 bg-slate-100 rounded-xl text-center text-xs font-bold">
+            <button
+              type="button"
+              onClick={() => setPaymentTab("apps")}
+              className={`py-2.5 px-1 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                paymentTab === "apps"
+                  ? "bg-white text-slate-900 shadow-sm"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+              <span className="truncate">UPI Apps (1-Click)</span>
+            </button>
 
-            {/* UPI Details & Multi-App 1-Tap Launchers */}
-            <div className="space-y-3.5 flex-1 text-center sm:text-left">
-              {/* Payment Addresses (Mobile & UPI ID) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div className="p-2.5 rounded-xl bg-white border border-slate-200">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                    PhonePe / Mobile Number:
-                  </span>
-                  <div className="flex items-center justify-between mt-1">
-                    <span className="text-xs font-mono font-black text-slate-800">
-                      {upiPhoneNumber}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleCopyPhone}
-                      className="px-2 py-1 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-[10px] font-bold flex items-center gap-1 transition"
-                    >
-                      {copiedPhone ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                      {copiedPhone ? "Copied" : "Copy"}
-                    </button>
-                  </div>
-                </div>
+            <button
+              type="button"
+              onClick={() => setPaymentTab("qr")}
+              className={`py-2.5 px-1 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                paymentTab === "qr"
+                  ? "bg-white text-slate-900 shadow-sm"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              <QrCode className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+              <span className="truncate">Scan QR Code</span>
+            </button>
 
-                <div className="p-2.5 rounded-xl bg-white border border-slate-200">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                    Official UPI ID:
-                  </span>
-                  <div className="flex items-center justify-between mt-1">
-                    <span className="text-xs font-mono font-bold text-slate-800 truncate mr-1">
-                      {upiId}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleCopyUpi}
-                      className="px-2 py-1 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-[10px] font-bold flex items-center gap-1 transition shrink-0"
-                    >
-                      {copiedUpi ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                      {copiedUpi ? "Copied" : "Copy"}
-                    </button>
-                  </div>
-                </div>
-              </div>
+            <button
+              type="button"
+              onClick={() => setPaymentTab("manual")}
+              className={`py-2.5 px-1 rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                paymentTab === "manual"
+                  ? "bg-white text-slate-900 shadow-sm"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              <Smartphone className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span className="truncate">Pay to Number / ID</span>
+            </button>
+          </div>
 
-              <div className="text-[11px] text-slate-500">
-                Payee Name: <strong className="text-slate-800">{upiPayee}</strong>
-              </div>
-
-              {/* Multi-App Instant 1-Tap Pay Launchers (Inspired by YouPI-PG) */}
-              <div className="space-y-1.5 pt-1">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block">
-                  1-Tap App Launchers (Direct Bank Rails — No ₹2,000 Limit):
+          {/* TAB 1: 1-Tap UPI Apps */}
+          {paymentTab === "apps" && (
+            <div className="space-y-3 pt-1 animate-fadeIn">
+              <div className="flex items-center justify-between text-xs text-slate-500 px-0.5">
+                <span>Tap below to open your payment app on mobile (pre-fills ₹{currentAmount}):</span>
+                <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  ⚡ 0% Fee &bull; No ₹2,000 Cap
                 </span>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
-                  <a
-                    href={phonePeUri}
-                    className="p-2 rounded-xl bg-purple-700 hover:bg-purple-800 text-white text-center transition flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-sm"
-                  >
-                    <span className="text-[11px] font-black">🟣 PhonePe</span>
-                    <span className="text-[8px] text-purple-200">Pay ₹{currentAmount}</span>
-                  </a>
+              </div>
 
-                  <a
-                    href={gpayUri}
-                    className="p-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-center transition flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-sm"
-                  >
-                    <span className="text-[11px] font-black">🔵 Google Pay</span>
-                    <span className="text-[8px] text-blue-200">Pay ₹{currentAmount}</span>
-                  </a>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                {/* PhonePe */}
+                <a
+                  href={phonePeUri}
+                  className="p-3.5 rounded-2xl bg-purple-50 hover:bg-purple-100/80 border border-purple-200 text-purple-950 transition flex flex-col items-center justify-center gap-1.5 group active:scale-95 shadow-xs text-center"
+                >
+                  <div className="w-10 h-10 rounded-full bg-[#5f259f] text-white flex items-center justify-center font-black text-sm shadow-sm">
+                    Pe
+                  </div>
+                  <span className="text-xs font-black text-purple-900">PhonePe</span>
+                  <span className="text-[10px] text-purple-700 font-bold bg-purple-100/90 px-2 py-0.5 rounded-full">
+                    Pay ₹{currentAmount}
+                  </span>
+                </a>
 
-                  <a
-                    href={paytmUri}
-                    className="p-2 rounded-xl bg-sky-700 hover:bg-sky-800 text-white text-center transition flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-sm"
-                  >
-                    <span className="text-[11px] font-black">🟦 Paytm</span>
-                    <span className="text-[8px] text-sky-200">Pay ₹{currentAmount}</span>
-                  </a>
+                {/* Google Pay */}
+                <a
+                  href={gpayUri}
+                  className="p-3.5 rounded-2xl bg-blue-50 hover:bg-blue-100/80 border border-blue-200 text-blue-950 transition flex flex-col items-center justify-center gap-1.5 group active:scale-95 shadow-xs text-center"
+                >
+                  <div className="w-10 h-10 rounded-full bg-white border border-blue-200 flex items-center justify-center shadow-sm">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.28-2.1 3.665-5.2 3.665-9.12z" />
+                      <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.28 21.43 7.37 24 12 24z" />
+                      <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.13z" />
+                      <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.28 2.57 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs font-black text-blue-900">Google Pay</span>
+                  <span className="text-[10px] text-blue-700 font-bold bg-blue-100/90 px-2 py-0.5 rounded-full">
+                    Pay ₹{currentAmount}
+                  </span>
+                </a>
 
-                  <a
-                    href={upiUri}
-                    className="p-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-center transition flex flex-col items-center justify-center gap-0.5 active:scale-95 shadow-sm"
-                  >
-                    <span className="text-[11px] font-black">🟢 Any UPI</span>
-                    <span className="text-[8px] text-emerald-200">CRED / BHIM</span>
-                  </a>
+                {/* Paytm */}
+                <a
+                  href={paytmUri}
+                  className="p-3.5 rounded-2xl bg-sky-50 hover:bg-sky-100/80 border border-sky-200 text-sky-950 transition flex flex-col items-center justify-center gap-1.5 group active:scale-95 shadow-xs text-center"
+                >
+                  <div className="w-10 h-10 rounded-full bg-[#002e6e] text-white flex items-center justify-center font-black text-xs shadow-sm">
+                    Paytm
+                  </div>
+                  <span className="text-xs font-black text-sky-900">Paytm</span>
+                  <span className="text-[10px] text-sky-700 font-bold bg-sky-100/90 px-2 py-0.5 rounded-full">
+                    Pay ₹{currentAmount}
+                  </span>
+                </a>
+
+                {/* CRED / Any UPI */}
+                <a
+                  href={upiUri}
+                  className="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-900 transition flex flex-col items-center justify-center gap-1.5 group active:scale-95 shadow-xs text-center"
+                >
+                  <div className="w-10 h-10 rounded-full bg-slate-900 text-amber-400 flex items-center justify-center font-black text-sm shadow-sm">
+                    <Zap className="w-5 h-5 fill-amber-400" />
+                  </div>
+                  <span className="text-xs font-black text-slate-900">CRED / BHIM</span>
+                  <span className="text-[10px] text-slate-600 font-bold bg-slate-200/80 px-2 py-0.5 rounded-full">
+                    Any UPI App
+                  </span>
+                </a>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: Scan QR Code */}
+          {paymentTab === "qr" && (
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left animate-fadeIn">
+              {qrDataUrl ? (
+                <div className="p-3 bg-white rounded-2xl shadow-sm border border-slate-200 shrink-0 relative">
+                  <img src={qrDataUrl} alt="UPI Payment QR" className="w-44 h-44 object-contain" />
+                  <div className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+                </div>
+              ) : (
+                <div className="w-44 h-44 bg-slate-200 animate-pulse rounded-2xl" />
+              )}
+              <div className="space-y-2 flex-1">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Active Payment Session &bull; ₹{currentAmount}
+                </div>
+                <h4 className="text-sm font-bold text-slate-900">Scan with Camera or Any UPI App</h4>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Open PhonePe, Google Pay, Paytm, BHIM, CRED, Navi, or your bank's mobile app and point the scanner at this QR code.
+                </p>
+                <div className="pt-1 text-[11px] text-slate-500">
+                  Merchant Payee: <strong className="text-slate-800">{upiPayee}</strong> ({upiId})
                 </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {/* TAB 3: Pay to Number / UPI ID */}
+          {paymentTab === "manual" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 animate-fadeIn">
+              {/* Card 1: PhonePe Mobile Number */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="flex items-center justify-between text-[11px] uppercase font-bold text-slate-500">
+                  <span className="flex items-center gap-1">
+                    <Smartphone className="w-3.5 h-3.5 text-purple-600" /> Pay to Mobile Number
+                  </span>
+                  <span className="text-emerald-700 font-bold">PhonePe / GPay</span>
+                </div>
+                <div className="flex items-center justify-between bg-white px-3 py-2 rounded-xl border border-slate-200">
+                  <span className="font-mono text-sm font-black text-slate-900">{upiPhoneNumber}</span>
+                  <button
+                    type="button"
+                    onClick={handleCopyPhone}
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                  >
+                    {copiedPhone ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedPhone ? "Copied" : "Copy"}</span>
+                  </button>
+                </div>
+                <span className="text-xs text-slate-500 block">Verified Payee: <strong className="text-slate-800">{upiPayee}</strong></span>
+              </div>
+
+              {/* Card 2: UPI ID */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="flex items-center justify-between text-[11px] uppercase font-bold text-slate-500">
+                  <span className="flex items-center gap-1">
+                    <CreditCard className="w-3.5 h-3.5 text-emerald-600" /> Pay to UPI ID / VPA
+                  </span>
+                  <span className="text-emerald-700 font-bold">Any Bank</span>
+                </div>
+                <div className="flex items-center justify-between bg-white px-3 py-2 rounded-xl border border-slate-200">
+                  <span className="font-mono text-xs font-bold text-slate-900 truncate mr-1">{upiId}</span>
+                  <button
+                    type="button"
+                    onClick={handleCopyUpi}
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer shrink-0"
+                  >
+                    {copiedUpi ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedUpi ? "Copied" : "Copy"}</span>
+                  </button>
+                </div>
+                <span className="text-xs text-slate-500 block">Verified Payee: <strong className="text-slate-800">{upiPayee}</strong></span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
