@@ -164,8 +164,8 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                     : "text-slate-700 hover:text-indigo-600 hover:bg-slate-100"
                 }`}
               >
-                <User className="w-3.5 h-3.5" />
-                <span>Store Login</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Admin Login</span>
               </Link>
               <Link
                 href="/#customizer"
@@ -286,7 +286,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                       : "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200"
                   }`}
                 >
-                  Store Login (PIN)
+                  Admin Command Center
                 </Link>
                 <Link
                   href="/#customizer"

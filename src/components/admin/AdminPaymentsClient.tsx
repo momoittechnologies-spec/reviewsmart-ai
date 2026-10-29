@@ -43,10 +43,6 @@ Your payment for *${storeName}* has been verified & approved. Your Lifetime Acco
 
 📋 *YOUR INSTANT STORE CREDENTIALS & ACCESS KIT*:
 ━━━━━━━━━━━━━━━━━━━━
-📱 *Login Dashboard*: ${appUrl}/login
-👤 *User ID (Mobile)*: ${cleanPhone || "Your registered mobile"}
-🔑 *Security PIN*: (Use the 4-digit PIN set up during onboarding)
-
 🌟 *Your Official Google Review Card*:
 🔗 ${storeSlug ? `${appUrl}/r/${storeSlug}` : `${appUrl}/dashboard`}
 

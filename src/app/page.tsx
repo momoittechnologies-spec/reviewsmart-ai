@@ -557,7 +557,7 @@ export default function HomePage() {
               className="text-xs font-bold text-slate-700 hover:text-slate-900 px-3 py-2 sm:px-3.5 sm:py-2 rounded-xl border border-slate-200 hover:bg-slate-50 transition flex items-center gap-1.5"
             >
               <Lock className="w-3.5 h-3.5 text-indigo-600" />
-              <span className="hidden xs:inline">Login</span>
+              <span className="hidden xs:inline">Admin Portal</span>
             </Link>
 
             <a
@@ -2002,7 +2002,7 @@ export default function HomePage() {
                 <MessageCircle className="w-3.5 h-3.5 text-emerald-600" /> WhatsApp
               </a>
               <Link href="/login" className="hover:text-slate-900 transition flex items-center gap-1 font-medium">
-                <Lock className="w-3.5 h-3.5 text-indigo-600" /> Merchant Login
+                <Lock className="w-3.5 h-3.5 text-indigo-600" /> Admin Portal
               </Link>
             </div>
           </div>

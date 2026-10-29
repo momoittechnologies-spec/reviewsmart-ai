@@ -119,7 +119,7 @@ export async function POST(req: NextRequest) {
 
       if (user.role !== "SUPER_ADMIN") {
         return NextResponse.json(
-          { error: "This login is for Super Admin only. Use User ID & PIN to sign in." },
+          { error: "Access restricted to authorized administrators only." },
           { status: 403 }
         );
       }
@@ -147,7 +147,7 @@ export async function POST(req: NextRequest) {
       }
     } else {
       return NextResponse.json(
-        { error: "Please provide User ID & PIN, or Email & Password." },
+        { error: "Please provide your administrator email and password." },
         { status: 400 }
       );
     }

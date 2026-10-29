@@ -501,7 +501,7 @@ export default function AdminMerchantsPage() {
     const cleanPhone = phone.replace(/[^0-9]/g, "");
     const waNumber = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
     const base = getAppUrl();
-    const msg = `Hello ${name}! 👋\nWelcome to ReviewSmart AI!\n\nHere are your store login credentials:\n📱 Login: ${base}/login\n👤 User ID (Mobile): ${cleanPhone}\n🔑 4-Digit Security PIN: ${pin}${slug ? `\n\n🌟 Your Review Card: ${base}/r/${slug}` : ""}\n\nLog in to customize your digital review card and protect your store ratings.`;
+    const msg = `Hello ${name}! 👋\nWelcome to ReviewSmart AI!\n\nYour Smart 3D Google Review Standee is being prepared for your counter!\n${slug ? `\n🌟 Live Review Station: ${base}/r/${slug}` : ""}\n\nWhen customers tap their phone on your standee, Gemini AI drafts an authentic 5-star review in 5 seconds without typing.\n\nNeed any changes to your Google Maps link or logo? Simply reply directly to this WhatsApp message!`;
     return `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
   };
 
