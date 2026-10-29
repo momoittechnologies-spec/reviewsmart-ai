@@ -78,6 +78,74 @@ async function handleSearch(query: string | null) {
     return NextResponse.json({ success: true, results: cached.data, cached: true });
   }
 
+  // 1. Primary: Real Google Places API (New) Text Search if API key is configured
+  const placesKey =
+    process.env.GOOGLE_PLACES_API_KEY ||
+    process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ||
+    process.env.GOOGLE_MAPS_API_KEY;
+
+  if (placesKey && placesKey.trim().length > 10) {
+    try {
+      const placesRes = await fetch("https://places.googleapis.com/v1/places:searchText", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": placesKey.trim(),
+          "X-Goog-FieldMask": [
+            "places.id",
+            "places.displayName",
+            "places.formattedAddress",
+            "places.rating",
+            "places.userRatingCount",
+            "places.googleMapsUri",
+            "places.primaryTypeDisplayName",
+          ].join(","),
+        },
+        body: JSON.stringify({
+          textQuery: cleanQuery,
+          languageCode: "en",
+          maxResultCount: 5,
+        }),
+      });
+
+      if (placesRes.ok) {
+        const placesData = await placesRes.json();
+        const rawPlaces = (placesData.places || []) as any[];
+        if (rawPlaces.length > 0) {
+          const results = rawPlaces.map((p) => {
+            const name = p.displayName?.text || cleanQuery;
+            const address = p.formattedAddress || "";
+            const locality = address.split(",")[0] || "";
+            const placeId = p.id || "";
+            const reviewUrl = placeId
+              ? `https://search.google.com/local/writereview?placeid=${placeId}`
+              : p.googleMapsUri || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + " " + address)}`;
+            const category = p.primaryTypeDisplayName?.text || "Local Business";
+
+            return {
+              name,
+              branchName: locality || "Verified Location",
+              address,
+              category,
+              googlePlaceId: placeId,
+              placeId,
+              googleReviewUrl: reviewUrl,
+              rating: p.rating ? Number(p.rating) : 5.0,
+              reviewCount: p.userRatingCount ? `${p.userRatingCount} reviews` : "Verified on Google",
+              suggestedTags: ["Quick Service", "Great Quality", "Friendly Staff", "Fair Pricing", "Clean Ambiance"],
+              logoUrl: null,
+            };
+          });
+
+          searchCache.set(cacheKey, { timestamp: Date.now(), data: results });
+          return NextResponse.json({ success: true, results, source: "google-places-api" });
+        }
+      }
+    } catch (placesErr) {
+      console.warn("Google Places API call failed, falling back to Gemini:", placesErr);
+    }
+  }
+
   const apiKey = process.env.GEMINI_API_KEY;
 
   if (apiKey && apiKey.trim().length > 5) {
