@@ -225,29 +225,27 @@ export default function AdminGrowthPage() {
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-xs font-semibold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-              Real-Data Growth Engine
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+              100% Free Open Data Engine
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
               AI Growth Engine 🚀
             </h1>
             <p className="text-slate-300 text-sm md:text-base max-w-2xl leading-relaxed">
-              Discover real businesses from{" "}
-              <span className="text-amber-300 font-semibold">Google Places API</span> and{" "}
-              <span className="text-emerald-300 font-semibold">OpenStreetMap</span> with low review
-              counts — your highest-converting leads.
+              Discover real local business leads from{" "}
+              <span className="text-emerald-300 font-semibold">OpenStreetMap &amp; Nominatim</span> with zero API costs and no credit card required — your highest-converting prospects.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <div className="bg-slate-800/80 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-700/60 flex items-center gap-3">
               <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
-                🌐
+                🆓
               </div>
               <div className="text-left">
-                <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Data Source</div>
-                <div className="text-xs font-semibold text-white">Google Places + OSM</div>
+                <div className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">Zero Cost</div>
+                <div className="text-xs font-semibold text-white">100% Free Open Engine</div>
               </div>
             </div>
 
