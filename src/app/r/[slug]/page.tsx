@@ -75,6 +75,7 @@ export default async function PublicReviewPage({
       qrMode: true,
       menuUrl: true,
       customUpiId: true,
+      visitingCardOwnerName: true,
       isPaid: true,
       demoExpiresAt: true,
       demoUsed: true,

@@ -34,6 +34,7 @@ import {
   Clock,
   ImageIcon,
   Camera,
+  CreditCard,
 } from "lucide-react";
 import { getAppUrl } from "@/lib/utils";
 
@@ -59,6 +60,9 @@ interface BusinessItem {
   demoExpiresAt?: string | null;
   demoUsed?: boolean;
   isDemoActive?: boolean;
+  customUpiId?: string | null;
+  menuUrl?: string | null;
+  qrMode?: string | null;
 }
 
 interface MerchantItem {
@@ -165,6 +169,9 @@ export default function AdminMerchantsPage() {
     isPaid: true,
     gmbStatus: "NOT_REQUESTED",
     gmbNotes: "",
+    customUpiId: "",
+    menuUrl: "",
+    qrMode: "SMART_HUB",
   });
   const [savingEdit, setSavingEdit] = useState(false);
   const [adminEnrichingDna, setAdminEnrichingDna] = useState(false);
@@ -335,6 +342,9 @@ export default function AdminMerchantsPage() {
       isPaid: b.isPaid ?? true,
       gmbStatus: b.gmbStatus || "NOT_REQUESTED",
       gmbNotes: b.gmbNotes || "",
+      customUpiId: b.customUpiId || "",
+      menuUrl: b.menuUrl || "",
+      qrMode: b.qrMode || "SMART_HUB",
     });
   };
 
@@ -396,6 +406,9 @@ export default function AdminMerchantsPage() {
                         customerType: editForm.customerType,
                         gmbStatus: editForm.gmbStatus,
                         gmbNotes: editForm.gmbNotes,
+                        customUpiId: editForm.customUpiId || null,
+                        menuUrl: editForm.menuUrl || null,
+                        qrMode: editForm.qrMode,
                       }
                     : b
                 ),
@@ -1761,6 +1774,60 @@ export default function AdminMerchantsPage() {
                         onChange={(e) => setEditForm({ ...editForm, website: e.target.value })}
                         placeholder="https://example.com"
                         className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* UPI Payment Acceptance & QR Experience Mode */}
+                  <div className="p-3.5 rounded-2xl bg-slate-900 border border-emerald-500/30 space-y-3">
+                    <label className="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5">
+                      <CreditCard className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Counter Payment Acceptance (UPI) &amp; QR Mode</span>
+                    </label>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[10px] text-slate-400 mb-1">
+                          Custom Payee UPI ID
+                        </label>
+                        <input
+                          type="text"
+                          value={editForm.customUpiId}
+                          onChange={(e) => setEditForm({ ...editForm, customUpiId: e.target.value.trim() })}
+                          placeholder="e.g. 7287867584@cub"
+                          className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        />
+                        <p className="text-[9px] text-slate-400 mt-1">
+                          Generates scannable QR &amp; 1-tap UPI deep link on review card.
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] text-slate-400 mb-1">
+                          QR Experience Mode
+                        </label>
+                        <select
+                          value={editForm.qrMode}
+                          onChange={(e) => setEditForm({ ...editForm, qrMode: e.target.value })}
+                          className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        >
+                          <option value="SMART_HUB">🌟 SMART_HUB (Review Booster + Quick Actions + Counter Pay)</option>
+                          <option value="STANDARD_REVIEW">⭐ STANDARD_REVIEW (Direct 5-Star Review Booster)</option>
+                          <option value="DUAL_PAY_REVIEW">💳 DUAL_PAY_REVIEW (Split Review &amp; Payment)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] text-slate-400 mb-1">
+                        Digital Menu / Product Catalog URL (Optional)
+                      </label>
+                      <input
+                        type="url"
+                        value={editForm.menuUrl}
+                        onChange={(e) => setEditForm({ ...editForm, menuUrl: e.target.value })}
+                        placeholder="https://... or menu link"
+                        className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500"
                       />
                     </div>
                   </div>

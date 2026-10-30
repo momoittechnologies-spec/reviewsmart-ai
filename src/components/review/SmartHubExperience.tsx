@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import QRCode from "qrcode";
 import {
   Star,
   Sparkles,
@@ -19,6 +20,11 @@ import {
   Check,
   QrCode,
   Share2,
+  CreditCard,
+  Copy,
+  X,
+  ArrowRight,
+  IndianRupee,
 } from "lucide-react";
 import ReviewExperience from "./ReviewExperience";
 import { copyToClipboard } from "@/lib/clipboard";
@@ -46,6 +52,7 @@ interface BusinessData {
   qrMode?: string | null;
   menuUrl?: string | null;
   customUpiId?: string | null;
+  visitingCardOwnerName?: string | null;
 }
 
 export default function SmartHubExperience({
@@ -61,6 +68,32 @@ export default function SmartHubExperience({
 }) {
   const [showReviewBooster, setShowReviewBooster] = useState(true);
   const [linkCopied, setLinkCopied] = useState(false);
+  const [showUpiModal, setShowUpiModal] = useState(false);
+  const [upiQrDataUrl, setUpiQrDataUrl] = useState<string>("");
+  const [upiCopied, setUpiCopied] = useState(false);
+
+  // Clean UPI ID and deep link for zero-friction payment acceptance
+  const customUpi = (business.customUpiId || "").trim();
+  const payeeOwnerName = (business.visitingCardOwnerName || business.name || "").trim();
+  const upiPayUrl = customUpi
+    ? `upi://pay?pa=${encodeURIComponent(customUpi)}&pn=${encodeURIComponent(business.name)}&cu=INR`
+    : "";
+
+  useEffect(() => {
+    if (upiPayUrl) {
+      QRCode.toDataURL(upiPayUrl, {
+        margin: 1,
+        width: 340,
+        errorCorrectionLevel: "M",
+        color: {
+          dark: "#020617",
+          light: "#ffffff",
+        },
+      })
+        .then((url) => setUpiQrDataUrl(url))
+        .catch((err) => console.error("UPI QR Generation Error:", err));
+    }
+  }, [upiPayUrl]);
 
   // Clean WhatsApp number
   const rawWa = business.whatsapp || business.phone || "";
@@ -272,6 +305,62 @@ export default function SmartHubExperience({
 
       {/* ─── QUICK ACTION BUTTONS GRID ───────────────────────────────────────── */}
       <div className="w-full mt-3.5 space-y-2.5">
+        {/* 0. Instant Counter UPI Payment Acceptance */}
+        {customUpi && (
+          <div className="w-full p-4 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-slate-900 to-teal-950/70 border border-emerald-500/40 hover:border-emerald-400 shadow-xl shadow-emerald-950/30 transition group">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30 group-hover:scale-105 transition shadow-sm">
+                  <CreditCard className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div className="text-left">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-sm font-bold text-white group-hover:text-emerald-300 transition">
+                      Pay at Counter via UPI
+                    </span>
+                    <span className="text-[9px] font-black uppercase text-emerald-400 bg-emerald-950 border border-emerald-800/80 px-1.5 py-0.5 rounded-full tracking-wider">
+                      0% FEE
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 font-mono font-medium mt-0.5">
+                    {customUpi}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setShowUpiModal(true)}
+                  className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 hover:text-white font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm"
+                  title="Show Payment QR Code"
+                >
+                  <QrCode className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>QR</span>
+                </button>
+                <a
+                  href={upiPayUrl}
+                  className="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs flex items-center gap-1 shadow-md shadow-emerald-950/50 transition active:scale-95"
+                >
+                  <span>Pay Now</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+
+            {/* Supported Apps Strip */}
+            <div className="mt-3 pt-2.5 border-t border-emerald-500/20 flex items-center justify-between text-[10px] text-slate-400">
+              <span className="flex items-center gap-1 text-emerald-400/90 font-medium">
+                <ShieldCheck className="w-3 h-3 text-emerald-400 shrink-0" />
+                Direct Merchant Transfer
+              </span>
+              <span className="font-mono text-slate-400 truncate max-w-[170px] sm:max-w-none text-right">
+                GPay • PhonePe • Paytm • CUB • BHIM
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* 1. WhatsApp Instant Chat / Orders */}
         {waUrl && (
           <a
@@ -446,6 +535,118 @@ export default function SmartHubExperience({
         )}
       </div>
 
+      {/* ─── UPI PAYMENT ACCEPTANCE MODAL ───────────────────────────────────── */}
+      {showUpiModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-slate-900 border border-emerald-500/40 rounded-3xl p-5 sm:p-6 max-w-sm w-full shadow-2xl relative space-y-4 text-center my-6 max-h-[92vh] overflow-y-auto">
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={() => setShowUpiModal(false)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition"
+              aria-label="Close Payment Modal"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Header */}
+            <div className="flex flex-col items-center">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mb-2 shadow-lg">
+                <CreditCard className="w-6 h-6" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-950/70 border border-emerald-800/70 px-2.5 py-0.5 rounded-full mb-1">
+                ⚡ Direct Merchant Payment
+              </span>
+              <h3 className="text-lg font-black text-white">{business.name}</h3>
+              {payeeOwnerName && (
+                <p className="text-xs text-slate-300 font-medium">
+                  Payee: <span className="text-white font-bold">{payeeOwnerName}</span>
+                </p>
+              )}
+            </div>
+
+            {/* Scannable Dynamic QR Code */}
+            <div className="flex flex-col items-center justify-center p-4 bg-white rounded-2xl shadow-xl border-4 border-emerald-500/30">
+              {upiQrDataUrl ? (
+                <img
+                  src={upiQrDataUrl}
+                  alt={`UPI QR code for ${business.name}`}
+                  className="w-56 h-56 object-contain"
+                />
+              ) : (
+                <div className="w-56 h-56 flex items-center justify-center text-slate-500 text-xs font-medium">
+                  Generating UPI QR...
+                </div>
+              )}
+              <span className="text-[11px] font-mono font-bold text-slate-800 mt-2">
+                Scan with CUB mBank Plus or Any UPI App
+              </span>
+            </div>
+
+            {/* UPI ID with 1-Click Copy */}
+            <div className="w-full bg-slate-950/80 border border-slate-800 rounded-2xl p-3 flex items-center justify-between gap-2">
+              <div className="text-left truncate">
+                <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">
+                  UPI VPA ID
+                </span>
+                <span className="text-xs sm:text-sm font-mono font-bold text-emerald-400 select-all truncate block">
+                  {customUpi}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  copyToClipboard(customUpi);
+                  setUpiCopied(true);
+                  setTimeout(() => setUpiCopied(false), 2000);
+                }}
+                className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white flex items-center gap-1.5 shrink-0 border border-slate-700 transition active:scale-95"
+              >
+                {upiCopied ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <span className="text-emerald-400">Copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Primary Mobile Action: Open in UPI App */}
+            <a
+              href={upiPayUrl}
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-950/50 transition transform active:scale-98"
+            >
+              <CreditCard className="w-4 h-4" />
+              <span>Pay with Any UPI App</span>
+              <ArrowRight className="w-4 h-4" />
+            </a>
+
+            {/* Supported Apps Badges */}
+            <div className="pt-1 text-[11px] text-slate-400 space-y-1.5">
+              <p className="font-semibold text-slate-300">Accepted on all UPI Apps</p>
+              <div className="flex flex-wrap items-center justify-center gap-1.5 text-[10px]">
+                {["CUB mBank Plus", "Google Pay", "PhonePe", "Paytm", "BHIM", "CRED", "Amazon Pay"].map((app) => (
+                  <span
+                    key={app}
+                    className="px-2 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-slate-300 font-medium"
+                  >
+                    {app}
+                  </span>
+                ))}
+              </div>
+              <p className="text-[10px] text-emerald-400/80 pt-1 flex items-center justify-center gap-1">
+                <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                Zero surcharge • 100% Direct instant credit to merchant
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ─── FOOTER WITH ZERO ADS GUARANTEE ─────────────────────────────────── */}
       <footer className="w-full mt-8 pt-4 border-t border-white/5 text-center flex flex-col items-center gap-1.5">

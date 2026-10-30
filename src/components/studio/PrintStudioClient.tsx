@@ -456,7 +456,8 @@ export default function PrintStudioClient({
       : reviewUrl;
 
   const upiPhone = business.phone || business.whatsapp || "8639831132";
-  const upiUrl = `upi://pay?pa=${upiPhone}@ybl&pn=${encodeURIComponent(business.name)}&cu=INR`;
+  const upiId = (business.customUpiId || "").trim() || `${upiPhone}@ybl`;
+  const upiUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(business.name)}&cu=INR`;
 
   useEffect(() => {
     QRCode.toDataURL(activeReviewUrl, {
