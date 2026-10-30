@@ -199,11 +199,12 @@ export default function HeroCustomizer() {
   const upiEncodedPayee = encodeURIComponent(upiPayee);
 
   // YouPI-PG Multi-App Protocol Deep Links (Direct App Handoff — No ₹2,000 Gallery limit)
-  const phonePeDeepLink = `phonepe://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}`;
-  const gpayDeepLink = `tez://upi/pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}`;
-  const paytmDeepLink = `paytmmp://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}`;
-  const credDeepLink = `credpay://upi/pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}`;
-  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}`;
+  const merchantParams = "mc=7372&mode=01&purpose=00";
+  const phonePeDeepLink = `phonepe://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
+  const gpayDeepLink = `tez://upi/pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
+  const paytmDeepLink = `paytmmp://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
+  const credDeepLink = `credpay://upi/pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
+  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=2999&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
 
   // Close dropdown on outside click
   useEffect(() => {

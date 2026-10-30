@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import QRCode from "qrcode";
 import {
@@ -25,9 +25,12 @@ import {
   X,
   ArrowRight,
   IndianRupee,
+  AlertCircle,
+  Smartphone,
 } from "lucide-react";
 import ReviewExperience from "./ReviewExperience";
 import { copyToClipboard } from "@/lib/clipboard";
+import { buildUpiLinks } from "@/lib/upi-engine";
 
 interface BusinessData {
   id: string;
@@ -72,16 +75,28 @@ export default function SmartHubExperience({
   const [upiQrDataUrl, setUpiQrDataUrl] = useState<string>("");
   const [upiCopied, setUpiCopied] = useState(false);
 
-  // Clean UPI ID and deep link for zero-friction payment acceptance
+  // Clean UPI ID and deep link bundle with NPCI Merchant Category compliance
   const customUpi = (business.customUpiId || "").trim();
   const payeeOwnerName = (business.visitingCardOwnerName || business.name || "").trim();
-  const upiPayUrl = customUpi
-    ? `upi://pay?pa=${encodeURIComponent(customUpi)}&pn=${encodeURIComponent(business.name)}&cu=INR`
-    : "";
+
+  const upiBundle = useMemo(() => {
+    if (!customUpi) return null;
+    return buildUpiLinks({
+      upiId: customUpi,
+      payeeName: business.name,
+      category: business.category,
+    });
+  }, [customUpi, business.name, business.category]);
+
+  const upiPayUrl = upiBundle?.standardUrl || "";
+  const phonepeUrl = upiBundle?.phonepeUrl || "";
+  const gpayUrl = upiBundle?.gpayUrl || "";
+  const paytmUrl = upiBundle?.paytmUrl || "";
+  const qrPayload = upiBundle?.qrPayload || "";
 
   useEffect(() => {
-    if (upiPayUrl) {
-      QRCode.toDataURL(upiPayUrl, {
+    if (qrPayload) {
+      QRCode.toDataURL(qrPayload, {
         margin: 1,
         width: 340,
         errorCorrectionLevel: "M",
@@ -93,7 +108,7 @@ export default function SmartHubExperience({
         .then((url) => setUpiQrDataUrl(url))
         .catch((err) => console.error("UPI QR Generation Error:", err));
     }
-  }, [upiPayUrl]);
+  }, [qrPayload]);
 
   // Clean WhatsApp number
   const rawWa = business.whatsapp || business.phone || "";
@@ -616,21 +631,70 @@ export default function SmartHubExperience({
               </button>
             </div>
 
-            {/* Primary Mobile Action: Open in UPI App */}
-            <a
-              href={upiPayUrl}
-              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-950/50 transition transform active:scale-98"
-            >
-              <CreditCard className="w-4 h-4" />
-              <span>Pay with Any UPI App</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
+            {/* Direct App Launch Intent Grid */}
+            <div className="space-y-2 pt-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                ⚡ Instant 1-Tap App Checkout
+              </span>
+              <div className="grid grid-cols-2 gap-2">
+                {/* PhonePe Direct */}
+                <a
+                  href={phonepeUrl}
+                  className="py-3 px-2 rounded-xl bg-purple-900/80 hover:bg-purple-800 border border-purple-500/50 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition transform active:scale-95"
+                >
+                  <Smartphone className="w-3.5 h-3.5 text-purple-300" />
+                  <span>PhonePe</span>
+                </a>
+
+                {/* Google Pay Direct */}
+                <a
+                  href={gpayUrl}
+                  className="py-3 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-blue-500/50 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition transform active:scale-95"
+                >
+                  <CreditCard className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Google Pay</span>
+                </a>
+
+                {/* Paytm Direct */}
+                <a
+                  href={paytmUrl}
+                  className="py-3 px-2 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 text-cyan-200 font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition transform active:scale-95"
+                >
+                  <IndianRupee className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Paytm</span>
+                </a>
+
+                {/* Any UPI / CUB App */}
+                <a
+                  href={upiPayUrl}
+                  className="py-3 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition transform active:scale-95"
+                >
+                  <ArrowRight className="w-3.5 h-3.5" />
+                  <span>All UPI Apps</span>
+                </a>
+              </div>
+            </div>
+
+            {/* High-Value / PhonePe Limit Guidance */}
+            <div className="p-3 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-left space-y-1">
+              <div className="flex items-center gap-1.5 text-amber-300 font-bold text-xs">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                <span>Paying over ₹2,000 on PhonePe?</span>
+              </div>
+              <p className="text-[10px] text-slate-300 leading-relaxed">
+                NPCI limits gallery screenshot uploads to ₹2,000. To pay amounts above ₹2,000:
+              </p>
+              <ul className="text-[10px] text-amber-200/90 list-disc list-inside space-y-0.5">
+                <li>Tap <strong>PhonePe</strong> button above directly, or</li>
+                <li>Copy UPI ID &amp; pay via PhonePe &rarr; <em>To UPI ID</em> (up to ₹1 Lakh limit).</li>
+              </ul>
+            </div>
 
             {/* Supported Apps Badges */}
             <div className="pt-1 text-[11px] text-slate-400 space-y-1.5">
               <p className="font-semibold text-slate-300">Accepted on all UPI Apps</p>
               <div className="flex flex-wrap items-center justify-center gap-1.5 text-[10px]">
-                {["CUB mBank Plus", "Google Pay", "PhonePe", "Paytm", "BHIM", "CRED", "Amazon Pay"].map((app) => (
+                {["CUB mBank Plus", "PhonePe", "Google Pay", "Paytm", "BHIM", "CRED", "Amazon Pay"].map((app) => (
                   <span
                     key={app}
                     className="px-2 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-slate-300 font-medium"

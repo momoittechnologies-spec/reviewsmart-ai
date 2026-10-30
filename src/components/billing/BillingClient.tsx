@@ -110,13 +110,14 @@ export default function BillingClient({
 
   const transactionNote = `ReviewSmart-Lifetime-${business?.slug || "Activation"}`;
 
-  // Multi-App UPI Intent Links (Inspired by YouPI-PG)
+  // Multi-App UPI Intent Links (NPCI Compliant YouPI-PG Architecture)
   const encodedPayee = encodeURIComponent(upiPayee);
   const encodedNote = encodeURIComponent(transactionNote);
-  const phonePeUri = `phonepe://pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}`;
-  const gpayUri = `tez://upi/pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}`;
-  const paytmUri = `paytmmp://pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}`;
-  const upiUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}`;
+  const merchantParams = `mc=7372&mode=01&purpose=00`;
+  const phonePeUri = `phonepe://pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}&${merchantParams}`;
+  const gpayUri = `tez://upi/pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}&${merchantParams}`;
+  const paytmUri = `paytmmp://pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}&${merchantParams}`;
+  const upiUri = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodedPayee}&am=${currentAmount}&cu=INR&tn=${encodedNote}&${merchantParams}`;
 
   useEffect(() => {
     QRCode.toDataURL(upiUri, {

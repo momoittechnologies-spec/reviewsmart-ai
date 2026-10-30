@@ -41,6 +41,7 @@ import {
   drawCanvasUniversalFooter,
 } from "@/lib/print-branding";
 import UniversalPrintFooter from "./UniversalPrintFooter";
+import { buildUpiLinks } from "@/lib/upi-engine";
 
 export type PrintFormat =
   | "stand"
@@ -67,6 +68,7 @@ interface BusinessData {
   visitingCardAddress?: string | null;
   visitingCardImageUrl?: string | null;
   customUpiId?: string | null;
+  category?: string | null;
 }
 
 interface PrintStudioProps {
@@ -457,7 +459,12 @@ export default function PrintStudioClient({
 
   const upiPhone = business.phone || business.whatsapp || "8639831132";
   const upiId = (business.customUpiId || "").trim() || `${upiPhone}@ybl`;
-  const upiUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(business.name)}&cu=INR`;
+  const upiBundle = buildUpiLinks({
+    upiId,
+    payeeName: business.name,
+    category: business.category,
+  });
+  const upiUrl = upiBundle.qrPayload;
 
   useEffect(() => {
     QRCode.toDataURL(activeReviewUrl, {
