@@ -36,6 +36,18 @@ import {
 import QRCode from "qrcode";
 import { printElement } from "@/lib/print";
 import { copyToClipboard } from "@/lib/clipboard";
+import {
+  UNIVERSAL_BRANDING_LINE,
+  drawCanvasUniversalFooter,
+} from "@/lib/print-branding";
+import UniversalPrintFooter from "./UniversalPrintFooter";
+
+export type PrintFormat =
+  | "stand"
+  | "flyer"
+  | "poster-a4"
+  | "poster-a3"
+  | "pvc-vertical";
 
 interface BusinessData {
   id: string;
@@ -390,7 +402,7 @@ export default function PrintStudioClient({
   agentMode = false,
   merchantInfo,
 }: PrintStudioProps) {
-  const [format, setFormat] = useState<"stand" | "pvc-vertical" | "poster-a4">("stand");
+  const [format, setFormat] = useState<PrintFormat>("stand");
   const [pvcSide, setPvcSide] = useState<"front" | "back">("front");
   type PvcBackMode = "business-card" | "upload-card" | "dual-upi" | "guide" | "staff";
   const [pvcBackMode, setPvcBackMode] = useState<PvcBackMode>(() => {
@@ -515,17 +527,29 @@ export default function PrintStudioClient({
         `${business.name} - 4x6 Acrylic Stand (${activeTheme.name})`,
         "@page { size: 4in 6in; margin: 0; }"
       );
+    } else if (format === "flyer") {
+      printElement(
+        "print-target",
+        `${business.name} - A5 Table Tent Flyer (${activeTheme.name})`,
+        "@page { size: A5 portrait; margin: 6mm; }"
+      );
+    } else if (format === "poster-a4") {
+      printElement(
+        "print-target",
+        `${business.name} - A4 Wall Poster (${activeTheme.name})`,
+        "@page { size: A4 portrait; margin: 8mm; }"
+      );
+    } else if (format === "poster-a3") {
+      printElement(
+        "print-target",
+        `${business.name} - A3 Jumbo Storefront Poster (${activeTheme.name})`,
+        "@page { size: A3 portrait; margin: 10mm; }"
+      );
     } else if (format === "pvc-vertical") {
       printElement(
         "print-target",
         `${business.name} - Vertical PVC Card (${pvcSide === "front" ? "Front" : "Back"})`,
         "@page { size: 2.125in 3.375in; margin: 0; }"
-      );
-    } else {
-      printElement(
-        "print-target",
-        `${business.name} - A4 Wall Poster (${activeTheme.name})`,
-        "@page { size: A4 portrait; margin: 10mm; }"
       );
     }
   };
@@ -947,12 +971,11 @@ export default function PrintStudioClient({
           "500"
         );
 
-        // Verified Partner Footer
-        ctx.fillStyle = activeTheme.accent;
-        ctx.font = "bold 26px -apple-system, BlinkMacSystemFont, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "alphabetic";
-        ctx.fillText("✨ ReviewSmart AI • Verified Google Partner", 600, 1660);
+        // Universal Mandatory Branding Footer
+        drawCanvasUniversalFooter(ctx, 600, 1625, 1665, activeTheme, {
+          partnerFontSize: 24,
+          brandingFontSize: 21,
+        });
 
         // Optional crop border
         if (showCropMarks) {
@@ -1128,10 +1151,12 @@ export default function PrintStudioClient({
           ctx.font = "bold 20px -apple-system, sans-serif";
           ctx.fillText("✨ AI Review Assistant Ready", 342, 855);
 
-          // Micro Authenticity Footer
-          ctx.fillStyle = activeTheme.subtext;
-          ctx.font = "bold 16px -apple-system, sans-serif";
-          ctx.fillText("✨ ReviewSmart AI • Smart Business Card", 342, 980);
+          // Universal Mandatory Branding Footer
+          drawCanvasUniversalFooter(ctx, 342, 948, 978, activeTheme, {
+            partnerFontSize: 16,
+            brandingFontSize: 13,
+            partnerText: "✨ ReviewSmart AI • Smart Business Card",
+          });
         } else {
           // BACK SIDE
           const pvcBackSafeWidth = 520;
@@ -1360,10 +1385,12 @@ export default function PrintStudioClient({
             ctx.font = "14px -apple-system, sans-serif";
             ctx.fillText("Verified Google 5-Star Business Partner", 342, 828);
 
-            // Footer
-            ctx.fillStyle = activeTheme.accent;
-            ctx.font = "bold 18px -apple-system, sans-serif";
-            ctx.fillText("✨ Official ReviewSmart Partner Card", 342, 980);
+            // Universal Mandatory Branding Footer
+            drawCanvasUniversalFooter(ctx, 342, 948, 978, activeTheme, {
+              partnerFontSize: 16,
+              brandingFontSize: 13,
+              partnerText: "✨ Official ReviewSmart Partner Card",
+            });
           } else if (pvcBackMode === "upload-card") {
             if (visitingCardImg) {
               const cardImg = new Image();
@@ -1461,10 +1488,12 @@ export default function PrintStudioClient({
               );
             }
 
-            ctx.fillStyle = activeTheme.accent;
-            ctx.font = "bold 18px -apple-system, sans-serif";
-            ctx.textAlign = "center";
-            ctx.fillText("✨ Official ReviewSmart Partner Card", 342, 980);
+            // Universal Mandatory Branding Footer
+            drawCanvasUniversalFooter(ctx, 342, 948, 978, activeTheme, {
+              partnerFontSize: 16,
+              brandingFontSize: 13,
+              partnerText: "✨ Official ReviewSmart Partner Card",
+            });
           } else if (pvcBackMode === "staff") {
             ctx.fillStyle = activeTheme.accent;
             ctx.font = "bold 26px -apple-system, sans-serif";
@@ -1574,9 +1603,12 @@ export default function PrintStudioClient({
             ctx.font = "18px -apple-system, sans-serif";
             ctx.fillText(business.phone ? `Direct Line: ${business.phone}` : "Customer Satisfaction Guaranteed", 342, 790);
 
-            ctx.fillStyle = activeTheme.accent;
-            ctx.font = "bold 18px -apple-system, sans-serif";
-            ctx.fillText("✨ ReviewSmart AI Staff Edition", 342, 980);
+            // Universal Mandatory Branding Footer
+            drawCanvasUniversalFooter(ctx, 342, 948, 978, activeTheme, {
+              partnerFontSize: 16,
+              brandingFontSize: 13,
+              partnerText: "✨ ReviewSmart AI Staff Edition",
+            });
           } else {
             // dual-upi
             ctx.fillStyle = activeTheme.accent;
@@ -1698,13 +1730,15 @@ export default function PrintStudioClient({
               "500"
             );
 
-            ctx.fillStyle = activeTheme.accent;
-            ctx.font = "bold 18px -apple-system, sans-serif";
-            ctx.textAlign = "center";
-            ctx.fillText("✨ ReviewSmart AI Dual Counter Card", 342, 980);
+            // Universal Mandatory Branding Footer
+            drawCanvasUniversalFooter(ctx, 342, 948, 978, activeTheme, {
+              partnerFontSize: 16,
+              brandingFontSize: 13,
+              partnerText: "✨ ReviewSmart AI Dual Counter Card",
+            });
           }
         }
-      } else {
+      } else if (format === "poster-a4") {
         // A4 Wall Poster: 210mm x 297mm at 300 DPI = 2480 x 3508 px
         canvas.width = 2480;
         canvas.height = 3508;
@@ -1954,18 +1988,535 @@ export default function PrintStudioClient({
         ctx.textBaseline = "middle";
         ctx.fillText(posterPillText, 1240, pillTopY + 65);
 
-        // Verified Partner Footer
-        ctx.fillStyle = activeTheme.accent;
-        ctx.font = "bold 46px -apple-system, BlinkMacSystemFont, sans-serif";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "alphabetic";
-        ctx.fillText("✨ ReviewSmart AI • Verified Google Partner", 1240, 3280);
+        // Universal Mandatory Branding Footer
+        drawCanvasUniversalFooter(ctx, 1240, 3210, 3270, activeTheme, {
+          partnerFontSize: 44,
+          brandingFontSize: 38,
+        });
 
         if (showCropMarks) {
           ctx.strokeStyle = "#94a3b8";
           ctx.lineWidth = 4;
           ctx.setLineDash([20, 20]);
           ctx.strokeRect(40, 40, 2400, 3428);
+        }
+      } else if (format === "poster-a3") {
+        // A3 Jumbo Storefront Poster: 297mm x 420mm at 300 DPI = 3508 x 4960 px
+        canvas.width = 3508;
+        canvas.height = 4960;
+
+        ctx.fillStyle = activeTheme.bg;
+        ctx.fillRect(0, 0, 3508, 4960);
+
+        // Outer Metallic Gold Border
+        ctx.strokeStyle = activeTheme.accent;
+        ctx.lineWidth = 22;
+        ctx.beginPath();
+        ctx.roundRect(110, 110, 3288, 4740, 64);
+        ctx.stroke();
+
+        // Inner Delicate Hairline Border
+        ctx.strokeStyle = activeTheme.innerBorder;
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.roundRect(150, 150, 3208, 4660, 48);
+        ctx.stroke();
+
+        // Corner Filigree Brackets
+        ctx.font = "bold 96px Georgia, serif";
+        ctx.fillStyle = activeTheme.accent;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("┌", 220, 220);
+        ctx.fillText("┐", 3288, 220);
+        ctx.fillText("└", 220, 4740);
+        ctx.fillText("┘", 3288, 4740);
+
+        // Top Luxury Award Ribbon Badge
+        const ribbonGrad = ctx.createLinearGradient(904, 250, 2604, 250);
+        ribbonGrad.addColorStop(0, "#d97706");
+        ribbonGrad.addColorStop(0.5, "#fbbf24");
+        ribbonGrad.addColorStop(1, "#d97706");
+        ctx.fillStyle = ribbonGrad;
+        ctx.beginPath();
+        ctx.roundRect(904, 250, 1700, 140, 70);
+        ctx.fill();
+
+        ctx.fillStyle = "#0b0f19";
+        ctx.font = "bold 60px -apple-system, BlinkMacSystemFont, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("★ 5.0 GOOGLE EXCELLENCE AWARD ★", 1754, 320);
+
+        // Brand Logo or Official Google "G" Badge
+        if (badgeType === "GOOGLE_G") {
+          await drawGoogleGBadgeOnCanvas(ctx, 1754, 640, 360, activeTheme.accent);
+        } else {
+          await drawAdaptiveLogoOnCanvas(
+            ctx,
+            logoUrl,
+            business.name,
+            1754,
+            640,
+            1260,
+            320,
+            logoStyle,
+            logoPlate,
+            activeTheme.accent
+          );
+        }
+
+        // Dynamic Middle Block
+        const a3SafeWidth = 2700;
+        const a3NameRes = fitAndWrapText(
+          ctx,
+          business.name,
+          a3SafeWidth,
+          120,
+          70,
+          "900",
+          "-apple-system, BlinkMacSystemFont, sans-serif",
+          2,
+          1.18
+        );
+
+        const a3AddrRes = business.googleAddress
+          ? fitAndWrapText(
+              ctx,
+              `📍 ${business.googleAddress}`,
+              a3SafeWidth,
+              60,
+              38,
+              "600",
+              "-apple-system, BlinkMacSystemFont, sans-serif",
+              2,
+              1.22
+            )
+          : null;
+
+        const a3StarSize = 80;
+        const a3RatingTextSize = 60;
+        const a3GapNameAddr = a3AddrRes && a3AddrRes.lines.length > 0 ? 24 : 0;
+        const a3GapToStars = 32;
+        const a3TotalMiddleHeight =
+          a3NameRes.totalHeight +
+          a3GapNameAddr +
+          (a3AddrRes ? a3AddrRes.totalHeight : 0) +
+          a3GapToStars +
+          a3StarSize;
+
+        const a3WindowTop = 830;
+        const a3WindowBottom = 1460;
+        const a3MiddleStartY =
+          a3WindowTop +
+          Math.max(16, Math.round((a3WindowBottom - a3WindowTop - a3TotalMiddleHeight) / 2));
+
+        let a3CursorY = a3MiddleStartY;
+        const a3NameBaseline = a3CursorY + Math.round(a3NameRes.fontSize * 0.85);
+        drawCenteredWrappedLines(
+          ctx,
+          a3NameRes.lines,
+          1754,
+          a3NameBaseline,
+          a3NameRes.lineHeight,
+          activeTheme.text,
+          a3NameRes.fontSize,
+          "900"
+        );
+        a3CursorY += a3NameRes.totalHeight;
+
+        if (a3AddrRes && a3AddrRes.lines.length > 0) {
+          a3CursorY += a3GapNameAddr;
+          const a3AddrBaseline = a3CursorY + Math.round(a3AddrRes.fontSize * 0.85);
+          drawCenteredWrappedLines(
+            ctx,
+            a3AddrRes.lines,
+            1754,
+            a3AddrBaseline,
+            a3AddrRes.lineHeight,
+            activeTheme.subtext,
+            a3AddrRes.fontSize,
+            "600"
+          );
+          a3CursorY += a3AddrRes.totalHeight;
+        }
+
+        a3CursorY += a3GapToStars;
+        drawUnifiedStarBadge(ctx, 1754, a3CursorY + Math.round(a3StarSize / 2), {
+          starFontSize: a3StarSize,
+          textFontSize: a3RatingTextSize,
+          ratingText: "5.0 on Google Maps",
+          textColor: activeTheme.text,
+          starColor: "#fbbf24",
+          gap: 32,
+        });
+
+        // Giant Center QR Code
+        if (qrDataUrl) {
+          const qrImg = new Image();
+          await new Promise((resolve) => {
+            qrImg.onload = resolve;
+            qrImg.src = qrDataUrl;
+          });
+
+          // QR White Container
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.roundRect(854, 1500, 1800, 1800, 76);
+          ctx.fill();
+
+          ctx.strokeStyle = activeTheme.accent;
+          ctx.lineWidth = 20;
+          ctx.stroke();
+
+          ctx.drawImage(qrImg, 934, 1580, 1640, 1640);
+        }
+
+        // Callout Title & Subtitle
+        const a3TitleRes = fitAndWrapText(
+          ctx,
+          calloutTitle,
+          a3SafeWidth,
+          115,
+          72,
+          "900",
+          "-apple-system, BlinkMacSystemFont, sans-serif",
+          2,
+          1.18
+        );
+        const a3SubRes = fitAndWrapText(
+          ctx,
+          calloutSubtitle,
+          a3SafeWidth,
+          72,
+          46,
+          "500",
+          "-apple-system, BlinkMacSystemFont, sans-serif",
+          2,
+          1.22
+        );
+
+        let a3BottomY = 3440;
+        const a3TitleBaseline = a3BottomY + Math.round(a3TitleRes.fontSize * 0.85);
+        drawCenteredWrappedLines(
+          ctx,
+          a3TitleRes.lines,
+          1754,
+          a3TitleBaseline,
+          a3TitleRes.lineHeight,
+          activeTheme.text,
+          a3TitleRes.fontSize,
+          "900"
+        );
+        a3BottomY += a3TitleRes.totalHeight + 32;
+
+        const a3SubBaseline = a3BottomY + Math.round(a3SubRes.fontSize * 0.85);
+        drawCenteredWrappedLines(
+          ctx,
+          a3SubRes.lines,
+          1754,
+          a3SubBaseline,
+          a3SubRes.lineHeight,
+          activeTheme.subtext,
+          a3SubRes.fontSize,
+          "500"
+        );
+        a3BottomY += a3SubRes.totalHeight + 64;
+
+        const a3PillTopY = Math.max(3850, a3BottomY);
+
+        // 3-Step Instruction Pill
+        ctx.fillStyle = activeTheme.id === "pearl-gold" ? "#f1f5f9" : "rgba(0, 0, 0, 0.4)";
+        ctx.beginPath();
+        ctx.roundRect(354, a3PillTopY, 2800, 180, 90);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        const a3PillText =
+          "① Scan with Phone Camera  •  ② Pick Instant AI Compliments  •  ③ Post in 5 Sec";
+        let a3PillFontSize = 60;
+        ctx.font = `bold ${a3PillFontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
+        while (ctx.measureText(a3PillText).width > 2600 && a3PillFontSize > 36) {
+          a3PillFontSize -= 2;
+          ctx.font = `bold ${a3PillFontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
+        }
+        ctx.fillStyle = activeTheme.text;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(a3PillText, 1754, a3PillTopY + 90);
+
+        // Universal Mandatory Branding Footer
+        drawCanvasUniversalFooter(ctx, 1754, 4550, 4635, activeTheme, {
+          partnerFontSize: 62,
+          brandingFontSize: 54,
+        });
+
+        if (showCropMarks) {
+          ctx.strokeStyle = "#94a3b8";
+          ctx.lineWidth = 6;
+          ctx.setLineDash([28, 28]);
+          ctx.strokeRect(55, 55, 3398, 4850);
+        }
+      } else {
+        // Flyer / Dining Table Tent: A5 (148mm x 210mm) at 300 DPI = 1748 x 2480 px
+        canvas.width = 1748;
+        canvas.height = 2480;
+
+        ctx.fillStyle = activeTheme.bg;
+        ctx.fillRect(0, 0, 1748, 2480);
+
+        // Outer Metallic Gold Border
+        ctx.strokeStyle = activeTheme.accent;
+        ctx.lineWidth = 12;
+        ctx.beginPath();
+        ctx.roundRect(55, 55, 1638, 2370, 42);
+        ctx.stroke();
+
+        // Inner Delicate Hairline Border
+        ctx.strokeStyle = activeTheme.innerBorder;
+        ctx.lineWidth = 3.5;
+        ctx.beginPath();
+        ctx.roundRect(80, 80, 1588, 2320, 30);
+        ctx.stroke();
+
+        // Corner Filigree Brackets
+        ctx.font = "bold 56px Georgia, serif";
+        ctx.fillStyle = activeTheme.accent;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("┌", 115, 115);
+        ctx.fillText("┐", 1633, 115);
+        ctx.fillText("└", 115, 2365);
+        ctx.fillText("┘", 1633, 2365);
+
+        // Top Luxury Award Ribbon Badge
+        const ribbonGrad = ctx.createLinearGradient(474, 120, 1274, 120);
+        ribbonGrad.addColorStop(0, "#d97706");
+        ribbonGrad.addColorStop(0.5, "#fbbf24");
+        ribbonGrad.addColorStop(1, "#d97706");
+        ctx.fillStyle = ribbonGrad;
+        ctx.beginPath();
+        ctx.roundRect(474, 120, 800, 76, 38);
+        ctx.fill();
+
+        ctx.fillStyle = "#0b0f19";
+        ctx.font = "bold 32px -apple-system, BlinkMacSystemFont, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("★ 5.0 GOOGLE EXCELLENCE AWARD ★", 874, 158);
+
+        // Brand Logo or Official Google "G" Badge
+        if (badgeType === "GOOGLE_G") {
+          await drawGoogleGBadgeOnCanvas(ctx, 874, 310, 180, activeTheme.accent);
+        } else {
+          await drawAdaptiveLogoOnCanvas(
+            ctx,
+            logoUrl,
+            business.name,
+            874,
+            310,
+            640,
+            165,
+            logoStyle,
+            logoPlate,
+            activeTheme.accent
+          );
+        }
+
+        // Dynamic Middle Block
+        const flyerSafeWidth = 1360;
+        const flyerNameRes = fitAndWrapText(
+          ctx,
+          business.name,
+          flyerSafeWidth,
+          62,
+          36,
+          "900",
+          "-apple-system, BlinkMacSystemFont, sans-serif",
+          2,
+          1.18
+        );
+
+        const flyerAddrRes = business.googleAddress
+          ? fitAndWrapText(
+              ctx,
+              `📍 ${business.googleAddress}`,
+              flyerSafeWidth,
+              32,
+              20,
+              "600",
+              "-apple-system, BlinkMacSystemFont, sans-serif",
+              2,
+              1.22
+            )
+          : null;
+
+        const flyerStarSize = 42;
+        const flyerRatingTextSize = 32;
+        const flyerGapNameAddr = flyerAddrRes && flyerAddrRes.lines.length > 0 ? 14 : 0;
+        const flyerGapToStars = 18;
+        const flyerTotalMiddleHeight =
+          flyerNameRes.totalHeight +
+          flyerGapNameAddr +
+          (flyerAddrRes ? flyerAddrRes.totalHeight : 0) +
+          flyerGapToStars +
+          flyerStarSize;
+
+        const flyerWindowTop = 415;
+        const flyerWindowBottom = 740;
+        const flyerMiddleStartY =
+          flyerWindowTop +
+          Math.max(8, Math.round((flyerWindowBottom - flyerWindowTop - flyerTotalMiddleHeight) / 2));
+
+        let flyerCursorY = flyerMiddleStartY;
+        const flyerNameBaseline = flyerCursorY + Math.round(flyerNameRes.fontSize * 0.85);
+        drawCenteredWrappedLines(
+          ctx,
+          flyerNameRes.lines,
+          874,
+          flyerNameBaseline,
+          flyerNameRes.lineHeight,
+          activeTheme.text,
+          flyerNameRes.fontSize,
+          "900"
+        );
+        flyerCursorY += flyerNameRes.totalHeight;
+
+        if (flyerAddrRes && flyerAddrRes.lines.length > 0) {
+          flyerCursorY += flyerGapNameAddr;
+          const flyerAddrBaseline = flyerCursorY + Math.round(flyerAddrRes.fontSize * 0.85);
+          drawCenteredWrappedLines(
+            ctx,
+            flyerAddrRes.lines,
+            874,
+            flyerAddrBaseline,
+            flyerAddrRes.lineHeight,
+            activeTheme.subtext,
+            flyerAddrRes.fontSize,
+            "600"
+          );
+          flyerCursorY += flyerAddrRes.totalHeight;
+        }
+
+        flyerCursorY += flyerGapToStars;
+        drawUnifiedStarBadge(ctx, 874, flyerCursorY + Math.round(flyerStarSize / 2), {
+          starFontSize: flyerStarSize,
+          textFontSize: flyerRatingTextSize,
+          ratingText: "5.0 on Google Maps",
+          textColor: activeTheme.text,
+          starColor: "#fbbf24",
+          gap: 18,
+        });
+
+        // Center QR Code
+        if (qrDataUrl) {
+          const qrImg = new Image();
+          await new Promise((resolve) => {
+            qrImg.onload = resolve;
+            qrImg.src = qrDataUrl;
+          });
+
+          // QR White Container
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.roundRect(434, 760, 880, 880, 44);
+          ctx.fill();
+
+          ctx.strokeStyle = activeTheme.accent;
+          ctx.lineWidth = 10;
+          ctx.stroke();
+
+          ctx.drawImage(qrImg, 484, 810, 780, 780);
+        }
+
+        // Callout Title & Subtitle
+        const flyerTitleRes = fitAndWrapText(
+          ctx,
+          calloutTitle,
+          flyerSafeWidth,
+          60,
+          38,
+          "900",
+          "-apple-system, BlinkMacSystemFont, sans-serif",
+          2,
+          1.18
+        );
+        const flyerSubRes = fitAndWrapText(
+          ctx,
+          calloutSubtitle,
+          flyerSafeWidth,
+          38,
+          24,
+          "500",
+          "-apple-system, BlinkMacSystemFont, sans-serif",
+          2,
+          1.22
+        );
+
+        let flyerBottomY = 1710;
+        const flyerTitleBaseline = flyerBottomY + Math.round(flyerTitleRes.fontSize * 0.85);
+        drawCenteredWrappedLines(
+          ctx,
+          flyerTitleRes.lines,
+          874,
+          flyerTitleBaseline,
+          flyerTitleRes.lineHeight,
+          activeTheme.text,
+          flyerTitleRes.fontSize,
+          "900"
+        );
+        flyerBottomY += flyerTitleRes.totalHeight + 18;
+
+        const flyerSubBaseline = flyerBottomY + Math.round(flyerSubRes.fontSize * 0.85);
+        drawCenteredWrappedLines(
+          ctx,
+          flyerSubRes.lines,
+          874,
+          flyerSubBaseline,
+          flyerSubRes.lineHeight,
+          activeTheme.subtext,
+          flyerSubRes.fontSize,
+          "500"
+        );
+        flyerBottomY += flyerSubRes.totalHeight + 36;
+
+        const flyerPillTopY = Math.max(1910, flyerBottomY);
+
+        // 3-Step Instruction Pill
+        ctx.fillStyle = activeTheme.id === "pearl-gold" ? "#f1f5f9" : "rgba(0, 0, 0, 0.4)";
+        ctx.beginPath();
+        ctx.roundRect(174, flyerPillTopY, 1400, 96, 48);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        const flyerPillText =
+          "① Scan with Phone Camera  •  ② Pick Instant AI Compliments  •  ③ Post in 5 Sec";
+        let flyerPillFontSize = 31;
+        ctx.font = `bold ${flyerPillFontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
+        while (ctx.measureText(flyerPillText).width > 1300 && flyerPillFontSize > 18) {
+          flyerPillFontSize -= 1;
+          ctx.font = `bold ${flyerPillFontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
+        }
+        ctx.fillStyle = activeTheme.text;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(flyerPillText, 874, flyerPillTopY + 48);
+
+        // Universal Mandatory Branding Footer
+        drawCanvasUniversalFooter(ctx, 874, 2260, 2315, activeTheme, {
+          partnerFontSize: 32,
+          brandingFontSize: 28,
+        });
+
+        if (showCropMarks) {
+          ctx.strokeStyle = "#94a3b8";
+          ctx.lineWidth = 3;
+          ctx.setLineDash([16, 16]);
+          ctx.strokeRect(30, 30, 1688, 2420);
         }
       }
 
@@ -2018,7 +2569,7 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
           </div>
         )}
 
-        {/* Format Selector (3 Practical Physical Formats) */}
+        {/* Format Selector (5 Practical Physical Formats) */}
         <div className="bg-white p-5 rounded-3xl border border-slate-200/70 shadow-sm space-y-3">
           <label className="text-xs font-bold text-slate-800 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
@@ -2026,48 +2577,82 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
               Display Template Formats
             </span>
             <span className="text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
-              {format === "stand" ? "Flipkart A6 Ready" : format === "pvc-vertical" ? "CR80 Standard" : "A4 Print Ready"}
+              {format === "stand"
+                ? "Flipkart A6 Ready"
+                : format === "flyer"
+                ? "A5 Dining & Tent Ready"
+                : format === "poster-a4"
+                ? "A4 Print Ready"
+                : format === "poster-a3"
+                ? "A3 Storefront Ready"
+                : "CR80 Standard"}
             </span>
           </label>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             <button
               type="button"
               onClick={() => setFormat("stand")}
-              className={`p-3 rounded-2xl border text-center transition flex flex-col items-center justify-center ${
+              className={`p-2.5 rounded-2xl border text-center transition flex flex-col items-center justify-center ${
                 format === "stand"
                   ? "border-amber-500 bg-amber-50/80 text-amber-900 font-bold shadow-sm"
                   : "border-slate-200 text-slate-600 hover:bg-slate-50"
               }`}
             >
-              <div className="text-xs">Acrylic Stand</div>
-              <div className="text-[10px] text-slate-500 font-normal mt-0.5">4" x 6" Counter</div>
+              <div className="text-xs font-bold">Acrylic Stand</div>
+              <div className="text-[10px] text-slate-500 font-normal mt-0.5">4" × 6" Counter</div>
             </button>
 
             <button
               type="button"
-              onClick={() => setFormat("pvc-vertical")}
-              className={`p-3 rounded-2xl border text-center transition flex flex-col items-center justify-center ${
-                format === "pvc-vertical"
+              onClick={() => setFormat("flyer")}
+              className={`p-2.5 rounded-2xl border text-center transition flex flex-col items-center justify-center ${
+                format === "flyer"
                   ? "border-amber-500 bg-amber-50/80 text-amber-900 font-bold shadow-sm"
                   : "border-slate-200 text-slate-600 hover:bg-slate-50"
               }`}
             >
-              <div className="text-xs">Vertical PVC</div>
-              <div className="text-[10px] text-slate-500 font-normal mt-0.5">PAN Card Size</div>
+              <div className="text-xs font-bold">Table Tent Flyer</div>
+              <div className="text-[10px] text-slate-500 font-normal mt-0.5">A5 Dining / Bill</div>
             </button>
 
             <button
               type="button"
               onClick={() => setFormat("poster-a4")}
-              className={`p-3 rounded-2xl border text-center transition flex flex-col items-center justify-center ${
+              className={`p-2.5 rounded-2xl border text-center transition flex flex-col items-center justify-center ${
                 format === "poster-a4"
                   ? "border-amber-500 bg-amber-50/80 text-amber-900 font-bold shadow-sm"
                   : "border-slate-200 text-slate-600 hover:bg-slate-50"
               }`}
             >
-              <div className="text-xs">A4 Wall Poster</div>
-              <div className="text-[10px] text-slate-500 font-normal mt-0.5">Wall &amp; Door</div>
+              <div className="text-xs font-bold">Wall Poster</div>
+              <div className="text-[10px] text-slate-500 font-normal mt-0.5">A4 (210×297mm)</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setFormat("poster-a3")}
+              className={`p-2.5 rounded-2xl border text-center transition flex flex-col items-center justify-center ${
+                format === "poster-a3"
+                  ? "border-amber-500 bg-amber-50/80 text-amber-900 font-bold shadow-sm"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
+              }`}
+            >
+              <div className="text-xs font-bold">Jumbo Poster</div>
+              <div className="text-[10px] text-slate-500 font-normal mt-0.5">A3 Storefront</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setFormat("pvc-vertical")}
+              className={`p-2.5 rounded-2xl border text-center transition flex flex-col items-center justify-center col-span-2 sm:col-span-1 ${
+                format === "pvc-vertical"
+                  ? "border-amber-500 bg-amber-50/80 text-amber-900 font-bold shadow-sm"
+                  : "border-slate-200 text-slate-600 hover:bg-slate-50"
+              }`}
+            >
+              <div className="text-xs font-bold">Smart Card / Badge</div>
+              <div className="text-[10px] text-slate-500 font-normal mt-0.5">CR80 PVC</div>
             </button>
           </div>
         </div>
@@ -2080,7 +2665,15 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
               4 Luxury Metallic Themes
             </label>
             <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-              {format === "stand" ? '4"×6" Standee' : format === "pvc-vertical" ? "CR80 54×85.6mm" : "A4 210×297mm"}
+              {format === "stand"
+                ? '4"×6" Standee'
+                : format === "flyer"
+                ? "A5 148×210mm"
+                : format === "poster-a4"
+                ? "A4 210×297mm"
+                : format === "poster-a3"
+                ? "A3 297×420mm"
+                : "CR80 54×85.6mm"}
             </span>
           </div>
 
@@ -2685,10 +3278,14 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
             <span className="text-xs text-slate-600 font-medium flex items-center gap-1.5">
               <Scissors className="w-3.5 h-3.5 text-slate-400" />
               {format === "stand"
-                ? 'Show 4"×6" trim / fold guidelines'
-                : format === "pvc-vertical"
-                ? "Show CR80 card bleed cutline"
-                : "Show A4 10mm print margin"}
+                ? 'Show 4"×6" trim guidelines'
+                : format === "flyer"
+                ? "Show A5 print cutline"
+                : format === "poster-a4"
+                ? "Show A4 10mm print margin"
+                : format === "poster-a3"
+                ? "Show A3 storefront margin"
+                : "Show CR80 card bleed cutline"}
             </span>
             <input
               type="checkbox"
@@ -2708,9 +3305,13 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
               <Printer className="w-4 h-4 text-slate-950" />
               {format === "stand"
                 ? 'Print / Save as PDF (4"×6" Flipkart A6)'
-                : format === "pvc-vertical"
-                ? `Print PVC Card (${pvcSide === "front" ? "Front Side" : "Back Side"})`
-                : "Print / Save as PDF (A4 Poster 210×297mm)"}
+                : format === "flyer"
+                ? "Print / Save as PDF (A5 Table Tent Flyer)"
+                : format === "poster-a4"
+                ? "Print / Save as PDF (A4 Poster 210×297mm)"
+                : format === "poster-a3"
+                ? "Print / Save as PDF (A3 Jumbo Poster 297×420mm)"
+                : `Print PVC Card (${pvcSide === "front" ? "Front Side" : "Back Side"})`}
             </button>
 
             {format === "pvc-vertical" ? (
@@ -2764,7 +3365,15 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
                 <Download className="w-4 h-4 text-amber-400" />
                 {isExporting
                   ? "Generating 300 DPI Export..."
-                  : `Download ${activeTheme.name} ${format === "stand" ? "Stand" : "Poster"} PNG (300 DPI)`}
+                  : `Download ${activeTheme.name} ${
+                      format === "stand"
+                        ? "Stand (4\"×6\")"
+                        : format === "flyer"
+                        ? "Flyer (A5)"
+                        : format === "poster-a3"
+                        ? "Jumbo Poster (A3)"
+                        : "Poster (A4)"
+                    } PNG (300 DPI)`}
               </button>
             )}
 
@@ -2874,22 +3483,22 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
             {/* Top Luxury Ribbon Badge */}
             <div className={`px-4 py-1 rounded-full text-[10px] font-black tracking-wider uppercase shadow-md ${activeTheme.ribbonBg} flex items-center gap-1.5 z-10`}>
               <Award className="w-3.5 h-3.5" />
-              <span>5.0 Google Excellence Award</span>
+              <span>★ 5.0 GOOGLE EXCELLENCE AWARD ★</span>
             </div>
 
             {/* Stand Header: Logo & Store Name */}
             <div className="flex flex-col items-center mt-1 z-10 w-full px-4">
               {/* Brand Badge (Google G or Merchant Logo) */}
               {badgeType === "GOOGLE_G" ? (
-                <div className="w-16 h-16 rounded-full border-2 border-amber-400 bg-white flex items-center justify-center p-3 shadow-lg mb-1 ring-2 ring-amber-400/20">
+                <div className="w-14 h-14 rounded-full border-2 border-amber-400 bg-white flex items-center justify-center p-3 shadow-lg mb-1 ring-2 ring-amber-400/20">
                   <GoogleGIcon className="w-full h-full" />
                 </div>
               ) : logoUrl ? (
                 <div
                   className={`p-1.5 flex items-center justify-center mb-1 overflow-hidden transition-all ${
                     logoStyle === "banner"
-                      ? "w-40 h-11 rounded-xl"
-                      : "w-14 h-14 rounded-full"
+                      ? "w-36 h-10 rounded-xl"
+                      : "w-13 h-13 rounded-full"
                   } ${
                     logoPlate === "white"
                       ? "bg-white border-2 border-amber-400 shadow-sm"
@@ -2905,15 +3514,15 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
                   />
                 </div>
               ) : (
-                <div className="w-14 h-14 rounded-full border-2 border-amber-400 bg-white flex items-center justify-center p-1 shadow-md mb-1 overflow-hidden">
-                  <span className="text-lg font-black text-amber-600">
+                <div className="w-13 h-13 rounded-full border-2 border-amber-400 bg-white flex items-center justify-center p-1 shadow-md mb-1 overflow-hidden">
+                  <span className="text-base font-black text-amber-600">
                     {business.name.slice(0, 2).toUpperCase() || "RS"}
                   </span>
                 </div>
               )}
 
               <h2
-                className="text-sm font-black tracking-tight leading-snug max-w-[280px] line-clamp-2 break-words"
+                className="text-[13px] font-black tracking-tight leading-snug max-w-[270px] line-clamp-2 break-words"
                 style={{ color: activeTheme.text }}
               >
                 {business.name}
@@ -2921,7 +3530,7 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
 
               {business.googleAddress && (
                 <p
-                  className="text-[9.5px] leading-tight line-clamp-2 break-words max-w-[270px] mt-0.5 font-medium"
+                  className="text-[9px] leading-tight line-clamp-1 break-words max-w-[260px] mt-0.5 font-medium"
                   style={{ color: activeTheme.subtext }}
                 >
                   📍 {business.googleAddress}
@@ -2931,11 +3540,11 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
               <div className="flex items-center gap-1 mt-1">
                 <div className="flex items-center text-amber-400">
                   {[1, 2, 3, 4, 5].map((s) => (
-                    <Star key={s} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    <Star key={s} className="w-3 h-3 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
                 <span
-                  className="text-[11px] font-extrabold ml-1"
+                  className="text-[10px] font-extrabold ml-1"
                   style={{ color: activeTheme.text }}
                 >
                   5.0 on Google
@@ -2944,21 +3553,21 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
             </div>
 
             {/* Centerpiece QR Code */}
-            <div className="p-3 bg-white rounded-2xl relative my-1 z-10 border-2 border-amber-400 shadow-xl">
+            <div className="p-2.5 bg-white rounded-2xl relative my-1 z-10 border-2 border-amber-400 shadow-xl">
               {qrDataUrl ? (
                 <img
                   src={qrDataUrl}
                   alt="Review QR Code"
-                  className="w-36 h-36 object-contain"
+                  className="w-32 h-32 object-contain"
                 />
               ) : (
-                <div className="w-36 h-36 bg-slate-100 animate-pulse rounded-xl" />
+                <div className="w-32 h-32 bg-slate-100 animate-pulse rounded-xl" />
               )}
             </div>
 
             {/* Micro 3-Step Instruction Guide */}
             <div
-              className="w-full px-2 py-1.5 rounded-xl bg-black/20 border border-white/10 text-[9px] font-bold z-10"
+              className="w-full px-2 py-1 rounded-xl bg-black/20 border border-white/10 text-[8.5px] font-bold z-10"
               style={{ color: activeTheme.subtext }}
             >
               ① Scan QR with Camera &bull; ② Pick Instant Compliments &bull; ③ Post in 5 Sec
@@ -2967,21 +3576,18 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
             {/* Stand Footer */}
             <div className="space-y-0.5 pb-0.5 z-10">
               <h3
-                className="text-xs font-black tracking-tight line-clamp-2 break-words max-w-[280px]"
+                className="text-xs font-black tracking-tight line-clamp-1 break-words max-w-[270px]"
                 style={{ color: activeTheme.text }}
               >
                 {calloutTitle}
               </h3>
               <p
-                className="text-[10px] max-w-[260px] font-medium line-clamp-2 break-words"
+                className="text-[9.5px] max-w-[260px] font-medium line-clamp-1 break-words"
                 style={{ color: activeTheme.subtext }}
               >
                 {calloutSubtitle}
               </p>
-              <div className="pt-1 text-[9px] font-bold text-amber-400 flex items-center justify-center gap-1">
-                <Sparkles className="w-3 h-3 text-amber-400" />
-                <span>ReviewSmart AI &bull; Verified Google Partner</span>
-              </div>
+              <UniversalPrintFooter theme={activeTheme} size="stand" className="pt-1" />
             </div>
 
             {/* Physical Print Dimension Indicator */}
@@ -3152,10 +3758,11 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
                     >
                       {calloutTitle}
                     </p>
-                    <div className="text-[8px] font-bold text-amber-400 flex items-center justify-center gap-1">
-                      <Sparkles className="w-2.5 h-2.5 text-amber-400" />
-                      <span>ReviewSmart AI • Verified Partner</span>
-                    </div>
+                    <UniversalPrintFooter
+                      theme={activeTheme}
+                      size="card"
+                      partnerText="ReviewSmart AI • Smart Business Card"
+                    />
                   </div>
                 </div>
 
@@ -3247,10 +3854,11 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
                         </div>
                       </div>
 
-                      <div className="text-[7.5px] font-bold text-amber-400/90 flex items-center gap-1">
-                        <span>★★★★★</span>
-                        <span>Google 5-Star Partner</span>
-                      </div>
+                      <UniversalPrintFooter
+                        theme={activeTheme}
+                        size="card"
+                        partnerText="Official ReviewSmart Partner Card"
+                      />
                     </div>
                   )}
 
@@ -3340,9 +3948,11 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
                         </div>
                       </div>
 
-                      <div className="text-[8px] font-semibold text-amber-400/90">
-                        ⚡ Powered by ReviewSmart AI
-                      </div>
+                      <UniversalPrintFooter
+                        theme={activeTheme}
+                        size="card"
+                        partnerText="ReviewSmart AI • 30-Sec Guide"
+                      />
                     </div>
                   )}
 
@@ -3380,6 +3990,11 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
                       <div className="p-2 rounded-xl bg-black/30 border border-white/10 w-full text-[8px] text-slate-300">
                         "Your feedback directly supports my recognition and rating!"
                       </div>
+                      <UniversalPrintFooter
+                        theme={activeTheme}
+                        size="card"
+                        partnerText="ReviewSmart AI • Staff Edition"
+                      />
                     </div>
                   )}
 
@@ -3430,9 +4045,11 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
                         </div>
                       </div>
 
-                      <div className="text-[8px] font-semibold text-slate-300">
-                        Fast • 100% Secure • Contactless
-                      </div>
+                      <UniversalPrintFooter
+                        theme={activeTheme}
+                        size="card"
+                        partnerText="ReviewSmart AI • Dual Counter Card"
+                      />
                     </div>
                   )}
                 </div>
@@ -3454,6 +4071,149 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
             <div className="text-[10px] text-slate-500 font-mono mt-2 text-center no-print">
               CR80 Standard PAN Card Size: 54mm × 85.6mm (2.125" × 3.375")
             </div>
+          </div>
+        )}
+
+        {/* A5 Table Tent Flyer Preview (148mm x 210mm) */}
+        {format === "flyer" && (
+          <div
+            id="print-target"
+            className="rounded-3xl p-6 sm:p-7 flex flex-col items-center text-center justify-between relative transition-all border-[3px] shadow-2xl select-none overflow-hidden"
+            style={{
+              width: "360px",
+              height: "509px",
+              backgroundColor: activeTheme.bg,
+              borderColor: activeTheme.accent,
+              boxShadow: "0 25px 40px -10px rgba(0, 0, 0, 0.4)",
+            }}
+          >
+            {/* Inner Hairline Gold Border */}
+            <div
+              className="absolute inset-2.5 rounded-2xl border pointer-events-none"
+              style={{ borderColor: activeTheme.innerBorder }}
+            />
+
+            {/* Corner Filigree Accents */}
+            <div className="absolute top-3.5 left-3.5 text-amber-400 font-serif text-xs pointer-events-none select-none">┌</div>
+            <div className="absolute top-3.5 right-3.5 text-amber-400 font-serif text-xs pointer-events-none select-none">┐</div>
+            <div className="absolute bottom-3.5 left-3.5 text-amber-400 font-serif text-xs pointer-events-none select-none">└</div>
+            <div className="absolute bottom-3.5 right-3.5 text-amber-400 font-serif text-xs pointer-events-none select-none">┘</div>
+
+            {/* Top Luxury Ribbon Badge */}
+            <div className={`px-4 py-1 rounded-full text-[10px] font-black tracking-wider uppercase shadow-md ${activeTheme.ribbonBg} flex items-center gap-1.5 z-10`}>
+              <Award className="w-3.5 h-3.5" />
+              <span>★ 5.0 GOOGLE EXCELLENCE AWARD ★</span>
+            </div>
+
+            {/* Flyer Header: Logo & Store Name */}
+            <div className="flex flex-col items-center mt-1 z-10 w-full px-4">
+              {badgeType === "GOOGLE_G" ? (
+                <div className="w-14 h-14 rounded-full border-2 border-amber-400 bg-white flex items-center justify-center p-3 shadow-lg mb-1 ring-2 ring-amber-400/20">
+                  <GoogleGIcon className="w-full h-full" />
+                </div>
+              ) : logoUrl ? (
+                <div
+                  className={`p-1.5 flex items-center justify-center mb-1 overflow-hidden transition-all ${
+                    logoStyle === "banner"
+                      ? "w-36 h-10 rounded-xl"
+                      : "w-13 h-13 rounded-full"
+                  } ${
+                    logoPlate === "white"
+                      ? "bg-white border-2 border-amber-400 shadow-sm"
+                      : logoPlate === "frost"
+                      ? "bg-white/15 border border-white/30 backdrop-blur-sm"
+                      : ""
+                  }`}
+                >
+                  <img
+                    src={logoUrl}
+                    alt={business.name}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="w-13 h-13 rounded-full border-2 border-amber-400 bg-white flex items-center justify-center p-1 shadow-md mb-1 overflow-hidden">
+                  <span className="text-base font-black text-amber-600">
+                    {business.name.slice(0, 2).toUpperCase() || "RS"}
+                  </span>
+                </div>
+              )}
+
+              <h2
+                className="text-sm font-black tracking-tight leading-snug max-w-[280px] line-clamp-2 break-words"
+                style={{ color: activeTheme.text }}
+              >
+                {business.name}
+              </h2>
+
+              {business.googleAddress && (
+                <p
+                  className="text-[9.5px] leading-tight line-clamp-1 break-words max-w-[270px] mt-0.5 font-medium"
+                  style={{ color: activeTheme.subtext }}
+                >
+                  📍 {business.googleAddress}
+                </p>
+              )}
+
+              <div className="flex items-center gap-1 mt-0.5">
+                <div className="flex items-center text-amber-400">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <Star key={s} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <span
+                  className="text-[11px] font-extrabold ml-1"
+                  style={{ color: activeTheme.text }}
+                >
+                  5.0 on Google Maps
+                </span>
+              </div>
+            </div>
+
+            {/* Centerpiece QR Code */}
+            <div className="p-2.5 bg-white rounded-2xl relative my-1 z-10 border-2 border-amber-400 shadow-xl">
+              {qrDataUrl ? (
+                <img
+                  src={qrDataUrl}
+                  alt="Review QR Code"
+                  className="w-32 h-32 object-contain"
+                />
+              ) : (
+                <div className="w-32 h-32 bg-slate-100 animate-pulse rounded-xl" />
+              )}
+            </div>
+
+            {/* Micro 3-Step Instruction Guide */}
+            <div
+              className="w-full px-2 py-1 rounded-xl bg-black/20 border border-white/10 text-[8.5px] font-bold z-10"
+              style={{ color: activeTheme.subtext }}
+            >
+              ① Scan with Any Phone Camera • ② Pick Instant Compliments • ③ Post in 5 Sec
+            </div>
+
+            {/* Flyer Footer */}
+            <div className="space-y-0.5 pb-0.5 z-10">
+              <h3
+                className="text-xs font-black tracking-tight line-clamp-1 break-words max-w-[280px]"
+                style={{ color: activeTheme.text }}
+              >
+                {calloutTitle}
+              </h3>
+              <p
+                className="text-[10px] max-w-[260px] font-medium line-clamp-1 break-words"
+                style={{ color: activeTheme.subtext }}
+              >
+                {calloutSubtitle}
+              </p>
+              <UniversalPrintFooter theme={activeTheme} size="stand" className="pt-1" />
+            </div>
+
+            {/* Physical Print Dimension Indicator */}
+            {showCropMarks && (
+              <div className="absolute -bottom-6 text-[10px] text-slate-400 no-print flex items-center gap-1 font-mono">
+                <Scissors className="w-3 h-3" /> Standard A5 (148mm × 210mm) Table Tent &amp; Handout Flyer
+              </div>
+            )}
           </div>
         )}
 
@@ -3589,16 +4349,156 @@ All high-resolution 300 DPI files are ready. Print on A4 paper or let us know if
               >
                 {calloutSubtitle}
               </p>
-              <div className="pt-1 text-[9px] font-bold text-amber-400 flex items-center justify-center gap-1">
-                <Sparkles className="w-3 h-3 text-amber-400" />
-                <span>ReviewSmart AI &bull; Verified Google Partner</span>
-              </div>
+              <UniversalPrintFooter theme={activeTheme} size="poster" className="pt-1" />
             </div>
 
             {/* Physical Print Dimension Indicator */}
             {showCropMarks && (
               <div className="absolute -bottom-6 text-[10px] text-slate-400 no-print flex items-center gap-1 font-mono">
                 <Scissors className="w-3 h-3" /> Standard A4 (210mm × 297mm) Printable Wall / Door Poster
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* A3 Printable Storefront Jumbo Poster (297mm x 420mm) */}
+        {format === "poster-a3" && (
+          <div
+            id="print-target"
+            className="rounded-3xl p-6 sm:p-7 flex flex-col items-center text-center justify-between relative transition-all border-[3px] shadow-2xl select-none overflow-hidden"
+            style={{
+              width: "370px",
+              height: "523px",
+              backgroundColor: activeTheme.bg,
+              borderColor: activeTheme.accent,
+              boxShadow: "0 25px 40px -10px rgba(0, 0, 0, 0.4)",
+            }}
+          >
+            {/* Inner Hairline Gold Border */}
+            <div
+              className="absolute inset-3 rounded-2xl border pointer-events-none"
+              style={{ borderColor: activeTheme.innerBorder }}
+            />
+
+            {/* Corner Filigree Accents */}
+            <div className="absolute top-4 left-4 text-amber-400 font-serif text-sm pointer-events-none select-none">┌</div>
+            <div className="absolute top-4 right-4 text-amber-400 font-serif text-sm pointer-events-none select-none">┐</div>
+            <div className="absolute bottom-4 left-4 text-amber-400 font-serif text-sm pointer-events-none select-none">└</div>
+            <div className="absolute bottom-4 right-4 text-amber-400 font-serif text-sm pointer-events-none select-none">┘</div>
+
+            {/* Top Luxury Ribbon Badge */}
+            <div className={`px-4 py-1 rounded-full text-[10px] font-black tracking-wider uppercase shadow-md ${activeTheme.ribbonBg} flex items-center gap-1.5 z-10`}>
+              <Award className="w-3.5 h-3.5" />
+              <span>★ 5.0 GOOGLE EXCELLENCE AWARD ★</span>
+            </div>
+
+            {/* Header: Logo & Store Name */}
+            <div className="flex flex-col items-center mt-1 z-10 w-full px-4">
+              {badgeType === "GOOGLE_G" ? (
+                <div className="w-16 h-16 rounded-full border-2 border-amber-400 bg-white flex items-center justify-center p-3.5 shadow-lg mb-1 ring-2 ring-amber-400/20">
+                  <GoogleGIcon className="w-full h-full" />
+                </div>
+              ) : logoUrl ? (
+                <div
+                  className={`p-1.5 flex items-center justify-center mb-1 overflow-hidden transition-all ${
+                    logoStyle === "banner"
+                      ? "w-44 h-12 rounded-xl"
+                      : "w-14 h-14 rounded-full"
+                  } ${
+                    logoPlate === "white"
+                      ? "bg-white border-2 border-amber-400 shadow-sm"
+                      : logoPlate === "frost"
+                      ? "bg-white/15 border border-white/30 backdrop-blur-sm"
+                      : ""
+                  }`}
+                >
+                  <img
+                    src={logoUrl}
+                    alt={business.name}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="w-12 h-12 rounded-full border-2 border-amber-400 bg-white flex items-center justify-center p-1 shadow-md mb-1 overflow-hidden">
+                  <span className="text-base font-black text-amber-600">
+                    {business.name.slice(0, 2).toUpperCase() || "RS"}
+                  </span>
+                </div>
+              )}
+
+              <h2
+                className="text-sm font-black tracking-tight leading-snug max-w-[280px] line-clamp-2 break-words"
+                style={{ color: activeTheme.text }}
+              >
+                {business.name}
+              </h2>
+
+              {business.googleAddress && (
+                <p
+                  className="text-[9.5px] leading-tight line-clamp-2 break-words max-w-[270px] mt-0.5 font-medium"
+                  style={{ color: activeTheme.subtext }}
+                >
+                  📍 {business.googleAddress}
+                </p>
+              )}
+
+              <div className="flex items-center gap-1 mt-0.5">
+                <div className="flex items-center text-amber-400">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <Star key={s} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <span
+                  className="text-[11px] font-extrabold ml-1"
+                  style={{ color: activeTheme.text }}
+                >
+                  5.0 on Google Maps
+                </span>
+              </div>
+            </div>
+
+            {/* Centerpiece Giant QR Code */}
+            <div className="p-3 bg-white rounded-2xl relative my-1 z-10 border-2 border-amber-400 shadow-xl">
+              {qrDataUrl ? (
+                <img
+                  src={qrDataUrl}
+                  alt="Review QR Code"
+                  className="w-36 h-36 object-contain"
+                />
+              ) : (
+                <div className="w-36 h-36 bg-slate-100 animate-pulse rounded-xl" />
+              )}
+            </div>
+
+            {/* Micro 3-Step Instruction Guide */}
+            <div
+              className="w-full px-2 py-1.5 rounded-xl bg-black/20 border border-white/10 text-[9px] font-bold z-10"
+              style={{ color: activeTheme.subtext }}
+            >
+              ① Scan with Any Phone Camera • ② Pick Instant Compliments • ③ Post in 5 Sec
+            </div>
+
+            {/* Poster Footer */}
+            <div className="space-y-0.5 pb-0.5 z-10">
+              <h3
+                className="text-xs font-black tracking-tight line-clamp-2 break-words max-w-[280px]"
+                style={{ color: activeTheme.text }}
+              >
+                {calloutTitle}
+              </h3>
+              <p
+                className="text-[10px] max-w-[260px] font-medium line-clamp-2 break-words"
+                style={{ color: activeTheme.subtext }}
+              >
+                {calloutSubtitle}
+              </p>
+              <UniversalPrintFooter theme={activeTheme} size="jumbo" className="pt-1" />
+            </div>
+
+            {/* Physical Print Dimension Indicator */}
+            {showCropMarks && (
+              <div className="absolute -bottom-6 text-[10px] text-slate-400 no-print flex items-center gap-1 font-mono">
+                <Scissors className="w-3 h-3" /> Standard A3 (297mm × 420mm) Jumbo Storefront Poster
               </div>
             )}
           </div>
