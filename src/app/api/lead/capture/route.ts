@@ -97,16 +97,22 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
     }
 
-    const { id, status, notes } = await req.json();
+    const { id, status, notes, phone, businessName, city, category } = await req.json();
     if (!id) {
       return NextResponse.json({ error: "Missing lead ID" }, { status: 400 });
     }
+
+    const cleanPhone = phone ? String(phone).replace(/[^0-9]/g, "").slice(-10) : undefined;
 
     const updated = await prisma.leadCapture.update({
       where: { id },
       data: {
         ...(status ? { status } : {}),
         ...(notes !== undefined ? { notes } : {}),
+        ...(cleanPhone && cleanPhone.length >= 10 ? { phone: cleanPhone } : {}),
+        ...(businessName ? { businessName: String(businessName).trim() } : {}),
+        ...(city ? { city: String(city).trim() } : {}),
+        ...(category ? { category: String(category).trim() } : {}),
       },
     });
 

@@ -76,8 +76,9 @@ async function huntLowReviewLeads() {
           if (clean) reviewCount = parseInt(clean, 10);
         }
 
-        // Phone number regex from address text (Indian mobile & landline)
-        const phoneMatch = address ? address.match(/(?:\+91[\-\s]?)?[0]?[6-9]\d{9}|08562\d{5,6}/) : null;
+        // Phone number regex from full card text (Indian mobile & landline)
+        const fullCardText = el.innerText || '';
+        const phoneMatch = fullCardText.match(/(?:\+91[\-\s]?)?[0]?[6-9]\d{4}[\s\-]?\d{5}|(?:\+91[\-\s]?)?[0]?[6-9]\d{9}|08562[\s\-]?\d{5,6}/);
 
         items.push({
           name,
