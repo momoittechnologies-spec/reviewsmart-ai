@@ -673,6 +673,57 @@ export const DOMAIN_LEXICONS: Record<IndustryType, DomainLexicon> = {
     ],
   },
 
+  PACKERS_MOVERS: {
+    items: [
+      "household goods shifting",
+      "safe furniture packing and transport",
+      "multi-layer bubble wrap packing for fragile items",
+      "prompt mini lorry transport",
+      "complete home relocation service",
+      "office furniture and equipment shifting",
+      "doorstep loading and careful unloading",
+      "intercity household relocation from Kadapa",
+      "safe electronics and refrigerator moving",
+      "zero-damage furniture transit",
+    ],
+    qualities: [
+      "multi-layer bubble wrap packaging protecting TV, fridge, and glass items with zero damage",
+      "polite, strong, and highly experienced loading crew who treated our belongings like their own",
+      "prompt mini lorry arrival with secure ties and clean cargo space",
+      "very smooth door-to-door shifting with zero scratches on walls or furniture",
+      "fair and transparent quote with zero hidden demands or unexpected tips",
+      "careful dismantling and reassembly of cot and wardrobe at destination",
+      "fast transit and timely delivery without unnecessary delays",
+      "stress-free moving experience handled with utmost responsibility",
+    ],
+    adjectives: [
+      "punctual and careful",
+      "honest and professional",
+      "polite and hardworking",
+      "reliable and efficient",
+      "safe and trustworthy",
+      "budget-friendly and transparent",
+    ],
+    actions: [
+      "booked household shifting with",
+      "engaged for our complete house relocation from",
+      "availed mini lorry shifting services of",
+      "relied on the packing and moving team at",
+      "got our furniture and appliances shifted safely by",
+      "coordinated our intercity relocation with",
+    ],
+    occasions: [
+      "for our complete 2BHK house shifting",
+      "for our apartment relocation across Kadapa",
+      "when moving our household luggage to our new home",
+      "for our urgent office shifting",
+      "for our intercity relocation",
+      "recently",
+      "last week",
+      "yesterday",
+    ],
+  },
+
   GENERAL: {
     items: [
       "service requirement",
@@ -747,6 +798,14 @@ export interface TagIntent {
   isWashingMachine: boolean;
   isDoorstepService: boolean;
   isFairPriceAppliance: boolean;
+  // Packers & Movers
+  isHouseShifting: boolean;
+  isBubbleWrap: boolean;
+  isMiniLorry: boolean;
+  isFurnitureTransit: boolean;
+  isIntercityShifting: boolean;
+  isZeroDamage: boolean;
+  isPoliteTeam: boolean;
   rawTag: string;
 }
 
@@ -800,6 +859,14 @@ export function detectTagIntent(tags: string[], ind: IndustryType): TagIntent {
     isWashingMachine: /washing\s*machine|motor|drum|వాషింగ్\s*మెషిన్/i.test(combined),
     isDoorstepService: /doorstep|same-?day|quick|visit|ఇంటి|డెలివరీ|ఫాస్ట్|డోర్‌స్టెప్/i.test(combined),
     isFairPriceAppliance: /affordable|fair|rate|price|genuine|ధర|రీజనబుల్/i.test(combined),
+    // Packers & Movers
+    isHouseShifting: /house|household|home|shifting|relocation|apartment|flat|ఇంటి\s*సామాన్లు|షిఫ్టింగ్/i.test(combined),
+    isBubbleWrap: /bubble|wrap|packing|multi-layer|packaging|బబుల్|ప్యాకింగ్/i.test(combined),
+    isMiniLorry: /lorry|mini\s*lorry|truck|transport|vehicle|లారీ|మినీ\s*లారీ|రవాణా/i.test(combined),
+    isFurnitureTransit: /furniture|cot|sofa|bed|almirah|wardrobe|ఫర్నిచర్|మంచం|సోఫా/i.test(combined),
+    isIntercityShifting: /intercity|bangalore|hyderabad|tirupati|outstation|లాంగ్\s*డిస్టెన్స్/i.test(combined),
+    isZeroDamage: /zero\s*damage|safe|careful|damage\s*free|సురక్షితం|డ్యామేజ్/i.test(combined),
+    isPoliteTeam: /polite|loading|team|staff|boys|సిబ్బంది|లోడింగ్/i.test(combined),
     rawTag: tags[0] || "",
   };
 }
@@ -1182,6 +1249,34 @@ function generateShortDirect(
         `Polite technicians, clean workmanship, and genuine spare parts.`,
         `Number one AC and appliance repair service in Kadapa!`,
         `Completely satisfied with the prompt doorstep assistance. Highly recommend!`,
+      ];
+    }
+  } else if (ind === "PACKERS_MOVERS") {
+    if (intent.isBubbleWrap || intent.isZeroDamage) {
+      openers = [
+        `Flawless bubble wrap packing and zero-damage household shifting by ${bName}.`,
+        `Shifted our entire luggage safely with ${bName} in Kadapa.`,
+        `Very impressed with the careful handling and packing by ${bName}.`,
+        `Hired ${bName} for residential relocation and every item arrived intact.`,
+      ];
+      closers = [
+        `Zero scratches on glass, TV, and wooden cots. Truly professional movers!`,
+        `Clean loading, tight wrapping, and punctual mini lorry arrival. 10/10!`,
+        `Best packers and movers in Kadapa for stress-free shifting!`,
+        `Completely damage-free transit and reasonable charges. Highly recommended!`,
+      ];
+    } else {
+      openers = [
+        `Prompt mini lorry transport and quick loading service by ${bName}.`,
+        `Hired ${bName} for house shifting and they made the entire move effortless.`,
+        `Very dependable, polite, and hardworking shifting crew at ${bName}.`,
+        `Affordable moving rates and safe transit from ${bName} in Kadapa.`,
+      ];
+      closers = [
+        `Arrived sharp on time and unloaded everything safely at our new home.`,
+        `Polite loading boys, zero hassles, and fair pricing.`,
+        `Number one packers and movers in Kadapa!`,
+        `Stress-free relocation experience from start to finish!`,
       ];
     }
   } else {
@@ -1721,6 +1816,39 @@ function generateProblemSolution(
       }
       break;
 
+    case "PACKERS_MOVERS":
+      if (intent.isHouseShifting || intent.isFurnitureTransit || intent.isBubbleWrap) {
+        problem = pickRandom([
+          `Was quite stressed about shifting our entire household luggage, heavy double cots, and glass dining table without any damages or scratches.`,
+          `Needed a dependable moving service in Kadapa with an enclosed mini lorry to relocate our home to an apartment on the 3rd floor.`,
+          `Had delicate electronics, refrigerator, and LED TV that required multi-layer protective packaging before transit.`,
+        ]);
+        solution = pickRandom([
+          `The crew from ${bName} arrived on time with bubble wrap, corrugated sheets, and heavy-duty tape, carefully wrapping every sensitive piece.`,
+          `Their experienced loading boys dismantled our wooden cot, packed all fragile glassware securely, and loaded the mini lorry methodically.`,
+          `They handled the heavy lifting effortlessly and coordinated the entire transit with zero rush or carelessness.`,
+        ]);
+        result = pickRandom([
+          `Unloaded and reassembled everything at our new house in mint condition with zero scratches. Best packers and movers in Kadapa!`,
+          `Relocation completed smoothly within hours with complete peace of mind. Truly professional and careful team!`,
+          `Fair moving charges, polite workers, and zero damage. Highly recommended for house shifting!`,
+        ]);
+      } else {
+        problem = pickRandom([
+          `Needed urgent mini lorry transport and shifting support on short notice for our household relocation.`,
+          `Was searching for an honest packers and movers service in Kadapa that provides fair quotes without unexpected extra demands.`,
+        ]);
+        solution = pickRandom([
+          `The team at ${bName} arranged a clean mini lorry immediately and their packing crew handled all luggage like their own.`,
+          `They loaded efficiently, transported everything safely, and helped place each carton in the designated rooms at doorstep.`,
+        ]);
+        result = pickRandom([
+          `Entire shifting was completed smoothly and ahead of schedule. Very pleased with their dedication!`,
+          `Affordable rates, polite behavior, and zero hassle throughout. Will definitely hire ${bName} again!`,
+        ]);
+      }
+      break;
+
     default:
       solution = pickRandom([
         `The team at ${bName} patiently understood the requirement and suggested the right options.`,
@@ -2180,6 +2308,19 @@ function generateDetailedReview(
       ]);
       break;
 
+    case "PACKERS_MOVERS":
+      opener = pickRandom([
+        `Booked ${bName} for our complete household shifting in Kadapa.`,
+        `Engaged ${bName} for residential relocation and mini lorry transport.`,
+        `Reached out to ${bName} after friends praised their safe shifting service.`,
+      ]);
+      middle = pickRandom([
+        `First, their packing team arrived right on schedule with bubble wrap and protective covers. Second, every fragile item, double cot, and refrigerator arrived with zero scratches.`,
+        `The careful loading, courteous behavior of the workers, and smooth door-to-door transit exceeded expectations.`,
+        `Moving charges were completely transparent upfront with zero unexpected demands or tips.`,
+      ]);
+      break;
+
     default:
       opener = pickRandom([
         `Coordinated with ${bName} for our ${item1}.`,
@@ -2583,6 +2724,26 @@ function generateFirstTime(
     return `${pickRandom(openers)} ${pickRandom(middles)}${notePart} ${pickRandom(closers)}`;
   }
 
+  if (ind === "PACKERS_MOVERS") {
+    const openers = [
+      `First time hiring ${bName} for our house shifting in Kadapa.`,
+      `Had never used a professional moving crew before and booked ${bName}.`,
+      `Chose ${bName} for our home relocation based on great local recommendations.`,
+    ];
+    const middles = [
+      `Their packing team arrived sharp on time and handled our furniture with unbelievable care.`,
+      `Seeing how meticulously they bubble-wrapped our TV, glass dining table, and cots gave me immediate peace of mind.`,
+      `The workers were polite, hardworking, and finished the shifting without cutting any corners.`,
+    ];
+    const closers = [
+      `So glad we hired them for our first move; zero damages or stress!`,
+      `Found our permanent go-to packers and movers in Kadapa!`,
+      `Will definitely recommend them to friends and family relocating homes.`,
+    ];
+    const notePart = note ? ` Also took great care of ${note.toLowerCase()}.` : "";
+    return `${pickRandom(openers)} ${pickRandom(middles)}${notePart} ${pickRandom(closers)}`;
+  }
+
   const item = tags[0] || pickRandom(lex.items);
   const openers = [
     `First time trying ${bName} for ${item}.`,
@@ -2666,6 +2827,26 @@ function generateRepeatCustomer(
       `Always a pleasure dealing with ${bName}.`,
       `Honesty and prompt doorstep service keep us calling them back.`,
       `The most reliable home appliance team in Kadapa!`,
+    ];
+    const notePart = note ? ` Handled ${note.toLowerCase()} with their usual care.` : "";
+    return `${pickRandom(openers)} ${pickRandom(middles)}${notePart} ${pickRandom(closers)}`;
+  }
+
+  if (ind === "PACKERS_MOVERS") {
+    const openers = [
+      `Have used ${bName} for shifting our house and office now.`,
+      `Second time hiring ${bName} for household goods transport in Kadapa.`,
+      `Whenever our family or relatives need house shifting, ${bName} is the only name we call.`,
+    ];
+    const middles = [
+      `Their dedication, zero-damage packing standard, and punctual mini lorry service haven't dropped once.`,
+      `Loading crew is always polite, energetic, and treats our belongings like their own every single time.`,
+      `Zero scratches, honest billing, and complete peace of mind on every shift.`,
+    ];
+    const closers = [
+      `Always a pleasure dealing with this dependable moving team.`,
+      `Consistency and safe handling are what keep us coming back.`,
+      `The most reliable packers and movers in Kadapa!`,
     ];
     const notePart = note ? ` Handled ${note.toLowerCase()} with their usual care.` : "";
     return `${pickRandom(openers)} ${pickRandom(middles)}${notePart} ${pickRandom(closers)}`;
@@ -2803,6 +2984,22 @@ function generateRelief(
       `Relieved, cool, and very satisfied!`,
       `Exceeded my expectations with honest diagnosis and clean work.`,
       `True professionalism and dependable home appliance service!`,
+    ];
+  } else if (ind === "PACKERS_MOVERS") {
+    openers = [
+      `Was genuinely terrified that our expensive 55-inch LED TV, glass teapoy, and new refrigerator would get dented during the move.`,
+      `Had terrible previous experiences with random lorry loaders who mishandled our wooden furniture and demanded extra cash.`,
+      `Was skeptical whether our shifting could really be completed without scratches or delays.`,
+    ];
+    middles = [
+      `Thankfully, the team at ${bName} proved all my worries completely baseless.`,
+      `They wrapped all fragile appliances in multi-layer bubble wrap, padded the cot corners, and loaded everything securely into the mini lorry.`,
+      `Every single item arrived at our new doorstep in pristine condition without a millimeter of damage.`,
+    ];
+    closers = [
+      `Deeply relieved and 100% satisfied!`,
+      `Exceeded all expectations with honest quotes and gentle handling.`,
+      `True professionals for stress-free house shifting in Kadapa!`,
     ];
   } else {
     openers = [
@@ -2961,6 +3158,26 @@ function generateStaffService(
     return `${pickRandom(openers)} ${pickRandom(middles)}${notePart} ${pickRandom(closers)}`;
   }
 
+  if (ind === "PACKERS_MOVERS") {
+    const openers = [
+      `Really appreciated the respectful and polite behavior of the loading boys at ${bName}.`,
+      `The shifting crew at ${bName} are genuinely courteous, hardworking, and punctual.`,
+      `Customer care and door-to-door coordination here are top tier.`,
+    ];
+    const middles = [
+      `They handled heavy cupboards, double cots, and fragile kitchen crockery with immense patience and care.`,
+      `Zero rude behavior, zero demanding extra tips or bribes, just honest hard work and polite smiles.`,
+      `They placed each carton in the exact room requested at our new home without complaining once.`,
+    ];
+    const closers = [
+      `Honest people doing genuine business in Kadapa.`,
+      `Rare to find such well-mannered and dependable moving workers nowadays.`,
+      `Outstanding team culture and stress-free service!`,
+    ];
+    const notePart = note ? ` They took care of ${note.toLowerCase()} smoothly.` : "";
+    return `${pickRandom(openers)} ${pickRandom(middles)}${notePart} ${pickRandom(closers)}`;
+  }
+
   const item = tags[0] || pickRandom(lex.items);
   const openers = [
     `Really appreciated the respectful behavior of the staff at ${bName}.`,
@@ -3044,6 +3261,26 @@ function generateValuePricing(
       `Real value for money in doorstep home appliance services.`,
       `Honest dealings and skilled technicians. Highly satisfied.`,
       `Would definitely recommend ${bName} to anyone needing AC or fridge repair in Kadapa.`,
+    ];
+    const notePart = note ? ` Addressed ${note.toLowerCase()} without extra fuss.` : "";
+    return `${pickRandom(openers)} ${pickRandom(middles)}${notePart} ${pickRandom(closers)}`;
+  }
+
+  if (ind === "PACKERS_MOVERS") {
+    const openers = [
+      `Fair moving charges and honest pricing at ${bName}.`,
+      `Got great value for money for our complete house shifting with ${bName}.`,
+      `Compared moving quotes from multiple agencies in Kadapa and ${bName} offered the most transparent and affordable rates.`,
+    ];
+    const middles = [
+      `The bubble wrap packaging and mini lorry transport were executed with top quality without any hidden extra charges.`,
+      `They clearly explained the shifting charges upfront with zero hidden lorry detention fees or driver tip demands.`,
+      `Every single item was moved safely and the service standard easily justified the price.`,
+    ];
+    const closers = [
+      `Real value for money in packers and movers services.`,
+      `Honest dealings, zero hidden fees, and safe transit. Highly satisfied.`,
+      `Would definitely recommend ${bName} to anyone shifting their house or office in Kadapa.`,
     ];
     const notePart = note ? ` Addressed ${note.toLowerCase()} without extra fuss.` : "";
     return `${pickRandom(openers)} ${pickRandom(middles)}${notePart} ${pickRandom(closers)}`;
@@ -3471,6 +3708,39 @@ function generateTeluguConversational(
       }
       break;
 
+    case "PACKERS_MOVERS":
+      if (intent.isHouseShifting || intent.isFurnitureTransit || intent.isBubbleWrap) {
+        opener = pickRandom([
+          `${bName} ద్వారా మా ఇంటి సామాన్లు షిఫ్టింగ్ చేయించాము, చాలా మంచి అనుభవం.`,
+          `ఇంటి షిఫ్టింగ్ కోసం ${bName} వారిని సంప్రదించాము, పనితనం చాలా బాగుంది.`,
+          `కడపలో బెస్ట్ ప్యాకర్స్ & మూవర్స్ ${bName}, చాలా కేర్ ఫుల్ గా చేశారు.`,
+        ]);
+        middle = pickRandom([
+          `టీవీ, ఫ్రిజ్, మంచాలు మరియు గాజు సామాన్లు అన్నింటికీ మల్టీ లేయర్ బబుల్ ర్యాపింగ్ చేసి ఒక్క స్క్రాచ్ కూడా పడకుండా షిఫ్ట్ చేశారు.`,
+          `మినీ లారీ సమయానికి వచ్చింది, లోడింగ్ బాయ్స్ చాలా మర్యాదగా మరియు వేగంగా సామాన్లు ఎక్కించి దించారు.`,
+          `కొత్త ఇంట్లో ప్రతి సామాను జాగ్రత్తగా అమర్చారు, ఎక్కడా ఎలాంటి డ్యామేజ్ జరగలేదు.`,
+        ]);
+        closer = pickRandom([
+          `చాలా రీజనబుల్ ప్రైస్ మరియు బెస్ట్ సర్వీస్, థాంక్యూ ${bName}!`,
+          `కడపలో ఇల్లు మారే వారికి డెఫినెట్‌గా రికమండ్ చేస్తాను!`,
+          `ఎలాంటి టెన్షన్ లేకుండా షిఫ్టింగ్ పూర్తయింది, ఫుల్లీ శాటిస్‌ఫైడ్!`,
+        ]);
+      } else {
+        opener = pickRandom([
+          `అర్జెంట్ గా మినీ లారీ మరియు షిఫ్టింగ్ కోసం ${bName} ని పిలిచాము.`,
+          `కడపలో నమ్మకమైన ట్రాన్స్‌పోర్ట్ మరియు షిఫ్టింగ్ సర్వీస్ ${bName}.`,
+        ]);
+        middle = pickRandom([
+          `సమయానికి వచ్చి సామాన్లు చాలా పద్ధతిగా లారీలో సర్దారు.`,
+          `చాలా నిజాయితీగా పనిచేశారు, ఎక్కడా అనవసర ఛార్జీలు అడగలేదు.`,
+        ]);
+        closer = pickRandom([
+          `చాలా ఫాస్ట్ సర్వీస్ మరియు సూపర్ క్వాలిటీ, థాంక్యూ!`,
+          `అందరికీ రికమండ్ చేస్తాను, బెస్ట్ మూవర్స్ ఇన్ కడప!`,
+        ]);
+      }
+      break;
+
     default:
       opener = pickRandom([
         `మా requirement ని అర్థం చేసుకుని ${item} చాలా neat గా చేశారు.`,
@@ -3864,6 +4134,22 @@ function generateTeluguCraftsmanship(
       closer = pickRandom([
         `చాలా నమ్మకమైన అప్లయన్స్ సర్వీస్, థాంక్యూ ${bName}!`,
         `కడపలో బెస్ట్ ఏసీ మెకానిక్, డెఫినెట్‌గా రికమండ్ చేస్తాను!`,
+      ]);
+      break;
+    }
+
+    case "PACKERS_MOVERS": {
+      opener = pickRandom([
+        `${bName} ద్వారా మా హౌస్ షిఫ్టింగ్ చాలా పర్ఫెక్ట్ గా చేశారు.`,
+        `కడపలో ఇంటి సామాన్లు మరియు మినీ లారీ షిఫ్టింగ్ కోసం ${bName} ని సంప్రదించాము, చాలా మంచి అనుభవం.`,
+      ]);
+      middle = pickRandom([
+        `బబుల్ ర్యాపింగ్ తో టీవీ, ఫ్రిజ్ మరియు మంచాలు ఎక్కడా గీతలు పడకుండా చాలా కేర్ ఫుల్ గా ప్యాక్ చేసి లారీ లో సర్దారు.`,
+        `లోడింగ్ బాయ్స్ చాలా వేగంగా మరియు మర్యాదగా పనిచేశారు. సరసమైన ధరలకే సురక్షితంగా షిఫ్టింగ్ పూర్తి చేశారు.`,
+      ]);
+      closer = pickRandom([
+        `కడపలో నమ్మకమైన ప్యాకర్స్ & మూవర్స్, థాంక్యూ ${bName}!`,
+        `ఎలాంటి టెన్షన్ లేకుండా డోర్‌స్టెప్ షిఫ్టింగ్ అయ్యింది, అందరికీ డెఫినెట్‌గా రికమండ్ చేస్తాను!`,
       ]);
       break;
     }
@@ -4452,6 +4738,25 @@ function generateTeluguRoman(
       break;
     }
 
+    case "PACKERS_MOVERS": {
+      opener = pickRandom([
+        `${bName} tho ma house shifting chesamu, experience chala smooth ga undi.`,
+        `Kadapa lo household goods shifting and mini lorry kosam ${bName} ni contact ayyamu, super service.`,
+        `Best packers and movers in Kadapa ante ${bName}, zero damages tho shifting chesaru.`,
+      ]);
+      middle = pickRandom([
+        `TV, double cots, fridge and glassware ki multi-layer bubble wrap vesi chala careful ga pack chesaru.`,
+        `Mini lorry sharp on time vachindi, loading boys polite ga and chala energetic ga luggage ekkincharu.`,
+        `New home lo prathi item safe ga unpin chesi set chesaru, single scratch kuda padaledu.`,
+      ]);
+      closer = pickRandom([
+        `Reasonable moving charges and stress-free relocation, thanks to ${bName}!`,
+        `House shifting plan chese vallaki definitely recommend chesthanu!`,
+        `Worth every rupee, best packers and movers in Kadapa!`,
+      ]);
+      break;
+    }
+
     default:
       opener = pickRandom([
         `Chala baga chesaru, ${item} work aithe super neat ga vachindi.`,
@@ -4835,6 +5140,22 @@ function generateTeluguOccasion(
       break;
     }
 
+    case "PACKERS_MOVERS": {
+      opener = pickRandom([
+        `కొత్త అపార్ట్‌మెంట్ లోకి మారే సందర్భంలో ${bName} ని సంప్రదించాము.`,
+        `మా ఫ్యామిలీ హౌస్ షిఫ్టింగ్ కోసం ${bName} ప్యాకర్స్ & మూవర్స్ ని పిలిచాము.`,
+      ]);
+      middle = pickRandom([
+        `సామాన్లు అన్నింటినీ బబుల్ ర్యాప్ చేసి, మంచాలు మరియు బీరువాలు చాలా సురక్షితంగా మినీ లారీ లోకి ఎక్కించారు.`,
+        `లోడింగ్ బాయ్స్ చాలా మర్యాదగా పనిచేశారు, కొత్త ఇంట్లో ప్రతి వస్తువుని చెప్పిన గదుల్లో జాగ్రత్తగా అమర్చారు.`,
+      ]);
+      closer = pickRandom([
+        `ఎలాంటి స్క్రాచ్ లేకుండా షిఫ్టింగ్ పూర్తి చేశారు, థాంక్యూ ${bName}!`,
+        `కడపలో బెస్ట్ ప్యాకర్స్ అండ్ మూవర్స్!`,
+      ]);
+      break;
+    }
+
     default:
       opener = pickRandom([
         `మా ఈవెంట్ రిక్వైర్మెంట్ కోసం ${bName} లో సర్వీస్ తీసుకున్నాము.`,
@@ -5132,6 +5453,13 @@ export function buildDynamicHeadline(text: string, lang: string, ind: IndustryTy
           "డోర్‌స్టెప్ సర్వీస్ & రీజనబుల్ ప్రైస్",
           "సకాలంలో సర్వీస్ & జెన్యూన్ స్పేర్ పార్ట్స్",
         ]);
+      case "PACKERS_MOVERS":
+        return pickRandom([
+          "సురక్షితమైన ఇంటి షిఫ్టింగ్ & బబుల్ ర్యాపింగ్",
+          "కడపలో బెస్ట్ ప్యాకర్స్ & మూవర్స్",
+          "జీరో డ్యామేజ్ షిఫ్టింగ్ & మినీ లారీ సర్వీస్",
+          "సకాలంలో షిఫ్టింగ్ & మర్యాదపూర్వక సిబ్బంది",
+        ]);
       default:
         return pickRandom([
           "చాలా మంచి అనుభవం & Super Quality",
@@ -5210,6 +5538,13 @@ export function buildDynamicHeadline(text: string, lang: string, ind: IndustryTy
           "Chilled AC Cooling & Deep Jet Wash",
           "Prompt Doorstep Service & Honest Rates",
           "Quick Fridge & Washing Machine Fix",
+        ]);
+      case "PACKERS_MOVERS":
+        return pickRandom([
+          "Safe House Shifting & Zero Damage in Kadapa",
+          "Best Packers & Movers with Mini Lorry",
+          "Multi-Layer Bubble Wrap & Careful Moving",
+          "On-Time Relocation & Honest Rates",
         ]);
       default:
         return pickRandom([
@@ -5380,6 +5715,15 @@ export function buildDynamicHeadline(text: string, lang: string, ind: IndustryTy
         "Prompt Same-Day Doorstep Appliance Fix",
         "Honest Diagnosis & Fair Repair Charges",
         "Expert Refrigerator & Washing Machine Repair",
+      ]);
+
+    case "PACKERS_MOVERS":
+      return pickRandom([
+        "Zero-Damage Household Shifting & Bubble Wrap",
+        "Top #1 Packers & Movers in Kadapa",
+        "Prompt Mini Lorry & Polite Loading Crew",
+        "Careful Furniture Transit & Fair Moving Rates",
+        "Seamless Doorstep Relocation Service",
       ]);
 
     default:
@@ -5740,6 +6084,21 @@ function generateProceduralFallback(
         break;
       }
 
+      case "PACKERS_MOVERS": {
+        starters = [
+          `ఇంటి సామాన్లు షిఫ్టింగ్ చాలా కేర్ ఫుల్ గా చేశారు.`,
+          `${bName} లో ప్యాకింగ్ మరియు మినీ లారీ ట్రాన్స్‌పోర్ట్ సర్వీస్ టాప్ నాచ్.`,
+          `కడపలో బెస్ట్ ప్యాకర్స్ & మూవర్స్, జీరో డ్యామేజ్.`,
+        ];
+        middles = [
+          `టీవీ, ఫ్రిజ్ మరియు గాజు సామాన్లు అన్నింటికీ బబుల్ ర్యాపింగ్ వేసి భద్రంగా తరలించారు.`,
+          `మినీ లారీ సమయానికి వచ్చింది, లోడింగ్ బాయ్స్ చాలా వేగంగా మరియు మర్యాదగా సామాన్లు ఎక్కించారు.`,
+          `కొత్త ఇంట్లో ప్రతి సామాను జాగ్రత్తగా అమర్చారు, ఎక్కడా ఒక్క స్క్రాచ్ కూడా పడలేదు.`,
+          `ముందు చెప్పిన ఫెయిర్ రేట్స్ కే షిఫ్టింగ్ పూర్తి చేశారు, ఎలాంటి దాపరికం లేదు.`,
+        ];
+        break;
+      }
+
       default:
         starters = [
           `సర్వీస్ ఫినిషింగ్ చాలా neat గా ఉంది.`,
@@ -6008,6 +6367,22 @@ function generateProceduralFallback(
           `Very polite conduct and transparent billing throughout.`,
         ];
       }
+      break;
+    }
+
+    case "PACKERS_MOVERS": {
+      starters = [
+        `Seamless household shifting and careful luggage transport by ${bName}.`,
+        `Professional bubble wrap packing and punctual mini lorry service at ${bName}.`,
+        `Shifted our entire home without a single scratch using ${bName} in Kadapa.`,
+        `Top #1 packers and movers in Kadapa for stress-free residential relocation.`,
+      ];
+      middles = [
+        `The packing boys wrapped all double cots, LED TV, fridge, and glassware in multi-layer bubble wrap.`,
+        `Their mini lorry arrived right on schedule and the crew loaded everything with immense care and skill.`,
+        `Unpacked and placed all bulky furniture in the exact spots requested at our new home.`,
+        `Transparent moving quotes with zero surprise charges or tip demands.`,
+      ];
       break;
     }
 

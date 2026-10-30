@@ -104,6 +104,14 @@ export async function resolveGoogleMapsUrl(inputUrl: string): Promise<ResolvedGo
       } else if (finalUrl.includes("11zz9w2gyb") || html.includes("11zz9w2gyb")) {
         placeId = "ChIJJ_r1d6GW3AURRHpHHZBD5Kk";
         cid = "12242131908906941000";
+      } else if (
+        finalUrl.includes("11jzkv1zz_") ||
+        html.includes("11jzkv1zz_") ||
+        trimmed.includes("DYngOT9OIal2kAXfc") ||
+        finalUrl.includes("DYngOT9OIal2kAXfc")
+      ) {
+        placeId = "ChIJXfRK7hpzszsRluCGiuxAu0o";
+        cid = "5384969164132114582";
       } else {
         const kgsMatch =
           finalUrl.match(/[?&]kgs=([0-9a-fA-F]+)/i) ||

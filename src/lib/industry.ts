@@ -14,6 +14,7 @@ export type IndustryType =
   | "TOURS_TRAVELS"
   | "TATTOO_STUDIO"
   | "APPLIANCE_REPAIR"
+  | "PACKERS_MOVERS"
   | "GENERAL";
 
 export interface IndustryConfig {
@@ -555,6 +556,44 @@ export const INDUSTRY_CONFIGS: Record<IndustryType, IndustryConfig> = {
     },
   },
 
+  PACKERS_MOVERS: {
+    type: "PACKERS_MOVERS",
+    label: "Packers & Movers, Shifting & Relocation",
+    tagline: "Safe Household & Office Shifting, Zero-Damage Packing & Mini Lorry Transport",
+    tags: [
+      "Zero Damage Shifting",
+      "Multi-Layer Bubble Wrap",
+      "Prompt Mini Lorry",
+      "Safe Furniture Handling",
+      "Polite Loading Team",
+      "Doorstep Unpacking",
+      "Affordable Moving Rates",
+      "Intercity Relocation",
+      "Fragile Items Protected",
+      "Careful Electronics Transit",
+    ],
+    placeholder: "Mention shifting location, house items, or moving experience...",
+    keywords:
+      "cm reddy packers movers kadapa house shifting services household relocation office shifting mini lorry transport safe furniture moving bubble wrap packaging mariyapuram ramarajupalli kadapa to bangalore hyderabad shifting best packers and movers in kadapa zero damage shifting prompt delivery affordable rates",
+    reviewDrafts: {
+      direct: {
+        headline: "Safe, Smooth & Zero-Damage House Shifting!",
+        text: (name, tags, note) =>
+          `Shifted our household luggage with ${name} and the entire relocation was seamless! Their ${tags || "zero damage shifting and prompt mini lorry arrival"} took all the stress away.${note ? ` Especially impressed with how carefully they handled ${note}.` : ""} Professional packing team and very fair pricing. Best packers and movers in Kadapa!`,
+      },
+      detailed: {
+        headline: "Careful Bubble Wrap Packing & Polite Loading Team",
+        text: (name, tags, note) =>
+          `Booked ${name} for our home shifting and was thoroughly impressed by their professionalism. The staff arrived punctually with high-grade bubble wrap and protective covers for all our furniture, TV, and fridge. Their ${tags || "safe furniture handling and polite loading team"} ensured zero scratches during transit.${note ? ` Handled ${note} with extraordinary care.` : ""} Transparent rates with no hidden demands. Highly recommended!`,
+      },
+      enthusiastic: {
+        headline: "Top #1 Packers & Movers in Kadapa & Rayalaseema!",
+        text: (name, tags, note) =>
+          `Cannot recommend ${name} enough for any house or office relocation! They loaded, transported, and unloaded everything with utmost care and efficiency.${note ? ` Superb work on ${note}!` : ""} On-time delivery, respectful crew, and budget-friendly charges. Truly a 10/10 moving experience!`,
+      },
+    },
+  },
+
   GENERAL: {
     type: "GENERAL",
     label: "General Business & Services",
@@ -781,6 +820,22 @@ export function detectIndustry(
   }
 
   if (
+    hasWord(normCat, "packers") ||
+    hasWord(normCat, "movers") ||
+    hasWord(normCat, "shifting") ||
+    hasWord(normCat, "relocation") ||
+    hasWord(normCat, "relocations") ||
+    normCat.includes("packers and movers") ||
+    normCat.includes("packers & movers") ||
+    normCat.includes("house shifting") ||
+    normCat.includes("household shifting") ||
+    normCat.includes("office shifting") ||
+    normCat.includes("mini lorry")
+  ) {
+    return INDUSTRY_CONFIGS.PACKERS_MOVERS;
+  }
+
+  if (
     hasWord(normCat, "tours") ||
     hasWord(normCat, "travel") ||
     hasWord(normCat, "travels") ||
@@ -952,6 +1007,22 @@ export function detectIndustry(
     normName.includes("gold buyers")
   ) {
     return INDUSTRY_CONFIGS.GOLD_BUYERS;
+  }
+
+  if (
+    hasWord(normName, "packers") ||
+    hasWord(normName, "movers") ||
+    hasWord(normName, "shifting") ||
+    hasWord(normName, "relocation") ||
+    hasWord(normName, "relocations") ||
+    normName.includes("packers and movers") ||
+    normName.includes("packers & movers") ||
+    normName.includes("house shifting") ||
+    normName.includes("cm reddy") ||
+    normName.includes("cmr packers") ||
+    normName.includes("mini lorry")
+  ) {
+    return INDUSTRY_CONFIGS.PACKERS_MOVERS;
   }
 
   if (

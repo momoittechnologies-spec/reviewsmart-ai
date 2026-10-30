@@ -468,6 +468,34 @@ export const DOMAIN_FENCES: Record<IndustryType, DomainFenceConfig> = {
     ],
   },
 
+  PACKERS_MOVERS: {
+    industryType: "PACKERS_MOVERS",
+    allowedKeywords: [
+      "shifting", "packers", "movers", "relocation", "household", "luggage", "furniture",
+      "bubble wrap", "packing", "transport", "loading", "unloading", "mini lorry", "lorry",
+      "transit", "damage free", "zero scratch", "scratches", "doorstep", "prompt", "timely",
+      "professional", "boys", "team", "careful", "electronics", "tv", "fridge", "sofa",
+      "bed", "kadapa", "bangalore", "hyderabad", "chennai", "intercity", "local shifting",
+      "house moving", "office shifting", "fair price", "charges", "safe", "rates", "safe transit",
+    ],
+    forbiddenKeywords: [
+      "gold", "silver", "bullion", "pawn", "jewellery", "doctor", "dental", "clinic", "hospital",
+      "facial", "haircut", "salon", "software", "app development", "biryani", "food", "dining",
+      "photo frame", "studio", "flex printing", "ac repair", "gas charging", "refrigeration repair",
+    ],
+    forbiddenPhrases: [
+      /\b(gold\s*buyers?|pawn\s*brokers?|jewellery\s*shop)\b/i,
+      /\b(haircuts?|facials?|salons?|parlours?)\b/i,
+      /\b(biryani|meals?|starters?|tandoori)\b/i,
+      /\b(ac\s*repair|gas\s*charging|jet\s*wash)\b/i,
+      /\b(software\s*development|web\s*development)\b/i,
+    ],
+    positiveIdentifiers: [
+      /\b(packers?|movers?|shiftings?|relocations?|household|mini\s*lorry|bubble\s*wrap|cm\s*reddy|luggage|loading|unloading)\b/i,
+      /(ప్యాకర్స్|మూవర్స్|షిఫ్టింగ్|ఇంటి\s*సామాన్లు|లారీ|కడప)/i,
+    ],
+  },
+
   GENERAL: {
     industryType: "GENERAL",
     allowedKeywords: [
