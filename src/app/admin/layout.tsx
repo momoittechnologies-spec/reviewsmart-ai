@@ -24,9 +24,9 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col pb-20 lg:pb-0">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col pb-28 lg:pb-8">
       {/* Mobile Top Header */}
-      <header className="lg:hidden sticky top-0 z-40 bg-slate-900/95 backdrop-blur-xl border-b border-slate-800/80 px-4 py-2.5 flex items-center justify-between no-print shadow-sm shadow-black/20">
+      <header className="lg:hidden sticky top-0 z-40 bg-slate-900/95 backdrop-blur-xl border-b border-slate-800/80 px-3.5 py-2.5 flex items-center justify-between no-print shadow-sm shadow-black/20">
         <div className="flex items-center gap-2">
           <BrandLogo href="/admin" size="sm" theme="dark" />
           <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 uppercase tracking-wider">
@@ -44,7 +44,7 @@ export default async function AdminLayout({
         </div>
       </header>
 
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* Admin Sidebar (Desktop only) */}
           <aside className="hidden lg:flex lg:col-span-1 flex-col gap-3 no-print bg-slate-900 border border-slate-800/90 p-4 rounded-3xl h-fit sticky top-6 shadow-xl shadow-black/30">

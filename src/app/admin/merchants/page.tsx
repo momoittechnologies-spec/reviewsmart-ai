@@ -1043,8 +1043,8 @@ export default function AdminMerchantsPage() {
 
       {/* ─── CREATE MERCHANT MODAL ────────────────────────────────────────── */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-md w-full shadow-2xl relative space-y-4">
+        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-4 sm:p-6 max-w-md w-full shadow-2xl relative space-y-4 max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between">
               <h2 className="text-base font-black text-white flex items-center gap-2">
                 <Plus className="w-4 h-4 text-indigo-400" />
@@ -1791,8 +1791,8 @@ export default function AdminMerchantsPage() {
 
       {/* ─── DELETE CONFIRMATION MODAL ────────────────────────────────────── */}
       {deletingMerchant && (
-        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-slate-900 border border-rose-500/40 rounded-3xl p-6 max-w-sm w-full shadow-2xl space-y-4 text-center">
+        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-fadeIn">
+          <div className="bg-slate-900 border border-rose-500/40 rounded-3xl p-4 sm:p-6 max-w-sm w-full shadow-2xl space-y-4 text-center max-h-[92vh] overflow-y-auto">
             <div className="w-14 h-14 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center mx-auto border border-rose-500/30">
               <AlertTriangle className="w-7 h-7" />
             </div>

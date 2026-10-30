@@ -499,34 +499,34 @@ export default function AdminGrowthPage() {
   return (
     <div className="space-y-6 pb-20">
       {/* ── TOP HERO HEADER ─────────────────────────────────────────── */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 border border-indigo-500/30 p-6 md:p-8 shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 border border-indigo-500/30 p-4 sm:p-6 md:p-8 shadow-2xl">
         <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-1/3 -mb-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
               100% Free Open-Source Growth Engine
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2 sm:gap-3">
               AI Growth &amp; Low-Review Hunter 🚀
             </h1>
-            <p className="text-slate-300 text-sm md:text-base max-w-2xl leading-relaxed">
+            <p className="text-slate-300 text-xs sm:text-sm md:text-base max-w-2xl leading-relaxed">
               Target independent local businesses with <strong className="text-emerald-300">few Google reviews (&lt; 40)</strong> that desperately need ReviewSmart AI standees. Zero paid APIs • Zero billing fees.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
             <button
               onClick={() => setShowImportModal(true)}
-              className="bg-indigo-600/90 hover:bg-indigo-500 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-indigo-400/40 text-white font-semibold text-xs flex items-center gap-2 shadow-lg shadow-indigo-600/30 transition-all"
+              className="bg-indigo-600/90 hover:bg-indigo-500 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-indigo-400/40 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 transition-all active:scale-95"
             >
               <Upload className="w-4 h-4 text-indigo-200" />
               Import Scraped Leads
             </button>
 
-            <div className="bg-slate-800/80 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-700/60 flex items-center gap-3">
+            <div className="bg-slate-800/80 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-700/60 flex items-center justify-between sm:justify-start gap-3">
               <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
                 🎯
               </div>
@@ -539,24 +539,24 @@ export default function AdminGrowthPage() {
         </div>
 
         {/* ── TABS BAR ──────────────────────────────────────────────── */}
-        <div className="flex items-center gap-2 mt-8 border-b border-slate-800/80 pb-1">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-6 sm:mt-8 border-b border-slate-800/80 pb-2">
           <button
             onClick={() => setActiveTab("inbound")}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+            className={`flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
               activeTab === "inbound"
                 ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
                 : "text-slate-400 hover:text-white hover:bg-slate-800/50"
             }`}
           >
             <Target className="w-4 h-4 text-emerald-400" />
-            Target Lead CRM &amp; Sales Hub
+            <span className="truncate">Target Lead CRM &amp; Sales Hub</span>
             {hunterLeadCount > 0 && (
-              <span className="ml-1 px-2 py-0.5 rounded-full text-[11px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+              <span className="ml-1 px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
                 {hunterLeadCount} Qualified
               </span>
             )}
             {inboundLeads.filter((l) => l.status === "NEW").length > 0 && (
-              <span className="ml-1 px-2 py-0.5 rounded-full text-[11px] bg-rose-500 text-white font-bold animate-pulse">
+              <span className="ml-1 px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] bg-rose-500 text-white font-bold animate-pulse">
                 {inboundLeads.filter((l) => l.status === "NEW").length} NEW
               </span>
             )}
@@ -564,15 +564,15 @@ export default function AdminGrowthPage() {
 
           <button
             onClick={() => setActiveTab("radar")}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+            className={`flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
               activeTab === "radar"
                 ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
                 : "text-slate-400 hover:text-white hover:bg-slate-800/50"
             }`}
           >
             <Compass className="w-4 h-4" />
-            Market Radar
-            <span className="ml-1 px-2 py-0.5 rounded-full text-[11px] bg-indigo-900/60 text-indigo-200 border border-indigo-700/50">
+            <span>Market Radar</span>
+            <span className="ml-1 px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] bg-indigo-900/60 text-indigo-200 border border-indigo-700/50">
               {leads.length}
             </span>
           </button>
@@ -581,49 +581,49 @@ export default function AdminGrowthPage() {
 
       {/* ── TAB 1: TARGET LEAD CRM & SALES ACTION HUB ────────────────── */}
       {activeTab === "inbound" && (
-        <div className="space-y-6">
+        <div className="space-y-5 sm:space-y-6">
           {/* Top Controls Bar */}
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 md:p-6 shadow-xl space-y-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-4 sm:p-5 md:p-6 shadow-xl space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="space-y-1">
-                <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Target className="w-5 h-5 text-emerald-400" />
-                  Target Lead Pipeline &amp; High-Converting Sales Funnel
+                <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                  <Target className="w-5 h-5 text-emerald-400 shrink-0" />
+                  <span>Target Lead Pipeline &amp; High-Converting Sales Funnel</span>
                 </h2>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-400 leading-normal">
                   Step 1: Send WhatsApp Message First &bull; Step 2: Proceed to Call &bull; Step 3: Convert to Client Store!
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto">
                 <button
                   onClick={() => setShowImportModal(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 text-xs font-semibold border border-indigo-500/40 transition-all"
+                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 text-xs font-semibold border border-indigo-500/40 transition-all active:scale-95"
                 >
-                  <Upload className="w-3.5 h-3.5" />
-                  Import Scraped Leads
+                  <Upload className="w-3.5 h-3.5 shrink-0" />
+                  <span className="truncate">Import Leads</span>
                 </button>
 
                 <button
                   onClick={fetchInboundLeads}
                   disabled={loadingInbound}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-all"
+                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-all active:scale-95"
                 >
-                  <RefreshCw className={`w-3.5 h-3.5 ${loadingInbound ? "animate-spin" : ""}`} />
-                  Refresh
+                  <RefreshCw className={`w-3.5 h-3.5 shrink-0 ${loadingInbound ? "animate-spin" : ""}`} />
+                  <span>Refresh</span>
                 </button>
               </div>
             </div>
 
             {/* Filter Tabs */}
-            <div className="pt-2 flex flex-wrap items-center justify-between gap-3 text-xs border-t border-slate-800">
+            <div className="pt-3 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs border-t border-slate-800/80">
               {/* Source Filter */}
-              <div className="flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700">
+              <div className="flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700/80 overflow-x-auto no-scrollbar max-w-full">
                 <button
                   onClick={() => setSourceFilter("ALL")}
-                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
                     sourceFilter === "ALL"
-                      ? "bg-indigo-600 text-white font-bold"
+                      ? "bg-indigo-600 text-white font-bold shadow-sm"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -631,35 +631,35 @@ export default function AdminGrowthPage() {
                 </button>
                 <button
                   onClick={() => setSourceFilter("HUNTER")}
-                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
                     sourceFilter === "HUNTER"
-                      ? "bg-emerald-600 text-white font-bold"
+                      ? "bg-emerald-600 text-white font-bold shadow-sm"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  🎯 Low-Review Hunter ({hunterLeadCount})
+                  🎯 Hunter ({hunterLeadCount})
                 </button>
                 <button
                   onClick={() => setSourceFilter("WEBSITE")}
-                  className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
                     sourceFilter === "WEBSITE"
-                      ? "bg-indigo-600 text-white font-bold"
+                      ? "bg-indigo-600 text-white font-bold shadow-sm"
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  🌐 Website Inquiries ({inboundLeads.length - hunterLeadCount})
+                  🌐 Inquiries ({inboundLeads.length - hunterLeadCount})
                 </button>
               </div>
 
               {/* Status Filter */}
-              <div className="flex flex-wrap items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700">
+              <div className="flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700/80 overflow-x-auto no-scrollbar max-w-full">
                 {["ALL", "NEW", "WHATSAPP_SENT", "CALLED", "DEMO_SENT", "CONVERTED", "LOST"].map((st) => (
                   <button
                     key={st}
                     onClick={() => setInboundFilter(st)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                    className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
                       inboundFilter === st
-                        ? "bg-indigo-600 text-white font-bold"
+                        ? "bg-indigo-600 text-white font-bold shadow-sm"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
@@ -671,17 +671,17 @@ export default function AdminGrowthPage() {
           </div>
 
           {/* Workflow Strategy Banner */}
-          <div className="p-4 bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/20 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4 text-xs text-slate-300">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">⚡</span>
+          <div className="p-3.5 sm:p-4 bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/20 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-3 text-xs text-slate-300">
+            <div className="flex items-start sm:items-center gap-3">
+              <span className="text-xl sm:text-2xl shrink-0">⚡</span>
               <div>
                 <strong className="text-white">Recommended Closing Sequence:</strong>
-                <span className="text-slate-300 ml-1">
-                  1. Click <strong>WhatsApp First</strong> to send the Review Deficit Hook &bull; 2. Wait 30 mins, then click <strong>Call Business</strong> to close &bull; 3. Click <strong>Onboard Store</strong> to generate standee!
+                <span className="text-slate-300 ml-1 block sm:inline mt-0.5 sm:mt-0">
+                  1. WhatsApp First Review Deficit &bull; 2. Call Business to close &bull; 3. Onboard Store!
                 </span>
               </div>
             </div>
-            <div className="p-2 rounded-xl bg-black/40 border border-slate-800 font-mono text-[11px] text-emerald-400 select-all shrink-0">
+            <div className="p-2 rounded-xl bg-black/40 border border-slate-800 font-mono text-[10px] sm:text-[11px] text-emerald-400 select-all max-w-full overflow-x-auto whitespace-nowrap">
               npm run hunt-leads -- --city Kadapa --category &quot;restaurants&quot; --maxReviews 40
             </div>
           </div>
@@ -788,7 +788,7 @@ export default function AdminGrowthPage() {
                       )}
 
                       {/* Interactive Pipeline Stepper Bar */}
-                      <div className="mt-3 grid grid-cols-5 gap-1 text-[10px] text-center font-bold">
+                      <div className="mt-3 grid grid-cols-5 gap-1 text-[9px] sm:text-[10px] text-center font-bold">
                         {[
                           { id: "NEW", label: "New" },
                           { id: "WHATSAPP_SENT", label: "WhatsApp" },
@@ -802,9 +802,9 @@ export default function AdminGrowthPage() {
                             <button
                               key={step.id}
                               onClick={() => updateInboundStatus(lead.id, step.id)}
-                              className={`py-1 rounded-lg transition-all border ${
+                              className={`py-1.5 px-0.5 rounded-lg transition-all border truncate active:scale-95 ${
                                 isDone
-                                  ? "bg-indigo-600 text-white border-indigo-500 shadow-sm"
+                                  ? "bg-indigo-600 text-white border-indigo-500 shadow-sm font-black"
                                   : "bg-slate-950 text-slate-500 border-slate-800 hover:text-slate-300"
                               }`}
                             >
@@ -821,39 +821,41 @@ export default function AdminGrowthPage() {
                             <label className="text-[11px] font-bold text-indigo-300 block">
                               Enter 10-Digit Mobile / Phone Number:
                             </label>
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                               <input
                                 type="text"
                                 value={editingPhoneValue}
                                 onChange={(e) => setEditingPhoneValue(e.target.value)}
                                 placeholder="e.g. 9876543210"
-                                className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
+                                className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
                                 autoFocus
                               />
-                              <button
-                                onClick={() => handleSavePhone(lead.id)}
-                                disabled={savingPhoneLoading}
-                                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 shadow-md shadow-emerald-600/30"
-                              >
-                                {savingPhoneLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-                                Save
-                              </button>
-                              <button
-                                onClick={() => setEditingPhoneId(null)}
-                                className="px-2 py-1.5 rounded-xl text-slate-400 hover:text-white text-xs"
-                              >
-                                ✕
-                              </button>
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => handleSavePhone(lead.id)}
+                                  disabled={savingPhoneLoading}
+                                  className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-md shadow-emerald-600/30 active:scale-95"
+                                >
+                                  {savingPhoneLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                                  <span>Save</span>
+                                </button>
+                                <button
+                                  onClick={() => setEditingPhoneId(null)}
+                                  className="px-3 py-2 rounded-xl text-slate-400 hover:text-white text-xs bg-slate-800 sm:bg-transparent"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
                             </div>
                           </div>
                         ) : (
-                          <div className="flex items-center justify-between text-xs">
-                            <div className="flex items-center gap-2">
-                              <Phone className="w-3.5 h-3.5 text-indigo-400" />
+                          <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs">
+                            <div className="flex items-center gap-1.5">
+                              <Phone className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
                               {hasValidPhone ? (
-                                <span className="font-bold text-white font-mono">+91 {cleanPhone}</span>
+                                <span className="font-bold text-white font-mono text-xs">+91 {cleanPhone}</span>
                               ) : (
-                                <span className="text-amber-400 font-medium">⚠️ Phone missing</span>
+                                <span className="text-amber-400 font-medium text-[11px]">⚠️ Phone missing</span>
                               )}
                               <button
                                 onClick={() => {
@@ -875,7 +877,7 @@ export default function AdminGrowthPage() {
                                 className="text-[11px] text-emerald-400 hover:underline flex items-center gap-1 font-semibold"
                               >
                                 <Search className="w-3 h-3" />
-                                Find number on Google Maps
+                                Find on Maps ↗
                               </a>
                             )}
                           </div>
@@ -891,28 +893,30 @@ export default function AdminGrowthPage() {
 
                       {/* Add Quick Note Input */}
                       {isWritingNote ? (
-                        <div className="mt-2 flex items-center gap-2">
+                        <div className="mt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                           <input
                             type="text"
                             value={noteInputValue}
                             onChange={(e) => setNoteInputValue(e.target.value)}
                             placeholder="e.g. Spoke to owner, callback at 4 PM..."
-                            className="flex-1 bg-slate-950 border border-slate-700 text-xs text-white rounded-xl px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="flex-1 bg-slate-950 border border-slate-700 text-xs text-white rounded-xl px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                             autoFocus
                           />
-                          <button
-                            onClick={() => handleSaveQuickNote(lead.id)}
-                            disabled={savingNoteLoading}
-                            className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={() => setActiveNoteId(null)}
-                            className="text-slate-400 hover:text-white text-xs px-1"
-                          >
-                            ✕
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleSaveQuickNote(lead.id)}
+                              disabled={savingNoteLoading}
+                              className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => setActiveNoteId(null)}
+                              className="text-slate-400 hover:text-white text-xs px-2 py-2 bg-slate-800 sm:bg-transparent rounded-xl"
+                            >
+                              ✕
+                            </button>
+                          </div>
                         </div>
                       ) : (
                         <div className="mt-1 flex justify-end">
@@ -921,7 +925,7 @@ export default function AdminGrowthPage() {
                               setActiveNoteId(lead.id);
                               setNoteInputValue("");
                             }}
-                            className="text-[10px] text-slate-400 hover:text-indigo-400 flex items-center gap-1 font-medium"
+                            className="text-[10px] text-slate-400 hover:text-indigo-400 flex items-center gap-1 font-medium py-1"
                           >
                             <PlusCircle className="w-3 h-3" />
                             Add Follow-up Note
@@ -931,8 +935,8 @@ export default function AdminGrowthPage() {
                     </div>
 
                     {/* Bottom Action Bar: STEP 1 (WhatsApp) -> STEP 2 (Call) -> STEP 3 (Onboard) */}
-                    <div className="pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex flex-wrap items-center gap-2">
+                    <div className="pt-3 border-t border-slate-800/80 space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
                         {/* 1. WHATSAPP FIRST BUTTON */}
                         <button
                           onClick={() => {
@@ -943,15 +947,15 @@ export default function AdminGrowthPage() {
                             }
                             setWhatsappModalLead(lead);
                           }}
-                          className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-md ${
+                          className={`inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 ${
                             lead.status === "WHATSAPP_SENT" || lead.status === "CALLED"
                               ? "bg-emerald-950/60 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-900/60"
                               : "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30"
                           }`}
                         >
-                          <MessageCircle className="w-3.5 h-3.5" />
-                          <span>1. WhatsApp Pitch</span>
-                          {lead.status === "WHATSAPP_SENT" && <CheckCircle2 className="w-3 h-3 text-emerald-400" />}
+                          <MessageCircle className="w-3.5 h-3.5 shrink-0" />
+                          <span className="truncate">1. WhatsApp</span>
+                          {lead.status === "WHATSAPP_SENT" && <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />}
                         </button>
 
                         {/* 2. THEN CALL BUTTON */}
@@ -964,25 +968,25 @@ export default function AdminGrowthPage() {
                             }
                             setCallingModalLead(lead);
                           }}
-                          className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-md ${
+                          className={`inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 ${
                             lead.status === "CALLED"
                               ? "bg-blue-950/60 text-blue-300 border border-blue-500/30 hover:bg-blue-900/60"
                               : "bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30"
                           }`}
                         >
-                          <PhoneCall className="w-3.5 h-3.5" />
-                          <span>2. Call Business</span>
-                          {lead.status === "CALLED" && <CheckCircle2 className="w-3 h-3 text-blue-400" />}
+                          <PhoneCall className="w-3.5 h-3.5 shrink-0" />
+                          <span className="truncate">2. Call</span>
+                          {lead.status === "CALLED" && <CheckCircle2 className="w-3 h-3 text-blue-400 shrink-0" />}
                         </button>
                       </div>
 
                       {/* 3. CONVERT TO CLIENT STORE */}
                       <Link
                         href={`/admin/merchants?autoName=${encodeURIComponent(lead.businessName)}&autoPhone=${cleanPhone}&autoCity=${encodeURIComponent(lead.city || "")}&autoCategory=${encodeURIComponent(lead.category || "")}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold border border-slate-700 transition-all hover:border-amber-400/40"
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold border border-slate-700 transition-all hover:border-amber-400/40 active:scale-95 shadow-sm"
                         title="Onboard this lead as an official client store"
                       >
-                        <UserCheck className="w-3.5 h-3.5 text-amber-400" />
+                        <UserCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                         <span>Onboard Store &rarr;</span>
                       </Link>
                     </div>
@@ -1059,11 +1063,11 @@ export default function AdminGrowthPage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-3 pt-2 lg:pt-0">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-2 lg:pt-0 w-full sm:w-auto">
                 <button
                   onClick={() => runRadarScan()}
                   disabled={loadingRadar}
-                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50 active:scale-95"
                 >
                   {loadingRadar ? (
                     <>
@@ -1081,7 +1085,7 @@ export default function AdminGrowthPage() {
                 {leads.length > 0 && (
                   <button
                     onClick={handleExportCsv}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-sm font-medium transition-all"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-sm font-medium transition-all"
                     title="Export Leads to CSV"
                   >
                     <Download className="w-4 h-4 text-emerald-400" />
@@ -1186,18 +1190,18 @@ export default function AdminGrowthPage() {
 
       {/* ── MODAL 1: WHATSAPP FIRST OUTREACH HUB ────────────────────── */}
       {whatsappModalLead && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-6 space-y-5 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <MessageCircle className="w-5 h-5 text-emerald-400" />
-                <h3 className="text-base font-bold text-white">
+                <MessageCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+                <h3 className="text-sm sm:text-base font-bold text-white truncate">
                   WhatsApp Pitch &bull; <span className="text-emerald-300">{whatsappModalLead.businessName}</span>
                 </h3>
               </div>
               <button
                 onClick={() => setWhatsappModalLead(null)}
-                className="text-slate-400 hover:text-white text-sm"
+                className="text-slate-400 hover:text-white text-sm p-1"
               >
                 ✕ Close
               </button>
@@ -1220,7 +1224,7 @@ export default function AdminGrowthPage() {
                     onClick={() => setActiveWaTemplate(t.id as any)}
                     className={`py-2 px-2 text-xs font-bold rounded-xl transition-all ${
                       activeWaTemplate === t.id
-                        ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/30"
+                        ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/30 font-black"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
@@ -1235,19 +1239,19 @@ export default function AdminGrowthPage() {
               <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
                 Message Preview (Ready to Send to +91 {whatsappModalLead.phone.replace(/[^0-9]/g, "")}):
               </label>
-              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-200 whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto font-sans">
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-200 whitespace-pre-line leading-relaxed max-h-52 overflow-y-auto font-sans">
                 {getWhatsAppMessage(whatsappModalLead, activeWaTemplate)}
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-between pt-2">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-2">
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(getWhatsAppMessage(whatsappModalLead, activeWaTemplate));
                   alert("Copied message to clipboard!");
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700 active:scale-95"
               >
                 <Copy className="w-3.5 h-3.5" />
                 Copy Text
@@ -1256,16 +1260,16 @@ export default function AdminGrowthPage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setWhatsappModalLead(null)}
-                  className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white font-semibold"
+                  className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs text-slate-400 hover:text-white font-semibold bg-slate-800 sm:bg-transparent"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => handleLaunchWhatsApp(whatsappModalLead)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/30 transition-all"
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/30 transition-all active:scale-95"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  Launch WhatsApp &amp; Advance Stage &rarr;
+                  Launch WhatsApp &rarr;
                 </button>
               </div>
             </div>
@@ -1275,32 +1279,32 @@ export default function AdminGrowthPage() {
 
       {/* ── MODAL 2: THEN CALL ASSISTANT & BATTLECARD ───────────────── */}
       {callingModalLead && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <PhoneCall className="w-5 h-5 text-blue-400" />
-                <h3 className="text-base font-bold text-white">
-                  Phone Call Battlecard &bull; <span className="text-blue-300">{callingModalLead.businessName}</span>
+                <PhoneCall className="w-5 h-5 text-blue-400 shrink-0" />
+                <h3 className="text-sm sm:text-base font-bold text-white truncate">
+                  Phone Battlecard &bull; <span className="text-blue-300">{callingModalLead.businessName}</span>
                 </h3>
               </div>
               <button
                 onClick={() => setCallingModalLead(null)}
-                className="text-slate-400 hover:text-white text-sm"
+                className="text-slate-400 hover:text-white text-sm p-1"
               >
                 ✕ Close
               </button>
             </div>
 
             {/* Click to Call Banner */}
-            <div className="p-4 rounded-2xl bg-blue-950/50 border border-blue-500/30 flex items-center justify-between">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-blue-950/50 border border-blue-500/30 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <div>
                 <div className="text-[10px] uppercase font-bold text-blue-400">Target Phone Number</div>
                 <div className="text-lg font-black text-white font-mono">+91 {callingModalLead.phone.replace(/[^0-9]/g, "")}</div>
               </div>
               <a
                 href={`tel:+91${callingModalLead.phone.replace(/[^0-9]/g, "")}`}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-lg shadow-blue-600/30 transition-all"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-lg shadow-blue-600/30 transition-all active:scale-95"
               >
                 <Phone className="w-4 h-4" />
                 Dial Now
@@ -1308,11 +1312,11 @@ export default function AdminGrowthPage() {
             </div>
 
             {/* Call Battlecard Script */}
-            <div className="space-y-3 text-xs bg-slate-950 p-4 rounded-2xl border border-slate-800 text-slate-300">
+            <div className="space-y-3 text-xs bg-slate-950 p-3.5 sm:p-4 rounded-2xl border border-slate-800 text-slate-300">
               <div className="text-[11px] font-bold text-amber-400 uppercase tracking-wider">
                 🗣️ On-Screen Call Script (High-Closing Pitch):
               </div>
-              <div className="space-y-2 leading-relaxed">
+              <div className="space-y-2 leading-relaxed text-xs">
                 <p>
                   <strong>1. The Hook:</strong> &quot;Hello, am I speaking with the manager/owner of {callingModalLead.businessName}? I just sent you a message on WhatsApp regarding your Google Maps rating.&quot;
                 </p>
@@ -1329,16 +1333,16 @@ export default function AdminGrowthPage() {
             </div>
 
             {/* Action Bar */}
-            <div className="flex items-center justify-between pt-2">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-2">
               <button
                 onClick={() => setCallingModalLead(null)}
-                className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white font-semibold"
+                className="px-4 py-2.5 rounded-xl text-xs text-slate-400 hover:text-white font-semibold bg-slate-800 sm:bg-transparent"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleMarkCalled(callingModalLead)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-600/30 transition-all"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-600/30 transition-all active:scale-95"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 Done! Mark as CALLED 📞
@@ -1350,16 +1354,16 @@ export default function AdminGrowthPage() {
 
       {/* ── MODAL 3: IMPORT SCRAPED LEADS ───────────────────────────── */}
       {showImportModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full p-6 space-y-5 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <Upload className="w-5 h-5 text-indigo-400" />
-                <h3 className="text-lg font-bold text-white">Import Scraped Google Maps Leads</h3>
+                <Upload className="w-5 h-5 text-indigo-400 shrink-0" />
+                <h3 className="text-base sm:text-lg font-bold text-white">Import Scraped Google Maps Leads</h3>
               </div>
               <button
                 onClick={() => setShowImportModal(false)}
-                className="text-slate-400 hover:text-white text-sm"
+                className="text-slate-400 hover:text-white text-sm p-1"
               >
                 ✕ Close
               </button>
@@ -1378,7 +1382,7 @@ export default function AdminGrowthPage() {
                   type="text"
                   value={importCity}
                   onChange={(e) => setImportCity(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2"
+                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2.5 text-xs"
                 />
               </div>
               <div>
@@ -1387,7 +1391,7 @@ export default function AdminGrowthPage() {
                   type="text"
                   value={importCategory}
                   onChange={(e) => setImportCategory(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2"
+                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2.5 text-xs"
                 />
               </div>
               <div>
@@ -1396,7 +1400,7 @@ export default function AdminGrowthPage() {
                   type="number"
                   value={importMaxReviews}
                   onChange={(e) => setImportMaxReviews(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2"
+                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2.5 text-xs"
                   placeholder="e.g. 40"
                 />
               </div>
@@ -1407,7 +1411,7 @@ export default function AdminGrowthPage() {
                 Paste CSV or JSON text here:
               </label>
               <textarea
-                rows={8}
+                rows={6}
                 value={importCsvText}
                 onChange={(e) => setImportCsvText(e.target.value)}
                 placeholder="name,phone,rating,reviews,address,url&#10;Sri Balaji Clinic,9876543210,4.6,18,Kadapa,https://maps.google.com/..."
@@ -1421,17 +1425,17 @@ export default function AdminGrowthPage() {
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-3 pt-2">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-2">
               <button
                 onClick={() => setShowImportModal(false)}
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white"
+                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 sm:bg-transparent"
               >
                 Cancel
               </button>
               <button
                 onClick={handleImportLeads}
                 disabled={importingLoading || !importCsvText.trim()}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-50 active:scale-95"
               >
                 {importingLoading ? (
                   <>

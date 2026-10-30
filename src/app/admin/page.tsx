@@ -320,7 +320,7 @@ export default async function AdminOverviewPage() {
       {/* Main Bottom Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Recent Transactions Table */}
-        <div className="lg:col-span-7 bg-slate-800 rounded-3xl border border-slate-700 p-6 shadow-sm">
+        <div className="lg:col-span-7 bg-slate-800 rounded-3xl border border-slate-700 p-4 sm:p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-sm font-bold text-white flex items-center gap-2">
@@ -434,7 +434,7 @@ export default async function AdminOverviewPage() {
         </div>
 
         {/* Recently Onboarded Stores */}
-        <div className="lg:col-span-5 bg-slate-800 rounded-3xl border border-slate-700 p-6 shadow-sm">
+        <div className="lg:col-span-5 bg-slate-800 rounded-3xl border border-slate-700 p-4 sm:p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-sm font-bold text-white flex items-center gap-2">
               <Store className="w-4 h-4 text-amber-400" />
