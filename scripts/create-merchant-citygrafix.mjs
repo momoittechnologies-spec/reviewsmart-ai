@@ -10,8 +10,8 @@ const prisma = new PrismaClient();
 
 // ── Config ──────────────────────────────────────────────────────────────────
 const MERCHANT_NAME   = "City Grafix";
-const MERCHANT_PHONE  = "7601043674";
-const SECONDARY_PHONE = "7287867584";
+const MERCHANT_PHONE  = "7287867584";
+const SECONDARY_PHONE = "7601043674";
 const RAW_PIN         = "7601";         // 4-digit PIN for merchant login
 const AGENT_CODE      = "MKT-04";        // Smiling Star
 const NEGOTIATED_PRICE = 2999;
