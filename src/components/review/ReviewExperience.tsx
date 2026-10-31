@@ -245,7 +245,11 @@ export default function ReviewExperience({
       }
     }
 
-    if (placeId === "ChIJfx1E9GgPujkRcPNEzcyHcJI" || placeId === "ChIJd5iV_xdzszsRMOGZeUo3C8A") {
+    if (
+      placeId === "ChIJfx1E9GgPujkRcPNEzcyHcJI" ||
+      placeId === "ChIJd5iV_xdzszsRMOGZeUo3C8A" ||
+      placeId === "ChIJd5iV_xdzszsRkhqTVfZl_iY"
+    ) {
       return "";
     }
 
@@ -266,6 +270,11 @@ export default function ReviewExperience({
         ? business.googleReviewUrl
         : "https://share.google/K9uqux6IBsMG2AeeZ";
     }
+    if (business.slug === "evania-luxury-salon") {
+      return (business.googleReviewUrl && !business.googleReviewUrl.includes("ChIJd5iV_xdzszsRkhqTVfZl_iY"))
+        ? business.googleReviewUrl
+        : "https://share.google/kOhlZAitT8HfL51yo";
+    }
 
     // 1. Official g.page/r/.../review shortlink opens the write-review dialog directly
     if (rawUrl && rawUrl.includes("g.page/r/")) {
@@ -274,17 +283,21 @@ export default function ReviewExperience({
         : `${rawUrl.replace(/\/+$/, "")}/review`;
     }
 
-    // 2. If we have a verified Place ID, ALWAYS return the official direct 5-star write-review popup link
+    // 2. Official share.google shortlinks (e.g. from merchant GMB share button) — never override with synthetic URLs
+    if (rawUrl && rawUrl.includes("share.google/")) {
+      return rawUrl;
+    }
+
+    // 3. If we have a verified Place ID, ALWAYS return the official direct 5-star write-review popup link
     // (Clean HTTPS — never wrap in intent://package=com.google.android.apps.maps which triggers Play Store!)
     if (placeId) {
       return `https://search.google.com/local/writereview?placeid=${encodeURIComponent(placeId)}`;
     }
 
-    // 3. If rawUrl explicitly points to writereview or share.google, use it directly
+    // 4. If rawUrl explicitly points to writereview, use it directly
     if (
       rawUrl &&
-      (rawUrl.includes("search.google.com/local/writereview") ||
-        rawUrl.includes("share.google/"))
+      rawUrl.includes("search.google.com/local/writereview")
     ) {
       return rawUrl;
     }
@@ -311,6 +324,9 @@ export default function ReviewExperience({
   const getMapsAppUrl = () => {
     if (business.slug === "momo-it-technologies") {
       return "https://share.google/K9uqux6IBsMG2AeeZ";
+    }
+    if (business.slug === "evania-luxury-salon") {
+      return business.googleMapsUrl || "https://share.google/kOhlZAitT8HfL51yo";
     }
     const placeId = getResolvedPlaceId();
     if (placeId) {

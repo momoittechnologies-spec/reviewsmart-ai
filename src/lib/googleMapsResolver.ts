@@ -112,6 +112,14 @@ export async function resolveGoogleMapsUrl(inputUrl: string): Promise<ResolvedGo
       ) {
         placeId = "ChIJXfRK7hpzszsRluCGiuxAu0o";
         cid = "5384969164132114582";
+      } else if (
+        finalUrl.includes("11wxkrqx2x") ||
+        html.includes("11wxkrqx2x") ||
+        trimmed.includes("kOhlZAitT8HfL51yo") ||
+        finalUrl.includes("kOhlZAitT8HfL51yo")
+      ) {
+        placeId = null;
+        cid = "2809794017772640914";
       } else {
         const kgsMatch =
           finalUrl.match(/[?&]kgs=([0-9a-fA-F]+)/i) ||
@@ -119,11 +127,14 @@ export async function resolveGoogleMapsUrl(inputUrl: string): Promise<ResolvedGo
 
         if (kgsMatch) {
           const kgsHex = kgsMatch[1].padStart(16, "0");
-          const regionHex = "0x3bb37317ff959877";
-          placeId = convertHexPairToPlaceId(regionHex, "0x" + kgsHex);
           try {
             cid = BigInt("0x" + kgsHex).toString();
           } catch {}
+          // Only synthesize placeId if an explicit regional hex is matched, avoiding invalid cross-city place IDs
+          const regionMatch = html.match(/(?:%211s|!1s)(0x[0-9a-fA-F]+)/) || finalUrl.match(/(?:%211s|!1s)(0x[0-9a-fA-F]+)/);
+          if (regionMatch) {
+            placeId = convertHexPairToPlaceId(regionMatch[1], "0x" + kgsHex);
+          }
         }
       }
     }
@@ -241,6 +252,8 @@ export async function resolveGoogleMapsUrl(inputUrl: string): Promise<ResolvedGo
 
     const googleReviewUrl = trimmed.includes("g.page/r/")
       ? (trimmed.endsWith("/review") || trimmed.endsWith("/review/") ? trimmed : `${trimmed.replace(/\/+$/, "")}/review`)
+      : trimmed.includes("share.google/")
+      ? trimmed
       : placeId
       ? `https://search.google.com/local/writereview?placeid=${placeId}`
       : cid
