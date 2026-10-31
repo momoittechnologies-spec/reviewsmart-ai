@@ -72,6 +72,7 @@ model Business {
   primaryColor       String            @default("#4f46e5")
   googlePlaceId      String?
   googleReviewUrl    String?
+  googleMapsUrl      String?
   googleAddress      String?
   phone              String?
   whatsapp           String?

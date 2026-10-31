@@ -56,6 +56,7 @@ interface BusinessData {
   menuUrl?: string | null;
   customUpiId?: string | null;
   visitingCardOwnerName?: string | null;
+  googleMapsUrl?: string | null;
 }
 
 export default function SmartHubExperience({
@@ -143,11 +144,13 @@ export default function SmartHubExperience({
   }
 
   // Google Maps directions / profile URL
-  const mapsUrl = business.googlePlaceId
-    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.name)}&query_place_id=${business.googlePlaceId}`
-    : business.googleAddress
-    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.googleAddress)}`
-    : null;
+  const mapsUrl =
+    business.googleMapsUrl ||
+    (business.googlePlaceId
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.name)}&query_place_id=${business.googlePlaceId}`
+      : business.googleAddress
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.googleAddress)}`
+      : null);
 
   const handleShareHub = async () => {
     if (typeof window === "undefined") return;

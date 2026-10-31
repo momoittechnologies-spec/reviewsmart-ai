@@ -71,6 +71,7 @@ interface BusinessData {
   reviewPromptTone: string;
   customUpiId?: string | null;
   visitingCardOwnerName?: string | null;
+  googleMapsUrl?: string | null;
 }
 
 interface ReviewOption {

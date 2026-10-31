@@ -48,6 +48,7 @@ interface BusinessItem {
   primaryColor?: string;
   googleReviewUrl?: string | null;
   googlePlaceId?: string | null;
+  googleMapsUrl?: string | null;
   googleAddress?: string | null;
   phone?: string | null;
   whatsapp?: string | null;
@@ -161,6 +162,7 @@ export default function AdminMerchantsPage() {
     tagline: "",
     googlePlaceId: "",
     googleReviewUrl: "",
+    googleMapsUrl: "",
     googleAddress: "",
     whatsapp: "",
     website: "",
@@ -334,6 +336,7 @@ export default function AdminMerchantsPage() {
       tagline: b.tagline || "",
       googlePlaceId: b.googlePlaceId || "",
       googleReviewUrl: b.googleReviewUrl || "",
+      googleMapsUrl: b.googleMapsUrl || "",
       googleAddress: b.googleAddress || "",
       whatsapp: b.whatsapp || m.phone || "",
       website: b.website || "",
@@ -397,6 +400,7 @@ export default function AdminMerchantsPage() {
                         category: editForm.category,
                         tagline: editForm.tagline,
                         googleReviewUrl: editForm.googleReviewUrl,
+                        googleMapsUrl: editForm.googleMapsUrl || null,
                         googleAddress: editForm.googleAddress,
                         whatsapp: editForm.whatsapp,
                         website: editForm.website,
@@ -1750,6 +1754,22 @@ export default function AdminMerchantsPage() {
                   <p className="text-[10px] text-amber-400/90 -mt-2">
                     ⭐ For the direct 5-star review modal, use Google Business &ldquo;Ask for reviews&rdquo; link, Google Maps Share link, or https://search.google.com/local/writereview?placeid=...
                   </p>
+
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                      Google Maps Location / Directions URL (Optional)
+                    </label>
+                    <input
+                      type="url"
+                      value={editForm.googleMapsUrl}
+                      onChange={(e) => setEditForm({ ...editForm, googleMapsUrl: e.target.value })}
+                      placeholder="https://www.google.com/maps?..."
+                      className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <p className="text-[10px] text-slate-400 mt-0.5">
+                      Used when customers tap &ldquo;Find us on Google Maps&rdquo; for live directions.
+                    </p>
+                  </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
