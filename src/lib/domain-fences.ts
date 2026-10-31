@@ -194,7 +194,11 @@ export const DOMAIN_FENCES: Record<IndustryType, DomainFenceConfig> = {
       "ambiance", "products", "look", "trim", "academy", "training", "course",
       "courses", "beautician", "makeover", "body spa", "skin care", "skincare",
       "ladies", "women", "facials", "haircuts", "fashion", "designing", "draping",
-      "saree draping", "hair spa", "relaxing", "glow",
+      "saree draping", "hair spa", "relaxing", "glow", "keratin", "botox",
+      "nanoplastia", "hydrafacial", "hydra", "nail", "nails", "nail art",
+      "extensions", "manicure", "pedicure", "tattoo", "tattoos", "piercing",
+      "balayage", "highlights", "hair colour", "hair color", "smoothening",
+      "d-tan", "aesthetics", "luxury", "unisex",
     ],
     forbiddenKeywords: [
       "gold", "bullion", "pledged", "photo frame", "flex banner", "software",
@@ -209,7 +213,7 @@ export const DOMAIN_FENCES: Record<IndustryType, DomainFenceConfig> = {
       /(ఫ్రేమ్|ఫ్రేములు|లెన్స్|కళ్ళద్దాలు|హాస్పిటల్|డాక్టర్|రెస్టారెంట్|బిర్యానీ|ప్లాట్|ఫ్లాట్|రియల్\s*ఎస్టేట్|మెకానిక్|గ్యారేజ్|కారు\s*రిపేర్)/i,
     ],
     positiveIdentifiers: [
-      /\b(hair|haircuts?|stylings?|stylists?|groomings?|facials?|spas?|salons?|makeups?|beards?|beaut(y|ies)|parlours?|makeover|bridals?|academy|training|courses?|beauticians?|skincare|body\s*spa|ladies|skin)\b/i,
+      /\b(hair|haircuts?|stylings?|stylists?|groomings?|facials?|spas?|salons?|makeups?|beards?|beaut(y|ies)|parlours?|makeover|bridals?|academy|training|courses?|beauticians?|skincare|body\s*spa|ladies|skin|keratin|botox|hydrafacial|nails?|tattoos?|piercing|aesthetics?)\b/i,
       /(హెయిర్‌కట్|స్టైలింగ్|సెలూన్|ఫేషియల్|మేకప్|స్పా|అకాడమీ|ట్రైనింగ్|బ్యూటీ|బ్రైడల్|పార్లర్)/i,
     ],
   },
