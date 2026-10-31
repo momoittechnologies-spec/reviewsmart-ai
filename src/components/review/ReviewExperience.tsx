@@ -234,6 +234,8 @@ export default function ReviewExperience({
       placeId = "ChIJz-6hOcbQVaYRELARxZjPbrE";
     } else if (business.slug === "momo-it-technologies" && !placeId) {
       placeId = "ChIJd5iV_xdzszsRlGLwd6hWTD4";
+    } else if (business.slug === "evania-luxury-salon" && !placeId) {
+      placeId = "ChIJY8WhWVmTyzsRUz83m4gzT_0";
     }
 
     if (!placeId && rawUrl) {
@@ -271,9 +273,7 @@ export default function ReviewExperience({
         : "https://share.google/K9uqux6IBsMG2AeeZ";
     }
     if (business.slug === "evania-luxury-salon") {
-      return (business.googleReviewUrl && !business.googleReviewUrl.includes("ChIJd5iV_xdzszsRkhqTVfZl_iY"))
-        ? business.googleReviewUrl
-        : "https://share.google/kOhlZAitT8HfL51yo";
+      return "https://search.google.com/local/writereview?placeid=ChIJY8WhWVmTyzsRUz83m4gzT_0";
     }
 
     // 1. Official g.page/r/.../review shortlink opens the write-review dialog directly

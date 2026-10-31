@@ -418,6 +418,14 @@ export default function HomePage() {
             "noopener,noreferrer"
           );
         }, 550);
+      } else if (slug === "evania-luxury-salon") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJY8WhWVmTyzsRUz83m4gzT_0",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
       } else if (slug) {
         setTimeout(() => {
           window.open("/r/" + slug, "_blank", "noopener,noreferrer");

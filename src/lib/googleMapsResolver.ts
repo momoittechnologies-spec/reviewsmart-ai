@@ -118,8 +118,8 @@ export async function resolveGoogleMapsUrl(inputUrl: string): Promise<ResolvedGo
         trimmed.includes("kOhlZAitT8HfL51yo") ||
         finalUrl.includes("kOhlZAitT8HfL51yo")
       ) {
-        placeId = null;
-        cid = "2809794017772640914";
+        placeId = "ChIJY8WhWVmTyzsRUz83m4gzT_0";
+        cid = "18252864476568567635";
       } else {
         const kgsMatch =
           finalUrl.match(/[?&]kgs=([0-9a-fA-F]+)/i) ||

@@ -16,8 +16,8 @@ const OFFLINE_PRICE    = 3000;
 const PRIMARY_COLOR    = "#D4AF37";      // Luxury Gold
 const SLUG             = "evania-luxury-salon";
 const ADDRESS          = "No. 1, PR Heights, Pillar no. C1732, Beside Big C Mobile Store, Megha Hills, Madhapur, Hyderabad, Telangana – 500081";
-const GOOGLE_PLACE_ID  = null;
-const GOOGLE_REVIEW_URL = "https://share.google/kOhlZAitT8HfL51yo";
+const GOOGLE_PLACE_ID  = "ChIJY8WhWVmTyzsRUz83m4gzT_0";
+const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJY8WhWVmTyzsRUz83m4gzT_0";
 const GOOGLE_MAPS_URL  = "https://www.google.com/maps?client=safari&hs=4PFW&sca_esv=2d151d6e027febbb&hl=en-in&cs=0&kgmid=/g/11wxkrqx2x&shem=epsd1,ltae,rimspwouoe&shndl=30&kgs=92050d4f8d8d1be9&um=1&ie=UTF-8&fb=1&gl=in&sa=X&geocode=KWPFoVlZk8s7MVM_N5uIM0_9&daddr=H+No:+1,+PR+heights,+Pillar+no:+C1732,+98/90/25/k,+beside+Big+C+Mobile+store,+Megha+Hills,+Madhapur,+Hyderabad,+Telangana+500081";
 const TAG_CHIPS        = "Hair Styling,Keratin & Botox,HydraFacial,Bridal Makeup,Gel Nails & Extensions,Men's Grooming,Hair Colour & Balayage,Tattoos & Piercing,Luxury Ambiance,Expert Stylists";
 const KEYWORDS         = "evania luxury unisex salon aesthetics madhapur hyderabad hair styling keratin treatment hydrafacial bridal makeup nail art extensions balayage haircut pr heights megha hills c1732";
