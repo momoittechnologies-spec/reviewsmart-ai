@@ -20,14 +20,16 @@ const ADDRESS           = "Industrial Estate, RIMS Rd, Aravind Nagar, Mamillapal
 const GOOGLE_PLACE_ID   = "ChIJ74oHbuBtszsR-4VnwfhA4nM";
 const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJ74oHbuBtszsR-4VnwfhA4nM";
 const GOOGLE_MAPS_URL   = "https://www.google.com/maps?cid=8350308096239175163";
+const INSTAGRAM_URL     = "https://www.instagram.com/ashok_yadav_xerox_distance_edu/";
+const FACEBOOK_URL      = "https://www.facebook.com/AshokyadaXerox";
 const TAG_CHIPS         = "Silent Study Hall,Chilled AC Ambience,High-Speed Wi-Fi,Individual Desk Charging,Uninterrupted Power Backup,Clean RO Drinking Water,APPSC & DSC Preparation,SI & Police Exam Focus,Affordable Monthly Fee,Ashok Yadav Sir Support";
-const KEYWORDS          = "ashok yadav study hall kadapa reading room industrial estate rims rd aravind nagar mamillapalle competitive exam preparation appsc dsc si police constable ssc banking library study cabins ac reading hall";
+const KEYWORDS          = "ashok yadav study hall kadapa reading room industrial estate rims rd aravind nagar mamillapalle competitive exam preparation appsc dsc si police constable ssc banking library study cabins ac reading hall xerox distance education";
 const CATEGORY          = "Study Hall, Reading Room & Education Center";
 const TAGLINE           = "Kadapa's Premier AC Study Hall & Silent Reading Room | 5 AM - 11 PM Daily";
 const LOGO_URL          = "/logos/ashok-yadav-logo.png";
 
 async function main() {
-  console.log("\n🚀 Onboarding Merchant: Ashok Yadav study Hall (Industrial Estate, Kadapa, AP)\n");
+  console.log("\n🚀 Updating Merchant: Ashok Yadav study Hall (Industrial Estate, Kadapa, AP)\n");
 
   // 1. Hash PIN & password
   const hashedPin = await bcrypt.hash(RAW_PIN, 10);
@@ -93,6 +95,8 @@ async function main() {
     googleAddress: ADDRESS,
     phone: MERCHANT_PHONE,
     whatsapp: `91${MERCHANT_PHONE}`,
+    instagram: INSTAGRAM_URL,
+    facebook: FACEBOOK_URL,
     tagChips: TAG_CHIPS,
     keywords: KEYWORDS,
     minRatingForGoogle: 4,
@@ -154,7 +158,7 @@ async function main() {
   }
 
   console.log("\n════════════════════════════════════════════════════════════");
-  console.log("🎉 Ashok Yadav study Hall successfully onboarded into ReviewSmart AI!");
+  console.log("🎉 Ashok Yadav study Hall successfully updated with Social Links!");
   console.log("════════════════════════════════════════════════════════════");
   console.log(`📱 Merchant Phone (User ID):  ${MERCHANT_PHONE}`);
   console.log(`🔑 Merchant 4-digit PIN:     ${RAW_PIN}`);
@@ -162,9 +166,10 @@ async function main() {
   console.log(`📍 Google Place ID:          ${GOOGLE_PLACE_ID}`);
   console.log(`⭐ Google Review URL:        ${GOOGLE_REVIEW_URL}`);
   console.log(`🗺️ Google Maps Profile:      ${GOOGLE_MAPS_URL}`);
+  console.log(`📸 Instagram Handle:         ${INSTAGRAM_URL}`);
+  console.log(`📘 Facebook Page:            ${FACEBOOK_URL}`);
   console.log(`💰 Paid Status:              ₹${OFFLINE_PRICE} (APPROVED / 100% Active)`);
   console.log(`🎨 Logo URL:                 ${LOGO_URL}`);
-  console.log(`🏷️  Active Tag Chips:        ${TAG_CHIPS}`);
   console.log("════════════════════════════════════════════════════════════\n");
 }
 
