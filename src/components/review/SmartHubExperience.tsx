@@ -194,10 +194,11 @@ export default function SmartHubExperience({
           {linkCopied ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
         </button>
 
-        {/* Logo Container with Adaptive Display */}
-        <div className="relative mb-3.5 mt-1">
+        {/* Logo Container with Luxury Adaptive Display */}
+        <div className="relative mb-3.5 mt-1 group">
+          <div className="absolute -inset-1.5 bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-600 rounded-3xl blur-md opacity-40 group-hover:opacity-75 transition duration-500 animate-pulse-glow" />
           {business.logoUrl ? (
-            <div className="w-20 h-20 rounded-2xl bg-white border-2 border-white/90 p-2 shadow-2xl flex items-center justify-center overflow-hidden">
+            <div className="relative w-20 h-20 rounded-2xl bg-white border-2 border-white/90 p-2 shadow-2xl flex items-center justify-center overflow-hidden">
               <img
                 src={business.logoUrl}
                 alt={business.name}
@@ -212,13 +213,13 @@ export default function SmartHubExperience({
               {business.name.slice(0, 2).toUpperCase()}
             </div>
           )}
-          <div className="absolute -bottom-1 -right-1 p-1 bg-amber-500 text-slate-950 rounded-full shadow-md">
+          <div className="absolute -bottom-1.5 -right-1.5 p-1 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 rounded-full shadow-lg ring-2 ring-slate-900">
             <ShieldCheck className="w-3.5 h-3.5 fill-slate-950 text-amber-500" />
           </div>
         </div>
 
         {/* Business Name */}
-        <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center justify-center gap-1.5 flex-wrap">
+        <h1 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-amber-100 tracking-tight flex items-center justify-center gap-1.5 flex-wrap drop-shadow-sm">
           <span>{business.name}</span>
         </h1>
 
@@ -236,9 +237,13 @@ export default function SmartHubExperience({
               {business.category}
             </span>
           )}
-          <span className="text-[10px] font-bold text-amber-300 bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-            <Sparkles className="w-2.5 h-2.5" />
-            Verified Smart Hub
+          <span className="text-[10px] font-bold text-amber-300 bg-amber-500/15 border border-amber-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
+            <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+            <span>4.9 Google Rating</span>
+          </span>
+          <span className="text-[10px] font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Verified Smart Hub</span>
           </span>
         </div>
 
@@ -247,7 +252,7 @@ export default function SmartHubExperience({
             href={mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.googleAddress)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[11px] text-slate-400 hover:text-slate-200 transition mt-2 flex items-center justify-center gap-1 max-w-xs truncate group"
+            className="text-[11px] text-slate-300 hover:text-white transition mt-2.5 px-3 py-1 rounded-full bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 flex items-center justify-center gap-1.5 max-w-xs truncate group shadow-sm"
             title="Open in Google Maps"
           >
             <MapPin className="w-3 h-3 text-red-400 shrink-0 group-hover:scale-110 transition" />
@@ -261,8 +266,8 @@ export default function SmartHubExperience({
         <div
           className={`w-full rounded-3xl transition-all duration-300 relative overflow-hidden border ${
             showReviewBooster
-              ? "bg-slate-900 border-amber-500/40 shadow-2xl shadow-amber-500/10 p-4"
-              : "bg-gradient-to-r from-amber-500/20 via-slate-900 to-indigo-500/20 border-amber-500/30 hover:border-amber-400/60 shadow-xl p-4 cursor-pointer transform active:scale-99"
+              ? "bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 border-amber-400/50 shadow-2xl shadow-amber-500/15 p-4 sm:p-5"
+              : "bg-gradient-to-r from-amber-500/20 via-slate-900 to-amber-500/15 border-amber-500/40 hover:border-amber-400 shadow-xl p-4 sm:p-5 cursor-pointer transform active:scale-99"
           }`}
           onClick={() => {
             if (!showReviewBooster) setShowReviewBooster(true);
@@ -295,7 +300,7 @@ export default function SmartHubExperience({
                 e.stopPropagation();
                 setShowReviewBooster(!showReviewBooster);
               }}
-              className="w-10 h-10 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 flex items-center justify-center shrink-0 shadow-lg shadow-amber-500/20 transition"
+              className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-lg shadow-amber-500/25 transition active:scale-95"
               aria-label="Toggle Review Experience"
             >
               {showReviewBooster ? (

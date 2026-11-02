@@ -136,6 +136,19 @@ export default async function PublicReviewPage({
 
   return (
     <main className="min-h-screen w-full bg-slate-950 flex flex-col items-center justify-start sm:justify-center p-0 sm:py-8 sm:px-4 selection:bg-amber-500 selection:text-slate-950 relative overflow-x-hidden">
+      {/* Ambient Lighting Orbs for Deep Atmospheric Depth */}
+      <div
+        className="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-96 bg-gradient-to-b from-amber-500/15 via-amber-400/5 to-transparent blur-3xl pointer-events-none -z-0"
+        aria-hidden="true"
+      />
+      <div
+        className="fixed top-1/4 -right-20 w-80 h-80 rounded-full bg-indigo-600/10 blur-3xl pointer-events-none -z-0"
+        aria-hidden="true"
+      />
+      <div
+        className="fixed bottom-12 -left-20 w-80 h-80 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none -z-0"
+        aria-hidden="true"
+      />
       {/* 24-Hour Live Evaluation Banner (discreet top pill) */}
       {isDemoActive && business.demoExpiresAt && (
         <div className="w-full max-w-sm px-4 pt-3 pb-1 sm:pt-0 no-print">

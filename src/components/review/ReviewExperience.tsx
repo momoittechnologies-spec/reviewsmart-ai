@@ -909,12 +909,13 @@ export default function ReviewExperience({
         )}
 
         {/* ─── STAR RATING SECTION ──────────────────────────────────────────── */}
-        <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-4 sm:p-6 border border-slate-800 shadow-xl text-center space-y-3">
-          <h2 className="text-base sm:text-lg font-black text-white tracking-tight">
+        <div className="bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 backdrop-blur-2xl rounded-3xl p-5 sm:p-7 border border-amber-400/30 shadow-2xl text-center space-y-3 relative overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-12 bg-amber-500/10 blur-xl pointer-events-none" />
+          <h2 className="text-lg sm:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-amber-100 tracking-tight">
             How was your visit today?
           </h2>
-          <p className="text-xs text-slate-400">
-            Tap the stars to rate your experience
+          <p className="text-xs text-slate-300 font-medium">
+            Tap the stars to generate your review in 1 tap ⚡
           </p>
 
           <div className="flex items-center justify-center gap-1 xs:gap-1.5 sm:gap-3 py-1">
@@ -929,10 +930,10 @@ export default function ReviewExperience({
                 aria-label={`Rate ${star} stars`}
               >
                 <Star
-                  className={`w-8 h-8 xs:w-9 xs:h-9 sm:w-11 sm:h-11 transition-all ${
+                  className={`w-9 h-9 xs:w-10 xs:h-10 sm:w-12 sm:h-12 transition-all ${
                     (hoverRating || rating) >= star
-                      ? "text-amber-400 fill-amber-400 drop-shadow-[0_0_14px_rgba(251,191,36,0.7)] scale-105"
-                      : "text-slate-700 hover:text-slate-500"
+                      ? "text-amber-400 fill-amber-400 drop-shadow-[0_0_20px_rgba(251,191,36,0.9)] scale-110"
+                      : "text-slate-700/80 hover:text-amber-300/50"
                   }`}
                 />
               </button>
@@ -942,9 +943,10 @@ export default function ReviewExperience({
           {rating > 0 && (
             <div className="pt-1 text-xs font-bold animate-fadeIn">
               {rating === 5 && (
-                <span className="text-amber-300 bg-amber-500/15 px-3 py-1 rounded-full border border-amber-500/30">
-                  🌟 Exceptional! Tap below to post on Google in 1 tap
-                </span>
+                <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/25 via-amber-400/20 to-amber-500/25 border border-amber-400/50 text-amber-200 text-xs font-black shadow-lg shadow-amber-500/10 animate-fadeIn">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                  <span>🌟 Outstanding Experience! AI Review Ready Below ↓</span>
+                </div>
               )}
               {rating === 4 && (
                 <span className="text-amber-300 bg-amber-500/15 px-3 py-1 rounded-full border border-amber-500/30">
@@ -1083,7 +1085,7 @@ export default function ReviewExperience({
         {isPositive && (
           <div
             ref={reviewSectionRef}
-            className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-4 sm:p-6 border border-amber-400/30 shadow-2xl transition-all duration-300 space-y-4 animate-fadeIn"
+            className="bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 backdrop-blur-2xl rounded-3xl p-4 sm:p-6 border border-amber-400/40 shadow-2xl transition-all duration-300 space-y-4 animate-fadeIn"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -1104,7 +1106,7 @@ export default function ReviewExperience({
                 type="button"
                 onClick={() => triggerAiGeneration(selectedTags, customNote, languageMode)}
                 disabled={isGenerating}
-                className="text-[11px] font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 transition disabled:opacity-50"
+                className="px-3 py-1.5 rounded-xl bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 text-[11px] font-bold text-amber-300 hover:text-amber-200 flex items-center gap-1.5 transition active:scale-95 disabled:opacity-50 shadow-sm"
               >
                 {isGenerating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
                 <span>Regenerate with AI</span>
@@ -1112,7 +1114,7 @@ export default function ReviewExperience({
             </div>
 
             {/* Language & Cadence Selector */}
-            <div className="flex items-center gap-1 p-1 bg-slate-950/80 rounded-2xl border border-slate-800 overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-1.5 p-1 bg-slate-950/90 rounded-2xl border border-slate-800/90 overflow-x-auto no-scrollbar shadow-inner">
               <button
                 type="button"
                 onClick={() => handleLanguageChange("AUTO")}
@@ -1207,8 +1209,8 @@ export default function ReviewExperience({
                       onClick={() => toggleTag(tag)}
                       className={`text-xs px-3 py-1.5 rounded-full transition-all font-semibold flex items-center gap-1 ${
                         active
-                          ? "bg-amber-400 text-slate-950 shadow-md scale-105"
-                          : "bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700"
+                          ? "bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 shadow-md shadow-amber-500/25 scale-105 border border-amber-300 font-bold"
+                          : "bg-slate-800/90 text-slate-300 hover:bg-slate-700/90 hover:text-white border border-slate-700/80 hover:border-slate-600"
                       }`}
                     >
                       <span>{active ? "✓" : "+"}</span>
@@ -1257,8 +1259,8 @@ export default function ReviewExperience({
                         onClick={() => handleSelectOption(opt)}
                         className={`p-1.5 sm:p-2.5 rounded-xl border text-center transition-all ${
                           isSelected
-                            ? "border-amber-400 bg-amber-400/15 text-white font-bold shadow"
-                            : "border-slate-800 bg-slate-800/50 text-slate-400 hover:text-slate-200"
+                            ? "border-amber-400 bg-gradient-to-br from-amber-400/25 via-amber-500/15 to-slate-900 text-white font-black shadow-lg shadow-amber-500/20 ring-1 ring-amber-400/60"
+                            : "border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700 hover:text-slate-200"
                         }`}
                       >
                         <span className="text-[9.5px] xs:text-[10px] sm:text-xs block truncate font-bold">{opt.headline || opt.tone}</span>
@@ -1317,7 +1319,7 @@ export default function ReviewExperience({
               <button
                 type="button"
                 onClick={() => handleOpenCopyModal(editableDraftText)}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-xl shadow-amber-500/25 transition transform active:scale-98 cursor-pointer shimmer-sweep btn-press border border-amber-300/40"
+                className="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-xl shadow-amber-500/30 transition-all transform active:scale-97 cursor-pointer shimmer-sweep btn-press border border-amber-200/60"
               >
                 <Copy className="w-4 h-4" />
                 <span>Copy Review &amp; Post on Google</span>
