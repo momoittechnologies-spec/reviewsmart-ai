@@ -20,7 +20,6 @@ import {
   detectScriptLanguage,
   hasNonLatinScript,
   translateSpokenRegionalToEnglish,
-  getIndustryPhotoObservation,
 } from "./vision-voice-translator";
 
 interface GenerateReviewParams {
@@ -159,15 +158,6 @@ Translate and expand their exact spoken thoughts into 3 ready-to-post 5-star rev
       }
     }
 
-    const photoVisionInstruction = imageBase64
-      ? `
-CRITICAL PHOTO VISION ANALYSIS INSTRUCTION:
-The customer has attached a real photo taken during their visit/service at "${businessName}" (${industry.label}).
-1. Inspect the attached image carefully and identify specific, genuine visual details relevant to ${industry.label} (for example: clean appliance servicing/jet wash, jewellery finish/purity testing, food presentation, sharp print/design quality, clean salon/tattoo work, neat vehicle interior, or welcoming store ambiance).
-2. Naturally weave 1-2 specific observations from the photo into each of the 3 review variations so the review reads like an authentic customer describing the exact photo they are posting on Google Maps!
-`
-      : "";
-
     const goldBuyerInstruction = industry.type === "GOLD_BUYERS" ? `
 CRITICAL POSITIONING (GOLD BUYING & PLEDGED GOLD SERVICE):
 This business is a gold-buying and pledged-gold assistance service (similar to Attica Gold Company). It is NOT a goldsmith or jewellery manufacturer, and does NOT sell jewellery to retail customers.
@@ -214,7 +204,6 @@ ${customNote ? `Specific customer comment/voice note: "${customNote}"` : ""}
 Desired tone: ${tone}
 
 ${languageInstruction}
-${photoVisionInstruction}
 ${goldBuyerInstruction}
 ${toursTravelsInstruction}
 ${tattooStudioInstruction}
@@ -254,17 +243,7 @@ Output strictly a JSON array without markdown formatting:
       try {
         const client = new GoogleGenAI({ apiKey });
 
-        const contents = imageBase64
-          ? [
-              {
-                inlineData: {
-                  mimeType: imageMimeType || "image/jpeg",
-                  data: imageBase64,
-                },
-              },
-              { text: prompt },
-            ]
-          : prompt;
+        const contents = prompt;
 
         const response = await client.models.generateContent({
           model,
@@ -382,20 +361,6 @@ Output strictly a JSON array without markdown formatting:
             : "🇮🇳 తెలుగు (Native)",
         languageMix: detectedDialect,
       };
-    }
-  }
-
-  // If a photo was snapped, weave industry-specific visual observation into the synthesized reviews
-  if (imageBase64) {
-    for (let i = 0; i < synthesized.length; i++) {
-      const langMix = (synthesized[i].languageMix || "ENGLISH") as LanguageMode;
-      const obs = getIndustryPhotoObservation(industry.type, langMix);
-      if (!synthesized[i].text.includes(obs)) {
-        synthesized[i].text = `${synthesized[i].text} ${obs}`;
-      }
-      if (i === 0 && !synthesized[i].headline.startsWith("📸")) {
-        synthesized[i].headline = `📸 ${synthesized[i].headline}`;
-      }
     }
   }
 

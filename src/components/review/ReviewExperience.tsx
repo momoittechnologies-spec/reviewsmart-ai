@@ -43,9 +43,7 @@ import {
   detectScriptLanguage,
   hasNonLatinScript,
   translateSpokenRegionalToEnglish,
-  getIndustryPhotoObservation,
 } from "@/lib/vision-voice-translator";
-import PhotoVisionInput from "./PhotoVisionInput";
 import ScratchRewardCard from "./ScratchRewardCard";
 import WhatsAppInviteGenerator from "./WhatsAppInviteGenerator";
 
@@ -119,11 +117,6 @@ export default function ReviewExperience({
   const [editableDraftText, setEditableDraftText] = useState<string>("");
   const [isEditingDraft, setIsEditingDraft] = useState(false);
   const [copied, setCopied] = useState(false);
-
-  // AI Photo-to-Review Vision Engine state
-  const [snappedPhotoBase64, setSnappedPhotoBase64] = useState<string | null>(null);
-  const [snappedPhotoMimeType, setSnappedPhotoMimeType] = useState<string>("image/jpeg");
-  const [snappedPhotoPreview, setSnappedPhotoPreview] = useState<string | null>(null);
 
   // Automation & Modal state
   const [hasOpenedGoogle, setHasOpenedGoogle] = useState(false);
@@ -364,8 +357,7 @@ export default function ReviewExperience({
   const buildInstantDrafts = (
     tags: string[] = selectedTags,
     note: string = customNote,
-    lang: LanguageMode = languageMode,
-    hasPhoto: boolean = Boolean(snappedPhotoBase64)
+    lang: LanguageMode = languageMode
   ): ReviewOption[] => {
     const staffMention = staff ? ` Special thanks to ${staff} for the attentive service!` : "";
     const detectedDialect = detectScriptLanguage(note || "");
@@ -427,21 +419,6 @@ export default function ReviewExperience({
         };
       }
     }
-
-    // If a photo was snapped, weave industry-specific visual observation at 0ms
-    if (hasPhoto) {
-      for (let i = 0; i < synthesized.length; i++) {
-        const langMix = (synthesized[i].languageMix || "ENGLISH") as LanguageMode;
-        const obs = getIndustryPhotoObservation(industry.type, langMix);
-        if (!synthesized[i].text.includes(obs)) {
-          synthesized[i].text = `${synthesized[i].text} ${obs}`;
-        }
-        if (i === 0 && !synthesized[i].headline.startsWith("📸")) {
-          synthesized[i].headline = `📸 ${synthesized[i].headline}`;
-        }
-      }
-    }
-
     return synthesized.map((s) => ({
       id: s.id,
       headline: s.headline,
@@ -497,49 +474,6 @@ export default function ReviewExperience({
       window.removeEventListener("focus", handleFocus);
     };
   }, [hasOpenedGoogle]);
-
-  const handlePhotoCaptured = (base64Data: string, mimeType: string, previewUrl: string) => {
-    setSnappedPhotoBase64(base64Data);
-    setSnappedPhotoMimeType(mimeType);
-    setSnappedPhotoPreview(previewUrl);
-
-    const updated = buildInstantDrafts(
-      selectedTags,
-      customNote,
-      languageMode,
-      true
-    );
-    setReviewOptions(updated);
-    setSelectedOptionId(1);
-    if (updated[0]) {
-      setEditableDraftText(updated[0].text);
-      copyToClipboard(updated[0].text);
-    }
-    triggerAiGeneration(
-      selectedTags,
-      customNote,
-      languageMode,
-      base64Data,
-      mimeType
-    );
-  };
-
-  const handlePhotoRemoved = () => {
-    setSnappedPhotoBase64(null);
-    setSnappedPhotoPreview(null);
-    const updated = buildInstantDrafts(
-      selectedTags,
-      customNote,
-      languageMode,
-      false
-    );
-    setReviewOptions(updated);
-    setSelectedOptionId(1);
-    if (updated[0]) {
-      setEditableDraftText(updated[0].text);
-      copyToClipboard(updated[0].text);
-    }
-  };
 
   const [isRedirecting, setIsRedirecting] = useState(false);
 
@@ -616,9 +550,7 @@ export default function ReviewExperience({
   const triggerAiGeneration = async (
     tags: string[] = selectedTags,
     note: string = customNote,
-    lang: LanguageMode = languageMode,
-    photoBase64: string | null = snappedPhotoBase64,
-    photoMime: string = snappedPhotoMimeType
+    lang: LanguageMode = languageMode
   ) => {
     setIsGenerating(true);
     const controller = new AbortController();
@@ -642,8 +574,6 @@ export default function ReviewExperience({
           rating,
           tone: business.reviewPromptTone || "friendly",
           languageMode: lang,
-          imageBase64: photoBase64 || undefined,
-          imageMimeType: photoBase64 ? photoMime : undefined,
         }),
       });
 
@@ -1289,14 +1219,6 @@ export default function ReviewExperience({
               </div>
             </div>
 
-            {/* Futuristic Feature 1: AI Photo-to-Review Vision Engine */}
-            <PhotoVisionInput
-              businessName={business.name}
-              isAnalyzing={isGenerating}
-              onPhotoCaptured={handlePhotoCaptured}
-              onPhotoRemoved={handlePhotoRemoved}
-            />
-
             {/* Custom Note or Specific Service Detail */}
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-slate-300 flex items-center justify-between">
@@ -1321,9 +1243,7 @@ export default function ReviewExperience({
                 <div className="p-8 text-center space-y-2 bg-slate-800/80 rounded-2xl border border-slate-700">
                   <Loader2 className="w-6 h-6 text-amber-400 animate-spin mx-auto" />
                   <p className="text-xs text-slate-300 font-medium">
-                    {snappedPhotoBase64
-                      ? "Gemini Vision is analyzing your photo & crafting reviews..."
-                      : "Gemini AI is crafting authentic review variations..."}
+                    "Gemini AI is crafting authentic review variations..."
                   </p>
                 </div>
               ) : (
@@ -1608,18 +1528,7 @@ export default function ReviewExperience({
                       </p>
                     </div>
                   </div>
-                  {snappedPhotoPreview && (
-                    <div className="w-full bg-emerald-500/15 border border-emerald-500/40 rounded-xl px-2.5 py-2 flex items-center gap-2.5">
-                      <img
-                        src={snappedPhotoPreview}
-                        alt="Photo to attach"
-                        className="w-9 h-9 rounded-lg object-cover border border-emerald-400/50 shrink-0"
-                      />
-                      <p className="text-[10px] text-emerald-300 font-bold leading-snug">
-                        📸 Tap <strong className="text-white">&ldquo;Add Photos&rdquo;</strong> in Google to attach your photo!
-                      </p>
-                    </div>
-                  )}
+                  
                 </div>
               </div>
             </div>

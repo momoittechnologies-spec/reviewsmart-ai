@@ -17,8 +17,6 @@ export async function POST(req: NextRequest) {
       languageMode = "AUTO",
       location: directLocation,
       tagChips: directTagChips,
-      imageBase64,
-      imageMimeType,
       spokenLanguage,
       isVoiceInput,
     } = body;
@@ -66,8 +64,6 @@ export async function POST(req: NextRequest) {
       customNote,
       category,
       languageMode,
-      imageBase64,
-      imageMimeType,
       spokenLanguage,
       isVoiceInput: Boolean(isVoiceInput),
     });
