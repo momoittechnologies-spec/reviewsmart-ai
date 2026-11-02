@@ -500,6 +500,38 @@ export const DOMAIN_FENCES: Record<IndustryType, DomainFenceConfig> = {
     ],
   },
 
+  STUDY_HALL_EDUCATION: {
+    industryType: "STUDY_HALL_EDUCATION",
+    allowedKeywords: [
+      "study", "reading", "hall", "room", "peaceful", "silence", "quiet", "ac",
+      "cooling", "air condition", "air conditioned", "chair", "chairs", "desk", "desks",
+      "cabin", "cabins", "cubicle", "cubicles", "wifi", "internet", "charging",
+      "sockets", "ro water", "drinking water", "power backup", "inverter", "generator",
+      "5 am", "11 pm", "hours", "timing", "timings", "aspirants", "students",
+      "appsc", "dsc", "si", "police", "constable", "ssc", "banking", "ibps", "neet",
+      "jee", "groups", "group 1", "group 2", "upsc", "competitive exams", "exam prep",
+      "preparation", "focus", "concentration", "environment", "atmosphere", "affordable",
+      "fee", "monthly fee", "ashok yadav", "ashok yadav sir", "kadapa", "rims road",
+      "industrial estate", "mamillapalle", "clean", "hygiene", "spacious",
+    ],
+    forbiddenKeywords: [
+      "gold", "silver", "bullion", "pawn", "jewellery", "doctor", "dental", "clinic",
+      "haircut", "facial", "salon", "software dev", "biryani", "food menu", "tasty meal",
+      "car repair", "bike repair", "garage", "mini lorry", "packers movers", "ac repair gas",
+    ],
+    forbiddenPhrases: [
+      /\b(gold\s*buyers?|pawn\s*brokers?|jewellery\s*shop)\b/i,
+      /\b(haircuts?|facials?|salons?|parlours?|keratin|botox)\b/i,
+      /\b(biryani|meals?|starters?|tandoori)\b/i,
+      /\b(ac\s*repair|gas\s*charging|jet\s*wash)\b/i,
+      /\b(packers?|movers?|house\s*shifting)\b/i,
+    ],
+    positiveIdentifiers: [
+      /\b(study(\s*hall|\s*space|\s*room)?|reading(\s*room|\s*hall)?|ac\s*(cooling|reading|hall)|aspirants?|wifi|peaceful|silence|desk|cabin|cubicle|appsc|competitive\s*exams?|ashok\s*yadav)\b/i,
+      /(స్టడీ\s*హాల్|రీడింగ్\s*రూమ్|చదువుకోవడానికి|ఏసీ|ప్రశాంతమైన|వైఫై|కాంపిటీటివ్|కడప|అశోక్\s*యాదవ్)/i,
+    ],
+  },
+
   GENERAL: {
     industryType: "GENERAL",
     allowedKeywords: [

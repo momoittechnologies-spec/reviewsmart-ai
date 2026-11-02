@@ -120,6 +120,14 @@ export async function resolveGoogleMapsUrl(inputUrl: string): Promise<ResolvedGo
       ) {
         placeId = "ChIJY8WhWVmTyzsRUz83m4gzT_0";
         cid = "18252864476568567635";
+      } else if (
+        finalUrl.includes("11sf1z3wsd") ||
+        html.includes("11sf1z3wsd") ||
+        trimmed.includes("I0PALzrqrkeqOd0BR") ||
+        finalUrl.includes("I0PALzrqrkeqOd0BR")
+      ) {
+        placeId = "ChIJ74oHbuBtszsR-4VnwfhA4nM";
+        cid = "8350308096239175163";
       } else {
         const kgsMatch =
           finalUrl.match(/[?&]kgs=([0-9a-fA-F]+)/i) ||

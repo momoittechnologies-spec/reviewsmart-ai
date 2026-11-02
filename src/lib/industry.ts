@@ -15,6 +15,7 @@ export type IndustryType =
   | "TATTOO_STUDIO"
   | "APPLIANCE_REPAIR"
   | "PACKERS_MOVERS"
+  | "STUDY_HALL_EDUCATION"
   | "GENERAL";
 
 export interface IndustryConfig {
@@ -594,6 +595,42 @@ export const INDUSTRY_CONFIGS: Record<IndustryType, IndustryConfig> = {
     },
   },
 
+  STUDY_HALL_EDUCATION: {
+    type: "STUDY_HALL_EDUCATION",
+    label: "Study Hall, Reading Room & Education",
+    tagline: "Air-Conditioned Study Hall & Reading Room with 5 AM to 11 PM Access",
+    tags: [
+      "AC Reading Hall",
+      "Peaceful Study Environment",
+      "5 AM to 11 PM Access",
+      "High-Speed WiFi",
+      "Comfortable Chairs & Desks",
+      "Individual Charging Sockets",
+      "RO Drinking Water",
+      "Power Backup",
+      "Affordable Fee",
+      "APPSC & Competitive Exam Prep",
+    ],
+    placeholder: "Mention your study experience (e.g. peaceful atmosphere, AC cooling, comfortable chairs, helpful management)...",
+    keywords: "study hall, reading room, ac library, peaceful study space, competitive exams, appsc, dsc, si, police constable, ssc, banking, neet, wifi, individual cabins, power backup, ro water, kadapa",
+    reviewDrafts: {
+      direct: {
+        headline: "Best Study Hall in Kadapa!",
+        text: (name, tags, note) =>
+          `Ashok Yadav Study Hall is hands down the best reading room in Kadapa! Very peaceful and distraction-free study environment with ${tags || "great AC cooling, comfortable chairs, and high-speed WiFi"}.${note ? ` Especially appreciated the ${note}.` : ""} The 5 AM to 11 PM timing is perfect for competitive exam aspirants. Highly recommend to everyone preparing for APPSC, SI, or Banking exams!`,
+      },
+      detailed: {
+        headline: "Top-Tier Facilities & Highly Focused Atmosphere",
+        text: (name, tags, note) =>
+          `Studying at ${name} has genuinely improved my daily preparation routine. The air conditioning is consistently cool, the individual cabins offer total privacy, and there are charging sockets at every desk. Loved the ${tags || "peaceful silence, power backup, and clean RO drinking water"}.${note ? ` Great support with ${note}.` : ""} Ashok Yadav sir has provided student-friendly facilities at very affordable monthly fees. 5 stars!`,
+      },
+      enthusiastic: {
+        headline: "Ideal Destination for Competitive Aspirants!",
+        text: (name, tags, note) =>
+          `100% recommended for serious aspirants! The atmosphere at ${name} is extremely quiet and motivating. Top-notch ${tags || "AC reading space, ergonomic seating, and uninterrupted power backup"}.${note ? ` Especially grateful for ${note}.` : ""} Definitely the top reading room in the RIMS Road / Industrial Estate area of Kadapa!`,
+      },
+    },
+  },
   GENERAL: {
     type: "GENERAL",
     label: "General Business & Services",
@@ -651,6 +688,20 @@ export function detectIndustry(
   // ═══════════════════════════════════════════════════════════════════════
   // STEP 1: CATEGORY-FIRST MATCHING (Highest Confidence)
   // ═══════════════════════════════════════════════════════════════════════
+  if (
+    hasWord(normCat, "study hall") ||
+    hasWord(normCat, "reading room") ||
+    hasWord(normCat, "education") ||
+    hasWord(normCat, "education center") ||
+    hasWord(normCat, "library") ||
+    hasWord(normCat, "reading") ||
+    normCat.includes("study hall") ||
+    normCat.includes("reading room") ||
+    normCat.includes("education center")
+  ) {
+    return INDUSTRY_CONFIGS.STUDY_HALL_EDUCATION;
+  }
+
   if (
     hasWord(normCat, "software") ||
     hasWord(normCat, "it solutions") ||
@@ -889,6 +940,18 @@ export function detectIndustry(
   // ═══════════════════════════════════════════════════════════════════════
   // STEP 2: BUSINESS NAME MATCHING (If category was generic/unspecified)
   // ═══════════════════════════════════════════════════════════════════════
+  if (
+    hasWord(normName, "study hall") ||
+    hasWord(normName, "study") ||
+    hasWord(normName, "reading room") ||
+    hasWord(normName, "library") ||
+    normName.includes("study hall") ||
+    normName.includes("reading room") ||
+    normName.includes("ashok yadav")
+  ) {
+    return INDUSTRY_CONFIGS.STUDY_HALL_EDUCATION;
+  }
+
   if (
     hasWord(normName, "technologies") ||
     hasWord(normName, "technology") ||

@@ -723,6 +723,58 @@ export const DOMAIN_LEXICONS: Record<IndustryType, DomainLexicon> = {
       "yesterday",
     ],
   },
+  STUDY_HALL_EDUCATION: {
+    items: [
+      "air-conditioned silent study space",
+      "individual cubicle study cabins",
+      "dedicated study desk with charging points",
+      "uninterrupted power backup and AC cooling",
+      "high-speed Wi-Fi internet connectivity",
+      "clean RO drinking water facility",
+      "peaceful exam preparation environment",
+      "extended study timings from 5:00 AM to 11:00 PM",
+      "affordable monthly study hall fee",
+    ],
+    qualities: [
+      "pin-drop silence and completely distraction-free atmosphere",
+      "chilled AC cooling and comfortable ergonomic seating",
+      "uninterrupted generator / inverter power backup during power cuts",
+      "individual mobile and laptop charging socket at every cubicle",
+      "seamless high-speed Wi-Fi for video lectures and mock tests",
+      "hygienic washrooms and clean RO drinking water",
+      "encouraging study culture for APPSC, DSC, SI, Banking, and SSC aspirants",
+      "highly polite, supportive, and motivating management by Ashok Yadav sir",
+    ],
+    adjectives: [
+      "silent and peaceful",
+      "comfortable and well-maintained",
+      "spacious and air-conditioned",
+      "disciplined and focused",
+      "super neat and clean",
+      "student-friendly and affordable",
+      "highly motivating",
+    ],
+    actions: [
+      "joined for daily preparation at",
+      "opted for study cabin membership at",
+      "chose this silent reading room at",
+      "prepared for my competitive exams at",
+      "spend 10+ focused study hours daily at",
+      "enrolled for daily study sessions at",
+    ],
+    occasions: [
+      "during my APPSC Group preparation",
+      "for my DSC teacher recruitment preparation",
+      "for my SI and Police Constable exam preparation",
+      "for my SSC CGL and Banking exam prep",
+      "during my college semester and competitive exams",
+      "for long daily self-study hours",
+      "recently",
+      "this month",
+    ],
+  },
+
+
 
   GENERAL: {
     items: [
@@ -1482,6 +1534,15 @@ function generateProblemSolution(
   let result = "";
 
   switch (ind) {
+    case "STUDY_HALL_EDUCATION":
+      return pickRandom([
+        "Pin-Drop Silence & Chilled AC Study Ambience",
+        "Best Reading Hall for APPSC, DSC & SI Aspirants",
+        "Individual Cabins, Fast Wi-Fi & Power Backup",
+        "Highly Supportive Ashok Yadav Sir & Peaceful Environment",
+        "Clean, Comfortable & Long 5 AM - 11 PM Hours",
+      ]);
+
     case "GOLD_BUYERS": {
       if (intent.isPledged) {
         problem = pickRandom([
@@ -1849,7 +1910,21 @@ function generateProblemSolution(
       }
       break;
 
-    default:
+          case "STUDY_HALL_EDUCATION":
+        return pickRandom([
+          "ప్రశాంతమైన స్టడీ హాల్ & చల్లని ఏసీ",
+          "కడపలో కాంపిటీటివ్ ఎగ్జామ్స్ కి బెస్ట్ రీడింగ్ రూమ్",
+          "పిన్ డ్రాప్ సైలెన్స్ & హై స్పీడ్ వైఫై",
+          "అశోక్ యాదవ్ సార్ సపోర్ట్ & బెస్ట్ ఫెసిలిటీస్",
+        ]);
+            case "STUDY_HALL_EDUCATION":
+        return pickRandom([
+          "Silent & Peaceful Study Environment in Kadapa",
+          "Best AC Study Hall for APPSC & DSC Prep",
+          "Individual Cubicles, WiFi & Power Backup",
+          "Affordable Fee & Dedicated Reading Space",
+        ]);
+      default:
       solution = pickRandom([
         `The team at ${bName} patiently understood the requirement and suggested the right options.`,
         `Staff walked me through the choices clearly and gave a realistic completion timeframe.`,

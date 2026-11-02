@@ -418,6 +418,14 @@ export default function HomePage() {
             "noopener,noreferrer"
           );
         }, 550);
+      } else if (slug === "ashok-yadav-study-hall") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJ74oHbuBtszsR-4VnwfhA4nM",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
       } else if (slug === "evania-luxury-salon") {
         setTimeout(() => {
           window.open(
