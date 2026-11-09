@@ -455,15 +455,28 @@ export default function ReviewExperience({
     }
   }, []);
 
-  // Gamified return-from-Google detection
+  // Gamified return-from-Google detection with cross-session persistence
   useEffect(() => {
+    const checkUnlocked = () => {
+      try {
+        const isUnlocked = sessionStorage.getItem("rs_scratch_unlocked_" + business.slug);
+        if (isUnlocked === "true") {
+          setHasOpenedGoogle(true);
+          return true;
+        }
+      } catch {}
+      return hasOpenedGoogle;
+    };
+
+    checkUnlocked();
+
     const handleVisibility = () => {
-      if (document.visibilityState === "visible" && hasOpenedGoogle) {
+      if (document.visibilityState === "visible" && checkUnlocked()) {
         setShowRewardCard(true);
       }
     };
     const handleFocus = () => {
-      if (hasOpenedGoogle) {
+      if (checkUnlocked()) {
         setShowRewardCard(true);
       }
     };
@@ -473,7 +486,7 @@ export default function ReviewExperience({
       document.removeEventListener("visibilitychange", handleVisibility);
       window.removeEventListener("focus", handleFocus);
     };
-  }, [hasOpenedGoogle]);
+  }, [hasOpenedGoogle, business.slug]);
 
   const [isRedirecting, setIsRedirecting] = useState(false);
 
@@ -641,6 +654,9 @@ export default function ReviewExperience({
       setSelectedOptionId(optId);
     }
     setHasOpenedGoogle(true);
+    try {
+      sessionStorage.setItem("rs_scratch_unlocked_" + business.slug, "true");
+    } catch {}
     setModalCopiedText(textToCopy);
     setShowCopyModal(true);
     setCopied(true);
@@ -682,6 +698,9 @@ export default function ReviewExperience({
   const handleCopyAndRedirect = async (targetUrl: string) => {
     if (countdownRef.current) clearTimeout(countdownRef.current);
     setHasOpenedGoogle(true);
+    try {
+      sessionStorage.setItem("rs_scratch_unlocked_" + business.slug, "true");
+    } catch {}
     setIsRedirecting(true);
     await copyToClipboard(modalCopiedText);
 
@@ -911,6 +930,31 @@ export default function ReviewExperience({
         {/* ─── STAR RATING SECTION ──────────────────────────────────────────── */}
         <div className="bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 backdrop-blur-2xl rounded-3xl p-5 sm:p-7 border border-amber-400/30 shadow-2xl text-center space-y-3 relative overflow-hidden">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-12 bg-amber-500/10 blur-xl pointer-events-none" />
+
+          {/* City Grafix Scratch Card Incentive Banner */}
+          {business.slug === "citygrafix" && (
+            <div className="p-2.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-600/20 border border-amber-400/60 shadow-md flex items-center justify-center gap-2 text-center animate-pulse-glow">
+              <Gift className="w-4 h-4 text-amber-400 animate-bounce shrink-0" />
+              <p className="text-[11px] sm:text-xs font-bold text-amber-200">
+                <span className="text-amber-400 font-black">🎁 Review &amp; Win:</span> Rate 5 stars to unlock a scratch card with <strong className="text-white underline decoration-amber-400">up to 5% instant discount</strong> on your flex &amp; printing order!
+              </p>
+            </div>
+          )}
+
+          {hasOpenedGoogle && (
+            <div className="pt-0.5">
+              <button
+                type="button"
+                onClick={() => setShowRewardCard(true)}
+                className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/30 transition active:scale-98"
+              >
+                <Gift className="w-4 h-4 animate-bounce" />
+                <span>View / Scratch Your Discount Voucher</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
+
           <h2 className="text-lg sm:text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-amber-100 tracking-tight">
             How was your visit today?
           </h2>
@@ -1328,6 +1372,29 @@ export default function ReviewExperience({
               <p className="text-[11px] text-center text-slate-400 font-medium mt-2">
                 ⚡ 1 Tap automatically copies your review &amp; opens Google review composer!
               </p>
+
+              {business.slug === "citygrafix" && (
+                <div className="mt-2.5 p-2 rounded-xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center gap-2 text-center">
+                  <Gift className="w-3.5 h-3.5 text-amber-400 animate-pulse shrink-0" />
+                  <span className="text-[11px] font-semibold text-amber-300">
+                    Your <strong className="text-white">Up to 5% Discount Scratch Card</strong> unlocks immediately upon posting your review!
+                  </span>
+                </div>
+              )}
+
+              {hasOpenedGoogle && (
+                <div className="mt-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowRewardCard(true)}
+                    className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-950/40 transition active:scale-98"
+                  >
+                    <Gift className="w-4 h-4 animate-bounce" />
+                    <span>View / Scratch Your Discount Voucher</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Direct Counter Payment Acceptance Strip */}
@@ -1542,6 +1609,9 @@ export default function ReviewExperience({
                 e.preventDefault();
                 if (countdownRef.current) clearTimeout(countdownRef.current);
                 setHasOpenedGoogle(true);
+                try {
+                  sessionStorage.setItem("rs_scratch_unlocked_" + business.slug, "true");
+                } catch {}
                 await copyToClipboard(modalCopiedText);
                 window.location.assign(googleUrl);
               }}
@@ -1615,9 +1685,29 @@ export default function ReviewExperience({
       {showRewardCard && (
         <ScratchRewardCard
           businessName={business.name}
+          businessSlug={business.slug}
           whatsappNumber={business.whatsapp || business.phone}
           onClose={() => setShowRewardCard(false)}
         />
+      )}
+
+      {/* ─── PERSISTENT FLOATING VOUCHER PILL (when unlocked & modal closed) ─── */}
+      {hasOpenedGoogle && !showRewardCard && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-sm w-[92%] px-2 animate-slideUp">
+          <button
+            type="button"
+            onClick={() => setShowRewardCard(true)}
+            className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-between shadow-2xl shadow-amber-500/40 border border-amber-200 transition active:scale-98 animate-pulse-glow"
+          >
+            <div className="flex items-center gap-2">
+              <Gift className="w-4 h-4 fill-slate-950 animate-bounce" />
+              <span>{business.slug === "citygrafix" ? "🎁 View Your Discount Voucher" : "🎁 View Your Reward Voucher"}</span>
+            </div>
+            <span className="text-[11px] font-bold bg-slate-950 text-amber-400 px-2.5 py-0.5 rounded-full">
+              Open Voucher &rarr;
+            </span>
+          </button>
+        </div>
       )}
 
       {/* ─── 1-CLICK WHATSAPP INVITE MODAL ─────────────────────────────────── */}

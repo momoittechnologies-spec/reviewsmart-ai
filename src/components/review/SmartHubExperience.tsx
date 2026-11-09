@@ -6,6 +6,7 @@ import QRCode from "qrcode";
 import {
   Star,
   Sparkles,
+  Gift,
   MessageCircle,
   ExternalLink,
   Phone,
@@ -260,6 +261,42 @@ export default function SmartHubExperience({
           </a>
         )}
       </div>
+
+      {/* City Grafix Scratch Card Promotion Banner */}
+      {business.slug === "citygrafix" && (
+        <div
+          onClick={() => setShowReviewBooster(true)}
+          className="w-full mt-3.5 p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-600/20 border-2 border-amber-400/60 shadow-lg shadow-amber-500/15 cursor-pointer flex items-center justify-between gap-3 text-left transition transform active:scale-98 animate-pulse-glow"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-500 text-slate-950 flex items-center justify-center shrink-0 shadow-md">
+              <Gift className="w-6 h-6 animate-bounce" />
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-black uppercase tracking-wider text-amber-400 bg-amber-400/15 px-2 py-0.5 rounded-md border border-amber-400/30">
+                  🎉 Lucky Scratch Offer
+                </span>
+                <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950 px-1.5 py-0.2 rounded border border-emerald-800/80">
+                  Live Today
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm font-black text-white mt-0.5 leading-snug">
+                Win Up to 5% Instant Discount!
+              </p>
+              <p className="text-[10.5px] text-slate-300 leading-tight">
+                Post a 5-star review &amp; scratch card to claim your discount.
+              </p>
+            </div>
+          </div>
+          <div className="shrink-0">
+            <span className="text-xs font-black text-amber-400 flex items-center gap-0.5">
+              <span>Scratch</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* ─── PRIMARY HERO ACTION: GOOGLE AI REVIEW BOOSTER ───────────────────── */}
       <div className="w-full mt-4">
