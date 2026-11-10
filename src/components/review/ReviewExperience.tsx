@@ -231,6 +231,8 @@ export default function ReviewExperience({
       placeId = "ChIJY8WhWVmTyzsRUz83m4gzT_0";
     } else if (business.slug === "ashok-yadav-study-hall" && !placeId) {
       placeId = "ChIJ74oHbuBtszsR-4VnwfhA4nM";
+    } else if (business.slug === "her-choice-kadapa" && !placeId) {
+      placeId = "ChIJmd0QeABtszsR2ygj6nHEsDg";
     }
 
     if (!placeId && rawUrl) {
@@ -272,6 +274,9 @@ export default function ReviewExperience({
     }
     if (business.slug === "ashok-yadav-study-hall") {
       return "https://search.google.com/local/writereview?placeid=ChIJ74oHbuBtszsR-4VnwfhA4nM";
+    }
+    if (business.slug === "her-choice-kadapa") {
+      return "https://search.google.com/local/writereview?placeid=ChIJmd0QeABtszsR2ygj6nHEsDg";
     }
 
     // 1. Official g.page/r/.../review shortlink opens the write-review dialog directly
@@ -328,6 +333,9 @@ export default function ReviewExperience({
     }
     if (business.slug === "ashok-yadav-study-hall") {
       return business.googleMapsUrl || "https://www.google.com/maps?cid=8350308096239175163";
+    }
+    if (business.slug === "her-choice-kadapa") {
+      return business.googleMapsUrl || "https://www.google.com/maps?cid=4084980855563561179";
     }
     const placeId = getResolvedPlaceId();
     if (placeId) {

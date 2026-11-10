@@ -434,6 +434,14 @@ export default function HomePage() {
             "noopener,noreferrer"
           );
         }, 550);
+      } else if (slug === "her-choice-kadapa") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJmd0QeABtszsR2ygj6nHEsDg",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
       } else if (slug) {
         setTimeout(() => {
           window.open("/r/" + slug, "_blank", "noopener,noreferrer");
