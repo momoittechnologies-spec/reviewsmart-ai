@@ -236,8 +236,6 @@ export default function ReviewExperience({
       placeId = "ChIJd5iV_xdzszsRlGLwd6hWTD4";
     } else if (business.slug === "evania-luxury-salon" && !placeId) {
       placeId = "ChIJY8WhWVmTyzsRUz83m4gzT_0";
-    } else if (business.slug === "ashok-yadav-study-hall" && !placeId) {
-      placeId = "ChIJ74oHbuBtszsR-4VnwfhA4nM";
     } else if (business.slug === "her-choice-kadapa" && !placeId) {
       placeId = "ChIJmd0QeABtszsR2ygj6nHEsDg";
     }
@@ -278,9 +276,6 @@ export default function ReviewExperience({
     }
     if (business.slug === "evania-luxury-salon") {
       return "https://search.google.com/local/writereview?placeid=ChIJY8WhWVmTyzsRUz83m4gzT_0";
-    }
-    if (business.slug === "ashok-yadav-study-hall") {
-      return "https://search.google.com/local/writereview?placeid=ChIJ74oHbuBtszsR-4VnwfhA4nM";
     }
     if (business.slug === "her-choice-kadapa") {
       return "https://search.google.com/local/writereview?placeid=ChIJmd0QeABtszsR2ygj6nHEsDg";
@@ -337,9 +332,6 @@ export default function ReviewExperience({
     }
     if (business.slug === "evania-luxury-salon") {
       return business.googleMapsUrl || "https://share.google/kOhlZAitT8HfL51yo";
-    }
-    if (business.slug === "ashok-yadav-study-hall") {
-      return business.googleMapsUrl || "https://www.google.com/maps?cid=8350308096239175163";
     }
     if (business.slug === "her-choice-kadapa") {
       return business.googleMapsUrl || "https://www.google.com/maps?cid=4084980855563561179";

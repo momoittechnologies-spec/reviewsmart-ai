@@ -881,7 +881,6 @@ export default function HeroCustomizer() {
             {[
               { name: "City Grafix", type: "Flex & Sign Boards", city: "Kadapa", rating: "5.0 ★" },
               { name: "Her Choice", type: "Jewelry & Boutique", city: "Kadapa", rating: "5.0 ★" },
-              { name: "Ashok Yadav Study Hall", type: "Education Center", city: "Kadapa", rating: "5.0 ★" },
               { name: "Evania Luxury Unisex Salon", type: "Salon & Aesthetics", city: "Madhapur", rating: "5.0 ★" },
               { name: "AS Refrigeration", type: "AC & Appliance Repair", city: "Kadapa", rating: "4.9 ★" },
               { name: "MANA Tours & Travels", type: "Tours & Cabs", city: "Kadapa", rating: "5.0 ★" },

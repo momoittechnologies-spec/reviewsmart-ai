@@ -612,22 +612,22 @@ export const INDUSTRY_CONFIGS: Record<IndustryType, IndustryConfig> = {
       "APPSC & Competitive Exam Prep",
     ],
     placeholder: "Mention your study experience (e.g. peaceful atmosphere, AC cooling, comfortable chairs, helpful management)...",
-    keywords: "study hall, reading room, ac library, peaceful study space, competitive exams, appsc, dsc, si, police constable, ssc, banking, neet, wifi, individual cabins, power backup, ro water, kadapa",
+    keywords: "study hall, reading room, ac library, peaceful study space, competitive exams, appsc, dsc, si, police constable, ssc, banking, neet, wifi, individual cabins, power backup, ro water",
     reviewDrafts: {
       direct: {
-        headline: "Best Study Hall in Kadapa!",
+        headline: "Best Study Hall & Reading Space!",
         text: (name, tags, note) =>
-          `Ashok Yadav Study Hall is hands down the best reading room in Kadapa! Very peaceful and distraction-free study environment with ${tags || "great AC cooling, comfortable chairs, and high-speed WiFi"}.${note ? ` Especially appreciated the ${note}.` : ""} The 5 AM to 11 PM timing is perfect for competitive exam aspirants. Highly recommend to everyone preparing for APPSC, SI, or Banking exams!`,
+          `${name} is hands down the best reading room! Very peaceful and distraction-free study environment with ${tags || "great AC cooling, comfortable chairs, and high-speed WiFi"}.${note ? ` Especially appreciated the ${note}.` : ""} The long timings are perfect for competitive exam aspirants. Highly recommend to everyone preparing for competitive or professional exams!`,
       },
       detailed: {
         headline: "Top-Tier Facilities & Highly Focused Atmosphere",
         text: (name, tags, note) =>
-          `Studying at ${name} has genuinely improved my daily preparation routine. The air conditioning is consistently cool, the individual cabins offer total privacy, and there are charging sockets at every desk. Loved the ${tags || "peaceful silence, power backup, and clean RO drinking water"}.${note ? ` Great support with ${note}.` : ""} Ashok Yadav sir has provided student-friendly facilities at very affordable monthly fees. 5 stars!`,
+          `Studying at ${name} has genuinely improved my daily preparation routine. The air conditioning is consistently cool, the individual cabins offer total privacy, and there are charging sockets at every desk. Loved the ${tags || "peaceful silence, power backup, and clean RO drinking water"}.${note ? ` Great support with ${note}.` : ""} The management has provided student-friendly facilities at very affordable monthly fees. 5 stars!`,
       },
       enthusiastic: {
         headline: "Ideal Destination for Competitive Aspirants!",
         text: (name, tags, note) =>
-          `100% recommended for serious aspirants! The atmosphere at ${name} is extremely quiet and motivating. Top-notch ${tags || "AC reading space, ergonomic seating, and uninterrupted power backup"}.${note ? ` Especially grateful for ${note}.` : ""} Definitely the top reading room in the RIMS Road / Industrial Estate area of Kadapa!`,
+          `100% recommended for serious aspirants! The atmosphere at ${name} is extremely quiet and motivating. Top-notch ${tags || "AC reading space, ergonomic seating, and uninterrupted power backup"}.${note ? ` Especially grateful for ${note}.` : ""} Definitely the top reading room in the area!`,
       },
     },
   },
@@ -946,8 +946,7 @@ export function detectIndustry(
     hasWord(normName, "reading room") ||
     hasWord(normName, "library") ||
     normName.includes("study hall") ||
-    normName.includes("reading room") ||
-    normName.includes("ashok yadav")
+    normName.includes("reading room")
   ) {
     return INDUSTRY_CONFIGS.STUDY_HALL_EDUCATION;
   }

@@ -188,8 +188,8 @@ This business is a premier AC, refrigerator, and washing machine repair & servic
 
         const studyHallInstruction = industry.type === "STUDY_HALL_EDUCATION" ? `
 CRITICAL POSITIONING (STUDY HALL, READING ROOM & COMPETITIVE EXAM ENVIRONMENT):
-This business is an air-conditioned study hall and reading room for students and competitive exam aspirants (APPSC, DSC, SI/Police Constable, SSC, Banking, NEET, JEE, Groups) in Kadapa (Ashok Yadav study Hall).
-- Customers/students review their daily study environment: 100% silent & peaceful atmosphere, comfortable seating with dedicated cubicles/cabins, chilled AC cooling, uninterrupted power backup (inverter/generator), high-speed Wi-Fi internet, individual mobile/laptop charging points at each desk, clean RO drinking water, clean washrooms, 5:00 AM to 11:00 PM long timings, highly supportive management (Ashok Yadav sir), and very affordable/reasonable monthly fees.
+This business is an air-conditioned study hall and reading room for students and competitive exam aspirants (APPSC, DSC, SI/Police Constable, SSC, Banking, NEET, JEE, Groups).
+- Customers/students review their daily study environment: 100% silent & peaceful atmosphere, comfortable seating with dedicated cubicles/cabins, chilled AC cooling, uninterrupted power backup (inverter/generator), high-speed Wi-Fi internet, individual mobile/laptop charging points at each desk, clean RO drinking water, clean washrooms, convenient long timings, highly supportive management, and very affordable/reasonable monthly fees.
 - DO NOT mention food/restaurant dining, buying gold, salon/haircuts, jewellery, cabs, car rental, flex printing, dental clinics, or software dev.
 ` : "";
 

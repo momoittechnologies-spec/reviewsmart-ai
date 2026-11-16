@@ -511,8 +511,7 @@ export const DOMAIN_FENCES: Record<IndustryType, DomainFenceConfig> = {
       "appsc", "dsc", "si", "police", "constable", "ssc", "banking", "ibps", "neet",
       "jee", "groups", "group 1", "group 2", "upsc", "competitive exams", "exam prep",
       "preparation", "focus", "concentration", "environment", "atmosphere", "affordable",
-      "fee", "monthly fee", "ashok yadav", "ashok yadav sir", "kadapa", "rims road",
-      "industrial estate", "mamillapalle", "clean", "hygiene", "spacious",
+      "fee", "monthly fee", "kadapa", "clean", "hygiene", "spacious",
     ],
     forbiddenKeywords: [
       "gold", "silver", "bullion", "pawn", "jewellery", "doctor", "dental", "clinic",
@@ -527,8 +526,8 @@ export const DOMAIN_FENCES: Record<IndustryType, DomainFenceConfig> = {
       /\b(packers?|movers?|house\s*shifting)\b/i,
     ],
     positiveIdentifiers: [
-      /\b(study(\s*hall|\s*space|\s*room)?|reading(\s*room|\s*hall)?|ac\s*(cooling|reading|hall)|aspirants?|wifi|peaceful|silence|desk|cabin|cubicle|appsc|competitive\s*exams?|ashok\s*yadav)\b/i,
-      /(స్టడీ\s*హాల్|రీడింగ్\s*రూమ్|చదువుకోవడానికి|ఏసీ|ప్రశాంతమైన|వైఫై|కాంపిటీటివ్|కడప|అశోక్\s*యాదవ్)/i,
+      /\b(study(\s*hall|\s*space|\s*room)?|reading(\s*room|\s*hall)?|ac\s*(cooling|reading|hall)|aspirants?|wifi|peaceful|silence|desk|cabin|cubicle|appsc|competitive\s*exams?)\b/i,
+      /(స్టడీ\s*హాల్|రీడింగ్\s*రూమ్|చదువుకోవడానికి|ఏసీ|ప్రశాంతమైన|వైఫై|కాంపిటీటివ్|కడప)/i,
     ],
   },
 

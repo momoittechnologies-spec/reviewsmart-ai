@@ -743,7 +743,7 @@ export const DOMAIN_LEXICONS: Record<IndustryType, DomainLexicon> = {
       "seamless high-speed Wi-Fi for video lectures and mock tests",
       "hygienic washrooms and clean RO drinking water",
       "encouraging study culture for APPSC, DSC, SI, Banking, and SSC aspirants",
-      "highly polite, supportive, and motivating management by Ashok Yadav sir",
+      "highly polite, supportive, and motivating management",
     ],
     adjectives: [
       "silent and peaceful",
@@ -1539,7 +1539,7 @@ function generateProblemSolution(
         "Pin-Drop Silence & Chilled AC Study Ambience",
         "Best Reading Hall for APPSC, DSC & SI Aspirants",
         "Individual Cabins, Fast Wi-Fi & Power Backup",
-        "Highly Supportive Ashok Yadav Sir & Peaceful Environment",
+        "Highly Supportive Management & Peaceful Environment",
         "Clean, Comfortable & Long 5 AM - 11 PM Hours",
       ]);
 
