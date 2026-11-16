@@ -76,10 +76,12 @@ export default function SmartHubExperience({
   const [showUpiModal, setShowUpiModal] = useState(false);
   const [upiQrDataUrl, setUpiQrDataUrl] = useState<string>("");
   const [upiCopied, setUpiCopied] = useState(false);
+  const [mobileCopied, setMobileCopied] = useState(false);
 
   // Clean UPI ID and deep link bundle with NPCI Merchant Category compliance
   const customUpi = (business.customUpiId || "").trim();
   const payeeOwnerName = (business.visitingCardOwnerName || business.name || "").trim();
+  const cleanMobile = (business.phone || business.whatsapp || "").replace(/\D/g, "").slice(-10);
 
   const upiBundle = useMemo(() => {
     if (!customUpi) return null;
@@ -625,67 +627,19 @@ export default function SmartHubExperience({
               )}
             </div>
 
-            {/* Scannable Dynamic QR Code */}
-            <div className="flex flex-col items-center justify-center p-4 bg-white rounded-2xl shadow-xl border-4 border-emerald-500/30">
-              {upiQrDataUrl ? (
-                <img
-                  src={upiQrDataUrl}
-                  alt={`UPI QR code for ${business.name}`}
-                  className="w-56 h-56 object-contain"
-                />
-              ) : (
-                <div className="w-56 h-56 flex items-center justify-center text-slate-500 text-xs font-medium">
-                  Generating UPI QR...
-                </div>
-              )}
-              <span className="text-[11px] font-mono font-bold text-slate-800 mt-2">
-                Scan with CUB mBank Plus or Any UPI App
-              </span>
-            </div>
-
-            {/* UPI ID with 1-Click Copy */}
-            <div className="w-full bg-slate-950/80 border border-slate-800 rounded-2xl p-3 flex items-center justify-between gap-2">
-              <div className="text-left truncate">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block font-bold">
-                  UPI VPA ID
+            {/* 1. Direct App Launch Intent Grid (Top Priority for Mobile) */}
+            <div className="space-y-2 pt-1 text-left">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
+                  ⚡ 1-Tap Instant App Pay
                 </span>
-                <span className="text-xs sm:text-sm font-mono font-bold text-emerald-400 select-all truncate block">
-                  {customUpi}
-                </span>
+                <span className="text-[10px] text-slate-400">No screenshot needed</span>
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  copyToClipboard(customUpi);
-                  setUpiCopied(true);
-                  setTimeout(() => setUpiCopied(false), 2000);
-                }}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white flex items-center gap-1.5 shrink-0 border border-slate-700 transition active:scale-95"
-              >
-                {upiCopied ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">Copied</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>Copy</span>
-                  </>
-                )}
-              </button>
-            </div>
-
-            {/* Direct App Launch Intent Grid */}
-            <div className="space-y-2 pt-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                ⚡ Instant 1-Tap App Checkout
-              </span>
               <div className="grid grid-cols-2 gap-2">
                 {/* PhonePe Direct */}
                 <a
                   href={phonepeUrl}
-                  className="py-3 px-2 rounded-xl bg-purple-900/80 hover:bg-purple-800 border border-purple-500/50 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition transform active:scale-95"
+                  className="py-3 px-2 rounded-xl bg-gradient-to-r from-purple-900/90 to-purple-800 hover:from-purple-800 hover:to-purple-700 border border-purple-500/60 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition transform active:scale-95 hover:border-purple-400"
                 >
                   <Smartphone className="w-3.5 h-3.5 text-purple-300" />
                   <span>PhonePe</span>
@@ -694,7 +648,7 @@ export default function SmartHubExperience({
                 {/* Google Pay Direct */}
                 <a
                   href={gpayUrl}
-                  className="py-3 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-blue-500/50 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition transform active:scale-95"
+                  className="py-3 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-blue-500/60 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition transform active:scale-95 hover:border-blue-400"
                 >
                   <CreditCard className="w-3.5 h-3.5 text-blue-400" />
                   <span>Google Pay</span>
@@ -703,7 +657,7 @@ export default function SmartHubExperience({
                 {/* Paytm Direct */}
                 <a
                   href={paytmUrl}
-                  className="py-3 px-2 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 text-cyan-200 font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition transform active:scale-95"
+                  className="py-3 px-2 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/60 text-cyan-200 font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition transform active:scale-95 hover:border-cyan-400"
                 >
                   <IndianRupee className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Paytm</span>
@@ -720,36 +674,119 @@ export default function SmartHubExperience({
               </div>
             </div>
 
-            {/* High-Value / PhonePe Limit Guidance */}
-            <div className="p-3 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-left space-y-1">
-              <div className="flex items-center gap-1.5 text-amber-300 font-bold text-xs">
-                <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
-                <span>Paying over ₹2,000 on PhonePe?</span>
+            {/* 2. Quick 1-Click Copy Options (Mobile & UPI ID) */}
+            <div className="space-y-2 pt-1 text-left">
+              {cleanMobile && (
+                <div className="w-full bg-slate-950/90 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-2">
+                  <div className="truncate">
+                    <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">
+                      Pay via Mobile Number (PhonePe / GPay)
+                    </span>
+                    <span className="text-xs sm:text-sm font-mono font-bold text-white select-all">
+                      {cleanMobile}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      copyToClipboard(cleanMobile);
+                      setMobileCopied(true);
+                      setTimeout(() => setMobileCopied(false), 2000);
+                    }}
+                    className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white flex items-center gap-1 shrink-0 border border-slate-700 transition active:scale-95"
+                  >
+                    {mobileCopied ? (
+                      <>
+                        <Check className="w-3 h-3 text-emerald-400" />
+                        <span className="text-emerald-400 text-[11px]">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3 h-3 text-slate-400" />
+                        <span className="text-[11px]">Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+
+              <div className="w-full bg-slate-950/90 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-2">
+                <div className="truncate">
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-bold">
+                    UPI VPA ID
+                  </span>
+                  <span className="text-xs sm:text-sm font-mono font-bold text-emerald-400 select-all truncate block">
+                    {customUpi}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    copyToClipboard(customUpi);
+                    setUpiCopied(true);
+                    setTimeout(() => setUpiCopied(false), 2000);
+                  }}
+                  className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white flex items-center gap-1 shrink-0 border border-slate-700 transition active:scale-95"
+                >
+                  {upiCopied ? (
+                    <>
+                      <Check className="w-3 h-3 text-emerald-400" />
+                      <span className="text-emerald-400 text-[11px]">Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3 h-3 text-slate-400" />
+                      <span className="text-[11px]">Copy</span>
+                    </>
+                  )}
+                </button>
               </div>
-              <p className="text-[10px] text-slate-300 leading-relaxed">
-                NPCI limits gallery screenshot uploads to ₹2,000. To pay amounts above ₹2,000:
-              </p>
-              <ul className="text-[10px] text-amber-200/90 list-disc list-inside space-y-0.5">
-                <li>Tap <strong>PhonePe</strong> button above directly, or</li>
-                <li>Copy UPI ID &amp; pay via PhonePe &rarr; <em>To UPI ID</em> (up to ₹1 Lakh limit).</li>
-              </ul>
             </div>
 
-            {/* Supported Apps Badges */}
-            <div className="pt-1 text-[11px] text-slate-400 space-y-1.5">
-              <p className="font-semibold text-slate-300">Accepted on all UPI Apps</p>
-              <div className="flex flex-wrap items-center justify-center gap-1.5 text-[10px]">
-                {["CUB mBank Plus", "PhonePe", "Google Pay", "Paytm", "BHIM", "CRED", "Amazon Pay"].map((app) => (
-                  <span
-                    key={app}
-                    className="px-2 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-slate-300 font-medium"
-                  >
-                    {app}
-                  </span>
-                ))}
+            {/* 3. PhonePe Gallery QR Guidance Banner */}
+            <div className="p-3 rounded-2xl bg-amber-950/40 border border-amber-500/40 text-left space-y-1.5">
+              <div className="flex items-center gap-1.5 text-amber-300 font-bold text-xs">
+                <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
+                <span>PhonePe Gallery QR Notice</span>
               </div>
-              <p className="text-[10px] text-emerald-400/80 pt-1 flex items-center justify-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-emerald-400" />
+              <p className="text-[11px] text-slate-200 leading-snug">
+                If PhonePe shows: <span className="italic text-amber-200/90 font-medium">&ldquo;You can pay up to ₹2,000 with QR codes via gallery...&rdquo;</span>
+              </p>
+              <div className="pt-0.5 space-y-1 text-[11px]">
+                <p className="text-emerald-300 font-bold flex items-center gap-1">
+                  👉 Simply tap <span className="underline font-black text-white px-1.5 py-0.5 rounded bg-emerald-900 border border-emerald-500/50">DISMISS</span> to complete payment!
+                </p>
+                <p className="text-slate-300 text-[10px]">
+                  For amounts over ₹2,000: Tap <strong>PhonePe</strong> button above or pay directly to Mobile: <strong className="text-white">{cleanMobile || customUpi}</strong>.
+                </p>
+              </div>
+            </div>
+
+            {/* 4. Scannable Dynamic QR Code (for other phones / counter) */}
+            <div className="flex flex-col items-center justify-center p-3.5 bg-white rounded-2xl shadow-xl border-4 border-emerald-500/30">
+              <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                Or Scan with another phone
+              </span>
+              {upiQrDataUrl ? (
+                <img
+                  src={upiQrDataUrl}
+                  alt={`UPI QR code for ${business.name}`}
+                  className="w-48 h-48 object-contain"
+                />
+              ) : (
+                <div className="w-48 h-48 flex items-center justify-center text-slate-500 text-xs font-medium">
+                  Generating UPI QR...
+                </div>
+              )}
+              <span className="text-[11px] font-mono font-bold text-slate-800 mt-1.5">
+                Scan with PhonePe, GPay, Paytm or CUB
+              </span>
+            </div>
+
+            {/* 5. Trust & Surcharge Badges */}
+            <div className="pt-1 text-[11px] text-slate-400 space-y-1">
+              <p className="text-[10px] text-emerald-400/90 flex items-center justify-center gap-1 font-semibold">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
                 Zero surcharge • 100% Direct instant credit to merchant
               </p>
             </div>

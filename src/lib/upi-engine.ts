@@ -1,6 +1,6 @@
 /**
  * UPI Protocol Engine with NPCI Merchant Compliance & Direct App Intent Links
- * Resolves NPCI Merchant Category Codes (MCC) to bypass ₹2,000 P2P/gallery-upload limits.
+ * Generates universally compliant UPI intent links and scannable QR payloads.
  */
 
 export interface UpiIntentOptions {
@@ -102,7 +102,9 @@ export function getMerchantCategoryCode(category?: string | null, customMcc?: st
 }
 
 /**
- * Builds a bundle of compliant UPI intent links and QR payload
+ * Builds a bundle of compliant UPI intent links and QR payload.
+ * Removes restrictive offline static QR flags (mode=01) so intent links and scanned
+ * payloads don't trigger the PhonePe gallery/offline limit warning.
  */
 export function buildUpiLinks(options: UpiIntentOptions): UpiLinkBundle {
   const pa = (options.upiId || "").trim();
@@ -112,9 +114,7 @@ export function buildUpiLinks(options: UpiIntentOptions): UpiLinkBundle {
   const queryParams = new URLSearchParams();
   queryParams.set("pa", pa);
   queryParams.set("pn", pn);
-  queryParams.set("mc", mcc);
-  queryParams.set("mode", "01"); // 01 = Live Camera QR Initiation (bypasses mode=02 gallery screenshot restriction)
-  queryParams.set("purpose", "00");
+  if (mcc) queryParams.set("mc", mcc);
   queryParams.set("cu", "INR");
 
   if (options.amount && options.amount > 0) {
