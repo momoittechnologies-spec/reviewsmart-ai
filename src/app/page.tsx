@@ -511,13 +511,13 @@ export default function HomePage() {
       <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 text-white text-xs py-2.5 px-4 text-center font-bold tracking-wide flex items-center justify-center gap-2 shadow-sm">
         <span className="w-2 h-2 rounded-full bg-emerald-300 animate-ping shrink-0" />
         <span>
-          PAN-INDIA LAUNCH OFFER: ₹2,999 One-Time Lifetime Pass &bull; 100% Free For Lifetime &bull; 🆓 Free Google Business Profile Setup Included!
+          PAN-INDIA LAUNCH: Tier 1 Starter ₹2,999 &bull; Smart Business Hub ₹3,999 &bull; 360° Growth ₹4,999 &bull; Zero Subscriptions &bull; 🆓 Free GMB Setup Included!
         </span>
         <a
           href="#pricing"
           className="underline underline-offset-2 ml-1 text-emerald-200 hover:text-white hidden sm:inline"
         >
-          Claim ₹2,999 Pass &rarr;
+          View Packages &rarr;
         </a>
       </div>
 
@@ -585,11 +585,11 @@ export default function HomePage() {
             </Link>
 
             <a
-              href="#customizer"
+              href="#pricing"
               className="px-3.5 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black transition shadow-lg shadow-emerald-600/25 active:scale-95 flex items-center gap-1.5 shrink-0"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
-              <span>Order Now &bull; ₹2,999</span>
+              <span>Packages &bull; From ₹2,999</span>
             </a>
 
             {/* Mobile / Tablet Hamburger Toggle */}
@@ -1552,119 +1552,268 @@ export default function HomePage() {
 
       <ReviewGapCalculator />
 
-      {/* ─── PRICING SECTION (FLAGSHIP ₹2,999 LIFETIME PASS) ──────────────── */}
-      <section id="pricing" className="py-24 px-4 sm:px-6 relative scroll-mt-16 bg-gradient-to-b from-white via-indigo-50/30 to-white border-t border-slate-200/80">
-        <div className="max-w-5xl mx-auto">
+      {/* ─── PRICING SECTION (3-TIER MODULAR SUITE) ──────────────── */}
+      <section id="pricing" className="py-24 px-4 sm:px-6 relative scroll-mt-16 bg-gradient-to-b from-white via-indigo-50/20 to-white border-t border-slate-200/80">
+        <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-black shadow-sm">
+          <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-800 text-xs font-black shadow-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-              <span>SPECIAL ONLINE PROMOTION &bull; PAN-INDIA META ADS EXCLUSIVE</span>
+              <span>TRANSPARENT VALUE-BASED PACKAGES &bull; ZERO MONTHLY SUBSCRIPTIONS</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900">
-              One Price. Zero Subscriptions.
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight">
+              Modular Packages for Every Merchant.
               <br />
-              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">
-                100% Free For Lifetime.
+              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 bg-clip-text text-transparent">
+                Pay Once. Own It For Lifetime.
               </span>
             </h2>
             <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
-              Say goodbye to greedy software subscriptions. Pay once today, and use ReviewSmart AI forever with all upcoming updates and free Google Business Profile setup.
+              Choose the exact solution package that matches your business model. Every package includes a premium acrylic standee, AI multilingual reviews, and zero monthly fees.
             </p>
           </div>
 
-          {/* Hero Lifetime Pricing Card */}
-          <div className="relative rounded-3xl bg-white border-2 border-emerald-500/80 p-6 sm:p-10 shadow-[0_20px_70px_rgba(16,185,129,0.12)] max-w-3xl mx-auto overflow-hidden">
-            {/* Top Banner Tag */}
-            <div className="absolute top-0 right-0 bg-gradient-to-l from-emerald-600 to-teal-600 text-white text-xs font-black uppercase tracking-wider py-1.5 px-6 rounded-bl-2xl shadow-md">
-              ★ Lifetime Free Pass
-            </div>
-
-            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 border-b border-slate-200 pb-6 mb-6">
+          {/* 3-Tier Pricing Grid: Uses Full Screen Width */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch mb-14">
+            {/* TIER 1: STARTER REVIEW BOOSTER */}
+            <div className="relative rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-7 shadow-lg flex flex-col justify-between hover:shadow-xl transition hover:border-slate-300">
               <div>
-                <span className="text-xs font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
-                  All-Inclusive Online License
+                <span className="text-[11px] font-black uppercase tracking-wider text-slate-700 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+                  Tier 1 &bull; Reputation Essential
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mt-3">
-                  Online Direct Lifetime Access
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-3">
+                  Starter Review Booster
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                  Complete Google Review Engine + 6-Language AI + Standee Studio + Free GMB
+                <p className="text-xs text-slate-600 mt-1">
+                  Ideal for clinics, study halls, small service centers &amp; single counters.
                 </p>
-              </div>
 
-              <div className="text-left sm:text-right">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl sm:text-5xl font-black text-slate-900">₹2,999</span>
-                  <span className="text-xs text-slate-400 font-semibold line-through">₹7,999</span>
+                <div className="my-5 pb-5 border-b border-slate-100">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl sm:text-4xl font-black text-slate-900">₹2,999</span>
+                    <span className="text-xs text-slate-400 font-semibold line-through">₹5,999</span>
+                  </div>
+                  <span className="text-xs font-bold text-emerald-600 block mt-0.5">
+                    100% One-Time &bull; Lifetime Free
+                  </span>
                 </div>
-                <span className="text-xs font-bold text-emerald-600 block mt-1">
-                  100% One-Time &bull; Lifetime Free
+
+                <div className="space-y-3 text-xs text-slate-700">
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Physical Acrylic Standee (A6)</strong> with custom QR &amp; NTAG213 NFC chip</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Gemini AI Review Engine</strong> in 6 Indian languages (1-tap copy &amp; post)</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Negative Review WhatsApp Shield</strong> (Filters 1-3★ to private form)</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Direct 1-Tap Google Maps Intent</strong> (Opens official review composer)</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Direct Call &amp; WhatsApp Actions</strong> + Live Google Maps navigation</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">12-Month Cloud Hosting</strong> &amp; operational warranty included</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6 mt-6 border-t border-slate-100">
+                <a
+                  href="#customizer"
+                  className="w-full py-3.5 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition active:scale-98 shadow"
+                >
+                  <span>Select Starter &bull; ₹2,999</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+
+            {/* TIER 2: SMART BUSINESS HUB (POPULAR / ANCHOR) */}
+            <div className="relative rounded-3xl bg-white border-2 border-emerald-500 p-6 sm:p-7 shadow-[0_20px_50px_rgba(16,185,129,0.18)] flex flex-col justify-between hover:shadow-2xl transition ring-4 ring-emerald-500/10 md:-translate-y-2">
+              <div className="absolute top-0 right-0 bg-gradient-to-l from-emerald-600 to-teal-600 text-white text-[10px] font-black uppercase tracking-wider py-1.5 px-4 rounded-bl-2xl shadow-sm">
+                ★ Most Popular
+              </div>
+
+              <div>
+                <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                  Tier 2 &bull; Complete Business Hub
                 </span>
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-3">
+                  Smart Business Hub
+                </h3>
+                <p className="text-xs text-slate-600 mt-1">
+                  Best for retail stores, salons, cafes, printing presses &amp; fashion boutiques.
+                </p>
+
+                <div className="my-5 pb-5 border-b border-slate-100">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl sm:text-4xl font-black text-slate-900">₹3,999</span>
+                    <span className="text-xs text-slate-400 font-semibold line-through">₹8,999</span>
+                  </div>
+                  <span className="text-xs font-bold text-emerald-600 block mt-0.5">
+                    100% One-Time &bull; Lifetime License
+                  </span>
+                </div>
+
+                <div className="space-y-3 text-xs text-slate-700">
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900 font-black">Everything in Tier 1 included</strong></span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Dual-Sided Standee Upgrade</strong> (Review QR on front, UPI Pay on back)</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Counter UPI Payment Integration</strong> (0% fee, PhonePe, GPay, Paytm 1-tap)</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Social Media Omni-Hub</strong> (Instagram Quick-Follow &amp; Facebook buttons)</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Digital Menu / Catalog Viewer</strong> (Direct QR link to service rate cards/menus)</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Store Visiting Card Profile</strong> (Owner name, designation &amp; branding)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6 mt-6 border-t border-slate-100">
+                <a
+                  href="#customizer"
+                  className="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition active:scale-98 shadow-lg shadow-emerald-600/30"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
+                  <span>Choose Smart Business Hub &bull; ₹3,999</span>
+                </a>
               </div>
             </div>
 
-            {/* Feature List */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-700 mb-8">
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-slate-900">Lifetime Free Access</strong> (Zero monthly or annual subscriptions)</span>
+            {/* TIER 3: 360° GROWTH & LOYALTY */}
+            <div className="relative rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-7 shadow-lg flex flex-col justify-between hover:shadow-xl transition hover:border-slate-300">
+              <div>
+                <span className="text-[11px] font-black uppercase tracking-wider text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">
+                  Tier 3 &bull; Growth &amp; Loyalty Suite
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-3">
+                  360° Growth &amp; Loyalty
+                </h3>
+                <p className="text-xs text-slate-600 mt-1">
+                  Designed for competitive retail, luxury dining &amp; high-volume customer retention.
+                </p>
+
+                <div className="my-5 pb-5 border-b border-slate-100">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl sm:text-4xl font-black text-slate-900">₹4,999</span>
+                    <span className="text-xs text-slate-400 font-semibold line-through">₹12,999</span>
+                  </div>
+                  <span className="text-xs font-bold text-indigo-600 block mt-0.5">
+                    100% One-Time &bull; Maximum Growth Suite
+                  </span>
+                </div>
+
+                <div className="space-y-3 text-xs text-slate-700">
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900 font-black">Everything in Tier 1 &amp; Tier 2 included</strong></span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Gamified Scratch &amp; Win Voucher Engine</strong> (Up to 5%–20% repeat discount coupons)</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Free Google Business Profile (GMB) Optimization</strong> &amp; verification assistance (Worth ₹2,500)</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Custom Industry SEO Keyword Tagging</strong> tailored to your local neighborhood</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">Multi-Staff Performance Tracking</strong> &amp; attribution</span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+                    <span><strong className="text-slate-900">VIP Priority Support</strong> with dedicated account manager</span>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-slate-900">🆓 Free GMB Setup &amp; Verification</strong> (If you don&apos;t have one yet)</span>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-slate-900">All Future Updates Free</strong> (All AI upgrades included at no extra cost)</span>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-slate-900">6 Indian Languages</strong> (Hindi, Telugu, Tamil, Kannada, Malayalam, English)</span>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-slate-900">Private WhatsApp Feedback Shield</strong> (100% bad review damage control)</span>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-slate-900">Standee Studio PDF Generator</strong> (300 DPI vector PDFs for 4x6, PVC &amp; A4)</span>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-slate-900">AI Review Reply Copilot</strong> (Instant polite review replies in 6 languages)</span>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong className="text-slate-900">100% Ad-Free Experience</strong> (Zero third-party ads or spam trackers)</span>
+
+              <div className="pt-6 mt-6 border-t border-slate-100">
+                <a
+                  href="#customizer"
+                  className="w-full py-3.5 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition active:scale-98 shadow-md"
+                >
+                  <span>Select 360° Growth &bull; ₹4,999</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
               </div>
             </div>
+          </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a
-                href="#customizer"
-                className="flex-1 py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-600/30 transition active:scale-98"
-              >
-                <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
-                <span>BUY NOW — ₹2,999 (LIFETIME PASS)</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
-
-              <a
-                href={whatsappDirectBuyUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="py-4 px-6 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm flex items-center justify-center gap-2 border border-slate-200 transition active:scale-98"
-              >
-                <MessageCircle className="w-4 h-4 text-emerald-600" />
-                <span>Activate via WhatsApp</span>
-              </a>
+          {/* Transparent Optional Add-On Modules Bar */}
+          <div className="p-5 sm:p-6 rounded-3xl bg-slate-900 text-white shadow-xl mb-14">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-4">
+              <div>
+                <span className="text-[10px] font-black uppercase tracking-wider text-amber-400 bg-amber-950/60 border border-amber-800/60 px-2.5 py-0.5 rounded-full">
+                  100% Modular Transparency
+                </span>
+                <h4 className="text-base sm:text-lg font-bold text-white mt-1.5">
+                  Need Individual Add-On Features? Configure Exactly What You Need:
+                </h4>
+              </div>
+              <span className="text-xs text-slate-400 font-medium">
+                No forced features &bull; Total flexibility
+              </span>
             </div>
 
-            <p className="text-[11px] text-slate-500 text-center mt-4">
-              🔒 Instant UPI Payment (GPay, PhonePe, Paytm, BHIM) &bull; Activated in 2 minutes &bull; Instant Invoice
-            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-left">
+              <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60">
+                <p className="text-[10px] text-slate-400 uppercase font-bold">Counter UPI Pay</p>
+                <p className="text-sm font-black text-emerald-400 mt-0.5">+₹499</p>
+                <p className="text-[9px] text-slate-400 mt-1">0% fee direct to bank</p>
+              </div>
+              <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60">
+                <p className="text-[10px] text-slate-400 uppercase font-bold">Dual-Sided Standee</p>
+                <p className="text-sm font-black text-emerald-400 mt-0.5">+₹899</p>
+                <p className="text-[9px] text-slate-400 mt-1">Review front, Pay back</p>
+              </div>
+              <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60">
+                <p className="text-[10px] text-slate-400 uppercase font-bold">Scratch Vouchers</p>
+                <p className="text-sm font-black text-amber-400 mt-0.5">+₹799</p>
+                <p className="text-[9px] text-slate-400 mt-1">Gamified repeat rewards</p>
+              </div>
+              <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60">
+                <p className="text-[10px] text-slate-400 uppercase font-bold">GMB Optimization</p>
+                <p className="text-sm font-black text-blue-400 mt-0.5">+₹1,499</p>
+                <p className="text-[9px] text-slate-400 mt-1">Google Maps ranking fix</p>
+              </div>
+              <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60">
+                <p className="text-[10px] text-slate-400 uppercase font-bold">Social Media Hub</p>
+                <p className="text-sm font-black text-pink-400 mt-0.5">+₹399</p>
+                <p className="text-[9px] text-slate-400 mt-1">Instagram &amp; Facebook</p>
+              </div>
+              <div className="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60">
+                <p className="text-[10px] text-slate-400 uppercase font-bold">Digital Menu / Catalog</p>
+                <p className="text-sm font-black text-orange-400 mt-0.5">+₹499</p>
+                <p className="text-[9px] text-slate-400 mt-1">Salon cards, food menus</p>
+              </div>
+            </div>
           </div>
 
           {/* Honest Comparison Table */}

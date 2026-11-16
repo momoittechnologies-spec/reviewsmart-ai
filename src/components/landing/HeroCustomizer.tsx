@@ -470,10 +470,13 @@ export default function HeroCustomizer() {
             <span>Telugu &bull; Hindi &bull; Tamil &bull; Kannada &bull; English</span>
           </div>
 
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-bold shadow-sm">
+          <a
+            href="#pricing"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200/80 text-amber-900 text-xs font-bold shadow-sm transition"
+          >
             <Zap className="w-3.5 h-3.5 text-amber-600" />
-            <span>₹2,999 One-Time Lifetime Pass</span>
-          </div>
+            <span>Modular Packages From ₹2,999 &bull; Lifetime</span>
+          </a>
         </div>
 
         {/* 2-Column Hero Grid: Value Pitch (Left) + 3D Standee Customizer (Right) */}
@@ -646,7 +649,7 @@ export default function HeroCustomizer() {
                       <Sparkles className="w-4 h-4 animate-spin" />
                     </span>
                     <span className="text-white text-base sm:text-lg font-black tracking-tight">
-                      BUY NOW &bull; ₹2,999
+                      BUY NOW &bull; From ₹2,999
                     </span>
                   </div>
 
@@ -817,6 +820,7 @@ export default function HeroCustomizer() {
             <p className="text-[11px] text-slate-500 mt-2 text-center font-medium">
               Crystal Acrylic A6 Counter Standee &bull; Built-in High-Frequency NTAG213 NFC chip &bull; No Battery Needed
             </p>
+
             {/* Quick Buy Standee CTA */}
             <button
               type="button"
@@ -826,6 +830,74 @@ export default function HeroCustomizer() {
               <Sparkles className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-12 transition-transform" />
               <span>Order This Custom Standee Now &rarr;</span>
             </button>
+
+            {/* 3 Hardware Benefit Badges to fill vertical space */}
+            <div className="mt-4 grid grid-cols-2 gap-2 w-full max-w-sm text-left">
+              <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-sm flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-slate-800 leading-tight">3mm Cast Acrylic</p>
+                  <p className="text-[9px] text-slate-500">Laser-cut &amp; scratch guard</p>
+                </div>
+              </div>
+              <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-sm flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                  <Zap className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-slate-800 leading-tight">NTAG213 Smart NFC</p>
+                  <p className="text-[9px] text-slate-500">Tap phone &amp; review in 10s</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Full-Width Merchant Social Proof & Trust Strip */}
+        <div className="mt-12 pt-8 border-t border-slate-200/90">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
+            <div>
+              <p className="text-xs font-black uppercase tracking-wider text-slate-400">
+                ⭐ Trusted by Premier Retailers, Salons, Clinics &amp; Services
+              </p>
+              <h3 className="text-sm sm:text-base font-bold text-slate-800">
+                Generating 5-Star Reviews Daily Across Andhra Pradesh &amp; Telangana
+              </h3>
+            </div>
+            <div className="flex items-center gap-4 text-xs font-bold text-slate-600">
+              <span className="flex items-center gap-1.5 text-emerald-600">
+                <CheckCircle2 className="w-4 h-4" /> 140+ Active Merchants
+              </span>
+              <span className="flex items-center gap-1.5 text-amber-500">
+                <Star className="w-4 h-4 fill-amber-400" /> 12,850+ Google Reviews
+              </span>
+            </div>
+          </div>
+
+          {/* Client Showcase Pills */}
+          <div className="flex flex-wrap items-center justify-start gap-2">
+            {[
+              { name: "City Grafix", type: "Flex & Sign Boards", city: "Kadapa", rating: "5.0 ★" },
+              { name: "Her Choice", type: "Jewelry & Boutique", city: "Kadapa", rating: "5.0 ★" },
+              { name: "Ashok Yadav Study Hall", type: "Education Center", city: "Kadapa", rating: "5.0 ★" },
+              { name: "Evania Luxury Unisex Salon", type: "Salon & Aesthetics", city: "Madhapur", rating: "5.0 ★" },
+              { name: "AS Refrigeration", type: "AC & Appliance Repair", city: "Kadapa", rating: "4.9 ★" },
+              { name: "MANA Tours & Travels", type: "Tours & Cabs", city: "Kadapa", rating: "5.0 ★" },
+              { name: "VR Gold Company", type: "Bullion & Gold", city: "Kadapa", rating: "4.9 ★" },
+            ].map((c) => (
+              <div
+                key={c.name}
+                className="px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2 text-xs hover:border-slate-300 transition"
+              >
+                <span className="font-bold text-slate-900">{c.name}</span>
+                <span className="text-[10px] text-slate-400 font-medium hidden sm:inline">({c.type})</span>
+                <span className="text-[10px] font-black text-amber-600 bg-amber-50 border border-amber-200 px-1.5 py-0.2 rounded-md">
+                  {c.rating}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
