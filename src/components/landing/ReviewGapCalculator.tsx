@@ -97,7 +97,7 @@ export default function ReviewGapCalculator() {
       {/* Background radial gradient */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-tr from-indigo-100/60 via-purple-100/40 to-transparent blur-[140px] pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold mb-3 shadow-sm">
@@ -118,7 +118,7 @@ export default function ReviewGapCalculator() {
         </div>
 
         {/* 2-Column Calculator Box */}
-        <div className="max-w-5xl mx-auto rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] backdrop-blur-xl">
+        <div className="max-w-6xl mx-auto rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.06)] backdrop-blur-xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             {/* LEFT: Interactive Controls & Sliders */}
             <div className="lg:col-span-7 space-y-6">
@@ -318,6 +318,11 @@ export default function ReviewGapCalculator() {
             </div>
           </div>
         </div>
+
+        {/* Disclaimer & Policy Compliance Note */}
+        <p className="text-[11px] text-slate-500 text-center mt-6 max-w-3xl mx-auto leading-relaxed">
+          <strong className="text-slate-700">*Disclaimer &amp; Policy Compliance Note:</strong> Projections and timelines shown are illustrative mathematical estimates based on average customer footfall velocity and typical conversion rates. ReviewSmart provides legitimate review collection software and QR hardware; we strictly comply with Google Review policies and do not sell reviews, manipulate ratings, or guarantee specific Google Maps search ranking positions or revenue outcomes.
+        </p>
       </div>
     </section>
   );

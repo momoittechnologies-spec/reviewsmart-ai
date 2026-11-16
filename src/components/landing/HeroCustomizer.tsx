@@ -455,43 +455,43 @@ export default function HeroCustomizer() {
   return (
     <div id="customizer" className="relative pt-6 pb-16 sm:pt-10 sm:pb-24 overflow-hidden bg-gradient-to-b from-[#fafbfe] via-slate-50 to-white">
       {/* Ambient background glow behind Hero */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-96 bg-gradient-to-b from-indigo-100/60 via-purple-100/30 to-transparent blur-[100px] pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1440px] h-[480px] bg-gradient-to-b from-indigo-100/50 via-purple-100/25 to-transparent blur-[120px] pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top Trust & Launch Badges */}
         <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 mb-6">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs font-bold shadow-sm">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50/90 border border-indigo-200/80 text-indigo-700 text-xs font-bold shadow-xs">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
             <span>INDIA&apos;S #1 SMART AI REVIEW STANDEE</span>
           </div>
 
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-bold shadow-sm">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50/90 border border-emerald-200/80 text-emerald-800 text-xs font-bold shadow-xs">
             <Globe className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Telugu &bull; Hindi &bull; Tamil &bull; Kannada &bull; English</span>
+            <span>Telugu &bull; Hindi &bull; Tamil &bull; Kannada &bull; English &bull; Malayalam</span>
           </div>
 
           <a
             href="#pricing"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200/80 text-amber-900 text-xs font-bold shadow-sm transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100/90 border border-amber-200/80 text-amber-900 text-xs font-bold shadow-xs transition"
           >
             <Zap className="w-3.5 h-3.5 text-amber-600" />
             <span>Modular Packages From ₹2,999 &bull; Lifetime</span>
           </a>
         </div>
 
-        {/* 2-Column Hero Grid: Value Pitch (Left) + 3D Standee Customizer (Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        {/* 2-Column Hero Grid: Value Pitch (Left 7 Cols) + 3D Standee Customizer (Right 5 Cols) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-center">
           {/* LEFT COLUMN: Headings, Value proposition & Instant lead input */}
-          <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
-            <h1 className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight text-slate-900 leading-[1.18] sm:leading-[1.15]">
+          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+            <h1 className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight text-slate-900 leading-[1.15] sm:leading-[1.12]">
               Turn Walk-In Customers Into{" "}
               <span className="bg-gradient-to-r from-amber-500 via-amber-600 to-orange-500 bg-clip-text text-transparent block sm:inline mt-1 sm:mt-0">
                 5-Star Google Reviews.
               </span>
             </h1>
 
-            <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed">
-              Customers simply <strong>tap their phone</strong> on your luxury acrylic standee or scan the smart QR code. Gemini AI writes authentic 5-star reviews in their native language in 10 seconds. Negative reviews are privately shielded to your WhatsApp.
+            <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+              Customers simply scan the smart QR code on your luxury acrylic standee with any phone camera or UPI app. Gemini AI guides them to write authentic, detailed 5-star reviews in their native language in 10 seconds. Private feedback is routed direct to the owner.
             </p>
 
             {/* Quick Live Preview Input Form */}
@@ -701,7 +701,7 @@ export default function HeroCustomizer() {
           </div>
 
           {/* RIGHT COLUMN: Photorealistic 3D Luxury Acrylic Standee */}
-          <div className="lg:col-span-6 flex flex-col items-center justify-center relative">
+          <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
             {/* Standee Theme Selector Pills */}
             <div className="mb-4 flex flex-wrap items-center justify-center gap-1.5 p-1 rounded-2xl bg-white border border-slate-200 shadow-md">
               {Object.values(THEMES).map((t) => (
@@ -831,8 +831,8 @@ export default function HeroCustomizer() {
             </button>
 
             {/* 3 Hardware Benefit Badges to fill vertical space */}
-            <div className="mt-4 grid grid-cols-2 gap-2 w-full max-w-sm text-left">
-              <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-sm flex items-center gap-2">
+            <div className="mt-4 grid grid-cols-3 gap-2 w-full max-w-md text-left">
+              <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-xs flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
                   <ShieldCheck className="w-4 h-4" />
                 </div>
@@ -841,13 +841,22 @@ export default function HeroCustomizer() {
                   <p className="text-[9px] text-slate-500">Laser-cut &amp; scratch guard</p>
                 </div>
               </div>
-              <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-sm flex items-center gap-2">
+              <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-xs flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
                   <Zap className="w-4 h-4" />
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-slate-800 leading-tight">Instant Smart QR</p>
-                  <p className="text-[9px] text-slate-500">Scan with camera &amp; review in 10s</p>
+                  <p className="text-[9px] text-slate-500">Camera &amp; UPI scanner</p>
+                </div>
+              </div>
+              <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-xs flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                  <Flame className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-slate-800 leading-tight">Zero Battery</p>
+                  <p className="text-[9px] text-slate-500">100% passive showpiece</p>
                 </div>
               </div>
             </div>
@@ -878,23 +887,27 @@ export default function HeroCustomizer() {
           {/* Client Showcase Pills */}
           <div className="flex flex-wrap items-center justify-start gap-2">
             {[
-              { name: "City Grafix", type: "Flex & Sign Boards", city: "Kadapa", rating: "5.0 ★" },
-              { name: "Her Choice", type: "Jewelry & Boutique", city: "Kadapa", rating: "5.0 ★" },
-              { name: "Evania Luxury Unisex Salon", type: "Salon & Aesthetics", city: "Madhapur", rating: "5.0 ★" },
-              { name: "AS Refrigeration", type: "AC & Appliance Repair", city: "Kadapa", rating: "4.9 ★" },
-              { name: "MANA Tours & Travels", type: "Tours & Cabs", city: "Kadapa", rating: "5.0 ★" },
-              { name: "VR Gold Company", type: "Bullion & Gold", city: "Kadapa", rating: "4.9 ★" },
+              { name: "City Grafix", type: "Flex & Sign Boards", city: "Kadapa", rating: "5.0 ★", slug: "citygrafix" },
+              { name: "Her Choice", type: "Jewelry & Boutique", city: "Kadapa", rating: "5.0 ★", slug: "her-choice-kadapa" },
+              { name: "Evania Luxury Unisex Salon", type: "Salon & Aesthetics", city: "Madhapur", rating: "5.0 ★", slug: "evania-luxury-salon" },
+              { name: "AS Refrigeration", type: "AC & Appliance Repair", city: "Kadapa", rating: "4.9 ★", slug: "as-refrigeration" },
+              { name: "MANA Tours & Travels", type: "Tours & Cabs", city: "Kadapa", rating: "5.0 ★", slug: "mana-tours-travels" },
+              { name: "VR Gold Company", type: "Bullion & Gold", city: "Kadapa", rating: "4.9 ★", slug: "vrgold" },
             ].map((c) => (
-              <div
+              <a
                 key={c.name}
-                className="px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 shadow-xs flex items-center gap-2 text-xs hover:border-slate-300 transition"
+                href={`/r/${c.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/90 shadow-xs flex items-center gap-2 text-xs hover:border-indigo-400 hover:shadow-sm transition group"
               >
-                <span className="font-bold text-slate-900">{c.name}</span>
+                <span className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{c.name}</span>
                 <span className="text-[10px] text-slate-400 font-medium hidden sm:inline">({c.type})</span>
-                <span className="text-[10px] font-black text-amber-600 bg-amber-50 border border-amber-200 px-1.5 py-0.2 rounded-md">
+                <span className="text-[10px] font-black text-amber-600 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded-md">
                   {c.rating}
                 </span>
-              </div>
+                <ExternalLink className="w-3 h-3 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+              </a>
             ))}
           </div>
         </div>

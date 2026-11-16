@@ -220,6 +220,46 @@ const DEMO_PRESETS: DemoPreset[] = [
     },
     author: "Obul Reddy C.",
   },
+  {
+    id: "salon",
+    name: "Evania Luxury Salon",
+    category: "Salon, Hair Spa & Aesthetics",
+    location: "Madhapur, Hyderabad, TS",
+    icon: Scissors,
+    color: "#ec4899",
+    slug: "evania-luxury-salon",
+    chips: ["Luxury Haircut", "Hair Botox & Keratin", "Hydra Facial", "Aesthetic Care", "Polite Stylists"],
+    reviews: {
+      ALL: "Had an amazing hair styling and facial experience at Evania Luxury Salon in Madhapur! The stylists are highly trained, ambience is super hygienic and premium. 5-star service throughout!",
+      ENGLISH: "Had an amazing hair styling and facial experience at Evania Luxury Salon in Madhapur! The stylists are highly trained, ambience is super hygienic and premium. 5-star service throughout!",
+      HINDI: "माधापुर में इवानिया लक्जरी सैलून में हेयर स्पा और फेशियल का अनुभव बहुत शानदार रहा! प्रीमियम माहौल और ट्रेंड हेयर स्टाइलिस्ट। बेहतरीन सर्विस!",
+      TELUGU: "మాదాపూర్‌లోని ఎవానియా లగ్జరీ సెలూన్‌లో హెయిర్ స్టైలింగ్ మరియు హైడ్రా ఫేషియల్ సర్వీస్ అద్భుతంగా ఉంది! చాలా హైజీనిక్ అంబియన్స్ మరియు ప్రొఫెషనల్ స్టైలిస్ట్స్.",
+      TAMIL: "எவானியா ஆடம்பர சலூனில் அருமையான ஹேர் ஸ்பா மற்றும் முக அழகு பராமரிப்பு! மிகச் சிறந்த சூழல் மற்றும் திறமையான பணியாளர்கள்.",
+      KANNADA: "ಮಾದಾಪುರದ ಇವಾನಿಯಾ ಲಕ್ಸುರಿ ಸಲೂನ್‌ನಲ್ಲಿ ಅದ್ಭುತ ಕೇಶ ವಿನ್ಯಾಸ ಮತ್ತು ಫೇಶಿಯಲ್ ಅನುಭವ! ಪ್ರೀಮಿಯಂ ವಾತಾವರಣ ಮತ್ತು ನುರಿತ ಸಿಬ್ಬಂದಿ.",
+      MALAYALAM: "മാദാപൂരിലെ ഇവാനിയ ലക്ഷ്വറി സലൂണിൽ മികച്ച ഹെയർ സ്റ്റൈലിംഗും ഫേഷ്യൽ അനുഭവവും! പ്രീമിയം സേവനം.",
+    },
+    author: "Sneha P.",
+  },
+  {
+    id: "boutique",
+    name: "Her Choice - Kadapa",
+    category: "Jewellery, Accessories & Boutique",
+    location: "N.G.O Colony, Kadapa, AP",
+    icon: Award,
+    color: "#f43f5e",
+    slug: "her-choice-kadapa",
+    chips: ["Anti-Tarnish Jewellery", "Trending Bangles", "Bridal Accessories", "Fair Prices", "Polite Staff"],
+    reviews: {
+      ALL: "Her Choice in Kadapa has the most stunning anti-tarnish jewelry and bridal accessories collection! The designs are trendy, long-lasting quality, and prices are very reasonable. Loved shopping here!",
+      ENGLISH: "Her Choice in Kadapa has the most stunning anti-tarnish jewelry and bridal accessories collection! The designs are trendy, long-lasting quality, and prices are very reasonable. Loved shopping here!",
+      HINDI: "कड़पा में हर चॉइस के पास एंटी-टार्निश ज्वेलरी और ब्राइडल एक्सेसरीज का सबसे बेहतरीन कलेक्शन है! डिजाइन बहुत सुंदर और टिकाऊ हैं। शानदार अनुभव!",
+      TELUGU: "హెర్ ఛాయిస్ లో యాంటీ-టార్నిష్ జ్యువెలరీ మరియు లేటెస్ట్ యాక్సెసరీస్ కలెక్షన్ అద్భుతంగా ఉన్నాయి! రీజనబుల్ ప్రైసెస్ మరియు క్వాలిటీ సూపర్. కడపలో బెస్ట్ బుటీక్!",
+      TAMIL: "ஹெர் சாய்ஸ் கடப்பாவில் அருமையான பிரைடல் நகைகள் மற்றும் ஆபரணங்கள் உள்ளன! தரமான டிசைன்கள் மற்றும் நியாயமான விலை.",
+      KANNADA: "ಹರ್ ಚಾಯ್ಸ್‌ನಲ್ಲಿ ಆಂಟಿ-ಟಾರ್ನಿಶ್ ಆಭರಣಗಳ ಅದ್ಭುತ ಕಲೆಕ್ಷನ್ ಇದೆ! ಸಮಂಜಸವಾದ ಬೆಲೆಗಳು ಮತ್ತು ಅತ್ಯುತ್ತಮ ಗುಣಮಟ್ಟ.",
+      MALAYALAM: "ഹെർ ചോയ്‌സിൽ മനോഹരമായ ആഭരണങ്ങളുടെ കളക്ഷൻ ലഭ്യമാണ്! മികച്ച ക്വാളിറ്റിയും മിതമായ നിരക്കും.",
+    },
+    author: "Divya M.",
+  },
 ];
 
 // ─── 3D HARDWARE THEMES ──────────────────────────────────────────────────────
@@ -515,11 +555,17 @@ export default function HomePage() {
 
       {/* ─── NAVBAR ───────────────────────────────────────────────────────── */}
       <nav className="sticky top-0 z-50 bg-white/85 backdrop-blur-2xl border-b border-slate-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <BrandLogo href="/" size="md" theme="light" />
 
           {/* Desktop Nav Links */}
           <div className="hidden lg:flex items-center gap-1 xl:gap-2">
+            <a
+              href="#how-it-works"
+              className="text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3 py-1.5 rounded-full transition"
+            >
+              How It Works
+            </a>
             <a
               href="#demo"
               className="text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3 py-1.5 rounded-full transition"
@@ -600,6 +646,14 @@ export default function HomePage() {
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-2xl px-4 py-4 space-y-1.5 shadow-2xl animate-fadeIn">
             <a
+              href="#how-it-works"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
+            >
+              <CheckCircle className="w-4 h-4 text-indigo-600" />
+              <span>How It Works (3 Steps)</span>
+            </a>
+            <a
               href="#demo"
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
@@ -674,9 +728,149 @@ export default function HomePage() {
 
       <HeroCustomizer />
 
+      {/* ─── HOW IT WORKS: CONNECTED 3-STEP JOURNEY ───────────────────────── */}
+      <section id="how-it-works" className="py-20 px-4 sm:px-6 relative scroll-mt-16 bg-white border-t border-slate-200/80">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold shadow-xs">
+              <Zap className="w-3.5 h-3.5 text-indigo-600" />
+              <span>SEAMLESS 10-SECOND WALK-IN EXPERIENCE</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+              How ReviewSmart Works at Your Counter
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Zero app downloads. Zero typing friction. An effortless 3-step loop that converts everyday customer visits into authentic, keyword-rich Google reviews.
+            </p>
+          </div>
+
+          {/* 3-Step Connected Progression Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative items-stretch">
+            {/* Visual connector line on desktop */}
+            <div className="hidden md:block absolute top-1/2 left-[15%] right-[15%] h-0.5 border-t-2 border-dashed border-indigo-200 -translate-y-12 pointer-events-none -z-0" />
+
+            {/* STEP 1 */}
+            <div className="relative z-10 p-7 rounded-3xl bg-slate-50/90 border border-slate-200/90 hover:border-indigo-400 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <span className="w-10 h-10 rounded-2xl bg-indigo-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-indigo-600/30">
+                    01
+                  </span>
+                  <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 group-hover:text-indigo-600 transition-colors">
+                    <QrCode className="w-4 h-4" />
+                  </div>
+                </div>
+
+                <h3 className="text-lg font-black text-slate-900 mb-2">
+                  Customer Scans Standee
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Walk-in customers scan your luxury acrylic QR standee at checkout using their default smartphone camera, Google Lens, or any UPI app.
+                </p>
+
+                <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 space-y-1.5 text-[11px] text-slate-600">
+                  <div className="flex items-center gap-2 font-medium text-slate-800">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>Works on all Android &amp; iPhone devices</span>
+                  </div>
+                  <div className="flex items-center gap-2 font-medium text-slate-800">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>Instant page load in under 1 second</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-slate-200/60 text-[11px] font-bold text-indigo-600 flex items-center gap-1">
+                <span>Step 1: Contactless Scan</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            {/* STEP 2 */}
+            <div className="relative z-10 p-7 rounded-3xl bg-white border-2 border-indigo-500 shadow-xl shadow-indigo-500/10 flex flex-col justify-between group md:-translate-y-2">
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-[10px] font-black tracking-wider uppercase shadow-sm">
+                ★ Gemini AI Powered
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <span className="w-10 h-10 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-indigo-600/30">
+                    02
+                  </span>
+                  <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600">
+                    <Sparkles className="w-4 h-4 animate-spin" />
+                  </div>
+                </div>
+
+                <h3 className="text-lg font-black text-slate-900 mb-2">
+                  AI Synthesizes Review
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  Customer selects highlights (e.g. &quot;Fast Service&quot;, &quot;Great Quality&quot;) or speaks a voice note. Gemini AI composes a warm, natural 5-star review in 10 seconds in their native language.
+                </p>
+
+                <div className="p-3.5 rounded-2xl bg-indigo-50/60 border border-indigo-200/80 space-y-1.5 text-[11px] text-slate-700">
+                  <div className="flex items-center gap-2 font-medium">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>Telugu, Hindi, English, Tamil, Kannada, Malayalam</span>
+                  </div>
+                  <div className="flex items-center gap-2 font-medium">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>Customer can edit any word before posting</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-indigo-100 text-[11px] font-bold text-indigo-700 flex items-center gap-1">
+                <span>Step 2: Instant Multilingual AI</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+
+            {/* STEP 3 */}
+            <div className="relative z-10 p-7 rounded-3xl bg-slate-50/90 border border-slate-200/90 hover:border-emerald-400 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <span className="w-10 h-10 rounded-2xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-emerald-600/30">
+                    03
+                  </span>
+                  <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 group-hover:text-emerald-600 transition-colors">
+                    <ShieldCheck className="w-4 h-4" />
+                  </div>
+                </div>
+
+                <h3 className="text-lg font-black text-slate-900 mb-2">
+                  1-Tap Post &amp; Grievance Line
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                  1 tap copies the review and opens the official Google Maps review dialogue directly. If a customer has private feedback, they can contact the owner directly for instant resolution.
+                </p>
+
+                <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 space-y-1.5 text-[11px] text-slate-600">
+                  <div className="flex items-center gap-2 font-medium text-slate-800">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>Direct deep link to Google Maps composer</span>
+                  </div>
+                  <div className="flex items-center gap-2 font-medium text-slate-800">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>100% compliant with Google review policies</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-slate-200/60 text-[11px] font-bold text-emerald-700 flex items-center gap-1">
+                <span>Step 3: Direct Google Maps Post</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ─── NEW KILLER FEATURE: 100% FREE GOOGLE BUSINESS PROFILE SETUP ──── */}
       <section id="gmb-setup" className="py-20 px-4 sm:px-6 relative scroll-mt-16 bg-gradient-to-b from-white via-emerald-50/40 to-white border-t border-slate-200/80">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-black shadow-sm">
@@ -765,11 +959,11 @@ export default function HomePage() {
                 </div>
                 <h4 className="text-base font-bold text-slate-900">Standee Goes Live on Counter</h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Your review QR stands and PVC passes are connected. From day 1, walk-in customers tap &amp; post genuine 5-star reviews effortlessly!
+                  Your custom Smart QR standee and digital review portal are activated. From day 1, walk-in customers scan &amp; post genuine Google reviews effortlessly!
                 </p>
               </div>
               <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-bold text-emerald-700 flex items-center gap-1">
-                <Check className="w-3.5 h-3.5" /> Ready for 5-star reviews
+                <Check className="w-3.5 h-3.5" /> Ready for customer reviews
               </div>
             </div>
           </div>
@@ -808,64 +1002,64 @@ export default function HomePage() {
 
       {/* ─── BEFORE VS AFTER GOOGLE MAPS RANKING BOOSTER ───────────────────── */}
       <section id="ranking-boost" className="py-20 px-4 sm:px-6 relative scroll-mt-16 bg-slate-50/70 border-t border-slate-200/80">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold">
-              <TrendingUp className="w-3.5 h-3.5 text-blue-600" /> Google Maps Local Pack Impact
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold shadow-xs">
+              <TrendingUp className="w-3.5 h-3.5 text-blue-600" /> Google Maps Local Discovery
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900">
-              From Invisible to #1 on Google Maps in 30 Days
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+              Accelerate Local Discovery with High Review Velocity
             </h2>
-            <p className="text-sm sm:text-base text-slate-600">
-              See what happens when your business switches from asking customers manually to automated AI review collection:
+            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
+              Compare the organic search difference when your store empowers walk-in customers to share real experiences at checkout:
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-5xl mx-auto">
             {/* Before Card */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-rose-200 space-y-5 shadow-sm flex flex-col justify-between">
+            <div className="p-7 sm:p-8 rounded-3xl bg-white border border-rose-200/90 space-y-5 shadow-xs flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-[10px] font-black uppercase tracking-wider text-rose-700 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
-                    ❌ BEFORE REVIEWSMART AI
+                    ❌ WITHOUT AUTOMATION
                   </span>
-                  <span className="text-xs text-rose-600 font-bold">Ranking #9 Local Search</span>
+                  <span className="text-xs text-rose-600 font-bold">Low Local Search Visibility</span>
                 </div>
 
-                <h4 className="text-lg font-bold text-slate-900 mb-2">
+                <h3 className="text-lg font-black text-slate-900 mb-2">
                   Struggling for Organic Walk-ins
-                </h4>
+                </h3>
 
                 <div className="space-y-3 text-xs text-slate-600 pt-2">
                   <div className="flex items-start gap-2.5">
                     <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                    <span>Only 10-15 reviews collected after 3 years in business</span>
+                    <span>Only 10-15 reviews collected after years of running business</span>
                   </div>
                   <div className="flex items-start gap-2.5">
                     <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                    <span>Customers say &quot;I will post later&quot; but forget once they leave</span>
+                    <span>Satisfied customers promise to review later but forget once they leave</span>
                   </div>
                   <div className="flex items-start gap-2.5">
                     <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                    <span>A single 1-star complaint drops your public rating drastically</span>
+                    <span>A single unresolved complaint drops your public rating disproportionately</span>
                   </div>
                   <div className="flex items-start gap-2.5">
                     <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                    <span>Competitors higher on Google Maps steal nearby customers</span>
+                    <span>Nearby competitors with higher review counts capture local footfall</span>
                   </div>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-center">
-                <span className="text-xs text-slate-500 font-medium">Monthly Google Maps Views:</span>
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
+                <span className="text-xs text-slate-500 font-medium">Monthly Google Maps Impressions:</span>
                 <div className="text-2xl font-black text-slate-400 mt-0.5">~350 Views / Mo</div>
               </div>
             </div>
 
             {/* After Card */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-white via-emerald-50/30 to-white border-2 border-emerald-500/80 space-y-5 shadow-xl flex flex-col justify-between relative">
+            <div className="p-7 sm:p-8 rounded-3xl bg-gradient-to-b from-white via-emerald-50/30 to-white border-2 border-emerald-500/80 space-y-5 shadow-xl shadow-emerald-500/10 flex flex-col justify-between relative">
               <div className="absolute -top-3 right-6 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md">
-                ★ 3.5× REVENUE GROWTH
+                ★ LOCAL 3-PACK DISCOVERY
               </div>
 
               <div>
@@ -873,36 +1067,37 @@ export default function HomePage() {
                   <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
                     ✅ WITH REVIEWSMART AI
                   </span>
-                  <span className="text-xs text-emerald-700 font-bold">🏆 Ranking #1 Local Pack</span>
+                  <span className="text-xs text-emerald-700 font-bold">🏆 Prominent Local Pack Presence</span>
                 </div>
 
-                <h4 className="text-lg font-bold text-slate-900 mb-2">
-                  Dominate Search &bull; Daily New Walk-ins
-                </h4>
+                <h3 className="text-lg font-black text-slate-900 mb-2">
+                  Consistent Organic Discovery &bull; Daily Inquiries
+                </h3>
 
                 <div className="space-y-3 text-xs text-slate-700 pt-2">
                   <div className="flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong className="text-slate-900">100+ new 5-star reviews</strong> added every single month</span>
+                    <span><strong className="text-slate-900">High review cadence</strong>: 50–100+ authentic customer reviews per month</span>
                   </div>
                   <div className="flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>Gemini AI drafts reviews in <strong className="text-slate-900">6 native Indian languages</strong></span>
+                    <span>Gemini AI drafts detailed reviews in <strong className="text-slate-900">6 native Indian languages</strong></span>
                   </div>
                   <div className="flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong className="text-slate-900">100% Negative Shield</strong>: 1-3 star grievances routed to private WhatsApp</span>
+                    <span><strong className="text-slate-900">Private Grievance Line</strong>: Disgruntled customers message owner directly for instant care</span>
                   </div>
                   <div className="flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong className="text-slate-900">#1 on Google Maps</strong>: Nearby tourists and locals choose you first</span>
+                    <span><strong className="text-slate-900">Organic Maps Prominence</strong>: High volume of positive keywords attracts nearby shoppers</span>
                   </div>
                 </div>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-center">
-                <span className="text-xs text-emerald-800 font-medium">Monthly Google Maps Views:</span>
-                <div className="text-2xl font-black text-emerald-600 mt-0.5">3,200+ Views / Mo 🚀</div>
+              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-center">
+                <span className="text-xs text-emerald-800 font-medium">Monthly Google Maps Impressions:</span>
+                <div className="text-2xl font-black text-emerald-600 mt-0.5">3,200+ Impressions / Mo 🚀</div>
+                <p className="text-[10px] text-emerald-700/80 mt-1">*Based on typical retail conversion averages in active urban markets.</p>
               </div>
             </div>
           </div>
@@ -911,7 +1106,7 @@ export default function HomePage() {
 
       {/* ─── LIVE 6-LANGUAGE INTERACTIVE DEMO ─────────────────────────────── */}
       <section id="demo" className="py-20 px-4 sm:px-6 relative scroll-mt-16 bg-white border-t border-slate-200/80">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold">
               <Globe className="w-3.5 h-3.5 text-indigo-600" /> Pan-India Multi-Language Simulator
@@ -1224,7 +1419,7 @@ export default function HomePage() {
 
       {/* ─── 3D HARDWARE & STANDEE STUDIO SHOWCASE ─────────────────────────── */}
       <section id="hardware" className="py-20 px-4 sm:px-6 relative scroll-mt-16 border-t border-slate-200/80 bg-slate-50/70">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold shadow-sm">
               <Printer className="w-3.5 h-3.5 text-amber-600" /> Physical Counter Display Formats
@@ -1546,7 +1741,7 @@ export default function HomePage() {
 
       {/* ─── PRICING SECTION (3-TIER MODULAR SUITE) ──────────────── */}
       <section id="pricing" className="py-24 px-4 sm:px-6 relative scroll-mt-16 bg-gradient-to-b from-white via-indigo-50/20 to-white border-t border-slate-200/80">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-800 text-xs font-black shadow-sm">
@@ -1894,12 +2089,12 @@ export default function HomePage() {
 
       {/* ─── REAL VERIFIED MERCHANTS SHOWCASE ─────────────────────────────── */}
       <section className="py-20 px-4 sm:px-6 relative bg-slate-50/60 border-t border-slate-200/80">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-10 space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold shadow-sm">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-12 space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold shadow-xs">
               <Award className="w-3.5 h-3.5 text-emerald-600" /> Real Verified Stores
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
               Trusted by Merchants Across South &amp; North India
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 flex items-center justify-center gap-2">
@@ -1910,28 +2105,33 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {DEMO_PRESETS.map((m) => (
               <div
                 key={m.id}
-                className="w-[270px] xs:w-[290px] shrink-0 snap-center sm:w-auto p-5 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 hover:shadow-md transition flex flex-col justify-between"
+                className="p-5 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-400 hover:shadow-lg transition-all duration-200 flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/80 truncate max-w-[180px]">
                       {m.category}
                     </span>
-                    <span className="text-amber-500 text-xs font-bold">★ 4.9</span>
+                    <span className="text-amber-500 text-xs font-black shrink-0">★ 5.0</span>
                   </div>
-                  <h4 className="text-sm font-bold text-slate-900 mb-1">{m.name}</h4>
-                  <p className="text-xs text-slate-500 mb-3">{m.location}</p>
+                  <h3 className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors mb-1 truncate">
+                    {m.name}
+                  </h3>
+                  <p className="text-xs text-slate-500 flex items-center gap-1 mb-4 truncate">
+                    <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
+                    <span>{m.location}</span>
+                  </p>
                 </div>
 
                 <a
                   href={`/r/${m.slug}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-200 transition"
+                  className="w-full py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-200 hover:border-indigo-200 transition"
                 >
                   <span>Open Live Portal</span>
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -1944,12 +2144,12 @@ export default function HomePage() {
 
       {/* ─── INTERACTIVE ROI CALCULATOR ───────────────────────────────────── */}
       <section className="py-20 px-4 sm:px-6 relative border-t border-slate-200/80 bg-white">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold shadow-sm">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold shadow-xs">
               <TrendingUp className="w-3.5 h-3.5 text-indigo-600" /> ROI Revenue Projection
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
               See How Fast You Recover ₹2,999
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
@@ -1995,28 +2195,32 @@ export default function HomePage() {
                   <Sparkles className="w-3.5 h-3.5 text-amber-500" /> With ReviewSmart AI
                 </div>
                 <div className="text-3xl font-black text-emerald-600">+{estimatedReviewsWith} Reviews!</div>
-                <p className="text-[10px] text-emerald-700 font-semibold mt-1">5-Star Google Reviews / Month 🚀</p>
+                <p className="text-[10px] text-emerald-700 font-semibold mt-1">Authentic Google Reviews / Month 🚀</p>
               </div>
 
               <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                <div className="text-xs font-medium text-slate-500 mb-1">Shielded Complaints</div>
+                <div className="text-xs font-medium text-slate-500 mb-1">Direct Grievance Alerts</div>
                 <div className="text-2xl font-black text-emerald-600">{shieldedComplaints} Alerts</div>
-                <p className="text-[10px] text-slate-400 mt-1">Saved from public Google damage</p>
+                <p className="text-[10px] text-slate-400 mt-1">Addressed privately with customer</p>
               </div>
             </div>
 
             <div className="mt-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
               <div>
                 <span className="text-xs font-bold text-emerald-800 flex items-center justify-center sm:justify-start gap-1">
-                  <TrendingUp className="w-4 h-4 text-emerald-600" /> Estimated Monthly Revenue Gain:
+                  <TrendingUp className="w-4 h-4 text-emerald-600" /> Estimated Monthly Revenue Value:
                 </span>
                 <p className="text-[11px] text-slate-600 mt-0.5">
-                  Ranking #1 on Google Maps drives fresh high-value walk-ins each week.
+                  Consistent high review velocity attracts local shoppers searching &quot;near me&quot;.
                 </p>
               </div>
               <div className="text-2xl font-black text-emerald-700 whitespace-nowrap">
-                +₹{estimatedRevenueGain.toLocaleString("en-IN")}/mo
+                +₹{estimatedRevenueGain.toLocaleString("en-IN")}/mo*
               </div>
+            </div>
+
+            <div className="mt-4 p-3 rounded-xl bg-slate-100/80 border border-slate-200/80 text-[10px] text-slate-500 text-center leading-relaxed">
+              <span className="font-bold text-slate-700">*Disclaimer:</span> Projections are illustrative calculations based on standard retail conversion averages (estimated 10% review response rate and repeat footfall). Actual review velocity and revenue gain vary by store location, customer volume, and service quality. ReviewSmart AI does not promise guaranteed search rankings or fixed revenue.
             </div>
           </div>
         </div>
@@ -2024,7 +2228,7 @@ export default function HomePage() {
 
       {/* ─── FREQUENTLY ASKED QUESTIONS (FAQ) ─────────────────────────────── */}
       <section id="faq" className="py-20 px-4 sm:px-6 relative border-t border-slate-200/80 bg-slate-50/60 scroll-mt-16">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold shadow-sm">
               <HelpCircle className="w-3.5 h-3.5 text-indigo-600" /> Common Questions
@@ -2090,13 +2294,13 @@ export default function HomePage() {
           {/* Value Highlights Chips */}
           <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
             <span className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 font-semibold">
-              ⚡ 1-Tap Google Reviews
+              ⚡ Instant Smart QR Reviews
             </span>
             <span className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 font-semibold">
               🇮🇳 6 Regional Languages
             </span>
             <span className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 font-semibold">
-              🛡️ Private Feedback Shield
+              🛡️ Private Grievance Shield
             </span>
             <span className="px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 font-bold">
               ✨ ₹2,999 Lifetime Pass
@@ -2129,7 +2333,7 @@ export default function HomePage() {
 
       {/* ─── FOOTER ───────────────────────────────────────────────────────── */}
       <footer className="border-t border-slate-200 pt-8 pb-28 sm:pb-8 px-4 sm:px-6 bg-slate-100 text-xs text-slate-600">
-        <div className="max-w-6xl mx-auto space-y-6">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto space-y-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-200/80">
             <BrandLogo href="/" size="sm" theme="light" />
 
