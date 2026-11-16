@@ -35,6 +35,9 @@ import {
   ImageIcon,
   Camera,
   CreditCard,
+  Gift,
+  Sliders,
+  Package,
 } from "lucide-react";
 import { getAppUrl } from "@/lib/utils";
 
@@ -62,6 +65,12 @@ interface BusinessItem {
   demoUsed?: boolean;
   isDemoActive?: boolean;
   customUpiId?: string | null;
+  enableUpiPayments?: boolean;
+  enableScratchCard?: boolean;
+  scratchCardMaxDiscount?: number;
+  enableSocialLinks?: boolean;
+  enableDigitalMenu?: boolean;
+  packageTier?: string;
   menuUrl?: string | null;
   qrMode?: string | null;
 }
@@ -172,6 +181,12 @@ export default function AdminMerchantsPage() {
     gmbStatus: "NOT_REQUESTED",
     gmbNotes: "",
     customUpiId: "",
+    enableUpiPayments: true,
+    enableScratchCard: false,
+    scratchCardMaxDiscount: 5,
+    enableSocialLinks: true,
+    enableDigitalMenu: true,
+    packageTier: "EXECUTIVE_STANDEE",
     menuUrl: "",
     qrMode: "SMART_HUB",
   });
@@ -346,6 +361,12 @@ export default function AdminMerchantsPage() {
       gmbStatus: b.gmbStatus || "NOT_REQUESTED",
       gmbNotes: b.gmbNotes || "",
       customUpiId: b.customUpiId || "",
+      enableUpiPayments: b.enableUpiPayments ?? true,
+      enableScratchCard: b.enableScratchCard ?? false,
+      scratchCardMaxDiscount: b.scratchCardMaxDiscount ?? 5,
+      enableSocialLinks: b.enableSocialLinks ?? true,
+      enableDigitalMenu: b.enableDigitalMenu ?? true,
+      packageTier: b.packageTier || "EXECUTIVE_STANDEE",
       menuUrl: b.menuUrl || "",
       qrMode: b.qrMode || "SMART_HUB",
     });
@@ -1798,57 +1819,168 @@ export default function AdminMerchantsPage() {
                     </div>
                   </div>
 
-                  {/* UPI Payment Acceptance & QR Experience Mode */}
-                  <div className="p-3.5 rounded-2xl bg-slate-900 border border-emerald-500/30 space-y-3">
-                    <label className="text-[11px] font-bold text-emerald-400 flex items-center gap-1.5">
-                      <CreditCard className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Counter Payment Acceptance (UPI) &amp; QR Mode</span>
-                    </label>
+                  {/* Modular Feature Modules & Optional Add-ons */}
+                  <div className="p-4 rounded-2xl bg-slate-900/90 border border-indigo-500/30 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-indigo-400 flex items-center gap-1.5">
+                        <Sliders className="w-3.5 h-3.5 text-indigo-400" />
+                        <span>Modular Features &amp; Add-on Packages</span>
+                      </label>
+                      <span className="text-[10px] text-slate-400 font-mono">
+                        Per-Merchant Customization
+                      </span>
+                    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[10px] text-slate-400 mb-1">
-                          Custom Payee UPI ID
-                        </label>
-                        <input
-                          type="text"
-                          value={editForm.customUpiId}
-                          onChange={(e) => setEditForm({ ...editForm, customUpiId: e.target.value.trim() })}
-                          placeholder="e.g. 7287867584@cub"
-                          className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        />
+                    {/* Onboarding Package Tier */}
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                        📦 Onboarding Package Tier
+                      </label>
+                      <select
+                        value={editForm.packageTier}
+                        onChange={(e) => setEditForm({ ...editForm, packageTier: e.target.value })}
+                        className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      >
+                        <option value="STARTER_PVC">Tier 1: Starter Review Booster (₹3,000 Base)</option>
+                        <option value="EXECUTIVE_STANDEE">Tier 2: Smart Business Hub (₹3,999 - With UPI/Social)</option>
+                        <option value="ALL_IN_ONE_HUB">Tier 3: 360° Growth &amp; Loyalty (₹4,999 - Full Suite)</option>
+                        <option value="ENTERPRISE_CUSTOM">Enterprise / Custom Package</option>
+                      </select>
+                    </div>
+
+                    {/* Feature Toggles Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      {/* 1. Counter UPI Payment Module */}
+                      <div className={`p-3 rounded-xl border transition ${editForm.enableUpiPayments ? "bg-emerald-950/30 border-emerald-500/40" : "bg-slate-800/40 border-slate-700"}`}>
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-bold text-emerald-400 flex items-center gap-1.5 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={editForm.enableUpiPayments}
+                              onChange={(e) => setEditForm({ ...editForm, enableUpiPayments: e.target.checked })}
+                              className="rounded border-slate-700 text-emerald-500 focus:ring-emerald-500"
+                            />
+                            <span>Counter UPI Payment</span>
+                          </label>
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${editForm.enableUpiPayments ? "bg-emerald-500/20 text-emerald-300" : "bg-slate-700 text-slate-400"}`}>
+                            {editForm.enableUpiPayments ? "ACTIVE" : "OFF"}
+                          </span>
+                        </div>
+                        {editForm.enableUpiPayments && (
+                          <div className="mt-2 space-y-1">
+                            <input
+                              type="text"
+                              value={editForm.customUpiId}
+                              onChange={(e) => setEditForm({ ...editForm, customUpiId: e.target.value.trim() })}
+                              placeholder="Merchant VPA: e.g. 7287867584@cub"
+                              className="w-full text-xs p-2 rounded-lg bg-slate-900 border border-emerald-500/30 text-white font-mono focus:outline-none"
+                            />
+                            <p className="text-[9px] text-slate-400">1-Tap PhonePe, GPay &amp; QR Modal</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 2. Customer Scratch & Win Discount Module */}
+                      <div className={`p-3 rounded-xl border transition ${editForm.enableScratchCard ? "bg-amber-950/30 border-amber-500/40" : "bg-slate-800/40 border-slate-700"}`}>
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-bold text-amber-400 flex items-center gap-1.5 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={editForm.enableScratchCard}
+                              onChange={(e) => setEditForm({ ...editForm, enableScratchCard: e.target.checked })}
+                              className="rounded border-slate-700 text-amber-500 focus:ring-amber-500"
+                            />
+                            <span>Scratch &amp; Win Voucher</span>
+                          </label>
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${editForm.enableScratchCard ? "bg-amber-500/20 text-amber-300" : "bg-slate-700 text-slate-400"}`}>
+                            {editForm.enableScratchCard ? "ACTIVE" : "OFF"}
+                          </span>
+                        </div>
+                        {editForm.enableScratchCard && (
+                          <div className="mt-2 space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] text-slate-400">Max Discount:</span>
+                              <select
+                                value={editForm.scratchCardMaxDiscount}
+                                onChange={(e) => setEditForm({ ...editForm, scratchCardMaxDiscount: Number(e.target.value) })}
+                                className="text-xs p-1.5 rounded-lg bg-slate-900 border border-amber-500/30 text-white focus:outline-none"
+                              >
+                                <option value={5}>Up to 5% OFF</option>
+                                <option value={10}>Up to 10% OFF</option>
+                                <option value={15}>Up to 15% OFF</option>
+                                <option value={20}>Up to 20% OFF</option>
+                              </select>
+                            </div>
+                            <p className="text-[9px] text-slate-400">Unlocks post-review discount coupon</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* 3. Social Media Omni-Hub */}
+                      <div className={`p-3 rounded-xl border transition ${editForm.enableSocialLinks ? "bg-pink-950/30 border-pink-500/40" : "bg-slate-800/40 border-slate-700"}`}>
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-bold text-pink-400 flex items-center gap-1.5 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={editForm.enableSocialLinks}
+                              onChange={(e) => setEditForm({ ...editForm, enableSocialLinks: e.target.checked })}
+                              className="rounded border-slate-700 text-pink-500 focus:ring-pink-500"
+                            />
+                            <span>Social Media Omni-Hub</span>
+                          </label>
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${editForm.enableSocialLinks ? "bg-pink-500/20 text-pink-300" : "bg-slate-700 text-slate-400"}`}>
+                            {editForm.enableSocialLinks ? "ACTIVE" : "OFF"}
+                          </span>
+                        </div>
                         <p className="text-[9px] text-slate-400 mt-1">
-                          Generates scannable QR &amp; 1-tap UPI deep link on review card.
+                          Shows Instagram, Facebook &amp; Website buttons if configured
                         </p>
                       </div>
 
-                      <div>
-                        <label className="block text-[10px] text-slate-400 mb-1">
-                          QR Experience Mode
-                        </label>
-                        <select
-                          value={editForm.qrMode}
-                          onChange={(e) => setEditForm({ ...editForm, qrMode: e.target.value })}
-                          className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                        >
-                          <option value="SMART_HUB">🌟 SMART_HUB (Review Booster + Quick Actions + Counter Pay)</option>
-                          <option value="STANDARD_REVIEW">⭐ STANDARD_REVIEW (Direct 5-Star Review Booster)</option>
-                          <option value="DUAL_PAY_REVIEW">💳 DUAL_PAY_REVIEW (Split Review &amp; Payment)</option>
-                        </select>
+                      {/* 4. Digital Menu / Catalog Module */}
+                      <div className={`p-3 rounded-xl border transition ${editForm.enableDigitalMenu ? "bg-orange-950/30 border-orange-500/40" : "bg-slate-800/40 border-slate-700"}`}>
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-bold text-orange-400 flex items-center gap-1.5 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={editForm.enableDigitalMenu}
+                              onChange={(e) => setEditForm({ ...editForm, enableDigitalMenu: e.target.checked })}
+                              className="rounded border-slate-700 text-orange-500 focus:ring-orange-500"
+                            />
+                            <span>Digital Menu / Catalog</span>
+                          </label>
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${editForm.enableDigitalMenu ? "bg-orange-500/20 text-orange-300" : "bg-slate-700 text-slate-400"}`}>
+                            {editForm.enableDigitalMenu ? "ACTIVE" : "OFF"}
+                          </span>
+                        </div>
+                        {editForm.enableDigitalMenu && (
+                          <div className="mt-2">
+                            <input
+                              type="url"
+                              value={editForm.menuUrl}
+                              onChange={(e) => setEditForm({ ...editForm, menuUrl: e.target.value })}
+                              placeholder="Menu/Catalog URL: https://..."
+                              className="w-full text-xs p-2 rounded-lg bg-slate-900 border border-orange-500/30 text-white font-mono focus:outline-none"
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
 
-                    <div>
+                    {/* QR Experience Mode */}
+                    <div className="pt-1">
                       <label className="block text-[10px] text-slate-400 mb-1">
-                        Digital Menu / Product Catalog URL (Optional)
+                        Hub Experience Presentation Mode
                       </label>
-                      <input
-                        type="url"
-                        value={editForm.menuUrl}
-                        onChange={(e) => setEditForm({ ...editForm, menuUrl: e.target.value })}
-                        placeholder="https://... or menu link"
-                        className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                      />
+                      <select
+                        value={editForm.qrMode}
+                        onChange={(e) => setEditForm({ ...editForm, qrMode: e.target.value })}
+                        className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      >
+                        <option value="SMART_HUB">🌟 SMART_HUB (Review Booster + Modular Quick Actions)</option>
+                        <option value="STANDARD_REVIEW">⭐ STANDARD_REVIEW (Direct 5-Star Review Booster Only)</option>
+                        <option value="DUAL_PAY_REVIEW">💳 DUAL_PAY_REVIEW (Split Review &amp; Payment)</option>
+                      </select>
                     </div>
                   </div>
                 </div>

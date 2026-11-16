@@ -68,6 +68,11 @@ interface BusinessData {
   keywords: string;
   reviewPromptTone: string;
   customUpiId?: string | null;
+  enableUpiPayments?: boolean | null;
+  enableScratchCard?: boolean | null;
+  scratchCardMaxDiscount?: number | null;
+  enableSocialLinks?: boolean | null;
+  enableDigitalMenu?: boolean | null;
   visitingCardOwnerName?: string | null;
   googleMapsUrl?: string | null;
 }
@@ -1383,16 +1388,16 @@ export default function ReviewExperience({
                 ⚡ 1 Tap automatically copies your review &amp; opens Google review composer!
               </p>
 
-              {business.slug === "citygrafix" && (
+              {business.enableScratchCard && (
                 <div className="mt-2.5 p-2 rounded-xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center gap-2 text-center">
                   <Gift className="w-3.5 h-3.5 text-amber-400 animate-pulse shrink-0" />
                   <span className="text-[11px] font-semibold text-amber-300">
-                    Your <strong className="text-white">Up to 5% Discount Scratch Card</strong> unlocks immediately upon posting your review!
+                    Your <strong className="text-white">Up to {business.scratchCardMaxDiscount || 5}% Discount Scratch Card</strong> unlocks immediately upon posting your review!
                   </span>
                 </div>
               )}
 
-              {hasOpenedGoogle && (
+              {hasOpenedGoogle && business.enableScratchCard && (
                 <div className="mt-3">
                   <button
                     type="button"
@@ -1408,7 +1413,7 @@ export default function ReviewExperience({
             </div>
 
             {/* Direct Counter Payment Acceptance Strip */}
-            {customUpi && (
+            {customUpi && business.enableUpiPayments !== false && (
               <div className="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/70 via-slate-900 to-teal-950/70 border border-emerald-500/40 text-left shadow-lg">
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2.5">
@@ -1692,17 +1697,18 @@ export default function ReviewExperience({
 
 
       {/* ─── SCRATCH REWARD CARD MODAL ─────────────────────────────────────── */}
-      {showRewardCard && (
+      {showRewardCard && business.enableScratchCard && (
         <ScratchRewardCard
           businessName={business.name}
           businessSlug={business.slug}
           whatsappNumber={business.whatsapp || business.phone}
+          maxDiscountPct={business.scratchCardMaxDiscount || 5}
           onClose={() => setShowRewardCard(false)}
         />
       )}
 
       {/* ─── PERSISTENT FLOATING VOUCHER PILL (when unlocked & modal closed) ─── */}
-      {hasOpenedGoogle && !showRewardCard && (
+      {hasOpenedGoogle && !showRewardCard && business.enableScratchCard && (
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-sm w-[92%] px-2 animate-slideUp">
           <button
             type="button"
@@ -1711,7 +1717,7 @@ export default function ReviewExperience({
           >
             <div className="flex items-center gap-2">
               <Gift className="w-4 h-4 fill-slate-950 animate-bounce" />
-              <span>{business.slug === "citygrafix" ? "🎁 View Your Discount Voucher" : "🎁 View Your Reward Voucher"}</span>
+              <span>🎁 View Your Discount Voucher</span>
             </div>
             <span className="text-[11px] font-bold bg-slate-950 text-amber-400 px-2.5 py-0.5 rounded-full">
               Open Voucher &rarr;

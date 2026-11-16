@@ -9,6 +9,7 @@ interface ScratchRewardCardProps {
   businessName: string;
   businessSlug?: string;
   whatsappNumber?: string | null;
+  maxDiscountPct?: number;
   onClose: () => void;
   customOffer?: {
     title?: string;

@@ -56,6 +56,11 @@ interface BusinessData {
   qrMode?: string | null;
   menuUrl?: string | null;
   customUpiId?: string | null;
+  enableUpiPayments?: boolean | null;
+  enableScratchCard?: boolean | null;
+  scratchCardMaxDiscount?: number | null;
+  enableSocialLinks?: boolean | null;
+  enableDigitalMenu?: boolean | null;
   visitingCardOwnerName?: string | null;
   googleMapsUrl?: string | null;
 }
@@ -368,7 +373,7 @@ export default function SmartHubExperience({
       {/* ─── QUICK ACTION BUTTONS GRID ───────────────────────────────────────── */}
       <div className="w-full mt-3.5 space-y-2.5">
         {/* 0. Instant Counter UPI Payment Acceptance */}
-        {customUpi && (
+        {customUpi && business.enableUpiPayments !== false && (
           <div className="w-full p-4 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-slate-900 to-teal-950/70 border border-emerald-500/40 hover:border-emerald-400 shadow-xl shadow-emerald-950/30 transition group">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
@@ -448,8 +453,8 @@ export default function SmartHubExperience({
           </a>
         )}
 
-        {/* 2. Digital Menu / Catalog Link (if configured) */}
-        {business.menuUrl && (
+        {/* 2. Digital Menu / Catalog Link (if configured & enabled) */}
+        {business.menuUrl && business.enableDigitalMenu !== false && (
           <a
             href={business.menuUrl.startsWith("http") ? business.menuUrl : `https://${business.menuUrl}`}
             target="_blank"
@@ -499,7 +504,7 @@ export default function SmartHubExperience({
         )}
 
         {/* 4. Instagram Profile */}
-        {instaUrl && (
+        {instaUrl && business.enableSocialLinks !== false && (
           <a
             href={instaUrl}
             target="_blank"
@@ -524,7 +529,7 @@ export default function SmartHubExperience({
         )}
 
         {/* 5. Facebook Page */}
-        {fbUrl && (
+        {fbUrl && business.enableSocialLinks !== false && (
           <a
             href={fbUrl}
             target="_blank"
@@ -549,7 +554,7 @@ export default function SmartHubExperience({
         )}
 
         {/* 6. Official Website */}
-        {siteUrl && (
+        {siteUrl && business.enableSocialLinks !== false && (
           <a
             href={siteUrl}
             target="_blank"
