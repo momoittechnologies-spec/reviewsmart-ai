@@ -30,7 +30,7 @@ export const HARDWARE_PACKAGES: Record<PackageTierId, HardwarePackage> = {
     isPopular: true,
     hardwareDeliverables: [
       "1x 4″×6″ Luxury Crystal Acrylic Counter Standee (Retail Showpiece)",
-      "1x Dual-Sided Vertical PVC Smart NFC Card (Google Review + Digital Visiting Card)",
+      "1x Dual-Sided Vertical PVC Smart QR Card (Google Review + Digital Visiting Card)",
       "Official Google 'G' High-Precision Circular QR Badge",
       "Free Doorstep Express Courier Delivery across India",
       "🆓 FREE Google Business Profile (GMB) Setup & Verification (if you don't have one)",
@@ -62,7 +62,7 @@ export const HARDWARE_PACKAGES: Record<PackageTierId, HardwarePackage> = {
     isPopular: false,
     hardwareDeliverables: [
       "1x Dual-Sided Vertical PVC Smart Card (CR80 Standard)",
-      "Front: Google 5-Star Review Station with Dynamic QR & NFC Tap",
+      "Front: Google 5-Star Review Station with Dynamic Smart QR",
       "Back: Custom Merchant Business Visiting Card (or Direct UPI QR)",
       "Scratch & waterproof matte/gloss executive finish",
     ],

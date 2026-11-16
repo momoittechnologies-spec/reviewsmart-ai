@@ -40,7 +40,7 @@ async function main() {
       durationDays: 30,
       maxCards: 1,
       features: JSON.stringify([
-        "1 Smart NFC/QR Review Card",
+        "1 Smart AI QR Review Card",
         "Gemini AI Review Generator",
         "Negative Review Shield (1-3 stars)",
         "Print Studio (PDF/SVG Stand & Card)",
@@ -56,7 +56,7 @@ async function main() {
       durationDays: 30,
       maxCards: 1,
       features: JSON.stringify([
-        "1 Smart NFC/QR Review Card",
+        "1 Smart AI QR Review Card",
         "Gemini AI Review Generator",
         "Negative Review Shield (1-3 stars)",
         "Print Studio (PDF/SVG Stand & Card)",

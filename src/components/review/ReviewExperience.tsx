@@ -1478,7 +1478,7 @@ export default function ReviewExperience({
             </span>
           </a>
           <p className="text-[10px] text-slate-500 flex items-center justify-center gap-1.5 flex-wrap">
-            <span>Powered by ReviewSmart AI &bull; Smart NFC Google Review Cards 🇮🇳</span>
+            <span>Powered by ReviewSmart AI &bull; Smart AI Google Review Cards 🇮🇳</span>
             <span>&bull;</span>
             <a
               href="https://www.momoittechnologies.com"

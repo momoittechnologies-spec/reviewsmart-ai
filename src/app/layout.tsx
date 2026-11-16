@@ -5,11 +5,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.reviewsmart.online"),
   title: "ReviewSmart AI - Smart Google Review Cards & AI Reputation Platform 🇮🇳",
   description:
-    "Empower local Indian businesses to get 100+ 5-star Google reviews in Telugu, Hindi, English, Tamil, and Kannada with luxury NFC acrylic standees, smart QR cards, and private negative review shield.",
+    "Empower local Indian businesses to get 100+ 5-star Google reviews in Telugu, Hindi, English, Tamil, and Kannada with luxury acrylic standees, smart QR cards, and private negative review shield.",
   applicationName: "ReviewSmart AI",
   keywords: [
     "Google review cards India",
-    "NFC review standee",
+    "Smart QR review standee",
     "ReviewSmart AI",
     "Google business profile setup free",
     "Smart review card Telugu",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     "Google reviews Kadapa",
     "Google reviews Hyderabad",
     "Google reviews Bangalore",
-    "NFC tap to review",
+    "Scan QR to review",
     "Local business SEO India",
     "Review management tool",
   ],
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ReviewSmart AI - Smart Google Review Cards & AI Reputation Platform 🇮🇳",
     description:
-      "Get 100+ 5-Star Google Reviews in Telugu, Hindi & English with Luxury NFC Counter Standees & AI Cards. Lifetime Pass at just ₹2,999.",
+      "Get 100+ 5-Star Google Reviews in Telugu, Hindi & English with Luxury Smart QR Counter Standees & AI Cards. Lifetime Pass at just ₹2,999.",
     url: "https://www.reviewsmart.online",
     siteName: "ReviewSmart AI",
     locale: "en_IN",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ReviewSmart AI - Smart Google Review Cards & AI Reputation Platform",
     description:
-      "Get 100+ 5-Star Google Reviews with Luxury NFC Counter Standees & AI Cards in Telugu, Hindi & English. Lifetime Pass at ₹2,999.",
+      "Get 100+ 5-Star Google Reviews with Luxury Smart QR Counter Standees & AI Cards in Telugu, Hindi & English. Lifetime Pass at ₹2,999.",
     creator: "@reviewsmart_ai",
   },
   appleWebApp: {
@@ -80,7 +80,7 @@ const jsonLdSchema = {
     "availability": "https://schema.org/InStock",
   },
   "description":
-    "Smart Google Review Cards, Luxury NFC Counter Standees, and AI Review Platform in Telugu, Hindi, English, Tamil, and Kannada for Indian merchants.",
+    "Smart Google Review Cards, Luxury Counter Standees, and AI Review Platform in Telugu, Hindi, English, Tamil, and Kannada for Indian merchants.",
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.9",

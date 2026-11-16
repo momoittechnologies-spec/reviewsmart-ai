@@ -347,7 +347,7 @@ export default function BillingClient({
                 </div>
                 <div className="flex items-center gap-1.5 font-medium">
                   <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  <span>1x Dual-Sided PVC NFC Smart Card</span>
+                  <span>1x Dual-Sided PVC Smart QR Card</span>
                 </div>
                 <div className="flex items-center gap-1.5 font-medium">
                   <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
@@ -415,7 +415,7 @@ export default function BillingClient({
                     <span className="text-[10px] text-slate-400 font-semibold">one-time</span>
                   </div>
                   <p className="text-[10px] text-slate-500 leading-tight">
-                    1x Dual-Sided PVC Smart NFC Card
+                    1x Dual-Sided PVC Smart QR Card
                   </p>
                 </div>
               </div>

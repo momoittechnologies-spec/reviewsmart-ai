@@ -44,7 +44,7 @@ flowchart TD
 1. **Official Google "G" Circle Badge (100% Scan Trust):**  
    Every standee and PVC card features the authentic Google "G" emblem enclosed in an ultra-clean white circular badge. Customers immediately recognize it as an official review station and scan without hesitation.
 2. **Dual-Sided Smart PVC Card (Front: Google Station • Back: Merchant Business Card):**  
-   - **Front Side:** Official Google 5-Star Station with zero-reprint dynamic QR code and NFC zone.
+   - **Front Side:** Official Google 5-Star Station with zero-reprint dynamic QR code.
    - **Back Side:** The merchant’s custom luxury visiting card (Proprietor Name, Title, Phone, Email, Address), an exact photographic snapshot of their physical paper card, or their Direct UPI Payment QR.
 3. **Universal Compatibility for Older Smartphones (Google Lens & Payment QR Scanners):**  
    Newer iPhones and Androids scan instantly with the built-in camera. If an older smartphone does not have a native QR scanner, customers can simply tap the **Google Lens** icon on their home screen or scan using **PhonePe / Google Pay / Paytm**. Zero app downloads needed!

@@ -1593,7 +1593,7 @@ export default function HomePage() {
                 <div className="space-y-3 text-xs text-slate-700">
                   <div className="flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong className="text-slate-900">Physical Acrylic Standee (A6)</strong> with custom QR &amp; NTAG213 NFC chip</span>
+                    <span><strong className="text-slate-900">Physical Acrylic Standee (A6)</strong> with custom high-contrast Smart AI QR</span>
                   </div>
                   <div className="flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
@@ -2084,7 +2084,7 @@ export default function HomePage() {
           </h2>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
-            Get your custom 3D acrylic NFC + QR standee delivered straight to your counter. Turn walk-in customers into authentic 5-star Google reviews. Zero monthly subscriptions &bull; Flat ₹2,999 Lifetime Pass.
+            Get your custom 3D acrylic Smart QR standee delivered straight to your counter. Turn walk-in customers into authentic 5-star Google reviews. Zero monthly subscriptions &bull; Flat ₹2,999 Lifetime Pass.
           </p>
 
           {/* Value Highlights Chips */}
@@ -2106,7 +2106,7 @@ export default function HomePage() {
           {/* Action CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
             <a
-              href="https://wa.me/918639831132?text=Hi%20ReviewSmart%20AI!%20I%20want%20to%20order%20the%20ReviewSmart%20AI%203D%20NFC%20%2B%20QR%20Standee%20for%20my%20business%20(%E2%82%B92%2C999%20Lifetime%20Pass).%20Please%20guide%20me%20with%20the%20next%20steps."
+              href="https://wa.me/918639831132?text=Hi%20ReviewSmart%20AI!%20I%20want%20to%20order%20the%20ReviewSmart%20AI%203D%20Smart%20QR%20Standee%20for%20my%20business%20(%E2%82%B92%2C999%20Lifetime%20Pass).%20Please%20guide%20me%20with%20the%20next%20steps."
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-2xl shadow-emerald-500/30 transition transform active:scale-98"

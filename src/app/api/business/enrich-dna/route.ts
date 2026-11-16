@@ -87,7 +87,7 @@ Extract and generate realistic, high-converting commercial data:
 2. "keyUSPs": Array of 3 to 4 distinct business strengths (e.g. ["Hygienic Preparation", "Zero Waiting Time", "Family AC Section", "Reasonable Pricing"]).
 3. "tagChips": Array of exactly 5 crisp, punchy compliment chips (1-3 words each) that customers will tap to review on their phone (must include at least 1 signature item + 1 service trait).
 4. "keywords": Comma-separated high-volume Google Maps search keywords (under 120 chars) that will skyrocket their local search rank.
-5. "tagline": A catchy 6-10 word customer-facing tagline for their NFC review card.
+5. "tagline": A catchy 6-10 word customer-facing tagline for their Smart QR review card.
 6. "tone": Best review prompt tone ("friendly" | "professional" | "enthusiastic").
 7. "summary": A 1-sentence summary of why customers choose this business.
 

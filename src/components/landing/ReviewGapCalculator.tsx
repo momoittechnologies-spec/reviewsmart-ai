@@ -48,8 +48,8 @@ export default function ReviewGapCalculator() {
 
   // Real formula: Reviews needed to match competitor + reach 4.8★
   const reviewGap = Math.max(15, competitorReviews - currentReviews + 10);
-  const reviewsPerDayWithNfc = Math.max(3, Math.round(catData.dailyFootfall * 0.12));
-  const daysToBeatCompetitor = Math.max(7, Math.ceil(reviewGap / reviewsPerDayWithNfc));
+  const reviewsPerDayWithQr = Math.max(3, Math.round(catData.dailyFootfall * 0.12));
+  const daysToBeatCompetitor = Math.max(7, Math.ceil(reviewGap / reviewsPerDayWithQr));
   const estimatedNewCustomersMonthly = Math.round(reviewGap * 1.8);
   const estimatedMonthlyRevenueGain = estimatedNewCustomersMonthly * catData.avgOrderValue;
 

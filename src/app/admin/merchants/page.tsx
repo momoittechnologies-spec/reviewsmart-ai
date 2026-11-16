@@ -1387,7 +1387,7 @@ export default function AdminMerchantsPage() {
                 <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-800/80 border border-slate-700">
                   <div>
                     <span className="text-xs font-bold text-white block">Activate Card Immediately (Paid)</span>
-                    <span className="text-[10px] text-slate-400">Card goes live instantly for QR and NFC taps</span>
+                    <span className="text-[10px] text-slate-400">Card goes live instantly for QR scans</span>
                   </div>
                   <input
                     type="checkbox"

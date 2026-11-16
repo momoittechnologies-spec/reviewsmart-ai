@@ -140,7 +140,7 @@ export default function HeroCustomizer() {
   const [category, setCategory] = useState("Tours & Travels");
   const [selectedTheme, setSelectedTheme] = useState<string>("royal-gold");
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
-  const [isNfcSimulating, setIsNfcSimulating] = useState(false);
+  const [isSimulating, setIsSimulating] = useState(false);
 
   // Google Places Live Search State (Modal & Hero)
   const [modalSearchResults, setModalSearchResults] = useState<GoogleSearchResult[]>([]);
@@ -264,10 +264,10 @@ export default function HeroCustomizer() {
     setVerifiedGoogleProfile(null);
   };
 
-  const handleSimulateNfcTap = () => {
-    setIsNfcSimulating(true);
+  const handleSimulateScan = () => {
+    setIsSimulating(true);
     setTimeout(() => {
-      setIsNfcSimulating(false);
+      setIsSimulating(false);
       confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 } });
     }, 1200);
   };
@@ -462,7 +462,7 @@ export default function HeroCustomizer() {
         <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 mb-6">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs font-bold shadow-sm">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
-            <span>INDIA&apos;S #1 SMART NFC REVIEW STANDEE</span>
+            <span>INDIA&apos;S #1 SMART AI REVIEW STANDEE</span>
           </div>
 
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-bold shadow-sm">
@@ -742,7 +742,7 @@ export default function HeroCustomizer() {
                 {/* Top Badge: Google Review Official Accent */}
                 <div className="flex items-center justify-between mb-4">
                   <div className={`px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider ${theme.badgeBg}`}>
-                    Tap NFC &bull; Scan QR
+                    Scan Smart QR &bull; 10s AI Review
                   </div>
                   <div className="flex items-center gap-1 bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/20">
                     <span className="text-[10px] font-black text-amber-300">5.0</span>
@@ -780,33 +780,32 @@ export default function HeroCustomizer() {
                   </div>
                 </div>
 
-                {/* Glowing NFC Tap Target with animated pulse */}
+                {/* Interactive QR Scan Test Target */}
                 <div className="mt-3 pt-3 border-t border-white/15 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="relative">
                       <div className="w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-400 flex items-center justify-center">
-                        <Smartphone className="w-4 h-4 text-indigo-300" />
+                        <QrCode className="w-4 h-4 text-indigo-300" />
                       </div>
-                      <div className="absolute inset-0 rounded-full bg-indigo-400/40 animate-ping pointer-events-none" />
                     </div>
                     <div className="text-left">
-                      <p className={`text-[11px] font-black leading-tight ${theme.textColor}`}>TAP PHONE HERE</p>
-                      <p className="text-[9px] text-slate-300">Instant NFC Detection</p>
+                      <p className={`text-[11px] font-black leading-tight ${theme.textColor}`}>SCAN WITH ANY PHONE</p>
+                      <p className="text-[9px] text-slate-300">Camera / Google Lens / UPI</p>
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    onClick={handleSimulateNfcTap}
-                    disabled={isNfcSimulating}
+                    onClick={handleSimulateScan}
+                    disabled={isSimulating}
                     className="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 border border-white/30 text-white text-[10px] font-bold transition active:scale-95 flex items-center gap-1"
                   >
-                    {isNfcSimulating ? (
+                    {isSimulating ? (
                       <Loader2 className="w-3 h-3 animate-spin text-amber-300" />
                     ) : (
                       <Play className="w-3 h-3 text-emerald-300" />
                     )}
-                    <span>{isNfcSimulating ? "Tapping..." : "Test Tap"}</span>
+                    <span>{isSimulating ? "Scanning..." : "Test Scan"}</span>
                   </button>
                 </div>
               </div>
@@ -818,7 +817,7 @@ export default function HeroCustomizer() {
 
             {/* Quick Helper text */}
             <p className="text-[11px] text-slate-500 mt-2 text-center font-medium">
-              Crystal Acrylic A6 Counter Standee &bull; Built-in High-Frequency NTAG213 NFC chip &bull; No Battery Needed
+              Crystal Acrylic A6 Counter Standee &bull; Laser-Crisp High-Density Dynamic QR &bull; Zero Battery Needed
             </p>
 
             {/* Quick Buy Standee CTA */}
@@ -847,8 +846,8 @@ export default function HeroCustomizer() {
                   <Zap className="w-4 h-4" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-800 leading-tight">NTAG213 Smart NFC</p>
-                  <p className="text-[9px] text-slate-500">Tap phone &amp; review in 10s</p>
+                  <p className="text-[10px] font-bold text-slate-800 leading-tight">Instant Smart QR</p>
+                  <p className="text-[9px] text-slate-500">Scan with camera &amp; review in 10s</p>
                 </div>
               </div>
             </div>
@@ -951,7 +950,7 @@ export default function HeroCustomizer() {
                 <div>
                   <h3 className="text-2xl font-black text-slate-900">Order Placed Successfully! 🚀</h3>
                   <p className="text-xs text-slate-600 mt-1 max-w-md mx-auto">
-                    Your 3D Acrylic NFC Standee for <strong>{orderSuccessData.businessName}</strong> has been received and queued for custom printing and doorstep dispatch.
+                    Your 3D Acrylic Review Standee for <strong>{orderSuccessData.businessName}</strong> has been received and queued for custom printing and doorstep dispatch.
                   </p>
                 </div>
 
@@ -1018,8 +1017,8 @@ export default function HeroCustomizer() {
                     <div className="px-3 pb-3 pt-1 space-y-2 border-t border-slate-200/60 bg-white text-[11px] animate-fadeIn">
                       <div className="flex justify-between items-start text-slate-600 pt-1">
                         <div>
-                          <span className="font-bold text-slate-800 block">4″×6″ Luxury Crystal Acrylic NFC Standee</span>
-                          <span className="text-[10px] text-slate-400">Custom Theme: {theme.name} &bull; Built-in NTAG213 Chip</span>
+                          <span className="font-bold text-slate-800 block">4″×6″ Luxury Crystal Acrylic Review Standee</span>
+                          <span className="text-[10px] text-slate-400">Custom Theme: {theme.name} &bull; Laser-Crisp Smart QR</span>
                         </div>
                         <span className="font-mono font-semibold line-through text-slate-400">₹4,999</span>
                       </div>
@@ -1046,7 +1045,7 @@ export default function HeroCustomizer() {
                 <form onSubmit={handleInstantSelfServeOrder} className="space-y-4">
                     <div>
                       <h3 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-                        <span>Claim Your 3D NFC Standee &bull; Lifetime Pass</span>
+                        <span>Claim Your 3D Counter Standee &bull; Lifetime Pass</span>
                       </h3>
                       <p className="text-xs text-slate-500 mt-1">
                         One-time ₹2,999 payment. Zero monthly or annual recurring fees. Delivered to your shop counter.

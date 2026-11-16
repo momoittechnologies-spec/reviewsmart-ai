@@ -23,7 +23,7 @@ export interface RealBusinessLead {
   isHotLead: boolean;
 }
 
-// Blacklist of corporate franchises & national chains that should NEVER be pitched NFC standees
+// Blacklist of corporate franchises & national chains that should NEVER be pitched review standees
 const CORPORATE_CHAINS_BLACKLIST = [
   "kfc",
   "domino",

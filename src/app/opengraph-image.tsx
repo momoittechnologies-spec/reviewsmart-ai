@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "ReviewSmart AI - Smart Google Review Standees & NFC Cards";
+export const alt = "ReviewSmart AI - Smart Google Review Standees & QR Cards";
 export const size = {
   width: 1200,
   height: 630,
@@ -78,7 +78,7 @@ export default async function Image() {
               width: "fit-content",
             }}
           >
-            <span>🇮🇳 Pan-India Smart NFC Review Standees</span>
+            <span>🇮🇳 Pan-India Smart QR Review Standees</span>
             <span>•</span>
             <span>₹2,999 Lifetime Pass</span>
           </div>
@@ -119,7 +119,7 @@ export default async function Image() {
           }}
         >
           <div style={{ display: "flex", gap: 32, color: "#cbd5e1", fontSize: 18, fontWeight: 700 }}>
-            <span>⚡ 1-Tap NFC &amp; QR Standees</span>
+            <span>⚡ 1-Tap Smart QR Standees</span>
             <span>🛡️ Negative Review Shield</span>
             <span>🆓 Free GMB Setup Included</span>
           </div>

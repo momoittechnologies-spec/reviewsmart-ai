@@ -342,19 +342,19 @@ export default function AdminGrowthPage() {
     const city = lead.city || "Kadapa";
 
     if (template === "telugu") {
-      return `నమస్కారం ${lead.businessName} మేనేజ్‌మెంట్ గారికి! 🙏\n\nగూగుల్ మ్యాప్స్‌లో మీ బిజినెస్‌కి ${starRating} రేటింగ్ ఉన్నా, కేవలం ${revs} రివ్యూలు మాత్రమే ఉన్నాయి. ${city}లో మీ పోటీదారులకు 100+ రివ్యూలు ఉండటం వల్ల రోజూ ఎంతోమంది కస్టమర్లు అటువైపు వెళ్ళిపోతున్నారు.\n\nమా 3D స్మార్ట్ NFC స్టాండీ మీ కౌంటర్‌లో పెడితే, కస్టమర్లు తమ మొబైల్ టచ్ చేయగానే కేవలం 5 సెకన్లలో 5-స్టార్ గూగుల్ రివ్యూ ఇస్తారు (Gemini AI సాయంతో).\n\nమీ బిజినెస్ కోసం ఉచిత డెమో & శాంపిల్ స్టాండీ ఫోటో పంపమంటారా?`;
+      return `నమస్కారం ${lead.businessName} మేనేజ్‌మెంట్ గారికి! 🙏\n\nగూగుల్ మ్యాప్స్‌లో మీ బిజినెస్‌కి ${starRating} రేటింగ్ ఉన్నా, కేవలం ${revs} రివ్యూలు మాత్రమే ఉన్నాయి. ${city}లో మీ పోటీదారులకు 100+ రివ్యూలు ఉండటం వల్ల రోజూ ఎంతోమంది కస్టమర్లు అటువైపు వెళ్ళిపోతున్నారు.\n\nమా 3D స్మార్ట్ QR స్టాండీ మీ కౌంటర్‌లో పెడితే, కస్టమర్లు తమ మొబైల్‌తో QR స్కాన్ చేయగానే కేవలం 5 సెకన్లలో 5-స్టార్ గూగుల్ రివ్యూ ఇస్తారు (Gemini AI సాయంతో).\n\nమీ బిజినెస్ కోసం ఉచిత డెమో & శాంపిల్ స్టాండీ ఫోటో పంపమంటారా?`;
     }
 
     if (template === "mockup") {
-      return `Hello ${lead.businessName} team! 👋\n\nWe noticed on Google Maps that you have a wonderful ${starRating} rating, but only ${revs} reviews in ${city}.\n\nWe designed a FREE custom 3D Crystal Acrylic NFC Standee preview with your shop's branding & instant Google review QR.\n\nWhen customers tap their phone on your billing counter, it opens your Google review box directly in 5 seconds without searching or typing.\n\nWould you like us to send the photo preview mockup for ${lead.businessName}?`;
+      return `Hello ${lead.businessName} team! 👋\n\nWe noticed on Google Maps that you have a wonderful ${starRating} rating, but only ${revs} reviews in ${city}.\n\nWe designed a FREE custom 3D Crystal Acrylic Review Standee preview with your shop's branding & instant Google review QR.\n\nWhen customers scan the QR on your billing counter, it opens your Google review box directly in 5 seconds without searching or typing.\n\nWould you like us to send the photo preview mockup for ${lead.businessName}?`;
     }
 
     if (template === "followup") {
-      return `Hello ${lead.businessName} team! 👋\n\nFollowing up on our phone call regarding your counter review standee. As discussed, placing our 3D Smart NFC Standee at your cash counter helps you collect 50-100 reviews in 30 days.\n\nWould you like us to deliver the sample standee to your counter today?`;
+      return `Hello ${lead.businessName} team! 👋\n\nFollowing up on our phone call regarding your counter review standee. As discussed, placing our 3D Smart QR Standee at your cash counter helps you collect 50-100 reviews in 30 days.\n\nWould you like us to deliver the sample standee to your counter today?`;
     }
 
     // Default: Deficit Audit (English)
-    return `Hello ${lead.businessName} team! 👋\n\nI was looking at businesses in ${city} today and noticed your listing on Google Maps has a great ${starRating} rating, but only ${revs} reviews.\n\nMost customers search and pick competitors who have 100+ reviews. You need about ${gap} more reviews to dominate local search in ${city}!\n\nReviewSmart AI provides luxury 3D Smart NFC Standees for your billing desk. Customers simply tap their phone, and Gemini AI drafts an authentic 5-star review in 5 seconds.\n\nWould you like to see a free working preview for ${lead.businessName}?`;
+    return `Hello ${lead.businessName} team! 👋\n\nI was looking at businesses in ${city} today and noticed your listing on Google Maps has a great ${starRating} rating, but only ${revs} reviews.\n\nMost customers search and pick competitors who have 100+ reviews. You need about ${gap} more reviews to dominate local search in ${city}!\n\nReviewSmart AI provides luxury 3D Smart QR Standees for your billing desk. Customers simply scan the QR code, and Gemini AI drafts an authentic 5-star review in 5 seconds.\n\nWould you like to see a free working preview for ${lead.businessName}?`;
   };
 
   // Launch WhatsApp and advance status
@@ -1324,7 +1324,7 @@ export default function AdminGrowthPage() {
                   <strong>2. The Deficit:</strong> &quot;I noticed you have a great rating, but only a few reviews in {callingModalLead.city || "town"}. When customers search on Google Maps, nearby competitors with 100+ reviews rank at the top.&quot;
                 </p>
                 <p>
-                  <strong>3. The Solution:</strong> &quot;We provide a 3D Smart NFC Standee for your billing desk. Diners/customers simply tap their phone at checkout, and Gemini AI drafts a 5-star review in 5 seconds.&quot;
+                  <strong>3. The Solution:</strong> &quot;We provide a 3D Smart QR Standee for your billing desk. Diners/customers simply scan the QR at checkout, and Gemini AI drafts a 5-star review in 5 seconds.&quot;
                 </p>
                 <p>
                   <strong>4. The Close:</strong> &quot;We have sample units ready in {callingModalLead.city || "your area"} today. Can I deliver one to your counter for a quick 2-minute trial?&quot;

@@ -59,7 +59,7 @@ export default function MobileAppDock() {
 
   const whatsappOrderUrl =
     "https://wa.me/918639831132?text=" +
-    encodeURIComponent("Hi ReviewSmart AI! I want to order the ReviewSmart AI 3D NFC + QR Standee for my business (₹2,999 Lifetime Pass). Please guide me with the next steps.");
+    encodeURIComponent("Hi ReviewSmart AI! I want to order the ReviewSmart AI 3D Smart QR Standee for my business (₹2,999 Lifetime Pass). Please guide me with the next steps.");
 
   const whatsappInquiryUrl =
     "https://wa.me/918639831132?text=" +
