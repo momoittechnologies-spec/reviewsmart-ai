@@ -260,6 +260,26 @@ const DEMO_PRESETS: DemoPreset[] = [
     },
     author: "Divya M.",
   },
+  {
+    id: "gold-buyer",
+    name: "JS Brother's Gold",
+    category: "Gold Buying & Valuation",
+    location: "Y Junction, Kadapa, AP",
+    icon: Coins,
+    color: "#d97706",
+    slug: "js-brothers-gold",
+    chips: ["Old Gold Buying", "Pledged Gold Release", "Accurate Precision Scale", "Instant Cash", "Fair Market Rates"],
+    reviews: {
+      ALL: "Outstanding and transparent gold valuation at JS Brother's Gold near Y Junction, Kadapa! Accurate precision scale, fair live rates, and instant cash transfer for old and pledged gold. Highly recommended!",
+      ENGLISH: "Outstanding and transparent gold valuation at JS Brother's Gold near Y Junction, Kadapa! Accurate precision scale, fair live rates, and instant cash transfer for old and pledged gold. Highly recommended!",
+      HINDI: "कड़पा वाई जंक्शन पर जेएस ब्रदर्स गोल्ड में पुराना और गिरवी रखा सोना बेचने का अनुभव बहुत पारदर्शी रहा! सटीक तौल, बेहतरीन रेट्स और तुरंत पेमेंट। अत्यधिक विश्वसनीय सेवा!",
+      TELUGU: "కడప వై జంక్షన్ వద్ద ఉన్న JS బ్రదర్స్ గోల్డ్ లో పాత మరియు తాకట్టు బంగారం విడుదల సర్వీస్ చాలా పారదర్శకంగా ఉంది! కచ్చితమైన తూకం మరియు వెంటనే క్యాష్ ట్రాన్స్‌ఫర్ చేశారు. బెస్ట్ మార్కెట్ రేట్స్!",
+      TAMIL: "கடப்பா ஒய் ஜங்ஷன் அருகே உள்ள ஜேஎஸ் பிரதர்ஸ் கோல்டில் பழைய மற்றும் அடகு தங்க மதிப்பீடு மிகவும் வெளிப்படையானது! துல்லியமான எடை, சிறந்த விலை மற்றும் உடனடி பணப் பரிமாற்றம்.",
+      KANNADA: "ಕಡಪ ವೈ ಜಂಕ್ಷನ್ ಬಳಿಯ ಜೆಎಸ್ ಬ್ರದರ್ಸ್ ಗೋಲ್ಡ್‌ನಲ್ಲಿ ಹಳೆಯ ಮತ್ತು ಅಡಮಾನ ಚಿನ್ನದ ಮೌಲ್ಯಮಾಪನ ಅತ್ಯಂತ ಪಾರದರ್ಶಕವಾಗಿದೆ! ನಿಖರವಾದ ತೂಕ, ಉತ್ತಮ ದರಗಳು ಮತ್ತು ತಕ್ಷಣದ ಪಾವತಿ.",
+      MALAYALAM: "കടപ്പ വൈ ജംഗ്ഷനിലെ ജെഎസ് ബ്രദേഴ്സ് ഗോൾഡിൽ പഴയതും പണയം വച്ചതുമായ സ്വർണ്ണത്തിന് മികച്ച മൂല്യവും തത്സമയ പേയ്‌മെന്റും ലഭിച്ചു! വിശ്വസനീയമായ സേവനം.",
+    },
+    author: "Rajesh K.",
+  },
 ];
 
 // ─── 3D HARDWARE THEMES ──────────────────────────────────────────────────────
@@ -470,6 +490,14 @@ export default function HomePage() {
         setTimeout(() => {
           window.open(
             "https://search.google.com/local/writereview?placeid=ChIJmd0QeABtszsR2ygj6nHEsDg",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug === "js-brothers-gold") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJub7cEKZzszsR1ndu-JYvlbA",
             "_blank",
             "noopener,noreferrer"
           );

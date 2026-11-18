@@ -126,6 +126,7 @@ const THEMES: Record<string, ThemeOption> = {
 };
 
 const POPULAR_PRESETS = [
+  { name: "JS BROTHER'S GOLD", city: "Kadapa, Andhra Pradesh", category: "Gold Buying & Valuation" },
   { name: "MANA Tours & Travels", city: "Kadapa, Andhra Pradesh", category: "Tours & Travels" },
   { name: "MOMO IT Technologies", city: "Kadapa, Andhra Pradesh", category: "Software & Technology" },
   { name: "VR Gold Company", city: "Kadapa, Andhra Pradesh", category: "Gold Buying & Pledged Gold" },
@@ -887,6 +888,7 @@ export default function HeroCustomizer() {
           {/* Client Showcase Pills */}
           <div className="flex flex-wrap items-center justify-start gap-2">
             {[
+              { name: "JS Brother's Gold", type: "Gold Buyers & Valuation", city: "Kadapa", rating: "5.0 ★", slug: "js-brothers-gold" },
               { name: "City Grafix", type: "Flex & Sign Boards", city: "Kadapa", rating: "5.0 ★", slug: "citygrafix" },
               { name: "Her Choice", type: "Jewelry & Boutique", city: "Kadapa", rating: "5.0 ★", slug: "her-choice-kadapa" },
               { name: "Evania Luxury Unisex Salon", type: "Salon & Aesthetics", city: "Madhapur", rating: "5.0 ★", slug: "evania-luxury-salon" },

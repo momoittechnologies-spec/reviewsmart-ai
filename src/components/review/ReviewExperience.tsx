@@ -238,6 +238,8 @@ export default function ReviewExperience({
       placeId = "ChIJY8WhWVmTyzsRUz83m4gzT_0";
     } else if (business.slug === "her-choice-kadapa" && !placeId) {
       placeId = "ChIJmd0QeABtszsR2ygj6nHEsDg";
+    } else if (business.slug === "js-brothers-gold" && !placeId) {
+      placeId = "ChIJub7cEKZzszsR1ndu-JYvlbA";
     }
 
     if (!placeId && rawUrl) {
@@ -279,6 +281,9 @@ export default function ReviewExperience({
     }
     if (business.slug === "her-choice-kadapa") {
       return "https://search.google.com/local/writereview?placeid=ChIJmd0QeABtszsR2ygj6nHEsDg";
+    }
+    if (business.slug === "js-brothers-gold") {
+      return "https://search.google.com/local/writereview?placeid=ChIJub7cEKZzszsR1ndu-JYvlbA";
     }
 
     // 1. Official g.page/r/.../review shortlink opens the write-review dialog directly
@@ -335,6 +340,9 @@ export default function ReviewExperience({
     }
     if (business.slug === "her-choice-kadapa") {
       return business.googleMapsUrl || "https://www.google.com/maps?cid=4084980855563561179";
+    }
+    if (business.slug === "js-brothers-gold") {
+      return business.googleMapsUrl || "https://maps.app.goo.gl/X6kq4UnsgiViFQ5T7";
     }
     const placeId = getResolvedPlaceId();
     if (placeId) {
