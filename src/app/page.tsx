@@ -280,6 +280,26 @@ const DEMO_PRESETS: DemoPreset[] = [
     },
     author: "Rajesh K.",
   },
+  {
+    id: "hair-studio",
+    name: "Golden Hair Wig Studio",
+    category: "Hair Wigs & Replacement Studio",
+    location: "Railway Station Rd, Kadapa, AP",
+    icon: Scissors,
+    color: "#d97706",
+    slug: "golden-hair-wig-studio",
+    chips: ["100% Natural Hair Wigs", "Hair Patch Fixing", "Non-Surgical Hair Replacement", "Ladies & Gents Wigs", "Lightweight Comfort", "Experienced Stylist"],
+    reviews: {
+      ALL: "Incredible hair wig and non-surgical hair replacement experience at Golden Hair Wig Studio near Railway Station Road, Kadapa! 100% natural look, lightweight comfort, and seamless styling by Mr. Swarup Maji. Highly recommended!",
+      ENGLISH: "Incredible hair wig and non-surgical hair replacement experience at Golden Hair Wig Studio near Railway Station Road, Kadapa! 100% natural look, lightweight comfort, and seamless styling by Mr. Swarup Maji. Highly recommended!",
+      HINDI: "कड़पा रेलवे स्टेशन रोड पर गोल्डन हेयर विग स्टूडियो में हेयर पैच और विग फिक्सिंग का अनुभव बहुत बेहतरीन रहा! 100% नेचुरल लुक, हल्का और बहुत आरामदायक। स्वरूपा जी की सर्विस बहुत शानदार है!",
+      TELUGU: "కడప రైల్వే స్టేషన్ రోడ్ లోని గోల్డెన్ హెయిర్ విగ్ స్టూడియో లో హెయిర్ ప్యాచ్ & విగ్ ఫిక్సింగ్ సర్వీస్ అద్భుతంగా ఉంది! 100% న్యాచురల్ లుక్, చాలా తేలికగా మరియు కంఫర్టబుల్ గా ఉంది. స్వరూప్ గారి సపోర్ట్ సూపర్!",
+      TAMIL: "கடப்பா ரயில்வே ஸ்டேஷன் சாலையில் உள்ள கோல்டன் ஹேர் விக் ஸ்டுடியோவில் ஹேர் பேட்ச் மற்றும் விக் பொருத்துதல் மிகச் சிறப்பாக உள்ளது! 100% இயற்கையான தோற்றம் மற்றும் வசதியானது. சிறந்த சேவை!",
+      KANNADA: "ಕಡಪ ರೈಲ್ವೆ ಸ್ಟೇಷನ್ ರಸ್ತೆಯ ಗೋಲ್ಡನ್ ಹೇರ್ ವಿಗ್ ಸ್ಟುಡಿಯೋದಲ್ಲಿ ಹೇರ್ ಪ್ಯಾಚ್ ಮತ್ತು ವಿಗ್ ಫಿಕ್ಸಿಂಗ್ ಸೇವೆ ಅದ್ಭುತವಾಗಿದೆ! 100% ನೈಸರ್ಗಿಕ ನೋಟ ಮತ್ತು ಅತ್ಯಂತ ಆರಾಮದಾಯಕ. ಉತ್ತಮ ಸೇವೆ!",
+      MALAYALAM: "കടപ്പ റെയിൽവേ സ്റ്റേഷൻ റോഡിലെ ഗോൾഡൻ ഹെയർ വിഗ് സ്റ്റുഡിയോയിൽ മികച്ച ഹെയർ പാച്ച്, വിഗ് ഫിക്സിംഗ് അനുഭവം! 100% നാച്ചുറൽ ലുക്കും മികച്ച സേവനവും.",
+    },
+    author: "Venkat R.",
+  },
 ];
 
 // ─── 3D HARDWARE THEMES ──────────────────────────────────────────────────────
@@ -498,6 +518,14 @@ export default function HomePage() {
         setTimeout(() => {
           window.open(
             "https://search.google.com/local/writereview?placeid=ChIJub7cEKZzszsR1ndu-JYvlbA",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug === "golden-hair-wig-studio") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJHQ87W85zszsRbNs55NHT6E8",
             "_blank",
             "noopener,noreferrer"
           );

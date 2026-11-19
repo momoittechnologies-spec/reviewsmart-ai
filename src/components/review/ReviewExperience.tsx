@@ -240,6 +240,8 @@ export default function ReviewExperience({
       placeId = "ChIJmd0QeABtszsR2ygj6nHEsDg";
     } else if (business.slug === "js-brothers-gold" && !placeId) {
       placeId = "ChIJub7cEKZzszsR1ndu-JYvlbA";
+    } else if (business.slug === "golden-hair-wig-studio" && !placeId) {
+      placeId = "ChIJHQ87W85zszsRbNs55NHT6E8";
     }
 
     if (!placeId && rawUrl) {
@@ -284,6 +286,9 @@ export default function ReviewExperience({
     }
     if (business.slug === "js-brothers-gold") {
       return "https://search.google.com/local/writereview?placeid=ChIJub7cEKZzszsR1ndu-JYvlbA";
+    }
+    if (business.slug === "golden-hair-wig-studio") {
+      return "https://search.google.com/local/writereview?placeid=ChIJHQ87W85zszsRbNs55NHT6E8";
     }
 
     // 1. Official g.page/r/.../review shortlink opens the write-review dialog directly
@@ -343,6 +348,9 @@ export default function ReviewExperience({
     }
     if (business.slug === "js-brothers-gold") {
       return business.googleMapsUrl || "https://maps.app.goo.gl/X6kq4UnsgiViFQ5T7";
+    }
+    if (business.slug === "golden-hair-wig-studio") {
+      return business.googleMapsUrl || "https://share.google/2Nccb0ELL3iwhq0lK";
     }
     const placeId = getResolvedPlaceId();
     if (placeId) {

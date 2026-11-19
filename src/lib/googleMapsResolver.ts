@@ -128,6 +128,12 @@ export async function resolveGoogleMapsUrl(inputUrl: string): Promise<ResolvedGo
       ) {
         placeId = "ChIJ74oHbuBtszsR-4VnwfhA4nM";
         cid = "8350308096239175163";
+      } else if (
+        trimmed.includes("2Nccb0ELL3iwhq0lK") ||
+        finalUrl.includes("2Nccb0ELL3iwhq0lK")
+      ) {
+        placeId = "ChIJHQ87W85zszsRbNs55NHT6E8";
+        cid = "5758085022023801708";
       } else {
         const kgsMatch =
           finalUrl.match(/[?&]kgs=([0-9a-fA-F]+)/i) ||
