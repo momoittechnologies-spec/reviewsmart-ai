@@ -41,6 +41,10 @@ export default function ScratchRewardCard({
     businessSlug === "citygrafix" ||
     businessName.toLowerCase().includes("city grafix");
 
+  const isGoldenHair =
+    businessSlug === "golden-hair-wig-studio" ||
+    businessName.toLowerCase().includes("golden hair");
+
   const storageKey = `rs_scratch_${businessSlug || "default"}`;
 
   // Initialize reward details (with persistence to prevent changing values on reload)
@@ -84,6 +88,33 @@ export default function ScratchRewardCard({
         benefit: `Flat ${discount}% OFF on Printing & Sign Boards`,
         terms:
           "Valid on Flex Printing, Banners, Visiting Cards, Glow Signs & Sign Boards · Present code at billing counter",
+        isRevealed: false,
+      };
+
+      if (typeof window !== "undefined") {
+        try {
+          sessionStorage.setItem(storageKey, JSON.stringify(data));
+          localStorage.setItem(storageKey, JSON.stringify(data));
+        } catch {}
+      }
+      return data;
+    }
+
+    if (isGoldenHair) {
+      // Up to 5% random discount: 2%, 3%, 4%, or 5%
+      // Weighted so 4% and 5% have generous win frequency for maximum customer delight
+      const discountPool = [3, 4, 5, 2, 4, 5, 3, 5];
+      const discount =
+        discountPool[Math.floor(Math.random() * discountPool.length)];
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      const voucherCode = `GOLDEN${discount}-${randomNum}`;
+      const data: StoredReward = {
+        discount,
+        voucherCode,
+        title: "Golden Hair Wig Studio Lucky Reward!",
+        benefit: `Flat ${discount}% OFF on Hair Wigs & Services`,
+        terms:
+          "Valid on Hair Wigs, Hair Patches, Non-Surgical Hair Replacement & Fixing Services · Present code at billing counter",
         isRevealed: false,
       };
 
@@ -153,7 +184,7 @@ export default function ScratchRewardCard({
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(
-      isCityGrafix
+      isCityGrafix || isGoldenHair
         ? "✨ Scratch to Reveal Your Discount! ✨"
         : "✨ Scratch Here to Reveal Your Reward! ✨",
       width / 2,
@@ -165,6 +196,8 @@ export default function ScratchRewardCard({
     ctx.fillText(
       isCityGrafix
         ? "🎁 Up to 5% OFF on Flex & Printing 🎁"
+        : isGoldenHair
+        ? "🎁 Up to 5% OFF on Wigs & Fixing 🎁"
         : "🎁 Exclusive Customer Voucher 🎁",
       width / 2,
       height / 2 + 8
@@ -298,6 +331,8 @@ export default function ScratchRewardCard({
 
     const message = isCityGrafix
       ? `Hi City Grafix, I just gave a 5-star review on Google and unlocked my lucky ${rewardData.discount}% discount voucher code: ${rewardData.voucherCode}! Please apply this discount to my flex printing / sign board order.`
+      : isGoldenHair
+      ? `Hi Golden Hair Wig Studio, I just gave a 5-star review on Google and unlocked my lucky ${rewardData.discount}% discount voucher code: ${rewardData.voucherCode}! Please apply this discount to my hair wig / fixing service.`
       : `Hi ${businessName}, I just gave a 5-star review on Google and unlocked reward coupon code ${rewardData.voucherCode}! Please apply this for my next order/visit.`;
 
     return `https://wa.me/${full}?text=${encodeURIComponent(message)}`;
@@ -329,11 +364,17 @@ export default function ScratchRewardCard({
         {/* Header Title */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 text-[11px] font-black uppercase tracking-wider mb-1.5">
           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-          <span>{isCityGrafix ? "City Grafix Special Offer" : "Customer Appreciation Reward"}</span>
+          <span>
+            {isCityGrafix
+              ? "City Grafix Special Offer"
+              : isGoldenHair
+              ? "Golden Hair Wig Studio Special Offer"
+              : "Customer Appreciation Reward"}
+          </span>
         </div>
 
         <h3 className="text-lg sm:text-xl font-black text-white">
-          {isCityGrafix ? "🎉 You Unlocked a Lucky Discount!" : "🎉 Customer Reward Unlocked!"}
+          {isCityGrafix || isGoldenHair ? "🎉 You Unlocked a Lucky Discount!" : "🎉 Customer Reward Unlocked!"}
         </h3>
         <p className="text-xs text-slate-300 mt-0.5">
           Thank you for rating <strong className="text-white">{businessName}</strong> on Google!
@@ -408,7 +449,7 @@ export default function ScratchRewardCard({
             >
               <MessageCircle className="w-4 h-4 fill-slate-950" />
               <span>
-                {isCityGrafix ? "Claim Discount on WhatsApp" : "Claim on WhatsApp with Store"}
+                {isCityGrafix || isGoldenHair ? "Claim Discount on WhatsApp" : "Claim on WhatsApp with Store"}
               </span>
               <ArrowRight className="w-3.5 h-3.5" />
             </a>
