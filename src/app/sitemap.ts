@@ -35,6 +35,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/r/golden-hair-wig-studio-madanapalle`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/r/js-brothers-gold`,
       lastModified: new Date(),
       changeFrequency: "daily",

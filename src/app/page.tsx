@@ -320,6 +320,26 @@ const DEMO_PRESETS: DemoPreset[] = [
     },
     author: "Kiran M.",
   },
+  {
+    id: "hair-studio-madanapalle",
+    name: "Golden Hair Wig Studio - Madanapalle",
+    category: "Hair Wigs & Replacement Studio",
+    location: "Venkateswara St, Madanapalle, AP",
+    icon: Scissors,
+    color: "#d97706",
+    slug: "golden-hair-wig-studio-madanapalle",
+    chips: ["100% Natural Hair Wigs", "Hair Patch Fixing", "Non-Surgical Hair Replacement", "Ladies & Gents Wigs", "Lightweight Comfort", "Experienced Stylists"],
+    reviews: {
+      ALL: "Outstanding hair wig and hair patch fixing service at Golden Hair Wig Studio near Vijaya Lodge, Madanapalle! 100% natural appearance, lightweight comfort, and very polite, professional service by Swarup Maji's team. Best hair replacement studio in Madanapalle!",
+      ENGLISH: "Outstanding hair wig and hair patch fixing service at Golden Hair Wig Studio near Vijaya Lodge, Madanapalle! 100% natural appearance, lightweight comfort, and very polite, professional service by Swarup Maji's team. Best hair replacement studio in Madanapalle!",
+      HINDI: "मदनपल्ले विजया लॉज के पास गोल्डन हेयर विग स्टूडियो में विग और हेयर पैच फिक्सिंग का अनुभव बहुत ही शानदार रहा! 100% नेचुरल लुक, बहुत आरामदायक और बेहतरीन स्टाइलिंग!",
+      TELUGU: "మదనపల్లె విజయ లాడ్జ్ వద్ద ఉన్న గోల్డెన్ హెయిర్ విగ్ స్టూడియో లో హెయిర్ ప్యాచ్ & విగ్ ఫిక్సింగ్ సర్వీస్ చాలా బాగుంది! 100% న్యాచురల్ లుక్ మరియు చాలా కంఫర్టబుల్. మదనపల్లె లో బెస్ట్ స్టూడియో!",
+      TAMIL: "மதனப்பள்ளி விஜயா லாட்ஜ் அருகே உள்ள கோல்டன் ஹேர் விக் ஸ்டுடியோவில் ஹேர் பேட்ச் மற்றும் விக் பொருத்துதல் மிகச் சிறப்பாக உள்ளது! 100% இயற்கையான தோற்றம்.",
+      KANNADA: "ಮದನಪಲ್ಲೆ ವಿಜಯಾ ಲಾಡ್ಜ್ ಬಳಿಯ ಗೋಲ್ಡನ್ ಹೇರ್ ವಿಗ್ ಸ್ಟುಡಿಯೋದಲ್ಲಿ ಹೇರ್ ಪ್ಯಾಚ್ ಮತ್ತು ವಿಗ್ ಫಿಕ್ಸಿಂಗ್ ಸೇವೆ ಅತ್ಯುತ್ತಮವಾಗಿದೆ! 100% ನೈಸರ್ಗಿಕ ನೋಟ.",
+      MALAYALAM: "മദനപ്പള്ളി വിജയ ലോഡ്ജിന് സമീപമുള്ള ഗോൾഡൻ ഹെയർ വിഗ് സ്റ്റുഡിയോയിൽ മികച്ച ഹെയർ പാച്ച്, വിഗ് ഫിക്സിംഗ് സേവനം! 100% നാച്ചുറൽ ലുക്ക്.",
+    },
+    author: "Prasad K.",
+  },
 ];
 
 // ─── 3D HARDWARE THEMES ──────────────────────────────────────────────────────
@@ -554,6 +574,14 @@ export default function HomePage() {
         setTimeout(() => {
           window.open(
             "https://search.google.com/local/writereview?placeid=ChIJYaVlsaittTsRr6ueXjEty4w",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug === "golden-hair-wig-studio-madanapalle") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJi9aO_IhlsjsRi9Ab1pTMaaM",
             "_blank",
             "noopener,noreferrer"
           );

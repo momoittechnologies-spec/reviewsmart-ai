@@ -889,8 +889,9 @@ export default function HeroCustomizer() {
           {/* Client Showcase Pills */}
           <div className="flex flex-wrap items-center justify-start gap-2">
             {[
+              { name: "Golden Hair Wig Studio (Madanapalle)", type: "Hair Wigs & Replacement", city: "Madanapalle", rating: "5.0 ★", slug: "golden-hair-wig-studio-madanapalle" },
               { name: "Golden Hair Wig Studio (Nandyal)", type: "Hair Wigs & Replacement", city: "Nandyal", rating: "5.0 ★", slug: "golden-hair-wig-studio-nandyal" },
-              { name: "Golden Hair Wig Studio", type: "Hair Wigs & Replacement", city: "Kadapa", rating: "5.0 ★", slug: "golden-hair-wig-studio" },
+              { name: "Golden Hair Wig Studio (Kadapa)", type: "Hair Wigs & Replacement", city: "Kadapa", rating: "5.0 ★", slug: "golden-hair-wig-studio" },
               { name: "JS Brother's Gold", type: "Gold Buyers & Valuation", city: "Kadapa", rating: "5.0 ★", slug: "js-brothers-gold" },
               { name: "City Grafix", type: "Flex & Sign Boards", city: "Kadapa", rating: "5.0 ★", slug: "citygrafix" },
               { name: "Her Choice", type: "Jewelry & Boutique", city: "Kadapa", rating: "5.0 ★", slug: "her-choice-kadapa" },

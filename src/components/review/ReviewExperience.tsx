@@ -244,6 +244,8 @@ export default function ReviewExperience({
       placeId = "ChIJHQ87W85zszsRbNs55NHT6E8";
     } else if (business.slug === "golden-hair-wig-studio-nandyal" && !placeId) {
       placeId = "ChIJYaVlsaittTsRr6ueXjEty4w";
+    } else if (business.slug === "golden-hair-wig-studio-madanapalle" && !placeId) {
+      placeId = "ChIJi9aO_IhlsjsRi9Ab1pTMaaM";
     }
 
     if (!placeId && rawUrl) {
@@ -294,6 +296,9 @@ export default function ReviewExperience({
     }
     if (business.slug === "golden-hair-wig-studio-nandyal") {
       return "https://search.google.com/local/writereview?placeid=ChIJYaVlsaittTsRr6ueXjEty4w";
+    }
+    if (business.slug === "golden-hair-wig-studio-madanapalle") {
+      return "https://search.google.com/local/writereview?placeid=ChIJi9aO_IhlsjsRi9Ab1pTMaaM";
     }
 
     // 1. Official g.page/r/.../review shortlink opens the write-review dialog directly
@@ -359,6 +364,9 @@ export default function ReviewExperience({
     }
     if (business.slug === "golden-hair-wig-studio-nandyal") {
       return business.googleMapsUrl || "https://share.google/IL4ROXJQTqePzWtGY";
+    }
+    if (business.slug === "golden-hair-wig-studio-madanapalle") {
+      return business.googleMapsUrl || "https://share.google/W4IkEga1ChNP4EQuB";
     }
     const placeId = getResolvedPlaceId();
     if (placeId) {
