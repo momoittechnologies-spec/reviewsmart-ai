@@ -340,6 +340,26 @@ const DEMO_PRESETS: DemoPreset[] = [
     },
     author: "Prasad K.",
   },
+  {
+    id: "hair-studio-proddatur",
+    name: "Golden Hair Wig Studio - Proddatur",
+    category: "Hair Wigs & Replacement Studio",
+    location: "DCSR Colony, Proddatur, AP",
+    icon: Scissors,
+    color: "#d97706",
+    slug: "golden-hair-wig-studio-proddatur",
+    chips: ["100% Natural Hair Wigs", "Hair Patch Fixing", "Non-Surgical Hair Replacement", "Ladies & Gents Wigs", "Lightweight Comfort", "Experienced Stylists"],
+    reviews: {
+      ALL: "Fantastic hair patch and non-surgical hair fixing at Golden Hair Wig Studio in DCSR Colony, Proddatur! 100% natural hairline, lightweight, and very comfortable. Mr. Swarup Maji's staff is polite and experienced. Highly recommended!",
+      ENGLISH: "Fantastic hair patch and non-surgical hair fixing at Golden Hair Wig Studio in DCSR Colony, Proddatur! 100% natural hairline, lightweight, and very comfortable. Mr. Swarup Maji's staff is polite and experienced. Highly recommended!",
+      HINDI: "प्रॉद्दातुर डीसीएसआर कॉलोनी में गोल्डन हेयर विग स्टूडियो में हेयर पैच और विग फिक्सिंग की सर्विस बहुत ही शानदार है! 100% नेचुरल लुक और बहुत आरामदायक!",
+      TELUGU: "ప్రొద్దుటూరు DCSR కాలనీ లోని గోల్డెన్ హెయిర్ విగ్ స్టూడియో లో హెయిర్ ప్యాచ్ & విగ్ ఫిక్సింగ్ సర్వీస్ సూపర్ గా ఉంది! 100% న్యాచురల్ లుక్ మరియు చాలా కంఫర్టబుల్. ప్రొద్దుటూరు లో బెస్ట్ స్టూడియో!",
+      TAMIL: "பொழுத்தூர் DCSR காலனியில் உள்ள கோல்டன் ஹேர் விக் ஸ்டுடியோவில் ஹேர் பேட்ச் மற்றும் விக் பொருத்துதல் மிகச் சிறப்பாக உள்ளது! 100% இயற்கையான தோற்றம்.",
+      KANNADA: "ಪ್ರೊದ್ದುಟೂರು DCSR ಕಾಲೋನಿಯ ಗೋಲ್ಡನ್ ಹೇರ್ ವಿಗ್ ಸ್ಟುಡಿಯೋದಲ್ಲಿ ಹೇರ್ ಪ್ಯಾಚ್ ಮತ್ತು ವಿಗ್ ಫಿಕ್ಸಿಂಗ್ ಸೇವೆ ಅತ್ಯುತ್ತಮವಾಗಿದೆ! 100% ನೈಸರ್ಗಿಕ ನೋಟ.",
+      MALAYALAM: "പ്രൊദ്ദത്തൂർ DCSR കോളനിയിലെ ഗോൾഡൻ ഹെയർ വിഗ് സ്റ്റുഡിയോയിൽ മികച്ച ഹെയർ പാച്ച്, വിഗ് ഫിക്സിംഗ് സർവീസ്! 100% നാച്ചുറൽ ലുക്ക്.",
+    },
+    author: "Ravi Teja S.",
+  },
 ];
 
 // ─── 3D HARDWARE THEMES ──────────────────────────────────────────────────────
@@ -582,6 +602,14 @@ export default function HomePage() {
         setTimeout(() => {
           window.open(
             "https://search.google.com/local/writereview?placeid=ChIJi9aO_IhlsjsRi9Ab1pTMaaM",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug === "golden-hair-wig-studio-proddatur") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJa-uPQACHszsR2qmIIq8hVK4",
             "_blank",
             "noopener,noreferrer"
           );
