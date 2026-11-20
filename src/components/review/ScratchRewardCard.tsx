@@ -43,6 +43,7 @@ export default function ScratchRewardCard({
 
   const isGoldenHair =
     businessSlug === "golden-hair-wig-studio" ||
+    businessSlug === "golden-hair-wig-studio-nandyal" ||
     businessName.toLowerCase().includes("golden hair");
 
   const storageKey = `rs_scratch_${businessSlug || "default"}`;

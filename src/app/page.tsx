@@ -300,6 +300,26 @@ const DEMO_PRESETS: DemoPreset[] = [
     },
     author: "Venkat R.",
   },
+  {
+    id: "hair-studio-nandyal",
+    name: "Golden Hair Wig Studio - Nandyal",
+    category: "Hair Wigs & Replacement Studio",
+    location: "Atmakur Rd, Nandyal, AP",
+    icon: Scissors,
+    color: "#d97706",
+    slug: "golden-hair-wig-studio-nandyal",
+    chips: ["100% Natural Hair Wigs", "Hair Patch Fixing", "Non-Surgical Hair Replacement", "Ladies & Gents Wigs", "Lightweight Comfort", "Experienced Stylists"],
+    reviews: {
+      ALL: "Incredible non-surgical hair replacement & wig fixing experience at Golden Hair Wig Studio on Atmakur Road, Nandyal! 100% natural look, lightweight comfort, and polite, skilled service by Swarup Maji's team. Highly recommended in Nandyal!",
+      ENGLISH: "Incredible non-surgical hair replacement & wig fixing experience at Golden Hair Wig Studio on Atmakur Road, Nandyal! 100% natural look, lightweight comfort, and polite, skilled service by Swarup Maji's team. Highly recommended in Nandyal!",
+      HINDI: "नंद्याल आत्मकुर रोड पर गोल्डन हेयर विग स्टूडियो में नॉन-सर्जिकल हेयर रिप्लेसमेंट और विग फिक्सिंग का अनुभव बहुत ही शानदार रहा! 100% नेचुरल लुक, बहुत आरामदायक और बेहतरीन सर्विस!",
+      TELUGU: "నంద్యాల ఆత్మకూరు రోడ్ లోని గోల్డెన్ హెయిర్ విగ్ స్టూడియో లో నాన్-సర్జికల్ హెయిర్ రీప్లేస్‌మెంట్ & విగ్ ఫిక్సింగ్ సర్వీస్ అద్భుతంగా ఉంది! 100% న్యాచురల్ లుక్, చాలా కంఫర్టబుల్ మరియు బెస్ట్ స్టైలింగ్!",
+      TAMIL: "நந்தியால் ஆத்மகூர் சாலையில் உள்ள கோல்டன் ஹேர் விக் ஸ்டுடியோவில் ஹேர் பேட்ச் மற்றும் விக் பொருத்துதல் மிகச் சிறப்பாக உள்ளது! 100% இயற்கையான தோற்றம் மற்றும் வசதியானது.",
+      KANNADA: "ನಂದ್ಯಾಲ ಆತ್ಮಾಕೂರು ರಸ್ತೆಯ ಗೋಲ್ಡನ್ ಹೇರ್ ವಿಗ್ ಸ್ಟುಡಿಯೋದಲ್ಲಿ ಹೇರ್ ಪ್ಯಾಚ್ ಮತ್ತು ವಿಗ್ ಫಿಕ್ಸಿಂಗ್ ಸೇವೆ ಅದ್ಭುತವಾಗಿದೆ! 100% ನೈಸರ್ಗಿಕ ನೋಟ ಮತ್ತು ಅತ್ಯುತ್ತಮ ಸೇವೆ.",
+      MALAYALAM: "നന്ത്യാൽ ആത്മകൂർ റോഡിലെ ഗോൾഡൻ ഹെയർ വിഗ് സ്റ്റുഡിയോയിൽ മികച്ച നോൺ-സർജിക്കൽ ഹെയർ റീപ്ലേസ്‌മെന്റ് സർവീസ്! 100% നാച്ചുറൽ ലുക്ക്.",
+    },
+    author: "Kiran M.",
+  },
 ];
 
 // ─── 3D HARDWARE THEMES ──────────────────────────────────────────────────────
@@ -526,6 +546,14 @@ export default function HomePage() {
         setTimeout(() => {
           window.open(
             "https://search.google.com/local/writereview?placeid=ChIJHQ87W85zszsRbNs55NHT6E8",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug === "golden-hair-wig-studio-nandyal") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJYaVlsaittTsRr6ueXjEty4w",
             "_blank",
             "noopener,noreferrer"
           );
