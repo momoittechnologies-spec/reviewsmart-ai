@@ -20,6 +20,7 @@ import {
   ChevronRight,
   Play,
   Globe,
+  Plane,
   Lock,
   BarChart2,
   Package,
@@ -360,6 +361,26 @@ const DEMO_PRESETS: DemoPreset[] = [
     },
     author: "Ravi Teja S.",
   },
+  {
+    id: "umrah-travels",
+    name: "New Roshan Tours & Travels",
+    category: "Umrah, Ziyarat & Flights",
+    location: "Ganagapeta, Kadapa, AP",
+    icon: Plane,
+    color: "#059669",
+    slug: "new-roshan-tours-and-travels",
+    chips: ["Umrah Packages", "Baghdad Ziyarath", "International Air Ticketing", "Visa Services", "Luxury Makkah Hotels", "Dedicated Guide"],
+    reviews: {
+      ALL: "Alhamdulillah! Truly blessed and seamless Umrah pilgrimage arrangement by New Roshan Tours & Travels in Ganagapeta, Kadapa. Direct flights, excellent hotel proximity near Haram, and very caring support by Janab Shafi Shaik. JazakAllah Khair!",
+      ENGLISH: "Alhamdulillah! Truly blessed and seamless Umrah pilgrimage arrangement by New Roshan Tours & Travels in Ganagapeta, Kadapa. Direct flights, excellent hotel proximity near Haram, and very caring support by Janab Shafi Shaik. JazakAllah Khair!",
+      HINDI: "अल्हम्दुलिल्लाह! न्यू रोशन टूर्स एंड ट्रैवल्स कडपा द्वारा उमराह और जियारत की व्यवस्था बहुत ही शानदार और शांतिपूर्ण रही। हरम के पास होटल और शफी शेख साहब का बहुत अच्छा मार्गदर्शन। बहुत अनुशंसित!",
+      TELUGU: "అల్హందులిల్లాహ్! కడప గంగపేట లోని న్యూ రోషన్ టూర్స్ & ట్రావెల్స్ ద్వారా ఉమ్రా మరియు జియారత్ యాత్ర ఏర్పాట్లు చాలా అద్భుతంగా జరిగాయి. హరమ్ దగ్గర లగ్జరీ హోటల్స్ మరియు షఫీ షేక్ గారి సపోర్ట్ చాలా బాగుంది!",
+      TAMIL: "அல்ஹம்துலில்லாஹ்! நியூ ரோஷன் டூர்ஸ் & டிராவல்ஸ் மூலம் உம்ரா மற்றும் ஜியாரத் பயணம் மிகவும் சிறப்பாக அமைந்தது. சிறந்த வழிகாட்டல் மற்றும் அருமையான தங்குமிடம்.",
+      KANNADA: "ಅಲ್ಹಮ್ದುಲಿಲ್ಲಾಹ್! ನ್ಯೂ ರೋಷನ್ ಟೂರ್ಸ್ & ಟ್ರಾವೆಲ್ಸ್ ಮೂಲಕ ಉಮ್ರಾ ಮತ್ತು ಝಿಯಾರತ್ ಪ್ರವಾಸ ಅತ್ಯಂತ ಶಾಂತಿಯುತವಾಗಿ ನಡೆಯಿತು. ಅತ್ಯುತ್ತಮ ಹೋಟೆಲ್‌ಗಳು ಮತ್ತು ಉತ್ತಮ ಮಾರ್ಗದರ್ಶನ.",
+      MALAYALAM: "അൽഹംദുലില്ലാഹ്! ന്യൂ റോഷൻ ടൂർസ് & ട്രാവൽസ് വഴി ചെയ്ത ഉംറ യാത്ര വളരെ മികച്ചതും അനുഗ്രഹീതവുമായിരുന്നു. മികച്ച സേവനവും താമസ സൗകര്യവും.",
+    },
+    author: "Mohammed Aslam K.",
+  },
 ];
 
 // ─── 3D HARDWARE THEMES ──────────────────────────────────────────────────────
@@ -610,6 +631,14 @@ export default function HomePage() {
         setTimeout(() => {
           window.open(
             "https://search.google.com/local/writereview?placeid=ChIJa-uPQACHszsR2qmIIq8hVK4",
+            "_blank",
+            "noopener,noreferrer"
+          );
+        }, 550);
+      } else if (slug === "new-roshan-tours-and-travels") {
+        setTimeout(() => {
+          window.open(
+            "https://search.google.com/local/writereview?placeid=ChIJgUHgPjpzszsRTYUDNrgZtC4",
             "_blank",
             "noopener,noreferrer"
           );

@@ -48,6 +48,10 @@ export default function ScratchRewardCard({
     businessSlug === "golden-hair-wig-studio-proddatur" ||
     businessName.toLowerCase().includes("golden hair");
 
+  const isNewRoshan =
+    businessSlug === "new-roshan-tours-and-travels" ||
+    businessName.toLowerCase().includes("new roshan");
+
   const storageKey = `rs_scratch_${businessSlug || "default"}`;
 
   // Initialize reward details (with persistence to prevent changing values on reload)
@@ -130,6 +134,32 @@ export default function ScratchRewardCard({
       return data;
     }
 
+    if (isNewRoshan) {
+      // Up to 5% random discount: 2%, 3%, 4%, or 5% on Umrah packages & flight bookings
+      const discountPool = [3, 4, 5, 2, 4, 5, 3, 5];
+      const discount =
+        discountPool[Math.floor(Math.random() * discountPool.length)];
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      const voucherCode = `ROSHAN${discount}-${randomNum}`;
+      const data: StoredReward = {
+        discount,
+        voucherCode,
+        title: "New Roshan Tours & Travels Lucky Reward!",
+        benefit: `Flat ${discount}% OFF on Umrah Packages & Flights`,
+        terms:
+          "Valid on Umrah Packages, Guided Ziyarat Tours & Flight Bookings · Present code at office counter",
+        isRevealed: false,
+      };
+
+      if (typeof window !== "undefined") {
+        try {
+          sessionStorage.setItem(storageKey, JSON.stringify(data));
+          localStorage.setItem(storageKey, JSON.stringify(data));
+        } catch {}
+      }
+      return data;
+    }
+
     // Default reward for other merchants
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const voucherCode = `REVIEW-${randomNum}`;
@@ -187,7 +217,7 @@ export default function ScratchRewardCard({
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(
-      isCityGrafix || isGoldenHair
+      isCityGrafix || isGoldenHair || isNewRoshan
         ? "✨ Scratch to Reveal Your Discount! ✨"
         : "✨ Scratch Here to Reveal Your Reward! ✨",
       width / 2,
@@ -201,6 +231,8 @@ export default function ScratchRewardCard({
         ? "🎁 Up to 5% OFF on Flex & Printing 🎁"
         : isGoldenHair
         ? "🎁 Up to 5% OFF on Wigs & Fixing 🎁"
+        : isNewRoshan
+        ? "🎁 Up to 5% OFF on Umrah & Flights 🎁"
         : "🎁 Exclusive Customer Voucher 🎁",
       width / 2,
       height / 2 + 8
@@ -336,6 +368,8 @@ export default function ScratchRewardCard({
       ? `Hi City Grafix, I just gave a 5-star review on Google and unlocked my lucky ${rewardData.discount}% discount voucher code: ${rewardData.voucherCode}! Please apply this discount to my flex printing / sign board order.`
       : isGoldenHair
       ? `Hi Golden Hair Wig Studio, I just gave a 5-star review on Google and unlocked my lucky ${rewardData.discount}% discount voucher code: ${rewardData.voucherCode}! Please apply this discount to my hair wig / fixing service.`
+      : isNewRoshan
+      ? `Hi New Roshan Tours & Travels, I just gave a 5-star review on Google and unlocked my lucky ${rewardData.discount}% discount voucher code: ${rewardData.voucherCode}! Please apply this discount to my Umrah package / ticket booking.`
       : `Hi ${businessName}, I just gave a 5-star review on Google and unlocked reward coupon code ${rewardData.voucherCode}! Please apply this for my next order/visit.`;
 
     return `https://wa.me/${full}?text=${encodeURIComponent(message)}`;
@@ -372,12 +406,14 @@ export default function ScratchRewardCard({
               ? "City Grafix Special Offer"
               : isGoldenHair
               ? "Golden Hair Wig Studio Special Offer"
+              : isNewRoshan
+              ? "New Roshan Tours & Travels Special Offer"
               : "Customer Appreciation Reward"}
           </span>
         </div>
 
         <h3 className="text-lg sm:text-xl font-black text-white">
-          {isCityGrafix || isGoldenHair ? "🎉 You Unlocked a Lucky Discount!" : "🎉 Customer Reward Unlocked!"}
+          {isCityGrafix || isGoldenHair || isNewRoshan ? "🎉 You Unlocked a Lucky Discount!" : "🎉 Customer Reward Unlocked!"}
         </h3>
         <p className="text-xs text-slate-300 mt-0.5">
           Thank you for rating <strong className="text-white">{businessName}</strong> on Google!
@@ -452,7 +488,7 @@ export default function ScratchRewardCard({
             >
               <MessageCircle className="w-4 h-4 fill-slate-950" />
               <span>
-                {isCityGrafix || isGoldenHair ? "Claim Discount on WhatsApp" : "Claim on WhatsApp with Store"}
+                {isCityGrafix || isGoldenHair || isNewRoshan ? "Claim Discount on WhatsApp" : "Claim on WhatsApp with Store"}
               </span>
               <ArrowRight className="w-3.5 h-3.5" />
             </a>

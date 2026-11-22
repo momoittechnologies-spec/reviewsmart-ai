@@ -889,6 +889,7 @@ export default function HeroCustomizer() {
           {/* Client Showcase Pills */}
           <div className="flex flex-wrap items-center justify-start gap-2">
             {[
+              { name: "New Roshan Tours & Travels", type: "Umrah, Ziyarat & Flights", city: "Kadapa", rating: "5.0 ★", slug: "new-roshan-tours-and-travels" },
               { name: "Golden Hair Wig Studio (Proddatur)", type: "Hair Wigs & Replacement", city: "Proddatur", rating: "5.0 ★", slug: "golden-hair-wig-studio-proddatur" },
               { name: "Golden Hair Wig Studio (Madanapalle)", type: "Hair Wigs & Replacement", city: "Madanapalle", rating: "5.0 ★", slug: "golden-hair-wig-studio-madanapalle" },
               { name: "Golden Hair Wig Studio (Nandyal)", type: "Hair Wigs & Replacement", city: "Nandyal", rating: "5.0 ★", slug: "golden-hair-wig-studio-nandyal" },

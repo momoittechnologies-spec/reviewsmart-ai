@@ -248,6 +248,8 @@ export default function ReviewExperience({
       placeId = "ChIJi9aO_IhlsjsRi9Ab1pTMaaM";
     } else if (business.slug === "golden-hair-wig-studio-proddatur" && !placeId) {
       placeId = "ChIJa-uPQACHszsR2qmIIq8hVK4";
+    } else if (business.slug === "new-roshan-tours-and-travels" && !placeId) {
+      placeId = "ChIJgUHgPjpzszsRTYUDNrgZtC4";
     }
 
     if (!placeId && rawUrl) {
@@ -304,6 +306,9 @@ export default function ReviewExperience({
     }
     if (business.slug === "golden-hair-wig-studio-proddatur") {
       return "https://search.google.com/local/writereview?placeid=ChIJa-uPQACHszsR2qmIIq8hVK4";
+    }
+    if (business.slug === "new-roshan-tours-and-travels") {
+      return "https://search.google.com/local/writereview?placeid=ChIJgUHgPjpzszsRTYUDNrgZtC4";
     }
 
     // 1. Official g.page/r/.../review shortlink opens the write-review dialog directly
@@ -375,6 +380,9 @@ export default function ReviewExperience({
     }
     if (business.slug === "golden-hair-wig-studio-proddatur") {
       return business.googleMapsUrl || "https://share.google/k4nRUBOWRP3xQWPmq";
+    }
+    if (business.slug === "new-roshan-tours-and-travels") {
+      return business.googleMapsUrl || "https://share.google/odil5WTbGmas4G1dr";
     }
     const placeId = getResolvedPlaceId();
     if (placeId) {
