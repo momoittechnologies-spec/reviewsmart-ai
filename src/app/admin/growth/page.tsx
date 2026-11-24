@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import {
+  Calendar,
   Compass,
   Search,
   Sparkles,
@@ -13,17 +14,10 @@ import {
   AlertTriangle,
   Loader2,
   ExternalLink,
-  Flame,
   Inbox,
   RefreshCw,
   MapPin,
-  Globe2,
-  Tag,
-  ChevronDown,
-  ChevronUp,
-  Upload,
   CheckCircle2,
-  Target,
   PlusCircle,
   FileText,
   Star,
@@ -35,989 +29,804 @@ import {
   Clock,
   UserCheck,
   Send,
+  Filter,
+  BarChart3,
+  Layers,
+  ShieldCheck,
+  Eye,
+  Check,
+  ChevronDown,
+  ChevronUp,
+  TrendingUp,
+  UserX,
+  Store,
+  HelpCircle,
 } from "lucide-react";
 import type { RealBusinessLead } from "@/lib/gmbDataFetcher";
 
-interface InboundLead {
+interface LeadActivity {
+  id: string;
+  type: string;
+  outcome: string | null;
+  notes: string | null;
+  performedBy: string | null;
+  createdAt: string;
+}
+
+interface CrmLead {
   id: string;
   businessName: string;
   city: string | null;
+  locality: string | null;
   category: string | null;
-  phone: string;
+  phone: string | null;
   source: string;
   notes: string | null;
   status: string;
+  provider: string | null;
+  providerListingId: string | null;
+  listingUrl: string | null;
+  rating: number | null;
+  reviewCount: number | null;
+  observedDate: string | null;
+  verificationMethod: string;
+  priority: string;
+  priorityReason: string | null;
+  assignedAgentId: string | null;
+  assignedAgentName: string | null;
+  nextAction: string | null;
+  nextActionDue: string | null;
+  lastOutcome: string | null;
+  doNotContact: boolean;
+  confirmedPaidAt: string | null;
   createdAt: string;
+  updatedAt: string;
+  activities?: LeadActivity[];
+}
+
+interface CrmMetrics {
+  totalLeads: number;
+  filteredTotal: number;
+  todaysFollowUpsCount: number;
+  websiteEnquiriesCount: number;
+  radarDiscoveredCount: number;
+  fieldContactsCount: number;
+  agentReportedConversions: number;
+  confirmedPaidSales: number;
+  stageCounts: Record<string, number>;
+}
+
+interface AgentUser {
+  id: string;
+  name: string;
+  role: string;
+  agentCode: string | null;
 }
 
 const POPULAR_CITIES = [
   { id: "Kadapa", label: "Kadapa", state: "Andhra Pradesh" },
+  { id: "Proddatur", label: "Proddatur", state: "Andhra Pradesh" },
+  { id: "Nandyal", label: "Nandyal", state: "Andhra Pradesh" },
   { id: "Tirupati", label: "Tirupati", state: "Andhra Pradesh" },
   { id: "Vijayawada", label: "Vijayawada", state: "Andhra Pradesh" },
   { id: "Visakhapatnam", label: "Visakhapatnam", state: "Andhra Pradesh" },
-  { id: "Guntur", label: "Guntur", state: "Andhra Pradesh" },
   { id: "Hyderabad", label: "Hyderabad", state: "Telangana" },
   { id: "Bengaluru", label: "Bengaluru", state: "Karnataka" },
-  { id: "Chennai", label: "Chennai", state: "Tamil Nadu" },
-  { id: "Kochi", label: "Kochi", state: "Kerala" },
-  { id: "Mumbai", label: "Mumbai", state: "Maharashtra" },
-  { id: "Pune", label: "Pune", state: "Maharashtra" },
-  { id: "Delhi NCR", label: "Delhi NCR", state: "Delhi" },
-  { id: "Jaipur", label: "Jaipur", state: "Rajasthan" },
-  { id: "Lucknow", label: "Lucknow", state: "Uttar Pradesh" },
-  { id: "Kolkata", label: "Kolkata", state: "West Bengal" },
 ];
 
-const POPULAR_CATEGORIES = [
-  "Restaurants & Cafes",
-  "Dental Clinics & Healthcare",
-  "Hair Salons & Beauty",
-  "Automobile Services & Garages",
-  "Jewellery & Gold Shops",
-  "Pharmacies & Medical Stores",
-  "Hotels & Lodges",
-  "Gyms & Fitness Centers",
-  "Supermarkets & Grocery Stores",
-  "Clothing & Textiles",
+const TARGET_CATEGORIES = [
+  { id: "dental clinics", label: "Dental Clinics & Doctors" },
+  { id: "beauty salon", label: "Beauty Salons & Spas" },
+  { id: "hair studio", label: "Hair Wigs & Salons" },
+  { id: "restaurants", label: "Restaurants & Cafes" },
+  { id: "tours travels", label: "Tours, Travels & Pilgrimage" },
+  { id: "clothing store", label: "Fashion & Clothing Stores" },
+  { id: "jewellery", label: "Gold & Jewellery Shops" },
+  { id: "photo studio", label: "Photography & Gift Studios" },
+  { id: "flex printing", label: "Printing & Sign Boards" },
+  { id: "ac repair", label: "AC & Appliance Repair" },
 ];
-
-const PIPELINE_STAGES = [
-  { id: "NEW", label: "1. New Target", color: "bg-slate-800 text-slate-300 border-slate-700" },
-  { id: "WHATSAPP_SENT", label: "2. WhatsApp Sent 💬", color: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
-  { id: "CALLED", label: "3. Called 📞", color: "bg-blue-500/20 text-blue-300 border-blue-500/40" },
-  { id: "DEMO_SENT", label: "4. Demo Sent 🎁", color: "bg-indigo-500/20 text-indigo-300 border-indigo-500/40" },
-  { id: "CONVERTED", label: "5. Converted 🎉", color: "bg-emerald-600 text-white border-emerald-500" },
-  { id: "LOST", label: "Lost ✕", color: "bg-rose-500/20 text-rose-300 border-rose-500/40" },
-];
-
-// Helper to extract rating & review count from lead.notes if stored in hunter format
-function parseHunterNotes(notes: string | null) {
-  if (!notes) return { rating: null, reviewCount: null, deficit: null, mapsUrl: null, cleanAddress: null };
-
-  const ratingMatch = notes.match(/Rating:\s*([0-9.]+)/i);
-  const reviewMatch = notes.match(/Google Reviews:\s*([0-9]+)/i);
-  const deficitMatch = notes.match(/Needs\s*([0-9]+)\s*to reach 100/i);
-  const mapsMatch = notes.match(/Maps:\s*(https?:\/\/[^\s]+)/i);
-  const addressMatch = notes.match(/Address:\s*([^.]+)\./i);
-
-  return {
-    rating: ratingMatch ? parseFloat(ratingMatch[1]) : null,
-    reviewCount: reviewMatch ? parseInt(reviewMatch[1], 10) : null,
-    deficit: deficitMatch ? parseInt(deficitMatch[1], 10) : null,
-    mapsUrl: mapsMatch ? mapsMatch[1] : null,
-    cleanAddress: addressMatch ? addressMatch[1].trim() : null,
-  };
-}
 
 export default function AdminGrowthPage() {
-  const [activeTab, setActiveTab] = useState<"radar" | "inbound">("inbound");
+  // Top-Level View State
+  const [activeView, setActiveView] = useState<"TODAYS_FOLLOWUPS" | "DISCOVER" | "PIPELINE" | "REPORTS">(
+    "TODAYS_FOLLOWUPS"
+  );
 
-  // Market Radar State
-  const [selectedCity, setSelectedCity] = useState("Kadapa");
-  const [customCity, setCustomCity] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Restaurants & Cafes");
-  const [filterHotOnly, setFilterHotOnly] = useState(false);
-  const [leads, setLeads] = useState<RealBusinessLead[]>([]);
-  const [loadingRadar, setLoadingRadar] = useState(false);
-  const [radarError, setRadarError] = useState("");
-  const [dataSourceNote, setDataSourceNote] = useState("");
-  const [expandedDossier, setExpandedDossier] = useState<Record<string, boolean>>({});
-  const [addingToCrmId, setAddingToCrmId] = useState<string | null>(null);
+  // CRM Data State
+  const [leads, setLeads] = useState<CrmLead[]>([]);
+  const [metrics, setMetrics] = useState<CrmMetrics | null>(null);
+  const [agents, setAgents] = useState<AgentUser[]>([]);
+  const [isLoadingCrm, setIsLoadingCrm] = useState(true);
+  const [crmError, setCrmError] = useState<string | null>(null);
 
-  // Inbound Leads CRM State
-  const [inboundLeads, setInboundLeads] = useState<InboundLead[]>([]);
-  const [loadingInbound, setLoadingInbound] = useState(false);
-  const [inboundFilter, setInboundFilter] = useState("ALL");
-  const [sourceFilter, setSourceFilter] = useState<"ALL" | "HUNTER" | "WEBSITE">("ALL");
-  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  // Filters & Pagination
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCity, setFilterCity] = useState("");
+  const [filterStage, setFilterStage] = useState("");
+  const [filterPriority, setFilterPriority] = useState("");
+  const [filterAgent, setFilterAgent] = useState("");
+  const [filterSource, setFilterSource] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  // Inline Phone Edit State
-  const [editingPhoneId, setEditingPhoneId] = useState<string | null>(null);
-  const [editingPhoneValue, setEditingPhoneValue] = useState("");
-  const [savingPhoneLoading, setSavingPhoneLoading] = useState(false);
-
-  // Quick Notes State
-  const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
-  const [noteInputValue, setNoteInputValue] = useState("");
-  const [savingNoteLoading, setSavingNoteLoading] = useState(false);
-
-  // WhatsApp Pitch Modal State
-  const [whatsappModalLead, setWhatsappModalLead] = useState<InboundLead | null>(null);
-  const [activeWaTemplate, setActiveWaTemplate] = useState<"deficit" | "telugu" | "mockup" | "followup">("deficit");
-
-  // Call Assistant Modal State
-  const [callingModalLead, setCallingModalLead] = useState<InboundLead | null>(null);
-
-  // Import Modal State
+  // Active Lead Outreach / Action Modals
+  const [selectedLead, setSelectedLead] = useState<CrmLead | null>(null);
+  const [showPitchModal, setShowPitchModal] = useState(false);
+  const [showVisitModal, setShowVisitModal] = useState(false);
+  const [showDetailDrawer, setShowDetailDrawer] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
-  const [importCsvText, setImportCsvText] = useState("");
-  const [importCity, setImportCity] = useState("Kadapa");
-  const [importCategory, setImportCategory] = useState("Local Business");
-  const [importMaxReviews, setImportMaxReviews] = useState("40");
-  const [importingLoading, setImportingLoading] = useState(false);
-  const [importResult, setImportResult] = useState<string | null>(null);
 
-  // Initial Scan on load
+  // Outreach Pitch Generator State
+  const [pitchTemplate, setPitchTemplate] = useState<"FIRST_CONTACT" | "CALL_FOLLOWUP" | "VISIT_FOLLOWUP">(
+    "FIRST_CONTACT"
+  );
+  const [pitchText, setPitchText] = useState("");
+  const [customPitchNote, setCustomPitchNote] = useState("");
+  const [pitchCopied, setPitchCopied] = useState(false);
+  const [isLoggingAction, setIsLoggingAction] = useState(false);
+
+  // In-Person Visit State
+  const [visitOwnerName, setVisitOwnerName] = useState("");
+  const [visitNotes, setVisitNotes] = useState("");
+  const [visitOutcome, setVisitOutcome] = useState("SPOKE_TO_OWNER");
+  const [visitNextDate, setVisitNextDate] = useState("");
+
+  // Discover / Radar State
+  const [radarCity, setRadarCity] = useState("Kadapa");
+  const [radarCategory, setRadarCategory] = useState("dental clinics");
+  const [radarResults, setRadarResults] = useState<RealBusinessLead[]>([]);
+  const [radarState, setRadarState] = useState<"IDLE" | "LOADING" | "SUCCESS" | "NO_MATCHES" | "ERROR">("IDLE");
+  const [radarErrorMsg, setRadarErrorMsg] = useState("");
+  const [addingLeadId, setAddingLeadId] = useState<string | null>(null);
+
+  // Import State
+  const [importCsvText, setImportCsvText] = useState("");
+  const [importMaxReviews, setImportMaxReviews] = useState(50);
+  const [isImporting, setIsImporting] = useState(false);
+  const [importPreview, setImportPreview] = useState<any | null>(null);
+  const [importResultMsg, setImportResultMsg] = useState<string | null>(null);
+
+  // Current Logged In Agent Name
+  const [currentAgentName, setCurrentAgentName] = useState("ReviewSmart Sales");
+
+  // Fetch Current User
   useEffect(() => {
-    fetchInboundLeads();
-    runRadarScan("Kadapa", "Restaurants & Cafes");
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.user?.name) {
+          setCurrentAgentName(data.user.name);
+        } else if (data.user?.agentCode) {
+          setCurrentAgentName(`Agent ${data.user.agentCode}`);
+        }
+      })
+      .catch(() => {});
   }, []);
 
-  // 1. Radar Scan
-  const runRadarScan = async (cityToUse?: string, categoryToUse?: string) => {
-    const city = (customCity.trim() || cityToUse || selectedCity).trim();
-    const category = (categoryToUse || selectedCategory).trim();
-
-    setLoadingRadar(true);
-    setRadarError("");
-    setDataSourceNote("");
-
+  // Fetch CRM Leads & Server-Side Metrics
+  const fetchCrmData = useCallback(async () => {
+    setIsLoadingCrm(true);
+    setCrmError(null);
     try {
-      const res = await fetch("/api/admin/growth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ city, category }),
+      const params = new URLSearchParams({
+        view: activeView,
+        page: String(currentPage),
+        pageSize: "25",
       });
+      if (searchTerm) params.set("search", searchTerm);
+      if (filterCity) params.set("city", filterCity);
+      if (filterStage) params.set("stage", filterStage);
+      if (filterPriority) params.set("priority", filterPriority);
+      if (filterAgent) params.set("agentId", filterAgent);
+      if (filterSource) params.set("source", filterSource);
 
-      const data = await res.json();
+      const res = await fetch(`/api/admin/growth/crm?${params.toString()}`);
       if (!res.ok) {
-        throw new Error(data.error || "Failed to scan market");
+        throw new Error(`CRM API responded with status ${res.status}`);
       }
-
-      setLeads(data.leads || []);
-      setDataSourceNote(data.note || "");
-    } catch (err: any) {
-      setRadarError(err?.message || "Radar scan failed");
-    } finally {
-      setLoadingRadar(false);
-    }
-  };
-
-  // 2. Inbound Pipeline Fetch
-  const fetchInboundLeads = async () => {
-    setLoadingInbound(true);
-    try {
-      const res = await fetch("/api/lead/capture");
       const data = await res.json();
-      if (res.ok && data.leads) {
-        setInboundLeads(data.leads);
-      }
-    } catch (err) {
-      console.error("Failed to load inbound leads:", err);
+      setLeads(data.leads || []);
+      setMetrics(data.metrics || null);
+      setAgents(data.agents || []);
+      setTotalPages(data.pagination?.totalPages || 1);
+    } catch (err: any) {
+      console.error("Failed to load CRM data:", err);
+      setCrmError(err.message || "Failed to load CRM leads. Please try again.");
     } finally {
-      setLoadingInbound(false);
+      setIsLoadingCrm(false);
     }
-  };
+  }, [activeView, currentPage, searchTerm, filterCity, filterStage, filterPriority, filterAgent, filterSource]);
 
-  const updateInboundStatus = async (id: string, status: string, appendNote?: string) => {
-    setUpdatingId(id);
+  useEffect(() => {
+    if (activeView !== "DISCOVER") {
+      fetchCrmData();
+    }
+  }, [fetchCrmData, activeView]);
+
+  // Construct Fact-Based English Outreach Pitch
+  useEffect(() => {
+    if (!selectedLead) return;
+
+    const ownerName = "Business Owner / Manager";
+    const agentName = currentAgentName;
+    const bizName = selectedLead.businessName;
+    const locality = selectedLead.locality || selectedLead.city || "your area";
+
+    let message = "";
+    if (pitchTemplate === "FIRST_CONTACT") {
+      message = `Hi ${ownerName}, this is ${agentName} from ReviewSmart AI.\n\nWe noticed ${bizName} in ${locality} and have prepared an official physical QR review standee preview for your counter.\n\nWould you like me to share a quick 10-second photo preview?`;
+    } else if (pitchTemplate === "CALL_FOLLOWUP") {
+      message = `Hi ${ownerName}, thank you for speaking with me earlier today regarding ${bizName}.\n\nAs discussed, here is the official ReviewSmart AI link for your business:\nhttps://reviewsmart.online/r/${bizName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}\n\nLet me know if you would like me to deliver your branded acrylic counter standee!`;
+    } else if (pitchTemplate === "VISIT_FOLLOWUP") {
+      message = `Hi ${ownerName}, it was great visiting ${bizName} today in ${locality}.\n\nAs demonstrated, your customers can tap or scan to share 5-star Google reviews in 10 seconds with zero typing.\n\nPlease find your digital card preview here. Excited to help grow your local Google visibility!`;
+    }
+
+    if (customPitchNote.trim()) {
+      message += `\n\nNote: ${customPitchNote.trim()}`;
+    }
+
+    setPitchText(message);
+  }, [selectedLead, pitchTemplate, currentAgentName, customPitchNote]);
+
+  // Handle WhatsApp Click (Records "Draft opened" without changing sales stage)
+  const handleOpenWhatsApp = async () => {
+    if (!selectedLead || !selectedLead.phone) return;
+
+    setIsLoggingAction(true);
     try {
-      const currentLead = inboundLeads.find((l) => l.id === id);
-      let updatedNotes = currentLead?.notes || "";
-      if (appendNote) {
-        const timestamp = new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
-        updatedNotes = `${updatedNotes}\n[${timestamp}]: ${appendNote}`.trim();
-      }
-
-      const res = await fetch("/api/lead/capture", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, status, notes: updatedNotes }),
-      });
-      if (res.ok) {
-        setInboundLeads((prev) =>
-          prev.map((l) => (l.id === id ? { ...l, status, notes: updatedNotes } : l))
-        );
-      }
-    } catch (err) {
-      console.error("Failed to update status:", err);
-    } finally {
-      setUpdatingId(null);
-    }
-  };
-
-  // Save / Update Phone Number
-  const handleSavePhone = async (leadId: string) => {
-    const cleanDigits = editingPhoneValue.replace(/[^0-9]/g, "").slice(-10);
-    if (cleanDigits.length < 10) {
-      alert("Please enter a valid 10-digit Indian mobile or landline number.");
-      return;
-    }
-
-    setSavingPhoneLoading(true);
-    try {
-      const res = await fetch("/api/lead/capture", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: leadId, phone: cleanDigits }),
-      });
-
-      if (res.ok) {
-        setInboundLeads((prev) =>
-          prev.map((l) => (l.id === leadId ? { ...l, phone: cleanDigits } : l))
-        );
-        setEditingPhoneId(null);
-        setEditingPhoneValue("");
-      } else {
-        alert("Failed to save phone number.");
-      }
-    } catch (err) {
-      console.error("Save phone error:", err);
-    } finally {
-      setSavingPhoneLoading(false);
-    }
-  };
-
-  // Add Quick Note
-  const handleSaveQuickNote = async (leadId: string) => {
-    if (!noteInputValue.trim()) return;
-    setSavingNoteLoading(true);
-    try {
-      const currentLead = inboundLeads.find((l) => l.id === leadId);
-      const timestamp = new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-      const newNotes = `${currentLead?.notes || ""}\n• [${timestamp}]: ${noteInputValue.trim()}`.trim();
-
-      const res = await fetch("/api/lead/capture", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: leadId, notes: newNotes }),
-      });
-
-      if (res.ok) {
-        setInboundLeads((prev) =>
-          prev.map((l) => (l.id === leadId ? { ...l, notes: newNotes } : l))
-        );
-        setActiveNoteId(null);
-        setNoteInputValue("");
-      }
-    } catch (err) {
-      console.error("Save note error:", err);
-    } finally {
-      setSavingNoteLoading(false);
-    }
-  };
-
-  const toggleDossier = (id: string) => {
-    setExpandedDossier((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
-
-  // 1-Click Add Radar Lead to CRM
-  const addRadarLeadToCrm = async (lead: RealBusinessLead) => {
-    setAddingToCrmId(lead.id);
-    try {
-      const cleanPhone = (lead.phone || "").replace(/[^0-9]/g, "");
-      const res = await fetch("/api/lead/capture", {
+      // 1. Log immutable audit action: WHATSAPP_DRAFT (DRAFT_OPENED)
+      await fetch("/api/admin/growth/crm/activity", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          businessName: lead.name,
-          city: lead.city,
-          category: selectedCategory,
-          phone: cleanPhone.length >= 10 ? cleanPhone : `000${Math.floor(1000000 + Math.random() * 9000000)}`,
-          source: "MARKET_RADAR_TARGET",
-          notes: `Added from Market Radar. Address: ${lead.address}. Google Maps: ${lead.googleMapsUrl}`,
+          leadId: selectedLead.id,
+          type: "WHATSAPP_DRAFT",
+          outcome: "DRAFT_OPENED",
+          notes: pitchText.slice(0, 150),
         }),
       });
 
-      if (res.ok) {
-        await fetchInboundLeads();
-        alert(`✅ Added "${lead.name}" to your Target CRM leads!`);
-      }
+      // 2. Open WhatsApp Web / Mobile
+      const clean10 = selectedLead.phone.replace(/\D/g, "").slice(-10);
+      const waUrl = `https://wa.me/91${clean10}?text=${encodeURIComponent(pitchText)}`;
+      window.open(waUrl, "_blank", "noopener,noreferrer");
+
+      fetchCrmData();
     } catch (err) {
-      console.error("Failed to add lead to CRM:", err);
+      console.error("WhatsApp activity log error:", err);
     } finally {
-      setAddingToCrmId(null);
+      setIsLoggingAction(false);
     }
   };
 
-  // Generate WhatsApp Message depending on selected template
-  const getWhatsAppMessage = (lead: InboundLead, template: "deficit" | "telugu" | "mockup" | "followup") => {
-    const { rating, reviewCount, deficit } = parseHunterNotes(lead.notes);
-    const starRating = rating !== null ? `${rating}★` : "5.0★";
-    const revs = reviewCount !== null ? reviewCount : "few";
-    const gap = deficit || 90;
-    const city = lead.city || "Kadapa";
-
-    if (template === "telugu") {
-      return `నమస్కారం ${lead.businessName} మేనేజ్‌మెంట్ గారికి! 🙏\n\nగూగుల్ మ్యాప్స్‌లో మీ బిజినెస్‌కి ${starRating} రేటింగ్ ఉన్నా, కేవలం ${revs} రివ్యూలు మాత్రమే ఉన్నాయి. ${city}లో మీ పోటీదారులకు 100+ రివ్యూలు ఉండటం వల్ల రోజూ ఎంతోమంది కస్టమర్లు అటువైపు వెళ్ళిపోతున్నారు.\n\nమా 3D స్మార్ట్ QR స్టాండీ మీ కౌంటర్‌లో పెడితే, కస్టమర్లు తమ మొబైల్‌తో QR స్కాన్ చేయగానే కేవలం 5 సెకన్లలో 5-స్టార్ గూగుల్ రివ్యూ ఇస్తారు (Gemini AI సాయంతో).\n\nమీ బిజినెస్ కోసం ఉచిత డెమో & శాంపిల్ స్టాండీ ఫోటో పంపమంటారా?`;
+  // Handle Explicit Confirmation: "Marked sent by agent"
+  const handleConfirmWhatsAppSent = async () => {
+    if (!selectedLead) return;
+    setIsLoggingAction(true);
+    try {
+      await fetch("/api/admin/growth/crm/activity", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          leadId: selectedLead.id,
+          type: "WHATSAPP_SENT",
+          outcome: "SENT_CONFIRMED",
+          notes: "Agent confirmed outreach message was successfully sent.",
+        }),
+      });
+      setShowPitchModal(false);
+      fetchCrmData();
+    } catch (err) {
+      console.error("Confirm sent error:", err);
+    } finally {
+      setIsLoggingAction(false);
     }
-
-    if (template === "mockup") {
-      return `Hello ${lead.businessName} team! 👋\n\nWe noticed on Google Maps that you have a wonderful ${starRating} rating, but only ${revs} reviews in ${city}.\n\nWe designed a FREE custom 3D Crystal Acrylic Review Standee preview with your shop's branding & instant Google review QR.\n\nWhen customers scan the QR on your billing counter, it opens your Google review box directly in 5 seconds without searching or typing.\n\nWould you like us to send the photo preview mockup for ${lead.businessName}?`;
-    }
-
-    if (template === "followup") {
-      return `Hello ${lead.businessName} team! 👋\n\nFollowing up on our phone call regarding your counter review standee. As discussed, placing our 3D Smart QR Standee at your cash counter helps you collect 50-100 reviews in 30 days.\n\nWould you like us to deliver the sample standee to your counter today?`;
-    }
-
-    // Default: Deficit Audit (English)
-    return `Hello ${lead.businessName} team! 👋\n\nI was looking at businesses in ${city} today and noticed your listing on Google Maps has a great ${starRating} rating, but only ${revs} reviews.\n\nMost customers search and pick competitors who have 100+ reviews. You need about ${gap} more reviews to dominate local search in ${city}!\n\nReviewSmart AI provides luxury 3D Smart QR Standees for your billing desk. Customers simply scan the QR code, and Gemini AI drafts an authentic 5-star review in 5 seconds.\n\nWould you like to see a free working preview for ${lead.businessName}?`;
   };
 
-  // Launch WhatsApp and advance status
-  const handleLaunchWhatsApp = async (lead: InboundLead) => {
-    const cleanPhone = lead.phone.replace(/[^0-9]/g, "");
-    if (!cleanPhone || cleanPhone.startsWith("000")) {
-      alert("Please add a valid phone number first.");
-      return;
+  // Handle Call Logging
+  const handleLogCall = async (outcome: "SPOKE_TO_OWNER" | "NO_ANSWER" | "CALLBACK_REQUESTED") => {
+    if (!selectedLead) return;
+    setIsLoggingAction(true);
+    try {
+      await fetch("/api/admin/growth/crm/activity", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          leadId: selectedLead.id,
+          type: "CALL",
+          outcome,
+          notes: `Call outcome: ${outcome.replace(/_/g, " ")}`,
+        }),
+      });
+      fetchCrmData();
+    } catch (err) {
+      console.error("Call log error:", err);
+    } finally {
+      setIsLoggingAction(false);
     }
-
-    const message = getWhatsAppMessage(lead, activeWaTemplate);
-    const waUrl = `https://wa.me/91${cleanPhone}?text=${encodeURIComponent(message)}`;
-
-    // Open WhatsApp
-    window.open(waUrl, "_blank");
-
-    // Automatically transition to WHATSAPP_SENT
-    await updateInboundStatus(lead.id, "WHATSAPP_SENT", `WhatsApp sent (${activeWaTemplate.toUpperCase()} template)`);
-    setWhatsappModalLead(null);
   };
 
-  // Mark as Called
-  const handleMarkCalled = async (lead: InboundLead) => {
-    await updateInboundStatus(lead.id, "CALLED", "Followed up via Phone Call");
-    setCallingModalLead(null);
+  // Handle In-Person Store Visit Logging
+  const handleLogVisit = async () => {
+    if (!selectedLead) return;
+    setIsLoggingAction(true);
+    try {
+      await fetch("/api/admin/growth/crm/activity", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          leadId: selectedLead.id,
+          type: "IN_PERSON_VISIT",
+          outcome: visitOutcome,
+          notes: `Owner: ${visitOwnerName || "Not stated"}. Notes: ${visitNotes}`,
+          nextAction: "FOLLOW_UP_VISIT",
+          nextActionDue: visitNextDate ? new Date(visitNextDate).toISOString() : null,
+        }),
+      });
+      setShowVisitModal(false);
+      setVisitOwnerName("");
+      setVisitNotes("");
+      setVisitNextDate("");
+      fetchCrmData();
+    } catch (err) {
+      console.error("Visit log error:", err);
+    } finally {
+      setIsLoggingAction(false);
+    }
   };
 
-  // Import Leads (CSV / JSON)
-  const handleImportLeads = async () => {
-    if (!importCsvText.trim()) return;
-    setImportingLoading(true);
-    setImportResult(null);
+  // Update Lead Stage / Status
+  const handleUpdateStage = async (leadId: string, newStage: string) => {
+    try {
+      await fetch("/api/admin/growth/crm", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          leadId,
+          status: newStage,
+        }),
+      });
+      fetchCrmData();
+    } catch (err) {
+      console.error("Stage update error:", err);
+    }
+  };
+
+  // Toggle Do Not Contact
+  const handleToggleDoNotContact = async (leadId: string, currentVal: boolean) => {
+    try {
+      await fetch("/api/admin/growth/crm", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          leadId,
+          doNotContact: !currentVal,
+        }),
+      });
+      fetchCrmData();
+    } catch (err) {
+      console.error("DNC update error:", err);
+    }
+  };
+
+  // Run Radar Search (On Demand Only)
+  const handleRunRadar = async () => {
+    setRadarState("LOADING");
+    setRadarErrorMsg("");
+    setRadarResults([]);
 
     try {
-      let payload: any = {
-        city: importCity,
-        category: importCategory,
-        maxReviews: parseInt(importMaxReviews, 10) || 50,
-        source: "OPEN_SOURCE_IMPORT",
-      };
-
-      if (importCsvText.trim().startsWith("[") || importCsvText.trim().startsWith("{")) {
-        try {
-          const parsed = JSON.parse(importCsvText.trim());
-          payload.leads = Array.isArray(parsed) ? parsed : [parsed];
-        } catch (e) {
-          payload.csvText = importCsvText;
-        }
-      } else {
-        payload.csvText = importCsvText;
+      const res = await fetch(`/api/admin/growth?city=${encodeURIComponent(radarCity)}&category=${encodeURIComponent(radarCategory)}`);
+      if (!res.ok) {
+        throw new Error(`Radar provider returned status ${res.status}`);
       }
+      const data = await res.json();
+      if (!data.leads || data.leads.length === 0) {
+        setRadarState("NO_MATCHES");
+      } else {
+        setRadarResults(data.leads);
+        setRadarState("SUCCESS");
+      }
+    } catch (err: any) {
+      console.error("Radar search error:", err);
+      setRadarErrorMsg(err.message || "Provider service unavailable. Please retry in a few moments.");
+      setRadarState("ERROR");
+    }
+  };
 
+  // Add Radar Discovery to CRM
+  const handleAddRadarToCrm = async (lead: RealBusinessLead) => {
+    setAddingLeadId(lead.id);
+    try {
+      const res = await fetch("/api/admin/growth/crm/radar-to-crm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: lead.name,
+          city: lead.city,
+          locality: lead.locality,
+          category: radarCategory,
+          phone: lead.phone,
+          rating: lead.rating,
+          reviewCount: lead.reviewCount,
+          googlePlaceId: lead.googlePlaceId,
+          googleMapsUrl: lead.googleMapsUrl,
+          dataSource: lead.dataSource,
+          id: lead.id,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        // Remove or mark added
+        setRadarResults((prev) => prev.filter((r) => r.id !== lead.id));
+      }
+    } catch (err) {
+      console.error("Add radar lead error:", err);
+    } finally {
+      setAddingLeadId(null);
+    }
+  };
+
+  // CSV Import (Supports dryRun preview first)
+  const handlePreviewImport = async (dryRun: boolean) => {
+    if (!importCsvText.trim()) return;
+    setIsImporting(true);
+    setImportResultMsg(null);
+    try {
       const res = await fetch("/api/admin/leads/import", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          csvText: importCsvText,
+          maxReviews: importMaxReviews,
+          dryRun,
+        }),
       });
-
       const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to import leads");
-      }
-
-      setImportResult(`✅ ${data.message}`);
-      await fetchInboundLeads();
-      setTimeout(() => {
-        setShowImportModal(false);
+      if (dryRun) {
+        setImportPreview(data);
+      } else {
+        setImportResultMsg(`Successfully imported ${data.importedCount} new leads! (${data.matchedCount} already matched, ${data.skippedCount} skipped)`);
+        setImportPreview(null);
         setImportCsvText("");
-        setImportResult(null);
-        setActiveTab("inbound");
-      }, 2000);
+        fetchCrmData();
+      }
     } catch (err: any) {
-      setImportResult(`❌ ${err?.message || "Import error"}`);
+      console.error("Import error:", err);
+      setImportResultMsg(err.message || "Failed to process CSV import.");
     } finally {
-      setImportingLoading(false);
+      setIsImporting(false);
     }
   };
-
-  const handleExportCsv = () => {
-    if (leads.length === 0) return;
-
-    const headers = [
-      "Business Name",
-      "Address",
-      "City",
-      "Phone",
-      "Website",
-      "Google Rating",
-      "Review Count",
-      "Opportunity Score",
-      "Data Source",
-      "Google Maps URL",
-    ];
-
-    const rows = leads.map((l) => [
-      `"${l.name.replace(/"/g, '""')}"`,
-      `"${(l.address || "").replace(/"/g, '""')}"`,
-      `"${l.city.replace(/"/g, '""')}"`,
-      `"${l.phone ?? ""}"`,
-      `"${l.website ?? ""}"`,
-      l.rating ?? "N/A",
-      l.reviewCount ?? "N/A",
-      l.reviewGapScore,
-      l.dataSource,
-      `"${l.googleMapsUrl ?? ""}"`,
-    ]);
-
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute(
-      "download",
-      `ReviewSmart_GrowthLeads_${selectedCity}_${Date.now()}.csv`
-    );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const displayedLeads = filterHotOnly ? leads.filter((l) => l.isHotLead) : leads;
-
-  const filteredInbound = inboundLeads.filter((l) => {
-    if (inboundFilter !== "ALL" && l.status !== inboundFilter) return false;
-
-    if (sourceFilter === "HUNTER") {
-      return l.source === "GOOGLE_MAPS_HUNTER" || l.source === "OPEN_SOURCE_IMPORT";
-    }
-    if (sourceFilter === "WEBSITE") {
-      return l.source !== "GOOGLE_MAPS_HUNTER" && l.source !== "OPEN_SOURCE_IMPORT";
-    }
-
-    return true;
-  });
-
-  const hunterLeadCount = inboundLeads.filter(
-    (l) => l.source === "GOOGLE_MAPS_HUNTER" || l.source === "OPEN_SOURCE_IMPORT"
-  ).length;
 
   return (
-    <div className="space-y-6 pb-20">
-      {/* ── TOP HERO HEADER ─────────────────────────────────────────── */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 border border-indigo-500/30 p-4 sm:p-6 md:p-8 shadow-2xl">
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 -mb-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              100% Free Open-Source Growth Engine
+    <div className="min-h-screen bg-[#F7F6F2] text-[#172033] pb-20 font-sans selection:bg-indigo-600 selection:text-white">
+      {/* ─── STICKY HEADER ──────────────────────────────────────────────────────── */}
+      <header className="sticky top-0 z-30 bg-[#F7F6F2]/90 backdrop-blur-md border-b border-stone-200/80 px-4 sm:px-6 py-3.5">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 flex-wrap">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black shadow-md shadow-indigo-600/20">
+              <Compass className="w-5 h-5" />
             </div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2 sm:gap-3">
-              AI Growth &amp; Low-Review Hunter 🚀
-            </h1>
-            <p className="text-slate-300 text-xs sm:text-sm md:text-base max-w-2xl leading-relaxed">
-              Target independent local businesses with <strong className="text-emerald-300">few Google reviews (&lt; 40)</strong> that desperately need ReviewSmart AI standees. Zero paid APIs • Zero billing fees.
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg sm:text-xl font-black text-[#172033] tracking-tight">
+                  Field-Sales CRM
+                </h1>
+                <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-2 py-0.5 rounded-full">
+                  Verified Data
+                </span>
+              </div>
+              <p className="text-xs text-stone-500">
+                Ground-truth leads, fact-based outreach & reliable follow-ups
+              </p>
+            </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+          {/* Navigation Views Tab Bar */}
+          <div className="flex items-center bg-stone-200/70 p-1 rounded-2xl border border-stone-300/60 shadow-inner">
             <button
-              onClick={() => setShowImportModal(true)}
-              className="bg-indigo-600/90 hover:bg-indigo-500 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-indigo-400/40 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 transition-all active:scale-95"
+              onClick={() => setActiveView("TODAYS_FOLLOWUPS")}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
+                activeView === "TODAYS_FOLLOWUPS"
+                  ? "bg-white text-indigo-900 shadow-sm"
+                  : "text-stone-600 hover:text-stone-900"
+              }`}
             >
-              <Upload className="w-4 h-4 text-indigo-200" />
-              Import Scraped Leads
+              <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Today's Follow-ups</span>
+              {metrics && metrics.todaysFollowUpsCount > 0 && (
+                <span className="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-indigo-600 text-white font-mono">
+                  {metrics.todaysFollowUpsCount}
+                </span>
+              )}
             </button>
 
-            <div className="bg-slate-800/80 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-700/60 flex items-center justify-between sm:justify-start gap-3">
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
-                🎯
-              </div>
-              <div className="text-left">
-                <div className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">Hunted Targets</div>
-                <div className="text-xs font-semibold text-white">{hunterLeadCount} Low-Review Leads</div>
-              </div>
-            </div>
+            <button
+              onClick={() => setActiveView("DISCOVER")}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
+                activeView === "DISCOVER"
+                  ? "bg-white text-indigo-900 shadow-sm"
+                  : "text-stone-600 hover:text-stone-900"
+              }`}
+            >
+              <Compass className="w-3.5 h-3.5 text-amber-600" />
+              <span>Discover (Radar)</span>
+            </button>
+
+            <button
+              onClick={() => setActiveView("PIPELINE")}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
+                activeView === "PIPELINE"
+                  ? "bg-white text-indigo-900 shadow-sm"
+                  : "text-stone-600 hover:text-stone-900"
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Pipeline</span>
+              {metrics && (
+                <span className="ml-1 text-[11px] font-mono text-stone-500">
+                  ({metrics.totalLeads})
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveView("REPORTS")}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
+                activeView === "REPORTS"
+                  ? "bg-white text-indigo-900 shadow-sm"
+                  : "text-stone-600 hover:text-stone-900"
+              }`}
+            >
+              <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Reports</span>
+            </button>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowImportModal(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-stone-300 text-stone-700 hover:text-stone-900 text-xs font-bold shadow-sm transition hover:bg-stone-50"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Import CSV</span>
+            </button>
+            <button
+              onClick={() => fetchCrmData()}
+              className="p-2 rounded-xl bg-white border border-stone-300 text-stone-600 hover:text-stone-900 transition hover:bg-stone-50"
+              title="Refresh CRM"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoadingCrm ? "animate-spin" : ""}`} />
+            </button>
           </div>
         </div>
+      </header>
 
-        {/* ── TABS BAR ──────────────────────────────────────────────── */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-6 sm:mt-8 border-b border-slate-800/80 pb-2">
-          <button
-            onClick={() => setActiveTab("inbound")}
-            className={`flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-              activeTab === "inbound"
-                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
-            }`}
-          >
-            <Target className="w-4 h-4 text-emerald-400" />
-            <span className="truncate">Target Lead CRM &amp; Sales Hub</span>
-            {hunterLeadCount > 0 && (
-              <span className="ml-1 px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
-                {hunterLeadCount} Qualified
-              </span>
-            )}
-            {inboundLeads.filter((l) => l.status === "NEW").length > 0 && (
-              <span className="ml-1 px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] bg-rose-500 text-white font-bold animate-pulse">
-                {inboundLeads.filter((l) => l.status === "NEW").length} NEW
-              </span>
-            )}
-          </button>
-
-          <button
-            onClick={() => setActiveTab("radar")}
-            className={`flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-              activeTab === "radar"
-                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
-            }`}
-          >
-            <Compass className="w-4 h-4" />
-            <span>Market Radar</span>
-            <span className="ml-1 px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] bg-indigo-900/60 text-indigo-200 border border-indigo-700/50">
-              {leads.length}
-            </span>
-          </button>
-        </div>
-      </div>
-
-      {/* ── TAB 1: TARGET LEAD CRM & SALES ACTION HUB ────────────────── */}
-      {activeTab === "inbound" && (
-        <div className="space-y-5 sm:space-y-6">
-          {/* Top Controls Bar */}
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-4 sm:p-5 md:p-6 shadow-xl space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                  <Target className="w-5 h-5 text-emerald-400 shrink-0" />
-                  <span>Target Lead Pipeline &amp; High-Converting Sales Funnel</span>
-                </h2>
-                <p className="text-xs text-slate-400 leading-normal">
-                  Step 1: Send WhatsApp Message First &bull; Step 2: Proceed to Call &bull; Step 3: Convert to Client Store!
+      {/* ─── MAIN CONTENT CONTAINER ─────────────────────────────────────────── */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-5">
+        {/* VIEW 1: TODAY'S FOLLOW-UPS (DEFAULT VIEW) */}
+        {activeView === "TODAYS_FOLLOWUPS" && (
+          <div className="space-y-4">
+            <div className="bg-white border border-stone-200/90 rounded-3xl p-5 shadow-sm flex items-center justify-between gap-4 flex-wrap">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-indigo-600" />
+                  <h2 className="text-base sm:text-lg font-black text-[#172033]">
+                    Today's Action Queue
+                  </h2>
+                </div>
+                <p className="text-xs text-stone-500 mt-0.5">
+                  Scheduled phone calls, in-person visits, and demo requests requiring action today.
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto">
-                <button
-                  onClick={() => setShowImportModal(true)}
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 text-indigo-200 text-xs font-semibold border border-indigo-500/40 transition-all active:scale-95"
-                >
-                  <Upload className="w-3.5 h-3.5 shrink-0" />
-                  <span className="truncate">Import Leads</span>
-                </button>
-
-                <button
-                  onClick={fetchInboundLeads}
-                  disabled={loadingInbound}
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-all active:scale-95"
-                >
-                  <RefreshCw className={`w-3.5 h-3.5 shrink-0 ${loadingInbound ? "animate-spin" : ""}`} />
-                  <span>Refresh</span>
-                </button>
+              {/* Search in Queue */}
+              <div className="relative min-w-[240px]">
+                <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search business or phone..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-stone-300 text-xs text-stone-800 placeholder-stone-400 bg-stone-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                />
               </div>
             </div>
 
-            {/* Filter Tabs */}
-            <div className="pt-3 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs border-t border-slate-800/80">
-              {/* Source Filter */}
-              <div className="flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700/80 overflow-x-auto no-scrollbar max-w-full">
-                <button
-                  onClick={() => setSourceFilter("ALL")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
-                    sourceFilter === "ALL"
-                      ? "bg-indigo-600 text-white font-bold shadow-sm"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  All Sources ({inboundLeads.length})
-                </button>
-                <button
-                  onClick={() => setSourceFilter("HUNTER")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
-                    sourceFilter === "HUNTER"
-                      ? "bg-emerald-600 text-white font-bold shadow-sm"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  🎯 Hunter ({hunterLeadCount})
-                </button>
-                <button
-                  onClick={() => setSourceFilter("WEBSITE")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
-                    sourceFilter === "WEBSITE"
-                      ? "bg-indigo-600 text-white font-bold shadow-sm"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  🌐 Inquiries ({inboundLeads.length - hunterLeadCount})
-                </button>
+            {/* Leads List / Cards */}
+            {isLoadingCrm ? (
+              <div className="bg-white rounded-3xl border border-stone-200 p-12 text-center flex flex-col items-center justify-center gap-3">
+                <Loader2 className="w-7 h-7 text-indigo-600 animate-spin" />
+                <p className="text-xs font-semibold text-stone-500">Loading today's follow-up queue...</p>
               </div>
-
-              {/* Status Filter */}
-              <div className="flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700/80 overflow-x-auto no-scrollbar max-w-full">
-                {["ALL", "NEW", "WHATSAPP_SENT", "CALLED", "DEMO_SENT", "CONVERTED", "LOST"].map((st) => (
-                  <button
-                    key={st}
-                    onClick={() => setInboundFilter(st)}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
-                      inboundFilter === st
-                        ? "bg-indigo-600 text-white font-bold shadow-sm"
-                        : "text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    {st === "WHATSAPP_SENT" ? "WHATSAPP SENT" : st}
-                  </button>
-                ))}
+            ) : leads.length === 0 ? (
+              <div className="bg-white rounded-3xl border border-stone-200 p-12 text-center flex flex-col items-center justify-center gap-2">
+                <CheckCircle2 className="w-10 h-10 text-emerald-500 mb-1" />
+                <h3 className="text-base font-bold text-stone-800">All caught up for today!</h3>
+                <p className="text-xs text-stone-500 max-w-sm">
+                  No overdue or pending follow-ups right now. Check the Pipeline or run a Radar search to discover new merchants.
+                </p>
               </div>
-            </div>
-          </div>
+            ) : (
+              <div className="space-y-2.5">
+                {leads.map((lead) => {
+                  const hasPhone = Boolean(lead.phone && lead.phone.length >= 10);
+                  return (
+                    <div
+                      key={lead.id}
+                      className="bg-white border border-stone-200/90 hover:border-indigo-300 rounded-2xl p-4 shadow-sm hover:shadow-md transition flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+                    >
+                      {/* Left: Identity & Badges */}
+                      <div className="space-y-1.5 flex-1 min-w-[280px]">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="font-bold text-sm text-[#172033] hover:text-indigo-600 transition cursor-pointer" onClick={() => { setSelectedLead(lead); setShowDetailDrawer(true); }}>
+                            {lead.businessName}
+                          </h3>
 
-          {/* Workflow Strategy Banner */}
-          <div className="p-3.5 sm:p-4 bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/20 rounded-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-3 text-xs text-slate-300">
-            <div className="flex items-start sm:items-center gap-3">
-              <span className="text-xl sm:text-2xl shrink-0">⚡</span>
-              <div>
-                <strong className="text-white">Recommended Closing Sequence:</strong>
-                <span className="text-slate-300 ml-1 block sm:inline mt-0.5 sm:mt-0">
-                  1. WhatsApp First Review Deficit &bull; 2. Call Business to close &bull; 3. Onboard Store!
-                </span>
-              </div>
-            </div>
-            <div className="p-2 rounded-xl bg-black/40 border border-slate-800 font-mono text-[10px] sm:text-[11px] text-emerald-400 select-all max-w-full overflow-x-auto whitespace-nowrap">
-              npm run hunt-leads -- --city Kadapa --category &quot;restaurants&quot; --maxReviews 40
-            </div>
-          </div>
-
-          {/* Leads Grid */}
-          {filteredInbound.length === 0 ? (
-            <div className="p-12 text-center bg-slate-900/50 rounded-3xl border border-slate-800 text-slate-400 text-sm">
-              <Inbox className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-              No leads found matching current filter.
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {filteredInbound.map((lead) => {
-                const cleanPhone = lead.phone.replace(/[^0-9]/g, "");
-                const hasValidPhone = cleanPhone.length >= 10 && !cleanPhone.startsWith("000");
-                const isHunter = lead.source === "GOOGLE_MAPS_HUNTER" || lead.source === "OPEN_SOURCE_IMPORT";
-                const { rating, reviewCount, deficit, mapsUrl, cleanAddress } = parseHunterNotes(lead.notes);
-                const isEditingThisPhone = editingPhoneId === lead.id;
-                const isWritingNote = activeNoteId === lead.id;
-
-                return (
-                  <div
-                    key={lead.id}
-                    className="p-5 rounded-3xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition-all space-y-4 shadow-xl flex flex-col justify-between"
-                  >
-                    <div>
-                      {/* Top Bar: Badges & Date */}
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <div className="flex flex-wrap items-center gap-1.5">
+                          {/* Priority Pill */}
                           <span
-                            className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${
-                              isHunter
-                                ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                                : "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
+                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full border flex items-center gap-1 ${
+                              lead.priority === "DEMO_REQUESTED"
+                                ? "bg-amber-100 text-amber-900 border-amber-300"
+                                : lead.priority === "BELOW_THRESHOLD"
+                                ? "bg-indigo-50 text-indigo-800 border-indigo-200"
+                                : "bg-stone-100 text-stone-700 border-stone-200"
+                            }`}
+                            title={lead.priorityReason || ""}
+                          >
+                            <span>{lead.priority.replace(/_/g, " ")}</span>
+                          </span>
+
+                          {/* Verification Method Pill */}
+                          <span
+                            className={`text-[9.5px] font-medium px-2 py-0.2 rounded-md border ${
+                              lead.verificationMethod === "API_VERIFIED"
+                                ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                : lead.verificationMethod === "MAPS_LINK_ONLY"
+                                ? "bg-sky-50 text-sky-800 border-sky-200"
+                                : "bg-amber-50 text-amber-800 border-amber-200"
                             }`}
                           >
-                            {isHunter ? "🎯 LOW-REVIEW TARGET" : "🌐 WEB INQUIRY"}
-                          </span>
-
-                          <span className="text-[10px] text-slate-500">
-                            {new Date(lead.createdAt).toLocaleDateString("en-IN", {
-                              day: "numeric",
-                              month: "short",
-                            })}
+                            {lead.verificationMethod === "API_VERIFIED"
+                              ? "API Verified"
+                              : lead.verificationMethod === "MAPS_LINK_ONLY"
+                              ? "Maps Link"
+                              : "Needs Verification"}
                           </span>
                         </div>
 
-                        {/* Status Dropdown */}
+                        {/* Locality & Ratings */}
+                        <div className="flex items-center gap-3 text-xs text-stone-500 flex-wrap">
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-3.5 h-3.5 text-stone-400 shrink-0" />
+                            <span>{lead.locality || lead.city || "Kadapa"}</span>
+                          </span>
+
+                          <span className="flex items-center gap-1">
+                            <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500 shrink-0" />
+                            <span>
+                              {lead.rating !== null ? `${lead.rating.toFixed(1)}★` : "Unrated"}
+                              {lead.reviewCount !== null ? ` (${lead.reviewCount} revs)` : " (0 revs)"}
+                            </span>
+                          </span>
+
+                          {lead.assignedAgentName && (
+                            <span className="flex items-center gap-1 font-mono text-[11px] text-indigo-700 bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-100">
+                              <UserCheck className="w-3 h-3" />
+                              <span>{lead.assignedAgentName}</span>
+                            </span>
+                          )}
+
+                          {lead.lastOutcome && (
+                            <span className="text-[11px] text-stone-600 bg-stone-100 px-1.5 py-0.2 rounded font-mono">
+                              Last: {lead.lastOutcome.replace(/_/g, " ")}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Right: Field Actions */}
+                      <div className="flex items-center gap-2 self-end md:self-center shrink-0 flex-wrap">
+                        {/* Call Button */}
+                        {hasPhone ? (
+                          <a
+                            href={`tel:+91${lead.phone}`}
+                            onClick={() => {
+                              setSelectedLead(lead);
+                              handleLogCall("SPOKE_TO_OWNER");
+                            }}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold transition shadow-sm"
+                            title={`Call +91 ${lead.phone}`}
+                          >
+                            <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>+91 {lead.phone}</span>
+                          </a>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-stone-100 text-stone-400 text-xs border border-stone-200">
+                            <Phone className="w-3.5 h-3.5 text-stone-300" />
+                            <span>No Phone</span>
+                          </span>
+                        )}
+
+                        {/* WhatsApp Outreach */}
+                        <button
+                          disabled={!hasPhone}
+                          onClick={() => {
+                            setSelectedLead(lead);
+                            setShowPitchModal(true);
+                          }}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-sm ${
+                            hasPhone
+                              ? "bg-emerald-600 hover:bg-emerald-500 text-white"
+                              : "bg-stone-200 text-stone-400 cursor-not-allowed"
+                          }`}
+                          title={hasPhone ? "Prepare WhatsApp Pitch" : "Phone number required for WhatsApp"}
+                        >
+                          <MessageCircle className="w-3.5 h-3.5" />
+                          <span>WhatsApp</span>
+                        </button>
+
+                        {/* In-Person Store Visit */}
+                        <button
+                          onClick={() => {
+                            setSelectedLead(lead);
+                            setShowVisitModal(true);
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-stone-300 hover:border-indigo-400 text-stone-700 hover:text-indigo-900 text-xs font-bold transition shadow-sm"
+                          title="Record in-person field visit"
+                        >
+                          <Store className="w-3.5 h-3.5 text-indigo-600" />
+                          <span>Log Visit</span>
+                        </button>
+
+                        {/* Stage Selector */}
                         <select
                           value={lead.status}
-                          disabled={updatingId === lead.id}
-                          onChange={(e) => updateInboundStatus(lead.id, e.target.value)}
-                          className="bg-slate-800 border border-slate-700 text-xs text-white rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-bold"
+                          onChange={(e) => handleUpdateStage(lead.id, e.target.value)}
+                          className="text-xs font-bold bg-stone-50 border border-stone-300 text-stone-800 rounded-xl px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                         >
-                          <option value="NEW">1. NEW</option>
-                          <option value="WHATSAPP_SENT">2. WHATSAPP SENT 💬</option>
-                          <option value="CALLED">3. CALLED 📞</option>
-                          <option value="DEMO_SENT">4. DEMO SENT 🎁</option>
-                          <option value="CONVERTED">5. CONVERTED 🎉</option>
-                          <option value="LOST">LOST ✕</option>
+                          <option value="NEW">New</option>
+                          <option value="CONTACTED">Contacted</option>
+                          <option value="DEMO_REQUESTED">Demo Requested</option>
+                          <option value="CONVERTED">Converted</option>
+                          <option value="LOST">Lost</option>
                         </select>
                       </div>
-
-                      {/* Business Title & Location */}
-                      <div className="space-y-0.5">
-                        <h4 className="text-lg font-extrabold text-white tracking-tight flex items-center justify-between">
-                          <span>{lead.businessName}</span>
-                          {mapsUrl && (
-                            <a
-                              href={mapsUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-xs text-indigo-400 hover:text-indigo-300 inline-flex items-center gap-1 font-semibold"
-                              title="Open listing on Google Maps"
-                            >
-                              <MapPin className="w-3.5 h-3.5" />
-                              Maps <ExternalLink className="w-3 h-3" />
-                            </a>
-                          )}
-                        </h4>
-                        <p className="text-xs text-slate-400">
-                          {lead.category || "Local Business"} &bull; <span className="text-slate-300 font-medium">{lead.city || "India"}</span>
-                          {cleanAddress ? ` &bull; ${cleanAddress}` : ""}
-                        </p>
-                      </div>
-
-                      {/* Google Reviews Metric Pill */}
-                      {isHunter && reviewCount !== null && (
-                        <div className="mt-3 bg-slate-950/80 border border-slate-800/90 rounded-2xl p-3 flex items-center justify-between text-xs">
-                          <div className="flex items-center gap-3">
-                            {rating !== null && (
-                              <span className="font-extrabold text-amber-400 flex items-center gap-1">
-                                ⭐ {rating}
-                              </span>
-                            )}
-                            <span className="font-bold text-slate-200">
-                              💬 {reviewCount} Google Reviews
-                            </span>
-                          </div>
-                          <span className="px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-black">
-                            🚨 Needs {deficit || (100 - reviewCount)} to hit 100
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Interactive Pipeline Stepper Bar */}
-                      <div className="mt-3 grid grid-cols-5 gap-1 text-[9px] sm:text-[10px] text-center font-bold">
-                        {[
-                          { id: "NEW", label: "New" },
-                          { id: "WHATSAPP_SENT", label: "WhatsApp" },
-                          { id: "CALLED", label: "Called" },
-                          { id: "DEMO_SENT", label: "Demo" },
-                          { id: "CONVERTED", label: "Closed" },
-                        ].map((step, idx) => {
-                          const activeIdx = ["NEW", "WHATSAPP_SENT", "CALLED", "DEMO_SENT", "CONVERTED"].indexOf(lead.status);
-                          const isDone = activeIdx >= idx;
-                          return (
-                            <button
-                              key={step.id}
-                              onClick={() => updateInboundStatus(lead.id, step.id)}
-                              className={`py-1.5 px-0.5 rounded-lg transition-all border truncate active:scale-95 ${
-                                isDone
-                                  ? "bg-indigo-600 text-white border-indigo-500 shadow-sm font-black"
-                                  : "bg-slate-950 text-slate-500 border-slate-800 hover:text-slate-300"
-                              }`}
-                            >
-                              {step.label}
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      {/* Phone Number Display / Inline Editor */}
-                      <div className="mt-3 pt-3 border-t border-slate-800/80">
-                        {isEditingThisPhone ? (
-                          <div className="p-3 bg-slate-950 rounded-2xl border border-indigo-500/40 space-y-2">
-                            <label className="text-[11px] font-bold text-indigo-300 block">
-                              Enter 10-Digit Mobile / Phone Number:
-                            </label>
-                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                              <input
-                                type="text"
-                                value={editingPhoneValue}
-                                onChange={(e) => setEditingPhoneValue(e.target.value)}
-                                placeholder="e.g. 9876543210"
-                                className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
-                                autoFocus
-                              />
-                              <div className="flex items-center gap-2">
-                                <button
-                                  onClick={() => handleSavePhone(lead.id)}
-                                  disabled={savingPhoneLoading}
-                                  className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-md shadow-emerald-600/30 active:scale-95"
-                                >
-                                  {savingPhoneLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-                                  <span>Save</span>
-                                </button>
-                                <button
-                                  onClick={() => setEditingPhoneId(null)}
-                                  className="px-3 py-2 rounded-xl text-slate-400 hover:text-white text-xs bg-slate-800 sm:bg-transparent"
-                                >
-                                  Cancel
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs">
-                            <div className="flex items-center gap-1.5">
-                              <Phone className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                              {hasValidPhone ? (
-                                <span className="font-bold text-white font-mono text-xs">+91 {cleanPhone}</span>
-                              ) : (
-                                <span className="text-amber-400 font-medium text-[11px]">⚠️ Phone missing</span>
-                              )}
-                              <button
-                                onClick={() => {
-                                  setEditingPhoneId(lead.id);
-                                  setEditingPhoneValue(hasValidPhone ? cleanPhone : "");
-                                }}
-                                className="text-[11px] text-indigo-400 hover:text-indigo-300 font-medium underline inline-flex items-center gap-0.5 ml-1"
-                              >
-                                <Edit3 className="w-3 h-3" />
-                                {hasValidPhone ? "Edit" : "Add Phone"}
-                              </button>
-                            </div>
-
-                            {!hasValidPhone && mapsUrl && (
-                              <a
-                                href={mapsUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-[11px] text-emerald-400 hover:underline flex items-center gap-1 font-semibold"
-                              >
-                                <Search className="w-3 h-3" />
-                                Find on Maps ↗
-                              </a>
-                            )}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Lead Notes / Activity History */}
-                      {lead.notes && (
-                        <div className="mt-3 text-xs text-slate-300 bg-slate-950/70 p-3 rounded-2xl border border-slate-800/80 leading-relaxed max-h-24 overflow-y-auto whitespace-pre-line font-mono text-[11px]">
-                          {lead.notes}
-                        </div>
-                      )}
-
-                      {/* Add Quick Note Input */}
-                      {isWritingNote ? (
-                        <div className="mt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                          <input
-                            type="text"
-                            value={noteInputValue}
-                            onChange={(e) => setNoteInputValue(e.target.value)}
-                            placeholder="e.g. Spoke to owner, callback at 4 PM..."
-                            className="flex-1 bg-slate-950 border border-slate-700 text-xs text-white rounded-xl px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                            autoFocus
-                          />
-                          <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => handleSaveQuickNote(lead.id)}
-                              disabled={savingNoteLoading}
-                              className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs"
-                            >
-                              Save
-                            </button>
-                            <button
-                              onClick={() => setActiveNoteId(null)}
-                              className="text-slate-400 hover:text-white text-xs px-2 py-2 bg-slate-800 sm:bg-transparent rounded-xl"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="mt-1 flex justify-end">
-                          <button
-                            onClick={() => {
-                              setActiveNoteId(lead.id);
-                              setNoteInputValue("");
-                            }}
-                            className="text-[10px] text-slate-400 hover:text-indigo-400 flex items-center gap-1 font-medium py-1"
-                          >
-                            <PlusCircle className="w-3 h-3" />
-                            Add Follow-up Note
-                          </button>
-                        </div>
-                      )}
                     </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
 
-                    {/* Bottom Action Bar: STEP 1 (WhatsApp) -> STEP 2 (Call) -> STEP 3 (Onboard) */}
-                    <div className="pt-3 border-t border-slate-800/80 space-y-2">
-                      <div className="grid grid-cols-2 gap-2">
-                        {/* 1. WHATSAPP FIRST BUTTON */}
-                        <button
-                          onClick={() => {
-                            if (!hasValidPhone) {
-                              setEditingPhoneId(lead.id);
-                              setEditingPhoneValue("");
-                              return;
-                            }
-                            setWhatsappModalLead(lead);
-                          }}
-                          className={`inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 ${
-                            lead.status === "WHATSAPP_SENT" || lead.status === "CALLED"
-                              ? "bg-emerald-950/60 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-900/60"
-                              : "bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30"
-                          }`}
-                        >
-                          <MessageCircle className="w-3.5 h-3.5 shrink-0" />
-                          <span className="truncate">1. WhatsApp</span>
-                          {lead.status === "WHATSAPP_SENT" && <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />}
-                        </button>
+        {/* VIEW 2: DISCOVER (RADAR ON-DEMAND SEARCH) */}
+        {activeView === "DISCOVER" && (
+          <div className="space-y-4">
+            <div className="bg-white border border-stone-200/90 rounded-3xl p-5 shadow-sm space-y-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Compass className="w-5 h-5 text-amber-600" />
+                  <h2 className="text-base sm:text-lg font-black text-[#172033]">
+                    Ground Radar Discovery
+                  </h2>
+                </div>
+                <p className="text-xs text-stone-500 mt-0.5">
+                  Scan local OpenStreetMap & Google Places registers on demand. Results remain strictly unverified until confirmed by an agent.
+                </p>
+              </div>
 
-                        {/* 2. THEN CALL BUTTON */}
-                        <button
-                          onClick={() => {
-                            if (!hasValidPhone) {
-                              setEditingPhoneId(lead.id);
-                              setEditingPhoneValue("");
-                              return;
-                            }
-                            setCallingModalLead(lead);
-                          }}
-                          className={`inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 ${
-                            lead.status === "CALLED"
-                              ? "bg-blue-950/60 text-blue-300 border border-blue-500/30 hover:bg-blue-900/60"
-                              : "bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30"
-                          }`}
-                        >
-                          <PhoneCall className="w-3.5 h-3.5 shrink-0" />
-                          <span className="truncate">2. Call</span>
-                          {lead.status === "CALLED" && <CheckCircle2 className="w-3 h-3 text-blue-400 shrink-0" />}
-                        </button>
-                      </div>
-
-                      {/* 3. CONVERT TO CLIENT STORE */}
-                      <Link
-                        href={`/admin/merchants?autoName=${encodeURIComponent(lead.businessName)}&autoPhone=${cleanPhone}&autoCity=${encodeURIComponent(lead.city || "")}&autoCategory=${encodeURIComponent(lead.category || "")}`}
-                        className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold border border-slate-700 transition-all hover:border-amber-400/40 active:scale-95 shadow-sm"
-                        title="Onboard this lead as an official client store"
-                      >
-                        <UserCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                        <span>Onboard Store &rarr;</span>
-                      </Link>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ── TAB 2: MARKET RADAR (OSM SCANNER) ───────────────────────── */}
-      {activeTab === "radar" && (
-        <div className="space-y-6">
-          {/* Controls Bar */}
-          <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-5 md:p-6 shadow-xl backdrop-blur-sm space-y-4">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 flex-1">
-                {/* City Picker */}
+              {/* City & Category Selectors */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-indigo-400" />
-                    Target Indian City
-                  </label>
+                  <label className="text-[11px] font-bold text-stone-600 block mb-1">Target City</label>
                   <select
-                    value={selectedCity}
-                    onChange={(e) => {
-                      setSelectedCity(e.target.value);
-                      setCustomCity("");
-                    }}
-                    className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    value={radarCity}
+                    onChange={(e) => setRadarCity(e.target.value)}
+                    className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-bold text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
                   >
                     {POPULAR_CITIES.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -1027,427 +836,721 @@ export default function AdminGrowthPage() {
                   </select>
                 </div>
 
-                {/* Custom City input */}
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <Globe2 className="w-3.5 h-3.5 text-emerald-400" />
-                    Or Any Other Indian City
-                  </label>
-                  <input
-                    type="text"
-                    value={customCity}
-                    onChange={(e) => setCustomCity(e.target.value)}
-                    placeholder="e.g. Surat, Coimbatore, Indore..."
-                    className="w-full bg-slate-800 border border-slate-700 text-white placeholder-slate-500 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-
-                {/* Category Picker */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <Tag className="w-3.5 h-3.5 text-amber-400" />
-                    Business Category
-                  </label>
+                  <label className="text-[11px] font-bold text-stone-600 block mb-1">Merchant Category</label>
                   <select
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    value={radarCategory}
+                    onChange={(e) => setRadarCategory(e.target.value)}
+                    className="w-full bg-stone-50 border border-stone-300 rounded-xl px-3 py-2 text-xs font-bold text-stone-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
                   >
-                    {POPULAR_CATEGORIES.map((cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
+                    {TARGET_CATEGORIES.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.label}
                       </option>
                     ))}
                   </select>
                 </div>
-              </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-2 lg:pt-0 w-full sm:w-auto">
-                <button
-                  onClick={() => runRadarScan()}
-                  disabled={loadingRadar}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50 active:scale-95"
-                >
-                  {loadingRadar ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Scanning Market...
-                    </>
-                  ) : (
-                    <>
-                      <Search className="w-4 h-4" />
-                      Scan Market Radar
-                    </>
-                  )}
-                </button>
-
-                {leads.length > 0 && (
+                <div className="flex items-end">
                   <button
-                    onClick={handleExportCsv}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-sm font-medium transition-all"
-                    title="Export Leads to CSV"
+                    onClick={handleRunRadar}
+                    disabled={radarState === "LOADING"}
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 font-black text-xs shadow-md transition disabled:opacity-50"
                   >
-                    <Download className="w-4 h-4 text-emerald-400" />
-                    Export CSV
+                    {radarState === "LOADING" ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Scanning Radar...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Search className="w-4 h-4" />
+                        <span>Search Radar</span>
+                      </>
+                    )}
                   </button>
-                )}
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Leads Grid */}
-          <div className="grid grid-cols-1 gap-6">
-            {displayedLeads.map((lead) => {
-              const isExpanded = expandedDossier[lead.id] || false;
-              const cleanPhone = (lead.phone || "").replace(/[^0-9]/g, "");
-              const isAdded = inboundLeads.some(
-                (il) => il.businessName.toLowerCase() === lead.name.toLowerCase()
-              );
+            {/* Radar Visual States */}
+            {radarState === "IDLE" && (
+              <div className="bg-white rounded-3xl border border-stone-200 p-12 text-center flex flex-col items-center justify-center gap-2">
+                <Compass className="w-10 h-10 text-stone-300 mb-1" />
+                <h3 className="text-base font-bold text-stone-800">Ready to Scan</h3>
+                <p className="text-xs text-stone-500 max-w-sm">
+                  Select your target city and category above, then tap "Search Radar" to query local business listings on demand.
+                </p>
+              </div>
+            )}
 
-              return (
-                <div
-                  key={lead.id}
-                  className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl hover:border-slate-700 transition-all"
+            {radarState === "LOADING" && (
+              <div className="bg-white rounded-3xl border border-stone-200 p-12 text-center flex flex-col items-center justify-center gap-3">
+                <Loader2 className="w-8 h-8 text-amber-500 animate-spin" />
+                <p className="text-xs font-semibold text-stone-600">
+                  Querying OpenStreetMap spatial nodes in {radarCity} for {radarCategory}...
+                </p>
+              </div>
+            )}
+
+            {radarState === "NO_MATCHES" && (
+              <div className="bg-white rounded-3xl border border-stone-200 p-12 text-center flex flex-col items-center justify-center gap-2">
+                <AlertTriangle className="w-10 h-10 text-amber-500 mb-1" />
+                <h3 className="text-base font-bold text-stone-800">No Listings Found</h3>
+                <p className="text-xs text-stone-500 max-w-sm">
+                  No matching business nodes found in {radarCity} for this category. Try another nearby city or category.
+                </p>
+              </div>
+            )}
+
+            {radarState === "ERROR" && (
+              <div className="bg-white rounded-3xl border border-red-200 p-8 text-center flex flex-col items-center justify-center gap-2">
+                <AlertTriangle className="w-10 h-10 text-red-500 mb-1" />
+                <h3 className="text-base font-bold text-red-800">Provider Unavailable</h3>
+                <p className="text-xs text-red-600 max-w-md">{radarErrorMsg}</p>
+                <button
+                  onClick={handleRunRadar}
+                  className="mt-2 px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-bold transition"
                 >
-                  <div className="p-5 md:p-6 border-b border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="space-y-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
-                          🗺️ OpenStreetMap
+                  Retry Search
+                </button>
+              </div>
+            )}
+
+            {radarState === "SUCCESS" && radarResults.length > 0 && (
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between text-xs text-stone-500 px-1">
+                  <span>Found {radarResults.length} potential merchant listings in {radarCity}</span>
+                  <span className="text-[11px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                    All Marked "Needs Verification"
+                  </span>
+                </div>
+
+                {radarResults.map((lead) => (
+                  <div
+                    key={lead.id}
+                    className="bg-white border border-stone-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+                  >
+                    <div className="space-y-1 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h4 className="font-bold text-sm text-[#172033]">{lead.name}</h4>
+                        <span className="text-[10px] font-bold text-amber-800 bg-amber-100/70 border border-amber-300 px-2 py-0.2 rounded-full">
+                          Needs Verification
                         </span>
-                        <span className="text-xs text-slate-400 flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-slate-500" />
-                          {lead.locality !== lead.city ? `${lead.locality}, ` : ""}{lead.city}
-                        </span>
+                        {lead.phone ? (
+                          <span className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">
+                            {lead.phone}
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-stone-400">No phone in OSM</span>
+                        )}
                       </div>
-                      <h2 className="text-xl font-bold text-white tracking-tight">{lead.name}</h2>
-                      {lead.address && <p className="text-xs text-slate-500">{lead.address}</p>}
+                      <p className="text-xs text-stone-500">{lead.address}</p>
                     </div>
 
-                    <div className="bg-slate-800/80 rounded-2xl p-3 border border-slate-700/60 flex items-center gap-4">
-                      <div className="text-center">
-                        <div className="text-[10px] uppercase font-bold text-slate-400">Rating</div>
-                        <div className="text-sm font-extrabold text-amber-400">⭐ N/A</div>
-                      </div>
-                      <div className="text-slate-600 font-black text-xs">•</div>
-                      <div className="text-center">
-                        <div className="text-[10px] uppercase font-bold text-slate-400">Reviews</div>
-                        <div className="text-sm font-extrabold text-slate-200">N/A</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="p-5 md:p-6 flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex items-center gap-2 shrink-0">
                       {lead.googleMapsUrl && (
                         <a
                           href={lead.googleMapsUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-all"
+                          className="p-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-600 transition"
+                          title="Open Maps Search"
                         >
-                          <MapPin className="w-3.5 h-3.5 text-indigo-400" />
-                          Verify on Google Maps
-                          <ExternalLink className="w-3 h-3 text-slate-400" />
+                          <ExternalLink className="w-3.5 h-3.5" />
                         </a>
                       )}
-
                       <button
-                        onClick={() => addRadarLeadToCrm(lead)}
-                        disabled={isAdded || addingToCrmId === lead.id}
-                        className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
-                          isAdded
-                            ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20 cursor-default"
-                            : "bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border-indigo-500/30"
-                        }`}
+                        onClick={() => handleAddRadarToCrm(lead)}
+                        disabled={addingLeadId === lead.id}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-sm transition disabled:opacity-50"
                       >
-                        {isAdded ? (
-                          <>
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                            Tracked in CRM
-                          </>
-                        ) : addingToCrmId === lead.id ? (
-                          <>
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            Adding...
-                          </>
+                        {addingLeadId === lead.id ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
                         ) : (
-                          <>
-                            <PlusCircle className="w-3.5 h-3.5" />
-                            Add to CRM Targets
-                          </>
+                          <PlusCircle className="w-3.5 h-3.5" />
                         )}
+                        <span>Add to CRM</span>
                       </button>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* ── MODAL 1: WHATSAPP FIRST OUTREACH HUB ────────────────────── */}
-      {whatsappModalLead && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl max-h-[92vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2">
-                <MessageCircle className="w-5 h-5 text-emerald-400 shrink-0" />
-                <h3 className="text-sm sm:text-base font-bold text-white truncate">
-                  WhatsApp Pitch &bull; <span className="text-emerald-300">{whatsappModalLead.businessName}</span>
-                </h3>
-              </div>
-              <button
-                onClick={() => setWhatsappModalLead(null)}
-                className="text-slate-400 hover:text-white text-sm p-1"
-              >
-                ✕ Close
-              </button>
-            </div>
-
-            {/* Template Selector Tabs */}
-            <div>
-              <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-                Select High-Converting WhatsApp Hook:
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-slate-950 p-1 rounded-2xl border border-slate-800">
-                {[
-                  { id: "deficit", label: "Deficit Hook (EN)" },
-                  { id: "telugu", label: "తెలుగు పిచ్" },
-                  { id: "mockup", label: "Mockup Offer" },
-                  { id: "followup", label: "Call Follow-up" },
-                ].map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => setActiveWaTemplate(t.id as any)}
-                    className={`py-2 px-2 text-xs font-bold rounded-xl transition-all ${
-                      activeWaTemplate === t.id
-                        ? "bg-emerald-600 text-white shadow-md shadow-emerald-600/30 font-black"
-                        : "text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    {t.label}
-                  </button>
                 ))}
               </div>
-            </div>
+            )}
+          </div>
+        )}
 
-            {/* Message Preview */}
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
-                Message Preview (Ready to Send to +91 {whatsappModalLead.phone.replace(/[^0-9]/g, "")}):
-              </label>
-              <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-200 whitespace-pre-line leading-relaxed max-h-52 overflow-y-auto font-sans">
-                {getWhatsAppMessage(whatsappModalLead, activeWaTemplate)}
+        {/* VIEW 3: PIPELINE (ALL LEADS & STAGES) */}
+        {activeView === "PIPELINE" && (
+          <div className="space-y-4">
+            {/* Filter Bar */}
+            <div className="bg-white border border-stone-200/90 rounded-3xl p-4 shadow-sm flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap flex-1">
+                <input
+                  type="text"
+                  placeholder="Filter name, phone, locality..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="px-3 py-1.5 rounded-xl border border-stone-300 text-xs bg-stone-50 focus:bg-white text-stone-800 placeholder-stone-400 min-w-[200px]"
+                />
+
+                <select
+                  value={filterStage}
+                  onChange={(e) => setFilterStage(e.target.value)}
+                  className="px-2.5 py-1.5 rounded-xl border border-stone-300 text-xs font-bold text-stone-700 bg-stone-50"
+                >
+                  <option value="">All Stages</option>
+                  <option value="NEW">New</option>
+                  <option value="CONTACTED">Contacted</option>
+                  <option value="DEMO_REQUESTED">Demo Requested</option>
+                  <option value="CONVERTED">Converted</option>
+                  <option value="LOST">Lost</option>
+                </select>
+
+                <select
+                  value={filterPriority}
+                  onChange={(e) => setFilterPriority(e.target.value)}
+                  className="px-2.5 py-1.5 rounded-xl border border-stone-300 text-xs font-bold text-stone-700 bg-stone-50"
+                >
+                  <option value="">All Priorities</option>
+                  <option value="DEMO_REQUESTED">Demo Requested</option>
+                  <option value="FOLLOW_UP_TODAY">Follow-up Today</option>
+                  <option value="BELOW_THRESHOLD">Below 30 Target</option>
+                  <option value="NEEDS_VERIFICATION">Needs Verification</option>
+                  <option value="NORMAL">Normal</option>
+                </select>
+
+                <select
+                  value={filterSource}
+                  onChange={(e) => setFilterSource(e.target.value)}
+                  className="px-2.5 py-1.5 rounded-xl border border-stone-300 text-xs font-bold text-stone-700 bg-stone-50"
+                >
+                  <option value="">All Sources</option>
+                  <option value="WEBSITE_ENQUIRY">Website Enquiry</option>
+                  <option value="RADAR_DISCOVERY">Radar Discovery</option>
+                  <option value="CSV_IMPORT">CSV Import</option>
+                  <option value="FIELD_VISIT">Field Visit</option>
+                </select>
               </div>
+
+              <span className="text-xs text-stone-500 font-mono">
+                Showing {leads.length} of {metrics?.filteredTotal || leads.length} leads
+              </span>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-2">
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(getWhatsAppMessage(whatsappModalLead, activeWaTemplate));
-                  alert("Copied message to clipboard!");
-                }}
-                className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white border border-slate-700 active:scale-95"
-              >
-                <Copy className="w-3.5 h-3.5" />
-                Copy Text
-              </button>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setWhatsappModalLead(null)}
-                  className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs text-slate-400 hover:text-white font-semibold bg-slate-800 sm:bg-transparent"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleLaunchWhatsApp(whatsappModalLead)}
-                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/30 transition-all active:scale-95"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  Launch WhatsApp &rarr;
-                </button>
+            {/* Pipeline Table */}
+            <div className="bg-white border border-stone-200 rounded-3xl overflow-hidden shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-stone-50 border-b border-stone-200 text-stone-500 font-bold uppercase tracking-wider text-[10px]">
+                      <th className="py-3 px-4">Merchant & Branch</th>
+                      <th className="py-3 px-4">Phone</th>
+                      <th className="py-3 px-4">Rating / Reviews</th>
+                      <th className="py-3 px-4">Priority & Reason</th>
+                      <th className="py-3 px-4">Source</th>
+                      <th className="py-3 px-4">Stage</th>
+                      <th className="py-3 px-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-100">
+                    {leads.map((lead) => (
+                      <tr key={lead.id} className="hover:bg-stone-50/70 transition">
+                        <td className="py-3 px-4">
+                          <div className="font-bold text-stone-900">{lead.businessName}</div>
+                          <div className="text-[11px] text-stone-400">{lead.locality || lead.city || "Kadapa"}</div>
+                        </td>
+                        <td className="py-3 px-4 font-mono">
+                          {lead.phone ? `+91 ${lead.phone}` : <span className="text-stone-300">—</span>}
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="font-bold text-stone-800">
+                            {lead.rating !== null ? `${lead.rating.toFixed(1)}★` : "—"}
+                          </span>{" "}
+                          <span className="text-stone-400">
+                            ({lead.reviewCount !== null ? lead.reviewCount : "Unverified"})
+                          </span>
+                        </td>
+                        <td className="py-3 px-4">
+                          <span
+                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                              lead.priority === "DEMO_REQUESTED"
+                                ? "bg-amber-100 text-amber-900 border-amber-300"
+                                : "bg-stone-100 text-stone-700 border-stone-200"
+                            }`}
+                          >
+                            {lead.priority.replace(/_/g, " ")}
+                          </span>
+                          {lead.priorityReason && (
+                            <div className="text-[10px] text-stone-400 mt-0.5 max-w-[160px] truncate" title={lead.priorityReason}>
+                              {lead.priorityReason}
+                            </div>
+                          )}
+                        </td>
+                        <td className="py-3 px-4 text-stone-500 text-[11px]">
+                          {lead.source.replace(/_/g, " ")}
+                        </td>
+                        <td className="py-3 px-4">
+                          <select
+                            value={lead.status}
+                            onChange={(e) => handleUpdateStage(lead.id, e.target.value)}
+                            className="bg-white border border-stone-200 rounded-lg px-2 py-1 text-xs font-bold text-stone-800"
+                          >
+                            <option value="NEW">New</option>
+                            <option value="CONTACTED">Contacted</option>
+                            <option value="DEMO_REQUESTED">Demo Requested</option>
+                            <option value="CONVERTED">Converted</option>
+                            <option value="LOST">Lost</option>
+                          </select>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <button
+                            onClick={() => { setSelectedLead(lead); setShowDetailDrawer(true); }}
+                            className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 transition"
+                            title="View Activity Details"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* ── MODAL 2: THEN CALL ASSISTANT & BATTLECARD ───────────────── */}
-      {callingModalLead && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl max-h-[92vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2">
-                <PhoneCall className="w-5 h-5 text-blue-400 shrink-0" />
-                <h3 className="text-sm sm:text-base font-bold text-white truncate">
-                  Phone Battlecard &bull; <span className="text-blue-300">{callingModalLead.businessName}</span>
+        {/* VIEW 4: SERVER-SIDE RECONCILED REPORTS */}
+        {activeView === "REPORTS" && metrics && (
+          <div className="space-y-4">
+            <div className="bg-white border border-stone-200 rounded-3xl p-5 shadow-sm">
+              <h2 className="text-base sm:text-lg font-black text-[#172033]">
+                Sales & Verification Performance
+              </h2>
+              <p className="text-xs text-stone-500 mt-0.5">
+                Aggregated server-side metrics across your full database. Tap any card to filter the contributing records.
+              </p>
+            </div>
+
+            {/* Metrics Cards Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              <div
+                onClick={() => { setFilterSource(""); setFilterStage(""); setActiveView("PIPELINE"); }}
+                className="bg-white border border-stone-200 rounded-2xl p-4 shadow-sm hover:border-indigo-400 cursor-pointer transition"
+              >
+                <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">Total Leads</span>
+                <span className="text-2xl font-black text-[#172033] mt-1 block">{metrics.totalLeads}</span>
+                <span className="text-[10px] text-stone-400 mt-1 block">Full CRM database</span>
+              </div>
+
+              <div
+                onClick={() => setActiveView("TODAYS_FOLLOWUPS")}
+                className="bg-white border border-indigo-200 rounded-2xl p-4 shadow-sm hover:border-indigo-400 cursor-pointer transition"
+              >
+                <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-wider block">Follow-ups Due</span>
+                <span className="text-2xl font-black text-indigo-900 mt-1 block">{metrics.todaysFollowUpsCount}</span>
+                <span className="text-[10px] text-indigo-500 mt-1 block">Due today or pending</span>
+              </div>
+
+              <div
+                onClick={() => { setFilterSource("WEBSITE_ENQUIRY"); setActiveView("PIPELINE"); }}
+                className="bg-white border border-stone-200 rounded-2xl p-4 shadow-sm hover:border-indigo-400 cursor-pointer transition"
+              >
+                <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">Website Enquiries</span>
+                <span className="text-2xl font-black text-[#172033] mt-1 block">{metrics.websiteEnquiriesCount}</span>
+                <span className="text-[10px] text-stone-400 mt-1 block">Inbound visitors</span>
+              </div>
+
+              <div
+                onClick={() => { setFilterSource("RADAR_DISCOVERY"); setActiveView("PIPELINE"); }}
+                className="bg-white border border-stone-200 rounded-2xl p-4 shadow-sm hover:border-indigo-400 cursor-pointer transition"
+              >
+                <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">Radar Discovered</span>
+                <span className="text-2xl font-black text-[#172033] mt-1 block">{metrics.radarDiscoveredCount}</span>
+                <span className="text-[10px] text-stone-400 mt-1 block">OSM & Maps hunters</span>
+              </div>
+
+              <div
+                onClick={() => { setFilterStage("CONVERTED"); setActiveView("PIPELINE"); }}
+                className="bg-white border border-emerald-200 rounded-2xl p-4 shadow-sm hover:border-emerald-400 cursor-pointer transition"
+              >
+                <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider block">Agent Conversions</span>
+                <span className="text-2xl font-black text-emerald-900 mt-1 block">{metrics.agentReportedConversions}</span>
+                <span className="text-[10px] text-emerald-600 mt-1 block">Reported in field</span>
+              </div>
+
+              <div
+                className="bg-emerald-50 border border-emerald-300 rounded-2xl p-4 shadow-sm"
+              >
+                <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">Confirmed Paid</span>
+                <span className="text-2xl font-black text-emerald-950 mt-1 block">{metrics.confirmedPaidSales}</span>
+                <span className="text-[10px] text-emerald-700 mt-1 block">Admin-verified sales</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* ─── MODAL 1: FACT-BASED OUTREACH PITCH GENERATOR ───────────────────── */}
+      {showPitchModal && selectedLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white border border-stone-300 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+              <div>
+                <h3 className="font-black text-base text-[#172033]">
+                  WhatsApp Outreach Generator
                 </h3>
+                <p className="text-xs text-stone-500">
+                  Target: {selectedLead.businessName} ({selectedLead.phone})
+                </p>
               </div>
-              <button
-                onClick={() => setCallingModalLead(null)}
-                className="text-slate-400 hover:text-white text-sm p-1"
-              >
-                ✕ Close
+              <button onClick={() => setShowPitchModal(false)} className="p-1 rounded-lg hover:bg-stone-100 text-stone-400">
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Click to Call Banner */}
-            <div className="p-3.5 sm:p-4 rounded-2xl bg-blue-950/50 border border-blue-500/30 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-              <div>
-                <div className="text-[10px] uppercase font-bold text-blue-400">Target Phone Number</div>
-                <div className="text-lg font-black text-white font-mono">+91 {callingModalLead.phone.replace(/[^0-9]/g, "")}</div>
-              </div>
-              <a
-                href={`tel:+91${callingModalLead.phone.replace(/[^0-9]/g, "")}`}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-lg shadow-blue-600/30 transition-all active:scale-95"
-              >
-                <Phone className="w-4 h-4" />
-                Dial Now
-              </a>
-            </div>
-
-            {/* Call Battlecard Script */}
-            <div className="space-y-3 text-xs bg-slate-950 p-3.5 sm:p-4 rounded-2xl border border-slate-800 text-slate-300">
-              <div className="text-[11px] font-bold text-amber-400 uppercase tracking-wider">
-                🗣️ On-Screen Call Script (High-Closing Pitch):
-              </div>
-              <div className="space-y-2 leading-relaxed text-xs">
-                <p>
-                  <strong>1. The Hook:</strong> &quot;Hello, am I speaking with the manager/owner of {callingModalLead.businessName}? I just sent you a message on WhatsApp regarding your Google Maps rating.&quot;
-                </p>
-                <p>
-                  <strong>2. The Deficit:</strong> &quot;I noticed you have a great rating, but only a few reviews in {callingModalLead.city || "town"}. When customers search on Google Maps, nearby competitors with 100+ reviews rank at the top.&quot;
-                </p>
-                <p>
-                  <strong>3. The Solution:</strong> &quot;We provide a 3D Smart QR Standee for your billing desk. Diners/customers simply scan the QR at checkout, and Gemini AI drafts a 5-star review in 5 seconds.&quot;
-                </p>
-                <p>
-                  <strong>4. The Close:</strong> &quot;We have sample units ready in {callingModalLead.city || "your area"} today. Can I deliver one to your counter for a quick 2-minute trial?&quot;
-                </p>
-              </div>
-            </div>
-
-            {/* Action Bar */}
-            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-2">
-              <button
-                onClick={() => setCallingModalLead(null)}
-                className="px-4 py-2.5 rounded-xl text-xs text-slate-400 hover:text-white font-semibold bg-slate-800 sm:bg-transparent"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => handleMarkCalled(callingModalLead)}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-600/30 transition-all active:scale-95"
-              >
-                <CheckCircle2 className="w-4 h-4" />
-                Done! Mark as CALLED 📞
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── MODAL 3: IMPORT SCRAPED LEADS ───────────────────────────── */}
-      {showImportModal && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl max-h-[92vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2">
-                <Upload className="w-5 h-5 text-indigo-400 shrink-0" />
-                <h3 className="text-base sm:text-lg font-bold text-white">Import Scraped Google Maps Leads</h3>
-              </div>
-              <button
-                onClick={() => setShowImportModal(false)}
-                className="text-slate-400 hover:text-white text-sm p-1"
-              >
-                ✕ Close
-              </button>
-            </div>
-
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Paste CSV or JSON exported from top open-source tools like{" "}
-              <strong className="text-emerald-300">omkarcloud/google-maps-scraper</strong> or{" "}
-              <strong className="text-emerald-300">gosom/google-maps-scraper</strong>. The system will automatically skip national chains, filter for businesses with few reviews, and compute review deficits!
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-              <div>
-                <label className="block text-slate-400 mb-1">City</label>
-                <input
-                  type="text"
-                  value={importCity}
-                  onChange={(e) => setImportCity(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2.5 text-xs"
-                />
-              </div>
-              <div>
-                <label className="block text-slate-400 mb-1">Category</label>
-                <input
-                  type="text"
-                  value={importCategory}
-                  onChange={(e) => setImportCategory(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2.5 text-xs"
-                />
-              </div>
-              <div>
-                <label className="block text-slate-400 mb-1">Max Reviews Filter</label>
-                <input
-                  type="number"
-                  value={importMaxReviews}
-                  onChange={(e) => setImportMaxReviews(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-2.5 text-xs"
-                  placeholder="e.g. 40"
-                />
-              </div>
-            </div>
-
+            {/* Template Selector (English Only) */}
             <div>
-              <label className="block text-xs text-slate-400 mb-1">
-                Paste CSV or JSON text here:
+              <label className="text-xs font-bold text-stone-700 block mb-1.5">Outreach Context</label>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPitchTemplate("FIRST_CONTACT")}
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition ${
+                    pitchTemplate === "FIRST_CONTACT"
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "bg-stone-50 text-stone-700 border-stone-200"
+                  }`}
+                >
+                  First Contact
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPitchTemplate("CALL_FOLLOWUP")}
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition ${
+                    pitchTemplate === "CALL_FOLLOWUP"
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "bg-stone-50 text-stone-700 border-stone-200"
+                  }`}
+                >
+                  Post-Call Link
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPitchTemplate("VISIT_FOLLOWUP")}
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold border transition ${
+                    pitchTemplate === "VISIT_FOLLOWUP"
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "bg-stone-50 text-stone-700 border-stone-200"
+                  }`}
+                >
+                  Post-Visit Demo
+                </button>
+              </div>
+            </div>
+
+            {/* Editable Pitch Area */}
+            <div>
+              <label className="text-xs font-bold text-stone-700 block mb-1">
+                Editable Message (English)
               </label>
               <textarea
                 rows={6}
-                value={importCsvText}
-                onChange={(e) => setImportCsvText(e.target.value)}
-                placeholder="name,phone,rating,reviews,address,url&#10;Sri Balaji Clinic,9876543210,4.6,18,Kadapa,https://maps.google.com/..."
-                className="w-full bg-slate-950 border border-slate-800 text-slate-200 font-mono text-xs rounded-xl p-3 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                value={pitchText}
+                onChange={(e) => setPitchText(e.target.value)}
+                className="w-full p-3 rounded-2xl border border-stone-300 text-xs text-stone-800 font-sans focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-stone-50 focus:bg-white"
               />
             </div>
 
-            {importResult && (
-              <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-xs text-slate-200">
-                {importResult}
-              </div>
-            )}
-
-            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-2">
+            {/* Action Bar */}
+            <div className="flex items-center justify-between gap-2 pt-2 border-t border-stone-100">
               <button
-                onClick={() => setShowImportModal(false)}
-                className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-800 sm:bg-transparent"
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(pitchText);
+                  setPitchCopied(true);
+                  setTimeout(() => setPitchCopied(false), 2000);
+                }}
+                className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold transition"
+              >
+                {pitchCopied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                <span>{pitchCopied ? "Copied" : "Copy"}</span>
+              </button>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleConfirmWhatsAppSent}
+                  className="px-3 py-2 rounded-xl bg-stone-200 hover:bg-stone-300 text-stone-800 text-xs font-bold transition"
+                  title="Record that this message was already sent manually"
+                >
+                  Mark Sent
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleOpenWhatsApp}
+                  disabled={isLoggingAction}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black shadow-md transition disabled:opacity-50"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>Open WhatsApp</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL 2: IN-PERSON STORE VISIT LOGGER ─────────────────────────── */}
+      {showVisitModal && selectedLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white border border-stone-300 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+              <div>
+                <h3 className="font-black text-base text-[#172033]">Log In-Person Store Visit</h3>
+                <p className="text-xs text-stone-500">{selectedLead.businessName}</p>
+              </div>
+              <button onClick={() => setShowVisitModal(false)} className="p-1 rounded-lg hover:bg-stone-100 text-stone-400">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-stone-700 block mb-1">Owner / Manager Name</label>
+              <input
+                type="text"
+                placeholder="e.g. Ramesh Reddy"
+                value={visitOwnerName}
+                onChange={(e) => setVisitOwnerName(e.target.value)}
+                className="w-full p-2.5 rounded-xl border border-stone-300 text-xs bg-stone-50 focus:bg-white text-stone-800"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-stone-700 block mb-1">Visit Outcome</label>
+              <select
+                value={visitOutcome}
+                onChange={(e) => setVisitOutcome(e.target.value)}
+                className="w-full p-2.5 rounded-xl border border-stone-300 text-xs font-bold bg-stone-50 text-stone-800"
+              >
+                <option value="SPOKE_TO_OWNER">Spoke to Owner directly</option>
+                <option value="DEMO_DELIVERED">Demonstrated review card on phone</option>
+                <option value="OWNER_NOT_AVAILABLE">Owner not available (met staff)</option>
+                <option value="PROMISED_CALL_BACK">Owner requested return visit</option>
+                <option value="NOT_INTERESTED">Not interested</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-stone-700 block mb-1">Visit Discussion Notes</label>
+              <textarea
+                rows={3}
+                placeholder="Notes on counter space, pricing response, objection handling..."
+                value={visitNotes}
+                onChange={(e) => setVisitNotes(e.target.value)}
+                className="w-full p-2.5 rounded-xl border border-stone-300 text-xs bg-stone-50 focus:bg-white text-stone-800"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-stone-700 block mb-1">Schedule Next Action Date</label>
+              <input
+                type="date"
+                value={visitNextDate}
+                onChange={(e) => setVisitNextDate(e.target.value)}
+                className="w-full p-2 rounded-xl border border-stone-300 text-xs bg-stone-50 text-stone-800"
+              />
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-stone-100">
+              <button
+                type="button"
+                onClick={() => setShowVisitModal(false)}
+                className="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold"
               >
                 Cancel
               </button>
               <button
-                onClick={handleImportLeads}
-                disabled={importingLoading || !importCsvText.trim()}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-50 active:scale-95"
+                type="button"
+                onClick={handleLogVisit}
+                disabled={isLoggingAction}
+                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black shadow-md transition disabled:opacity-50"
               >
-                {importingLoading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Importing...
-                  </>
+                Save Visit Log
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL 3: CSV IMPORT PREVIEW ────────────────────────────────────── */}
+      {showImportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white border border-stone-300 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+              <div>
+                <h3 className="font-black text-base text-[#172033]">Import Leads CSV</h3>
+                <p className="text-xs text-stone-500">Separates distinct branches, strips fake phones, and normalizes Indian numbers</p>
+              </div>
+              <button onClick={() => { setShowImportModal(false); setImportPreview(null); }} className="p-1 rounded-lg hover:bg-stone-100 text-stone-400">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 flex-1 overflow-y-auto">
+              <div>
+                <label className="text-xs font-bold text-stone-700 block mb-1">Paste CSV Data or Tab-Delimited Leads</label>
+                <textarea
+                  rows={6}
+                  placeholder="name,phone,reviews,rating,address,city,category&#10;City Grafix,7287867584,12,4.8,Ganagapeta,Kadapa,Printing"
+                  value={importCsvText}
+                  onChange={(e) => setImportCsvText(e.target.value)}
+                  className="w-full p-2.5 rounded-xl border border-stone-300 text-xs font-mono bg-stone-50 focus:bg-white text-stone-800"
+                />
+              </div>
+
+              {/* Preview Summary */}
+              {importPreview && importPreview.summary && (
+                <div className="bg-stone-50 border border-stone-200 rounded-2xl p-3 space-y-2 text-xs">
+                  <h4 className="font-bold text-stone-800">Preview Counts</h4>
+                  <div className="grid grid-cols-3 gap-2 text-[11px]">
+                    <div className="p-2 bg-white rounded-lg border border-stone-200">
+                      <span className="text-stone-400 block">Total Rows:</span>
+                      <span className="font-bold text-stone-800">{importPreview.summary.total}</span>
+                    </div>
+                    <div className="p-2 bg-emerald-50 rounded-lg border border-emerald-200">
+                      <span className="text-emerald-700 block">New Leads:</span>
+                      <span className="font-bold text-emerald-900">{importPreview.summary.newCount}</span>
+                    </div>
+                    <div className="p-2 bg-amber-50 rounded-lg border border-amber-200">
+                      <span className="text-amber-700 block">Already in CRM:</span>
+                      <span className="font-bold text-amber-900">{importPreview.summary.matchedCount}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {importResultMsg && (
+                <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-semibold">
+                  {importResultMsg}
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between gap-2 pt-2 border-t border-stone-100">
+              <button
+                type="button"
+                onClick={() => handlePreviewImport(true)}
+                disabled={isImporting || !importCsvText.trim()}
+                className="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-bold transition disabled:opacity-50"
+              >
+                Preview Counts
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handlePreviewImport(false)}
+                disabled={isImporting || !importCsvText.trim()}
+                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black shadow-md transition disabled:opacity-50"
+              >
+                Confirm Import
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── DRAWER 4: LEAD AUDIT & ACTIVITY HISTORY ───────────────────────── */}
+      {showDetailDrawer && selectedLead && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm">
+          <div className="bg-white max-w-md w-full h-full p-6 shadow-2xl overflow-y-auto space-y-4 flex flex-col justify-between">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between border-b border-stone-200 pb-3">
+                <div>
+                  <h3 className="font-black text-lg text-[#172033]">{selectedLead.businessName}</h3>
+                  <p className="text-xs text-stone-500">{selectedLead.locality || selectedLead.city || "Kadapa"}</p>
+                </div>
+                <button onClick={() => setShowDetailDrawer(false)} className="p-1 rounded-lg hover:bg-stone-100 text-stone-400">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Status & Priority */}
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="p-2.5 bg-stone-50 border border-stone-200 rounded-xl">
+                  <span className="text-[10px] text-stone-400 font-bold block">STATUS</span>
+                  <span className="font-bold text-stone-800">{selectedLead.status}</span>
+                </div>
+                <div className="p-2.5 bg-stone-50 border border-stone-200 rounded-xl">
+                  <span className="text-[10px] text-stone-400 font-bold block">PRIORITY</span>
+                  <span className="font-bold text-stone-800">{selectedLead.priority.replace(/_/g, " ")}</span>
+                </div>
+              </div>
+
+              {/* Verified Contact Details */}
+              <div className="space-y-1 text-xs">
+                <span className="text-stone-400 font-bold text-[10px] uppercase">Verified Phone</span>
+                <p className="font-mono font-bold text-stone-800">
+                  {selectedLead.phone ? `+91 ${selectedLead.phone}` : "No verified number (Do in-person visit)"}
+                </p>
+              </div>
+
+              {/* Do Not Contact Toggle */}
+              <div className="flex items-center justify-between p-3 bg-stone-50 border border-stone-200 rounded-xl text-xs">
+                <div>
+                  <span className="font-bold text-stone-800 block">Do Not Contact</span>
+                  <span className="text-[10px] text-stone-500">Mute from active outreach and follow-up lists</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleToggleDoNotContact(selectedLead.id, selectedLead.doNotContact)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                    selectedLead.doNotContact
+                      ? "bg-red-600 text-white"
+                      : "bg-stone-200 text-stone-700 hover:bg-stone-300"
+                  }`}
+                >
+                  {selectedLead.doNotContact ? "Muted" : "Mute"}
+                </button>
+              </div>
+
+              {/* Append-Only Activity Log */}
+              <div className="space-y-2 pt-2">
+                <h4 className="font-bold text-xs text-stone-800 flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Activity History</span>
+                </h4>
+                {selectedLead.activities && selectedLead.activities.length > 0 ? (
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {selectedLead.activities.map((act) => (
+                      <div key={act.id} className="p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs space-y-1">
+                        <div className="flex items-center justify-between text-[10px]">
+                          <span className="font-bold text-indigo-700 bg-indigo-50 px-1.5 py-0.2 rounded border border-indigo-100">
+                            {act.type}
+                          </span>
+                          <span className="text-stone-400">{new Date(act.createdAt).toLocaleString()}</span>
+                        </div>
+                        {act.outcome && <p className="font-bold text-stone-800 text-[11px]">{act.outcome.replace(/_/g, " ")}</p>}
+                        {act.notes && <p className="text-stone-600 text-[11px]">{act.notes}</p>}
+                        {act.performedBy && <p className="text-[9.5px] text-stone-400">By: {act.performedBy}</p>}
+                      </div>
+                    ))}
+                  </div>
                 ) : (
-                  <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    Process &amp; Save Leads
-                  </>
+                  <p className="text-xs text-stone-400 italic">No activity recorded yet.</p>
                 )}
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-stone-200">
+              <button
+                type="button"
+                onClick={() => setShowDetailDrawer(false)}
+                className="w-full py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold text-xs rounded-xl"
+              >
+                Close Drawer
               </button>
             </div>
           </div>

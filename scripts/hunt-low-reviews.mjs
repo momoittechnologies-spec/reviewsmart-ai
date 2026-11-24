@@ -106,18 +106,27 @@ async function huntLowReviewLeads() {
     const deficit = 100 - (lead.reviewCount || 0);
     const notes = `Rating: ${lead.rating || 5.0}★ | Google Reviews: ${lead.reviewCount || 0} (Needs ${deficit} to reach 100). Address: ${lead.address}. Maps: ${lead.url}`;
 
-    // Upsert into LeadCapture table so it instantly shows in the Admin Inbound CRM
     try {
-      const cleanPhone = lead.phone || `000${Math.floor(1000000 + Math.random() * 9000000)}`;
+      const cleanPhone = lead.phone ? lead.phone.replace(/\D/g, "").slice(-10) : null;
       await prisma.leadCapture.create({
         data: {
           businessName: lead.name,
           city: targetCity,
           category: targetCategory,
+          locality: lead.address ? lead.address.split(",")[0] : null,
           phone: cleanPhone,
-          source: 'GOOGLE_MAPS_HUNTER',
+          rating: lead.rating || null,
+          reviewCount: lead.reviewCount !== undefined ? lead.reviewCount : null,
+          listingUrl: lead.url || null,
+          source: "GOOGLE_MAPS_HUNTER",
+          provider: "GOOGLE_MAPS",
+          verificationMethod: lead.reviewCount !== undefined ? "API_VERIFIED" : "MAPS_LINK_ONLY",
+          priority: (lead.reviewCount !== undefined && lead.reviewCount < maxReviews) ? "BELOW_THRESHOLD" : "NORMAL",
+          priorityReason: (lead.reviewCount !== undefined && lead.reviewCount < maxReviews)
+            ? `Google reviews (${lead.reviewCount}) below ${maxReviews} threshold`
+            : "Google Maps discovery",
           notes,
-          status: 'NEW',
+          status: "NEW",
         },
       });
       savedCount++;

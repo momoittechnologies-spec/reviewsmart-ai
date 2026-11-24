@@ -16,7 +16,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const cleanPhone = phone.replace(/[^0-9+]/g, "").trim();
+    const digits = phone.replace(/\D/g, "").trim();
+    const cleanPhone = digits.length >= 10 ? digits.slice(-10) : digits;
     const cleanBusiness = (businessName || "Interested Business").trim();
 
     // Check if recent lead with same phone exists in last 24h to avoid spam duplicates
@@ -38,8 +39,10 @@ export async function POST(req: NextRequest) {
           businessName: cleanBusiness,
           city: city?.trim() || existing.city,
           category: category?.trim() || existing.category,
-          source: source || existing.source,
+          source: source || existing.source || "WEBSITE_ENQUIRY",
           notes: notes ? `${existing.notes || ""}\n[Update]: ${notes}` : existing.notes,
+          priority: "DEMO_REQUESTED",
+          priorityReason: "Website customer enquiry updated",
         },
       });
     } else {
@@ -50,7 +53,11 @@ export async function POST(req: NextRequest) {
           city: city?.trim() || null,
           category: category?.trim() || null,
           phone: cleanPhone,
-          source: source || "HERO_CUSTOMIZER",
+          source: source || "WEBSITE_ENQUIRY",
+          provider: "WEBSITE_ENQUIRY",
+          verificationMethod: "USER_SUBMITTED",
+          priority: "DEMO_REQUESTED",
+          priorityReason: "Inbound website enquiry",
           notes: notes || null,
           status: "NEW",
         },

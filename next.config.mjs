@@ -26,6 +26,14 @@ const nextConfig = {
           { key: "CDN-Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
+      {
+        source: "/r/:slug*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=60, s-maxage=3600, stale-while-revalidate=86400" },
+          { key: "CDN-Cache-Control", value: "public, s-maxage=3600, stale-while-revalidate=86400" },
+          { key: "Vercel-CDN-Cache-Control", value: "public, s-maxage=3600, stale-while-revalidate=86400" },
+        ],
+      },
     ];
   },
 };

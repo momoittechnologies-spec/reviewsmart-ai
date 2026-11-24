@@ -21,6 +21,9 @@ export interface RealBusinessLead {
   dataSource: "openstreetmap" | "google_places";
   reviewGapScore: number;
   isHotLead: boolean;
+  verificationMethod: "API_VERIFIED" | "MAPS_LINK_ONLY" | "UNVERIFIED";
+  priority: "NEEDS_VERIFICATION" | "BELOW_THRESHOLD" | "NORMAL" | "DEMO_REQUESTED";
+  priorityReason: string;
 }
 
 // Blacklist of corporate franchises & national chains that should NEVER be pitched review standees
@@ -220,8 +223,11 @@ async function fetchFromNominatim(
           lat,
           lng,
           dataSource: "openstreetmap",
-          reviewGapScore: 88,
-          isHotLead: true,
+          reviewGapScore: 0,
+          isHotLead: false,
+          verificationMethod: "MAPS_LINK_ONLY",
+          priority: "NEEDS_VERIFICATION",
+          priorityReason: "Unverified listing via OpenStreetMap",
         });
       }
     } catch (err) {
@@ -309,8 +315,13 @@ out center 25;
         lat,
         lng,
         dataSource: "openstreetmap" as const,
-        reviewGapScore: phone ? 90 : 85,
-        isHotLead: true,
+        reviewGapScore: 0,
+        isHotLead: false,
+        verificationMethod: "MAPS_LINK_ONLY",
+        priority: "NEEDS_VERIFICATION",
+        priorityReason: phone
+          ? "Contact phone observed; Google listing unverified"
+          : "Missing verified contact phone number",
       };
     });
 }
@@ -391,7 +402,12 @@ async function fetchFromGooglePlaces(
         lng,
         dataSource: "google_places" as const,
         reviewGapScore: gapScore,
-        isHotLead: gapScore >= 60 || (reviewCount !== null && reviewCount < 40),
+        isHotLead: reviewCount !== null && reviewCount < 30,
+        verificationMethod: "API_VERIFIED",
+        priority: (reviewCount !== null && reviewCount < 30) ? "BELOW_THRESHOLD" : "NORMAL",
+        priorityReason: (reviewCount !== null && reviewCount < 30)
+          ? `Verified Google reviews (${reviewCount}) below 30 target`
+          : "Verified Google Places listing",
       };
     });
 }

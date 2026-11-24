@@ -204,20 +204,64 @@ model GeneratedReviewMemory {
 }
 
 
-// 🌟 ONLINE LEAD CAPTURE (Hero Customizer, Growth Calculator & WhatsApp Funnel) 🌟
+// ─── FIELD SALES & CRM LEAD CAPTURE ──────────────────────────────────────────
 model LeadCapture {
-  id           String   @id @default(cuid())
-  businessName String
-  city         String?
-  category     String?
-  phone        String
-  source       String   @default("HERO_CUSTOMIZER") // "HERO_CUSTOMIZER" | "GAP_CALCULATOR" | "WHATSAPP_DOCK"
-  notes        String?
-  status       String   @default("NEW")            // "NEW" | "CONTACTED" | "CONVERTED" | "LOST"
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                 String         @id @default(cuid())
+  businessName       String
+  city               String?
+  locality           String?        // Branch / locality / area (e.g. "Ganagapeta", "YV Street")
+  category           String?
+  phone              String?        // Nullable: genuine null when phone not available yet
+  source             String         @default("WEBSITE_ENQUIRY") // "WEBSITE_ENQUIRY" | "RADAR_DISCOVERY" | "CSV_IMPORT" | "FIELD_VISIT" | "HERO_CUSTOMIZER"
+  notes              String?
+  status             String         @default("NEW")            // "NEW" | "CONTACTED" | "DEMO_REQUESTED" | "CONVERTED" | "LOST"
+  
+  // Structured Provider & Verification Details
+  provider           String?        // "OPENSTREETMAP" | "GOOGLE_PLACES" | "MANUAL" | "CSV_IMPORT" | "WEBSITE_ENQUIRY"
+  providerListingId  String?        // ID from source provider
+  listingUrl         String?        // Maps or business URL
+  rating             Float?         // Structured rating (null if unverified)
+  reviewCount        Int?           // Structured count (genuine 0 preserved, null if unknown)
+  observedDate       DateTime?      // When rating/count was observed
+  verificationMethod String         @default("UNVERIFIED") // "API_VERIFIED" | "MAPS_LINK_ONLY" | "UNVERIFIED" | "FIELD_VERIFIED" | "USER_SUBMITTED"
+
+  // Priority & Action Management
+  priority           String         @default("NEEDS_VERIFICATION") // "NEEDS_VERIFICATION" | "DEMO_REQUESTED" | "FOLLOW_UP_TODAY" | "BELOW_THRESHOLD" | "NORMAL"
+  priorityReason     String?        // Explicit reason (e.g. "Demo requested", "Follow-up due today", "Verified count below 100")
+  assignedAgentId    String?
+  assignedAgentName  String?
+  nextAction         String?        // "CALL" | "IN_PERSON_VISIT" | "WHATSAPP_FOLLOWUP" | "DELIVER_MOCKUP"
+  nextActionDue      DateTime?
+  lastOutcome        String?        // "SPOKE_TO_OWNER" | "NO_ANSWER" | "CALLBACK_REQUESTED" | "VISITED_STORE" | "NOT_INTERESTED"
+  doNotContact       Boolean        @default(false)
+  confirmedPaidAt    DateTime?      // Admin-verified payment conversion timestamp
+
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  activities         LeadActivity[]
 
   @@index([phone])
   @@index([status])
+  @@index([priority])
+  @@index([nextActionDue])
+  @@index([assignedAgentId])
+  @@index([createdAt])
+}
+
+// ─── LEAD ACTIVITY AUDIT TRAIL ────────────────────────────────────────────────
+model LeadActivity {
+  id          String      @id @default(cuid())
+  leadId      String
+  type        String      // "CALL" | "WHATSAPP_DRAFT" | "WHATSAPP_SENT" | "IN_PERSON_VISIT" | "NOTE" | "STATUS_CHANGE" | "ASSIGNMENT"
+  outcome     String?     // "SPOKE_TO_OWNER" | "NO_ANSWER" | "CALLBACK_REQUESTED" | "DRAFT_OPENED" | "SENT_CONFIRMED" | "VISITED_STORE"
+  notes       String?
+  performedBy String?     // Agent name or user identifier
+  createdAt   DateTime    @default(now())
+
+  lead        LeadCapture @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId])
+  @@index([type])
   @@index([createdAt])
 }

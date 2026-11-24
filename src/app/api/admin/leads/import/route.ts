@@ -11,18 +11,22 @@ interface LeadInput {
   phone?: string;
   phoneNumber?: string;
   telephone?: string;
+  mobile?: string;
   rating?: number | string;
   reviews?: number | string;
   reviewCount?: number | string;
   reviews_count?: number | string;
   address?: string;
   full_address?: string;
+  locality?: string;
   city?: string;
   category?: string;
   type?: string;
   url?: string;
   link?: string;
   place_url?: string;
+  providerListingId?: string;
+  place_id?: string;
 }
 
 function parseCSVLine(text: string): string[] {
@@ -53,15 +57,16 @@ function parseCSVLine(text: string): string[] {
 export async function POST(req: NextRequest) {
   try {
     const user = await getSessionUser();
-    if (!user || user.role !== "SUPER_ADMIN") {
+    if (!user || (user.role !== "SUPER_ADMIN" && user.role !== "MARKETING_AGENT")) {
       return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
     }
 
     const body = await req.json();
+    const isDryRun = Boolean(body.dryRun);
     const defaultCity = String(body.city || "Kadapa").trim();
     const defaultCategory = String(body.category || "Local Business").trim();
-    const maxReviewsFilter = Number(body.maxReviews) || 50;
-    const sourceTag = String(body.source || "OPEN_SOURCE_IMPORT").trim();
+    const maxReviewsFilter = Number(body.maxReviews) || 100;
+    const sourceTag = String(body.source || "CSV_IMPORT").trim();
 
     let itemsToProcess: LeadInput[] = [];
 
@@ -96,9 +101,11 @@ export async function POST(req: NextRequest) {
             rating: rowObj.rating || rowObj.stars || rowObj.totalscore,
             reviewCount: rowObj.reviews || rowObj.reviewcount || rowObj.reviewscount || rowObj.userreviewscount,
             address: rowObj.address || rowObj.fulladdress || rowObj.formattedaddress || rowObj.street,
+            locality: rowObj.locality || rowObj.area || rowObj.sublocality,
             city: rowObj.city || defaultCity,
             category: rowObj.category || rowObj.type || defaultCategory,
             url: rowObj.url || rowObj.link || rowObj.placeurl || rowObj.googlemapsurl,
+            providerListingId: rowObj.placeid || rowObj.providerlistingid || rowObj.id,
           });
         }
       }
@@ -111,90 +118,205 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let importedCount = 0;
-    let skippedChains = 0;
-    let skippedHighReviews = 0;
-    let skippedMissingName = 0;
+    // Fetch existing leads for deduplication
+    const existingLeads = await prisma.leadCapture.findMany({
+      select: {
+        id: true,
+        businessName: true,
+        locality: true,
+        city: true,
+        phone: true,
+        providerListingId: true,
+      },
+    });
+
+    let newCount = 0;
+    let matchedCount = 0;
+    let ambiguousCount = 0;
+    let invalidCount = 0;
+    let skippedCount = 0;
+
+    const previewItems: any[] = [];
+    const leadsToInsert: any[] = [];
 
     for (const item of itemsToProcess) {
       const name = (item.name || item.businessName || "").trim();
       if (!name || name.length < 2) {
-        skippedMissingName++;
+        invalidCount++;
         continue;
       }
 
-      // 1. Skip national corporate chains
+      // Skip national corporate chains
       if (isCorporateChain(name)) {
-        skippedChains++;
+        skippedCount++;
         continue;
       }
 
-      // 2. Parse review count & rating
+      // Parse review count (preserve genuine 0)
       let revCount: number | null = null;
-      const rawRev = item.reviewCount || item.reviews || item.reviews_count;
+      const rawRev = item.reviewCount ?? item.reviews ?? item.reviews_count;
       if (rawRev !== undefined && rawRev !== null && rawRev !== "") {
         const cleanRev = String(rawRev).replace(/[^0-9]/g, "");
-        if (cleanRev) revCount = parseInt(cleanRev, 10);
+        if (cleanRev !== "") {
+          revCount = parseInt(cleanRev, 10);
+        }
       }
 
-      // Filter out businesses with high reviews if threshold is set
-      if (revCount !== null && revCount >= maxReviewsFilter) {
-        skippedHighReviews++;
-        continue;
-      }
-
+      // Parse rating
       let ratingNum: number | null = null;
       if (item.rating !== undefined && item.rating !== null && item.rating !== "") {
         const parsed = parseFloat(String(item.rating));
         if (!isNaN(parsed)) ratingNum = parsed;
       }
 
-      // 3. Clean phone
-      const rawPhone = String(item.phone || item.phoneNumber || item.telephone || "").trim();
-      const phoneDigits = rawPhone.replace(/[^0-9]/g, "");
-      const cleanPhone = phoneDigits.length >= 10
-        ? phoneDigits.slice(-10)
-        : `000${Math.floor(1000000 + Math.random() * 9000000)}`;
+      // Clean & normalize Indian phone
+      let cleanPhone: string | null = null;
+      const rawPhone = String(item.phone || item.phoneNumber || item.telephone || item.mobile || "").trim();
+      const digits = rawPhone.replace(/\D/g, "");
+      if (digits.length >= 10) {
+        cleanPhone = digits.slice(-10); // Standardize to 10-digit Indian mobile
+      }
 
       const city = (item.city || defaultCity).trim();
       const category = (item.category || item.type || defaultCategory).trim();
-      const address = (item.address || item.full_address || `${name}, ${city}`).trim();
-      const mapsUrl = item.url || item.link || item.place_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + " " + city)}`;
+      const address = (item.address || item.full_address || "").trim();
+      const locality = (item.locality || address.split(",")[0] || city).trim();
+      const mapsUrl = item.url || item.link || item.place_url || null;
+      const providerListingId = item.providerListingId || item.place_id || null;
 
-      const deficit = revCount !== null ? Math.max(0, 100 - revCount) : 85;
-      const notes = `Rating: ${ratingNum !== null ? ratingNum : "N/A"}★ | Google Reviews: ${revCount !== null ? revCount : "N/A"} (Needs ${deficit} to reach 100). Address: ${address}. Maps: ${mapsUrl}`;
+      // Smart Branch-Aware Deduplication:
+      // Preserves separate branches with the same business name (e.g. "Golden Hair Wig Studio - Proddatur" vs "Golden Hair Wig Studio - Kadapa")
+      const exactMatch = existingLeads.find((ex) => {
+        if (providerListingId && ex.providerListingId) {
+          return ex.providerListingId === providerListingId;
+        }
+        if (cleanPhone && ex.phone) {
+          return ex.phone === cleanPhone;
+        }
+        // If names match, check if localities are also the same
+        const nameMatches = ex.businessName.toLowerCase() === name.toLowerCase();
+        if (nameMatches) {
+          if (locality && ex.locality) {
+            return ex.locality.toLowerCase() === locality.toLowerCase();
+          }
+          if (city && ex.city) {
+            return ex.city.toLowerCase() === city.toLowerCase();
+          }
+        }
+        return false;
+      });
 
+      // Ambiguous check: same name but conflicting or missing branch locality
+      const sameNameDifferentBranch = existingLeads.some(
+        (ex) => ex.businessName.toLowerCase() === name.toLowerCase() &&
+          locality && ex.locality &&
+          ex.locality.toLowerCase() !== locality.toLowerCase()
+      );
+
+      let itemStatus: "NEW" | "MATCHED" | "AMBIGUOUS" = "NEW";
+      if (exactMatch) {
+        itemStatus = "MATCHED";
+        matchedCount++;
+      } else if (sameNameDifferentBranch) {
+        // Distinct branch identified! Keep as NEW branch
+        itemStatus = "NEW";
+        newCount++;
+      } else {
+        newCount++;
+      }
+
+      // Structured Priority & Reason
+      let priority = "NEEDS_VERIFICATION";
+      let priorityReason = "Imported listing";
+      if (!cleanPhone) {
+        priority = "NEEDS_VERIFICATION";
+        priorityReason = "Missing verified contact phone number";
+      } else if (revCount !== null && revCount < maxReviewsFilter) {
+        priority = "BELOW_THRESHOLD";
+        priorityReason = `Verified Google reviews (${revCount}) below ${maxReviewsFilter} target`;
+      } else if (revCount === null) {
+        priority = "NEEDS_VERIFICATION";
+        priorityReason = "Unverified Google review metrics";
+      } else {
+        priority = "NORMAL";
+        priorityReason = "Verified active listing";
+      }
+
+      const verificationMethod = revCount !== null ? "API_VERIFIED" : mapsUrl ? "MAPS_LINK_ONLY" : "UNVERIFIED";
+      const notes = address ? `Address: ${address}` : null;
+
+      const preparedLead = {
+        businessName: name,
+        city,
+        locality,
+        category,
+        phone: cleanPhone,
+        source: sourceTag,
+        provider: sourceTag,
+        providerListingId,
+        listingUrl: mapsUrl,
+        rating: ratingNum,
+        reviewCount: revCount,
+        observedDate: new Date(),
+        verificationMethod,
+        priority,
+        priorityReason,
+        notes,
+        status: "NEW",
+        doNotContact: false,
+      };
+
+      previewItems.push({
+        ...preparedLead,
+        matchStatus: itemStatus,
+      });
+
+      if (!exactMatch) {
+        leadsToInsert.push(preparedLead);
+      }
+    }
+
+    if (isDryRun) {
+      return NextResponse.json({
+        success: true,
+        dryRun: true,
+        summary: {
+          total: itemsToProcess.length,
+          newCount,
+          matchedCount,
+          ambiguousCount,
+          invalidCount,
+          skippedCount,
+        },
+        previewItems: previewItems.slice(0, 50),
+      });
+    }
+
+    // Execute insertion for non-dry-run
+    let importedCount = 0;
+    for (const leadData of leadsToInsert) {
       try {
         await prisma.leadCapture.create({
-          data: {
-            businessName: name,
-            city,
-            category,
-            phone: cleanPhone,
-            source: sourceTag,
-            notes,
-            status: "NEW",
-          },
+          data: leadData,
         });
         importedCount++;
-      } catch (dbErr) {
-        // Skip duplicate or constraint error
+      } catch (err) {
+        console.error("Lead insert error:", err);
       }
     }
 
     return NextResponse.json({
       success: true,
+      dryRun: false,
       importedCount,
-      skippedChains,
-      skippedHighReviews,
-      skippedMissingName,
-      totalReceived: itemsToProcess.length,
-      message: `Successfully imported ${importedCount} qualified low-review leads (< ${maxReviewsFilter} reviews). Skipped ${skippedHighReviews} high-review businesses and ${skippedChains} chains.`,
+      matchedCount,
+      skippedCount,
+      invalidCount,
     });
-  } catch (err: any) {
-    console.error("[leads/import] Error:", err);
+  } catch (error: any) {
+    console.error("Lead import error:", error);
     return NextResponse.json(
-      { error: err?.message || "Failed to import leads" },
+      { error: "Failed to process lead import", details: error?.message || String(error) },
       { status: 500 }
     );
   }
