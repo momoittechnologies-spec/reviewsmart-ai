@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUser, hashPin, hashPassword } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { slugify } from "@/lib/utils";
+import { slugify, getCleanLogoUrl } from "@/lib/utils";
 import { resolveGoogleMapsUrl } from "@/lib/googleMapsResolver";
 
 export const dynamic = "force-dynamic";
@@ -81,6 +81,7 @@ export async function GET() {
       const totalPaid = approved.reduce((s, p) => s + p.amount, 0);
       const businesses = m.businesses.map((b) => ({
         ...b,
+        logoUrl: getCleanLogoUrl(b),
         isDemoActive: !b.isPaid && Boolean(b.demoExpiresAt && new Date(b.demoExpiresAt) > now),
       }));
       return { ...m, businesses, totalPaid, dealCount: m.upiPayments.length };

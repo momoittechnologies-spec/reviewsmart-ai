@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateQrDataUrl } from "@/lib/qr";
-import { getAppUrl } from "@/lib/utils";
+import { getAppUrl, getCleanLogoUrl } from "@/lib/utils";
 import DashboardClientView from "@/components/dashboard/DashboardClientView";
 
 export const dynamic = "force-dynamic";
@@ -165,7 +165,7 @@ export default async function DashboardOverviewPage({
           slug: business.slug,
           category: business.category,
           tagline: business.tagline,
-          logoUrl: business.logoUrl,
+          logoUrl: getCleanLogoUrl(business),
           primaryColor: business.primaryColor,
           googleAddress: business.googleAddress,
           googleReviewUrl: business.googleReviewUrl,

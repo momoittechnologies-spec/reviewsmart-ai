@@ -4,7 +4,7 @@ import ReviewExperience from "@/components/review/ReviewExperience";
 import SmartHubExperience from "@/components/review/SmartHubExperience";
 import type { Metadata } from "next";
 import { MessageCircle, Sparkles, Clock } from "lucide-react";
-import { getAppUrl } from "@/lib/utils";
+import { getAppUrl, getCleanLogoUrl, getAbsoluteLogoUrl } from "@/lib/utils";
 
 // Cache dynamic business review portal with 60s ISR for instant mobile tap performance
 export const revalidate = 60;
@@ -16,12 +16,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const business = await prisma.business.findUnique({
     where: { slug: params.slug },
-    select: { name: true, tagline: true, logoUrl: true },
+    select: { id: true, slug: true, name: true, tagline: true, logoUrl: true },
   });
 
   if (!business) {
     return { title: "Business Not Found" };
   }
+
+  const logoUrl = getAbsoluteLogoUrl(business);
 
   return {
     title: `Review ${business.name} - Official Review Portal`,
@@ -29,7 +31,13 @@ export async function generateMetadata({
     openGraph: {
       title: `Review ${business.name}`,
       description: business.tagline || `Share your honest feedback for ${business.name}.`,
-      images: business.logoUrl ? [business.logoUrl] : [],
+      images: logoUrl ? [logoUrl] : [],
+    },
+    twitter: {
+      card: "summary",
+      title: `Review ${business.name}`,
+      description: business.tagline || `Share your honest feedback for ${business.name}.`,
+      images: logoUrl ? [logoUrl] : [],
     },
   };
 }
@@ -100,6 +108,12 @@ export default async function PublicReviewPage({
   if (!business) {
     notFound();
   }
+
+  // Sanitize logoUrl to prevent heavy Base64 strings from entering HTML & RSC payloads
+  const sanitizedBusiness = {
+    ...business,
+    logoUrl: getCleanLogoUrl(business),
+  };
 
   const now = new Date();
   const isDemoActive =
@@ -175,14 +189,14 @@ export default async function PublicReviewPage({
       <div className={showWatermark ? "w-full max-w-full blur-sm brightness-50 pointer-events-none select-none overflow-x-hidden" : "w-full max-w-full overflow-x-hidden"}>
         {business.qrMode === "SMART_HUB" ? (
           <SmartHubExperience
-            business={business}
+            business={sanitizedBusiness}
             staff={searchParams?.staff || null}
             customerName={searchParams?.cust || null}
             serviceName={searchParams?.service || null}
           />
         ) : (
           <ReviewExperience
-            business={business}
+            business={sanitizedBusiness}
             staff={searchParams?.staff || null}
             customerName={searchParams?.cust || null}
             serviceName={searchParams?.service || null}

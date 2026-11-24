@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { getAppUrl } from "@/lib/utils";
+import { getAppUrl, getCleanLogoUrl } from "@/lib/utils";
 import PrintStudioClient from "@/components/studio/PrintStudioClient";
 import {
   Printer,
@@ -121,7 +121,13 @@ export default async function StudioPage({
         </div>
       </div>
 
-      <PrintStudioClient business={business} reviewUrl={reviewUrl} />
+      <PrintStudioClient
+        business={{
+          ...business,
+          logoUrl: getCleanLogoUrl(business),
+        }}
+        reviewUrl={reviewUrl}
+      />
     </div>
   );
 }

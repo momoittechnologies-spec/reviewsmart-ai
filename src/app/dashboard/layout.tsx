@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getCleanLogoUrl } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import {
   LayoutDashboard,
@@ -49,7 +50,12 @@ export default async function DashboardLayout({
     console.error("DashboardLayout businesses fetch error:", err);
   }
 
-  const isOffline = businesses[0]?.customerType === "OFFLINE";
+  const sanitizedBusinesses = businesses.map((b) => ({
+    ...b,
+    logoUrl: getCleanLogoUrl(b),
+  }));
+
+  const isOffline = sanitizedBusinesses[0]?.customerType === "OFFLINE";
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col pb-20 lg:pb-0">
@@ -61,8 +67,8 @@ export default async function DashboardLayout({
           <aside className="lg:col-span-1 space-y-4 no-print">
             {/* Interactive Multi-Branch Switcher */}
             <BranchSwitcher
-              branches={businesses}
-              activeBranchId={businesses[0]?.id || ""}
+              branches={sanitizedBusinesses}
+              activeBranchId={sanitizedBusinesses[0]?.id || ""}
             />
 
             {/* Desktop Navigation Menu (with live active link highlighting) */}

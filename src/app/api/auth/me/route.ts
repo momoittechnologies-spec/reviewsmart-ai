@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getCleanLogoUrl } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +48,11 @@ export async function GET() {
           userIdTag: fullUser?.userIdTag,
           customerType: fullUser?.customerType,
           isActive: fullUser?.isActive ?? true,
-          businesses: fullUser?.businesses || [],
+          businesses:
+            fullUser?.businesses.map((b) => ({
+              ...b,
+              logoUrl: getCleanLogoUrl(b),
+            })) || [],
         },
       });
     } catch {

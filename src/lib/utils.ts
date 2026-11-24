@@ -37,6 +37,31 @@ export interface ParsedPhone {
   clean10: string;
 }
 
+export function getCleanLogoUrl(
+  business: { id?: string; slug?: string; logoUrl?: string | null } | null | undefined
+): string | null {
+  if (!business || !business.logoUrl) return null;
+  const raw = business.logoUrl.trim();
+  if (raw.startsWith("data:")) {
+    const identifier = business.slug || business.id;
+    if (identifier) {
+      return `/api/business/${identifier}/logo`;
+    }
+  }
+  return raw;
+}
+
+export function getAbsoluteLogoUrl(
+  business: { id?: string; slug?: string; logoUrl?: string | null } | null | undefined
+): string | null {
+  const clean = getCleanLogoUrl(business);
+  if (!clean) return null;
+  if (clean.startsWith("http://") || clean.startsWith("https://")) {
+    return clean;
+  }
+  return `${getAppUrl()}${clean}`;
+}
+
 export function parsePhoneNumbers(phoneStr: string | null | undefined): ParsedPhone[] {
   if (!phoneStr) return [];
   // Split on delimiters like '/', ',', '&', '|', or words like 'and', ';'
