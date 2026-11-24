@@ -262,24 +262,24 @@ const DEMO_PRESETS: DemoPreset[] = [
     author: "Divya M.",
   },
   {
-    id: "gold-buyer",
-    name: "JS Brother's Gold",
-    category: "Gold Buying & Valuation",
-    location: "Y Junction, Kadapa, AP",
-    icon: Coins,
-    color: "#d97706",
-    slug: "js-brothers-gold",
-    chips: ["Old Gold Buying", "Pledged Gold Release", "Accurate Precision Scale", "Instant Cash", "Fair Market Rates"],
+    id: "tours-travels",
+    name: "New Roshan Tours & Travels",
+    category: "Umrah, Ziyarat & Flights",
+    location: "Ganagapeta, Kadapa, AP",
+    icon: Plane,
+    color: "#059669",
+    slug: "new-roshan-tours-and-travels",
+    chips: ["Customized Umrah Packages", "Baghdad Ziyarat", "Air Ticketing & Visa", "Hotel Booking", "Trusted Guidance"],
     reviews: {
-      ALL: "Outstanding and transparent gold valuation at JS Brother's Gold near Y Junction, Kadapa! Accurate precision scale, fair live rates, and instant cash transfer for old and pledged gold. Highly recommended!",
-      ENGLISH: "Outstanding and transparent gold valuation at JS Brother's Gold near Y Junction, Kadapa! Accurate precision scale, fair live rates, and instant cash transfer for old and pledged gold. Highly recommended!",
-      HINDI: "कड़पा वाई जंक्शन पर जेएस ब्रदर्स गोल्ड में पुराना और गिरवी रखा सोना बेचने का अनुभव बहुत पारदर्शी रहा! सटीक तौल, बेहतरीन रेट्स और तुरंत पेमेंट। अत्यधिक विश्वसनीय सेवा!",
-      TELUGU: "కడప వై జంక్షన్ వద్ద ఉన్న JS బ్రదర్స్ గోల్డ్ లో పాత మరియు తాకట్టు బంగారం విడుదల సర్వీస్ చాలా పారదర్శకంగా ఉంది! కచ్చితమైన తూకం మరియు వెంటనే క్యాష్ ట్రాన్స్‌ఫర్ చేశారు. బెస్ట్ మార్కెట్ రేట్స్!",
-      TAMIL: "கடப்பா ஒய் ஜங்ஷன் அருகே உள்ள ஜேஎஸ் பிரதர்ஸ் கோல்டில் பழைய மற்றும் அடகு தங்க மதிப்பீடு மிகவும் வெளிப்படையானது! துல்லியமான எடை, சிறந்த விலை மற்றும் உடனடி பணப் பரிமாற்றம்.",
-      KANNADA: "ಕಡಪ ವೈ ಜಂಕ್ಷನ್ ಬಳಿಯ ಜೆಎಸ್ ಬ್ರದರ್ಸ್ ಗೋಲ್ಡ್‌ನಲ್ಲಿ ಹಳೆಯ ಮತ್ತು ಅಡಮಾನ ಚಿನ್ನದ ಮೌಲ್ಯಮಾಪನ ಅತ್ಯಂತ ಪಾರದರ್ಶಕವಾಗಿದೆ! ನಿಖರವಾದ ತೂಕ, ಉತ್ತಮ ದರಗಳು ಮತ್ತು ತಕ್ಷಣದ ಪಾವತಿ.",
-      MALAYALAM: "കടപ്പ വൈ ജംഗ്ഷനിലെ ജെഎസ് ബ്രദേഴ്സ് ഗോൾഡിൽ പഴയതും പണയം വച്ചതുമായ സ്വർണ്ണത്തിന് മികച്ച മൂല്യവും തത്സമയ പേയ്‌മെന്റും ലഭിച്ചു! വിശ്വസനീയമായ സേവനം.",
+      ALL: "Exceptional pilgrimage arrangement by New Roshan Tours & Travels in Kadapa! Seamless Umrah visa processing, premium hotel accommodations close to Haram, and caring guided assistance throughout our journey. Highly recommended!",
+      ENGLISH: "Exceptional pilgrimage arrangement by New Roshan Tours & Travels in Kadapa! Seamless Umrah visa processing, premium hotel accommodations close to Haram, and caring guided assistance throughout our journey. Highly recommended!",
+      HINDI: "कड़पा में न्यू रोशन टूर्स एंड ट्रेवल्स द्वारा उमरा और जियारत का बहुत ही शानदार और विश्वसनीय इंतजाम किया गया! हरम के करीब बेहतरीन होटल, समय पर वीजा और बेहतरीन गाइडेंस। अत्यधिक अनुशंसित!",
+      TELUGU: "కడప గణగపేటలోని న్యూ రోషన్ టూర్స్ & ట్రావెల్స్ ద్వారా ఉమ్రా మరియు జియారత్ ట్రిప్ అద్భుతంగా ప్లాన్ చేశారు! హరమ్ సమీపంలో మంచి హోటల్స్, సులభమైన వీసా ప్రాసెసింగ్ మరియు ఎక్సలెంట్ గైడెన్స్. కడపలో బెస్ట్ ట్రావెల్ ఏజెన్సీ!",
+      TAMIL: "கடப்பாவில் உள்ள நியூ ரோஷன் டூர்ஸ் & டிராவல்ஸ் மூலம் உம்ரா மற்றும் ஜியாரத் பயணம் மிகச் சிறப்பாக அமைந்தது! சிறந்த ஹோட்டல் மற்றும் வழிகாட்டல்.",
+      KANNADA: "ಕಡಪದ ನ್ಯೂ ರೋಷನ್ ಟೂರ್ಸ್ & ಟ್ರಾವೆಲ್ಸ್ ಮೂಲಕ ಉಮ್ರಾ ಮತ್ತು ಜಿಯಾರತ್ ಪ್ರಯಾಣ ಅತ್ಯಂತ ಸುಗಮವಾಗಿ ನಡೆಯಿತು! ಉತ್ತಮ ಹೋಟೆಲ್ ಮತ್ತು ವೀಸಾ ಸೇವೆ.",
+      MALAYALAM: "കടപ്പയിലെ ന്യൂ റോഷൻ ടൂർസ് & ട്രാവൽസ് വഴി ഉംറ, സിയാറത്ത് യാത്ര വളരെ മികച്ച രീതിയിൽ ക്രമീകരിച്ചു! വിശ്വസനീയമായ സേവനം.",
     },
-    author: "Rajesh K.",
+    author: "Syed Imran",
   },
   {
     id: "hair-studio",
@@ -595,10 +595,10 @@ export default function HomePage() {
             "noopener,noreferrer"
           );
         }, 550);
-      } else if (slug === "js-brothers-gold") {
+      } else if (slug === "new-roshan-tours-and-travels") {
         setTimeout(() => {
           window.open(
-            "https://search.google.com/local/writereview?placeid=ChIJub7cEKZzszsR1ndu-JYvlbA",
+            "https://share.google/odil5WTbGmas4G1dr",
             "_blank",
             "noopener,noreferrer"
           );

@@ -248,8 +248,6 @@ export default function ReviewExperience({
       placeId = "ChIJY8WhWVmTyzsRUz83m4gzT_0";
     } else if (business.slug === "her-choice-kadapa" && !placeId) {
       placeId = "ChIJmd0QeABtszsR2ygj6nHEsDg";
-    } else if (business.slug === "js-brothers-gold" && !placeId) {
-      placeId = "ChIJub7cEKZzszsR1ndu-JYvlbA";
     } else if (business.slug === "golden-hair-wig-studio" && !placeId) {
       placeId = "ChIJHQ87W85zszsRbNs55NHT6E8";
     } else if (business.slug === "golden-hair-wig-studio-nandyal" && !placeId) {
@@ -301,9 +299,6 @@ export default function ReviewExperience({
     }
     if (business.slug === "her-choice-kadapa") {
       return "https://search.google.com/local/writereview?placeid=ChIJmd0QeABtszsR2ygj6nHEsDg";
-    }
-    if (business.slug === "js-brothers-gold") {
-      return "https://search.google.com/local/writereview?placeid=ChIJub7cEKZzszsR1ndu-JYvlbA";
     }
     if (business.slug === "golden-hair-wig-studio") {
       return "https://search.google.com/local/writereview?placeid=ChIJHQ87W85zszsRbNs55NHT6E8";
@@ -375,9 +370,6 @@ export default function ReviewExperience({
     }
     if (business.slug === "her-choice-kadapa") {
       return business.googleMapsUrl || "https://www.google.com/maps?cid=4084980855563561179";
-    }
-    if (business.slug === "js-brothers-gold") {
-      return business.googleMapsUrl || "https://maps.app.goo.gl/X6kq4UnsgiViFQ5T7";
     }
     if (business.slug === "golden-hair-wig-studio") {
       return business.googleMapsUrl || "https://share.google/2Nccb0ELL3iwhq0lK";
