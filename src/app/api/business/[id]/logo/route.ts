@@ -55,12 +55,45 @@ export async function GET(
       }
     }
 
-    // 2. External HTTP/HTTPS URL
+    // 2. Local static file in public folder (e.g. /logos/[slug]-logo.webp)
+    if (rawLogo.startsWith("/")) {
+      try {
+        const fs = await import("fs");
+        const path = await import("path");
+        const filePath = path.join(process.cwd(), "public", rawLogo);
+        if (fs.existsSync(filePath)) {
+          const buffer = fs.readFileSync(filePath);
+          const ext = path.extname(filePath).toLowerCase();
+          const mimeMap: Record<string, string> = {
+            ".webp": "image/webp",
+            ".png": "image/png",
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".svg": "image/svg+xml",
+          };
+          const contentType = mimeMap[ext] || "image/png";
+          return new NextResponse(buffer, {
+            status: 200,
+            headers: {
+              "Content-Type": contentType,
+              "Content-Length": buffer.length.toString(),
+              "Cache-Control": "public, max-age=31536000, immutable",
+              "CDN-Cache-Control": "public, max-age=31536000, immutable",
+              "Vercel-CDN-Cache-Control": "public, max-age=31536000, immutable",
+            },
+          });
+        }
+      } catch (e) {
+        // Fall through to redirect
+      }
+    }
+
+    // 3. External HTTP/HTTPS URL
     if (rawLogo.startsWith("http://") || rawLogo.startsWith("https://")) {
       return NextResponse.redirect(rawLogo, 307);
     }
 
-    // 3. Fallback relative URL
+    // 4. Fallback relative URL
     return NextResponse.redirect(new URL(rawLogo, req.url), 307);
   } catch (err: any) {
     console.error("Failed to serve business logo:", err);

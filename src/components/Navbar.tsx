@@ -10,9 +10,8 @@ import {
   LogOut,
   Menu,
   X,
-  ExternalLink,
   ChevronRight,
-  User,
+  Store,
 } from "lucide-react";
 import BrandLogo from "@/components/brand/BrandLogo";
 
@@ -24,7 +23,7 @@ interface SessionUser {
 }
 
 interface NavbarProps {
-  /** "light" = white frosted glass bar (marketing/public pages)
+  /** "light" = warm ivory showroom bar (marketing/public pages)
    *  "dark" = dark slate bar (dashboard/admin) */
   variant?: "light" | "dark";
 }
@@ -60,7 +59,16 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
     router.refresh();
   };
 
-  /* ── Computed class tokens based on variant & scroll state ── */
+  const scrollToCustomizer = (e: React.MouseEvent) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      const el = document.getElementById("customizer") || document.getElementById("hero-preview");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
+
   const headerCls = isDark
     ? `sticky top-0 z-40 w-full border-b transition-all duration-300 no-print ${
         scrolled
@@ -69,13 +77,13 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
       }`
     : `sticky top-0 z-40 w-full border-b transition-all duration-300 no-print ${
         scrolled
-          ? "border-slate-200/80 bg-white/85 backdrop-blur-xl shadow-sm shadow-slate-200/50"
-          : "border-transparent bg-white/70 backdrop-blur-md"
+          ? "border-[#e3ded6] bg-[#f7f6f2]/90 backdrop-blur-xl shadow-xs"
+          : "border-transparent bg-[#f7f6f2]/75 backdrop-blur-md"
       }`;
 
   const navLinkCls = isDark
-    ? "text-slate-300 hover:text-white px-3 py-1.5 rounded-full hover:bg-white/5 transition-all duration-200"
-    : "text-slate-600 hover:text-indigo-600 px-3 py-1.5 rounded-full hover:bg-slate-100/70 transition-all duration-200";
+    ? "text-slate-300 hover:text-white px-3.5 py-1.5 rounded-full hover:bg-white/5 transition font-medium"
+    : "text-[#172033]/80 hover:text-[#4338ca] px-3.5 py-1.5 rounded-full hover:bg-white/60 transition font-medium";
 
   return (
     <header className={headerCls}>
@@ -86,93 +94,62 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav
-          className={`hidden md:flex items-center gap-1.5 text-xs font-semibold px-2 py-1 rounded-full border ${
-            isDark
-              ? "bg-slate-900/60 border-slate-800 text-slate-300"
-              : "bg-slate-100/60 border-slate-200/70 text-slate-600"
-          }`}
-        >
-          <Link href="/#features" className={navLinkCls}>
-            Features
-          </Link>
+        <nav className="hidden md:flex items-center gap-2 text-xs font-semibold">
           <Link href="/#how-it-works" className={navLinkCls}>
-            How it Works
+            How it works
           </Link>
           <Link href="/#pricing" className={navLinkCls}>
-            Pricing (₹2,999)
+            Pricing
           </Link>
-          <Link
-            href="/r/mana-tours-travels"
-            target="_blank"
-            className={`flex items-center gap-1.5 font-bold text-[11px] px-3 py-1.5 rounded-full transition-all ${
-              isDark
-                ? "text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20"
-                : "text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100"
-            }`}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Live Demo</span>
+          <Link href="/login" className={navLinkCls}>
+            Sign in
           </Link>
         </nav>
 
-        {/* Right CTA / User State */}
-        <div className="hidden md:flex items-center gap-2.5">
+        {/* Right Action */}
+        <div className="hidden md:flex items-center gap-3">
           {user ? (
             <div className="flex items-center gap-2">
-              {user.role === "SUPER_ADMIN" && (
+              {user.role === "SUPER_ADMIN" ? (
                 <Link
                   href="/admin"
-                  className={`text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 transition ${
-                    isDark
-                      ? "bg-amber-500/15 text-amber-300 border border-amber-500/25 hover:bg-amber-500/25"
-                      : "bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100"
-                  }`}
+                  className="text-xs font-bold px-3.5 py-2 rounded-xl bg-amber-500/15 text-amber-900 border border-amber-300 hover:bg-amber-500/25 transition flex items-center gap-1.5"
                 >
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  Owner Panel
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Admin Panel</span>
                 </Link>
-              )}
-              {user.role !== "SUPER_ADMIN" && (
+              ) : (
                 <Link
                   href="/dashboard"
-                  className="text-xs font-bold px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-md shadow-indigo-600/20 flex items-center gap-1.5 active:scale-95"
+                  className="text-xs font-bold px-4 py-2 rounded-xl bg-[#4338ca] text-white hover:bg-[#3730a3] transition shadow-xs flex items-center gap-1.5"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5" />
-                  Store Dashboard
+                  <span>Dashboard</span>
                 </Link>
               )}
               <button
                 onClick={handleLogout}
                 title="Log Out"
-                className={`p-2 rounded-xl transition ${
-                  isDark
-                    ? "text-slate-400 hover:text-white hover:bg-slate-800"
-                    : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"
-                }`}
+                className="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-white/60 transition"
               >
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               <Link
                 href="/login"
-                className={`text-xs font-bold px-3.5 py-2 rounded-xl transition-all duration-150 flex items-center gap-1.5 ${
-                  isDark
-                    ? "text-slate-300 hover:text-white hover:bg-slate-800"
-                    : "text-slate-700 hover:text-indigo-600 hover:bg-slate-100"
-                }`}
+                className="text-xs font-bold px-3.5 py-2 rounded-xl text-slate-700 hover:text-[#4338ca] transition"
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Admin Login</span>
+                Sign in
               </Link>
               <Link
                 href="/#customizer"
-                className="text-xs font-black px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white hover:from-emerald-500 hover:to-teal-500 transition shadow-md shadow-emerald-600/25 active:scale-95 flex items-center gap-1.5 shimmer-sweep"
+                onClick={scrollToCustomizer}
+                className="text-xs font-bold px-4 py-2 rounded-xl bg-[#4338ca] hover:bg-[#3730a3] text-white transition shadow-sm flex items-center gap-1.5"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span>BUY NOW &bull; ₹2,999</span>
+                <span>Preview my standee</span>
               </Link>
             </div>
           )}
@@ -181,11 +158,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
         {/* Mobile menu trigger */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className={`md:hidden p-2 rounded-xl transition ${
-            isDark
-              ? "text-slate-300 hover:text-white bg-slate-900 border border-slate-800"
-              : "text-slate-700 hover:text-slate-900 bg-slate-100 border border-slate-200"
-          }`}
+          className="md:hidden p-2 rounded-xl text-slate-700 bg-white border border-[#e3ded6] shadow-xs"
           aria-label="Toggle Navigation Menu"
         >
           {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -194,109 +167,71 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div
-          className={`md:hidden px-4 pt-3 pb-5 space-y-3 shadow-2xl border-b animate-slideUp ${
-            isDark
-              ? "bg-slate-950/95 backdrop-blur-2xl border-slate-800 text-slate-200"
-              : "bg-white/95 backdrop-blur-2xl border-slate-200 text-slate-800"
-          }`}
-        >
+        <div className="md:hidden px-4 pt-3 pb-5 space-y-3 bg-[#f7f6f2] border-b border-[#e3ded6] shadow-xl text-[#172033]">
           <div className="flex flex-col space-y-1">
-            <Link
-              href="/#features"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-xl text-xs font-semibold hover:bg-slate-500/10 transition flex items-center justify-between"
-            >
-              <span>Features</span>
-              <ChevronRight className="w-3.5 h-3.5 opacity-40" />
-            </Link>
             <Link
               href="/#how-it-works"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-xl text-xs font-semibold hover:bg-slate-500/10 transition flex items-center justify-between"
+              className="px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-white transition flex items-center justify-between"
             >
-              <span>How it Works</span>
+              <span>How it works</span>
               <ChevronRight className="w-3.5 h-3.5 opacity-40" />
             </Link>
             <Link
               href="/#pricing"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-xl text-xs font-semibold hover:bg-slate-500/10 transition flex items-center justify-between"
+              className="px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-white transition flex items-center justify-between"
             >
-              <span>Lifetime Pass (₹2,999)</span>
+              <span>Pricing (From ₹1,999)</span>
               <ChevronRight className="w-3.5 h-3.5 opacity-40" />
             </Link>
             <Link
-              href="/r/mana-tours-travels"
-              target="_blank"
+              href="/login"
               onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center justify-between text-xs font-bold px-3 py-2.5 rounded-xl border ${
-                isDark
-                  ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
-                  : "text-emerald-700 bg-emerald-50 border-emerald-200"
-              }`}
+              className="px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-white transition flex items-center justify-between"
             >
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Live Demo (Mana Tours)</span>
-              </div>
-              <ExternalLink className="w-3.5 h-3.5" />
+              <span>Merchant &amp; Admin Sign In</span>
+              <ChevronRight className="w-3.5 h-3.5 opacity-40" />
+            </Link>
+            <Link
+              href="/agent"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-white transition flex items-center justify-between text-indigo-700"
+            >
+              <span>Field Agent Demonstration Tool</span>
+              <ChevronRight className="w-3.5 h-3.5 opacity-40" />
             </Link>
           </div>
 
-          <div className={`pt-3 border-t flex flex-col gap-2 ${isDark ? "border-slate-800" : "border-slate-100"}`}>
+          <div className="pt-2 border-t border-[#e3ded6]">
             {user ? (
-              <>
-                {user.role === "SUPER_ADMIN" && (
-                  <Link
-                    href="/admin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-full text-center py-2.5 rounded-xl bg-amber-500 text-slate-950 font-black text-xs shadow-md"
-                  >
-                    Admin Console
-                  </Link>
-                )}
-                {user.role !== "SUPER_ADMIN" && (
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-full text-center py-2.5 rounded-xl bg-indigo-600 text-white font-bold text-xs shadow-md"
-                  >
-                    Go to Store Dashboard
-                  </Link>
-                )}
+              <div className="flex items-center gap-2">
+                <Link
+                  href={user.role === "SUPER_ADMIN" ? "/admin" : "/dashboard"}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex-1 py-2.5 rounded-xl bg-[#4338ca] text-white text-xs font-bold text-center"
+                >
+                  {user.role === "SUPER_ADMIN" ? "Admin Panel" : "Store Dashboard"}
+                </Link>
                 <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleLogout();
-                  }}
-                  className="w-full py-2 text-center text-xs font-semibold text-red-400 hover:text-red-300"
+                  onClick={handleLogout}
+                  className="p-2.5 rounded-xl border border-[#e3ded6] bg-white text-slate-600"
                 >
-                  Sign Out
+                  <LogOut className="w-4 h-4" />
                 </button>
-              </>
-            ) : (
-              <div className="flex flex-col gap-2 pt-1">
-                <Link
-                  href="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`w-full text-center py-2.5 rounded-xl font-bold text-xs border transition ${
-                    isDark
-                      ? "bg-slate-900 hover:bg-slate-800 text-slate-200 border-slate-800"
-                      : "bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-200"
-                  }`}
-                >
-                  Admin Command Center
-                </Link>
-                <Link
-                  href="/#customizer"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-3 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white font-black text-xs shadow-lg shadow-emerald-950/40 transition flex items-center justify-center gap-1.5"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                  <span>BUY NOW &bull; ₹2,999 (LIFETIME PASS)</span>
-                </Link>
               </div>
+            ) : (
+              <Link
+                href="/#customizer"
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  scrollToCustomizer(e);
+                }}
+                className="w-full py-2.5 rounded-xl bg-[#4338ca] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span>Preview my standee</span>
+              </Link>
             )}
           </div>
         </div>

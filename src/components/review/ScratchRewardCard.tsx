@@ -413,10 +413,10 @@ export default function ScratchRewardCard({
         </div>
 
         <h3 className="text-lg sm:text-xl font-black text-white">
-          {isCityGrafix || isGoldenHair || isNewRoshan ? "🎉 You Unlocked a Lucky Discount!" : "🎉 Customer Reward Unlocked!"}
+          {isCityGrafix || isGoldenHair || isNewRoshan ? "🎉 Visitor Discount Voucher!" : "🎉 Customer Appreciation Voucher!"}
         </h3>
         <p className="text-xs text-slate-300 mt-0.5">
-          Thank you for rating <strong className="text-white">{businessName}</strong> on Google!
+          Exclusive visitor appreciation offer for <strong className="text-white">{businessName}</strong>
         </p>
 
         {/* Scratch Card Container */}

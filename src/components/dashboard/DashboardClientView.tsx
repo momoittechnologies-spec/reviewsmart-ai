@@ -22,6 +22,7 @@ import {
   Palette,
   QrCode,
   Check,
+  MapPin,
 } from "lucide-react";
 import { copyToClipboard } from "@/lib/clipboard";
 
@@ -158,24 +159,42 @@ export default function DashboardClientView({
                 </span>
               </div>
 
-              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight">
-                {business.name}
-              </h1>
+              <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                <h1 className="text-xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+                  {business.name}
+                </h1>
+                {business.googleAddress && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-indigo-100 border border-white/20">
+                    <MapPin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    <span className="truncate max-w-[260px]">{business.googleAddress.split(",")[0] || business.googleAddress}</span>
+                  </span>
+                )}
+              </div>
 
-              <p className="text-xs text-indigo-200/80 truncate max-w-md">
+              <p className="text-xs text-indigo-200/80 truncate max-w-lg">
                 {business.category || "Local Business"} • {business.googleAddress || "Verified Google Profile"}
               </p>
             </div>
           </div>
 
           {/* Quick Header Actions */}
-          <div className="flex items-center gap-2 self-stretch sm:self-auto">
+          <div className="flex flex-wrap items-center gap-2 self-stretch sm:self-auto">
+            <a
+              href={qrDataUrl}
+              download={`${business.slug}-review-qr.png`}
+              className="flex-1 sm:flex-initial px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 active:bg-white/30 backdrop-blur-md border border-white/15 text-white font-bold text-xs flex items-center justify-center gap-2 transition"
+              title="Download QR Code"
+            >
+              <Download className="w-4 h-4 text-emerald-300" />
+              <span>Download QR</span>
+            </a>
+
             <Link
-              href="/dashboard/settings"
+              href="/dashboard/studio"
               className="flex-1 sm:flex-initial px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 active:bg-white/30 backdrop-blur-md border border-white/15 text-white font-bold text-xs flex items-center justify-center gap-2 transition"
             >
-              <Palette className="w-4 h-4 text-indigo-300" />
-              <span>Customise</span>
+              <Printer className="w-4 h-4 text-amber-300" />
+              <span>Print Studio</span>
             </Link>
 
             <a
@@ -184,7 +203,7 @@ export default function DashboardClientView({
               rel="noreferrer"
               className="flex-1 sm:flex-initial px-4 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-indigo-950/60 transition"
             >
-              <span>Test Card</span>
+              <span>Open Review Card</span>
               <ArrowUpRight className="w-4 h-4" />
             </a>
           </div>

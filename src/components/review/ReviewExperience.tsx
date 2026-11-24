@@ -34,6 +34,7 @@ import {
   IndianRupee,
   AlertCircle,
   Smartphone,
+  Mic,
 } from "lucide-react";
 import { buildUpiLinks } from "@/lib/upi-engine";
 import { detectIndustry } from "@/lib/industry";
@@ -131,6 +132,10 @@ export default function ReviewExperience({
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [isInAppBrowser, setIsInAppBrowser] = useState(false);
   const [expressToast, setExpressToast] = useState<string | null>(null);
+  const [showPrivateFeedback, setShowPrivateFeedback] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [logoError, setLogoError] = useState(false);
+  const recognitionRef = useRef<any>(null);
 
   // Counter UPI Payment Acceptance state
   const [showUpiModal, setShowUpiModal] = useState(false);
@@ -547,24 +552,83 @@ export default function ReviewExperience({
 
   const [isRedirecting, setIsRedirecting] = useState(false);
 
+  const toggleVoiceInput = () => {
+    if (typeof window === "undefined") return;
+    const SpeechRecognition =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Voice input is not supported in this browser. You can type directly in the draft box.");
+      return;
+    }
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+      return;
+    }
+    try {
+      const recognition = new SpeechRecognition();
+      recognitionRef.current = recognition;
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      const langMap: Record<string, string> = {
+        ENGLISH: "en-IN",
+        HINDI: "hi-IN",
+        TELUGU_SCRIPT: "te-IN",
+        TELUGU_ENGLISH: "te-IN",
+        TELUGU_ROMAN: "te-IN",
+        TAMIL: "ta-IN",
+        KANNADA: "kn-IN",
+        MALAYALAM: "ml-IN",
+        AUTO: "en-IN",
+      };
+      recognition.lang = langMap[languageMode] || "en-IN";
+      recognition.onstart = () => setIsListening(true);
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0]?.[0]?.transcript;
+        if (transcript) {
+          setEditableDraftText((prev) => (prev ? `${prev} ${transcript}` : transcript));
+        }
+      };
+      recognition.onerror = () => setIsListening(false);
+      recognition.onend = () => setIsListening(false);
+      recognition.start();
+    } catch {
+      setIsListening(false);
+    }
+  };
+
   const handleRatingClick = async (star: number) => {
     setRating(star);
 
-    // For 4 or 5 stars, instantly initialize and copy the unique dynamic draft
-    if (star >= 4) {
+    // For ALL ratings (1 to 5), generate/prepare the review draft
+    if (star <= 3) {
+      const constructiveDraft = customNote
+        ? customNote
+        : `Visited ${business.name}. The experience had a few points that could be improved regarding service and response time. Sharing constructive feedback so management can address it.`;
+      const draftOption: ReviewOption = {
+        id: 1,
+        headline: "Constructive Feedback",
+        text: constructiveDraft,
+        tone: "constructive",
+      };
+      setReviewOptions([draftOption]);
+      setSelectedOptionId(1);
+      setEditableDraftText(constructiveDraft);
+      await copyToClipboard(constructiveDraft);
+    } else {
       const currentDrafts = buildInstantDrafts(selectedTags, customNote, languageMode);
       setReviewOptions(currentDrafts);
       setSelectedOptionId(1);
-      setEditableDraftText(currentDrafts[0].text);
-      await copyToClipboard(currentDrafts[0].text);
-
-      setTimeout(() => {
-        reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 200);
-
-      // Background AI / memory check & registration
+      setEditableDraftText(currentDrafts[0]?.text || "");
+      if (currentDrafts[0]?.text) {
+        await copyToClipboard(currentDrafts[0].text);
+      }
       triggerAiGeneration(selectedTags, customNote, languageMode);
     }
+
+    setTimeout(() => {
+      reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
 
     fetch("/api/analytics/track", {
       method: "POST",
@@ -830,11 +894,12 @@ export default function ReviewExperience({
                 className="w-full h-full rounded-2xl bg-white border-2 flex items-center justify-center p-2 overflow-hidden shadow-lg"
                 style={{ borderColor: business.primaryColor || "#4f46e5" }}
               >
-                {business.logoUrl ? (
+                {business.logoUrl && !logoError ? (
                   <img
                     src={business.logoUrl}
                     alt={business.name}
                     className="w-full h-full object-contain"
+                    onError={() => setLogoError(true)}
                   />
                 ) : (
                   <span
@@ -1059,127 +1124,8 @@ export default function ReviewExperience({
           )}
         </div>
 
-        {/* ─── 1-3 STARS: TRANSPARENT RESOLUTION (100% GOOGLE POLICY COMPLIANT) ─ */}
-        {isNeedsImprovement && (
-          <div className="bg-slate-900/90 backdrop-blur-2xl rounded-3xl p-4 sm:p-6 border border-amber-500/30 shadow-2xl animate-fadeIn space-y-4">
-            {feedbackSubmitted ? (
-              <div className="text-center py-6 space-y-3">
-                <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-2 border border-emerald-500/40">
-                  <Check className="w-7 h-7 stroke-[3]" />
-                </div>
-                <h3 className="text-base font-bold text-white">
-                  Message Delivered Directly to Store Management
-                </h3>
-                <p className="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed">
-                  Thank you for your honesty. Your note has been securely forwarded to management so we can address this directly with you.
-                </p>
-                <div className="pt-3 flex flex-col sm:flex-row gap-2 justify-center">
-                  {whatsappUrl && (
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition"
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                      Chat with Manager on WhatsApp
-                    </a>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => handleOpenCopyModal(feedbackComments)}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition"
-                  >
-                    <span>Also Share on Google</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="text-center">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-xs font-bold mb-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-                    Direct Feedback Resolution
-                  </div>
-                  <h3 className="text-sm font-bold text-white">
-                    How can we make things right for you?
-                  </h3>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
-                    We take every customer seriously. You can message the store owner directly, or continue to leave your public review on Google.
-                  </p>
-                </div>
-
-                {/* Direct to Owner Form */}
-                <form onSubmit={handleFeedbackSubmit} className="space-y-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Send a private note to store management:
-                    </label>
-                    <textarea
-                      required
-                      rows={3}
-                      value={feedbackComments}
-                      onChange={(e) => setFeedbackComments(e.target.value)}
-                      placeholder="Tell the owner what happened so they can help resolve this..."
-                      className="w-full text-xs p-3 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <input
-                      type="text"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="Your Name (optional)"
-                      className="w-full text-xs p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500"
-                    />
-                    <input
-                      type="text"
-                      value={customerContact}
-                      onChange={(e) => setCustomerContact(e.target.value)}
-                      placeholder="Mobile / Email (for callback)"
-                      className="w-full text-xs p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={feedbackSubmitting || !feedbackComments.trim()}
-                    className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-md transition disabled:opacity-50"
-                  >
-                    {feedbackSubmitting ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <>
-                        <Send className="w-3.5 h-3.5" />
-                        Send Note to Store Management
-                      </>
-                    )}
-                  </button>
-                </form>
-
-                {/* Google Policy Non-Gated Public Option */}
-                <div className="pt-2 text-center border-t border-slate-800">
-                  <p className="text-[11px] text-slate-400 mb-2">
-                    Prefer to post your review publicly on Google?
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => handleOpenCopyModal(feedbackComments || `Review for ${business.name}`)}
-                    className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold flex items-center justify-center gap-2 transition"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Continue Directly to Google Review</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* ─── 4-5 STARS: AI-ASSISTED REVIEW COMPOSER STUDIO ──────────────── */}
-        {isPositive && (
+        {/* ─── UNIVERSAL REVIEW COMPOSER STUDIO (ALL RATINGS 1-5 STARS) ──── */}
+        {rating > 0 && (
           <div
             ref={reviewSectionRef}
             className="bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 backdrop-blur-2xl rounded-3xl p-4 sm:p-6 border border-amber-400/40 shadow-2xl transition-all duration-300 space-y-4 animate-fadeIn"
@@ -1192,10 +1138,10 @@ export default function ReviewExperience({
                 </div>
                 <div>
                   <h3 className="text-xs sm:text-sm font-bold text-white">
-                    Smart AI Review Assistant
+                    Your Review Draft
                   </h3>
-                  <p className="text-[10px] text-slate-400">
-                    Authentic review suggestions you can edit or customize
+                  <p className="text-[10.5px] text-slate-400">
+                    What would you like to share about your visit?
                   </p>
                 </div>
               </div>
@@ -1291,10 +1237,10 @@ export default function ReviewExperience({
               </button>
             </div>
 
-            {/* Compliment Tags */}
+            {/* Compliment / Feedback Chips */}
             <div>
               <span className="text-[11px] font-bold text-slate-300 block mb-2">
-                What did you like most? (Tap chips to update review)
+                {rating <= 3 ? "Areas that stood out or need care:" : "What did you like most? (Tap chips to update review)"}
               </span>
               <div className="flex flex-wrap gap-1.5">
                 {tagsList.map((tag) => {
@@ -1318,77 +1264,101 @@ export default function ReviewExperience({
               </div>
             </div>
 
-            {/* Custom Note or Specific Service Detail */}
+            {/* Custom Note or Specific Service Detail + Voice Input */}
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-slate-300 flex items-center justify-between">
-                <span>Add a personal note or project detail (optional):</span>
+                <span>Add personal details or speak your review:</span>
+                <button
+                  type="button"
+                  onClick={toggleVoiceInput}
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 transition ${
+                    isListening
+                      ? "bg-red-500 text-white animate-pulse"
+                      : "bg-slate-800 text-slate-300 hover:text-white"
+                  }`}
+                >
+                  <Mic className="w-3 h-3 text-amber-400" />
+                  <span>{isListening ? "Listening..." : "Voice input"}</span>
+                </button>
               </label>
-              <input
-                type="text"
-                value={customNote}
-                onChange={(e) => handleNoteChange(e.target.value)}
-                placeholder={industry.placeholder || "e.g. Built our project on time with fantastic support"}
-                className="w-full text-xs p-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
-              />
+              <div className="relative">
+                <input
+                  type="text"
+                  value={customNote}
+                  onChange={(e) => handleNoteChange(e.target.value)}
+                  placeholder={industry.placeholder || "e.g. Prompt service, transparent pricing, great team"}
+                  className="w-full text-xs p-3 pr-10 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                />
+                <button
+                  type="button"
+                  onClick={toggleVoiceInput}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-amber-400 transition"
+                  title="Speak your review"
+                >
+                  <Mic className={`w-4 h-4 ${isListening ? "text-red-400 animate-pulse" : ""}`} />
+                </button>
+              </div>
             </div>
 
             {/* Review Draft Choices */}
-            <div className="space-y-2.5 pt-1">
-              <span className="text-[11px] font-bold text-slate-300 block">
-                Choose a style or customize below:
-              </span>
+            {reviewOptions.length > 1 && (
+              <div className="space-y-2.5 pt-1">
+                <span className="text-[11px] font-bold text-slate-300 block">
+                  Choose a style or customize below:
+                </span>
 
-              {isGenerating ? (
-                <div className="p-8 text-center space-y-2 bg-slate-800/80 rounded-2xl border border-slate-700">
-                  <Loader2 className="w-6 h-6 text-amber-400 animate-spin mx-auto" />
-                  <p className="text-xs text-slate-300 font-medium">
-                    "Gemini AI is crafting authentic review variations..."
-                  </p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-3 gap-1 sm:gap-2">
-                  {reviewOptions.map((opt) => {
-                    const isSelected = selectedOptionId === opt.id;
-                    return (
-                      <button
-                        key={opt.id}
-                        type="button"
-                        onClick={() => handleSelectOption(opt)}
-                        className={`p-1.5 sm:p-2.5 rounded-xl border text-center transition-all ${
-                          isSelected
-                            ? "border-amber-400 bg-gradient-to-br from-amber-400/25 via-amber-500/15 to-slate-900 text-white font-black shadow-lg shadow-amber-500/20 ring-1 ring-amber-400/60"
-                            : "border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700 hover:text-slate-200"
-                        }`}
-                      >
-                        <span className="text-[9.5px] xs:text-[10px] sm:text-xs block truncate font-bold">{opt.headline || opt.tone}</span>
-                        {opt.languageMix === "TELUGU_SCRIPT" && (
-                          <span className="text-[8px] text-amber-400 block font-semibold">తెలుగు</span>
-                        )}
-                        {opt.languageMix === "HINDI" && (
-                          <span className="text-[8px] text-amber-400 block font-semibold">हिंदी</span>
-                        )}
-                        {opt.languageMix === "TAMIL" && (
-                          <span className="text-[8px] text-amber-400 block font-semibold">தமிழ்</span>
-                        )}
-                        {opt.languageMix === "KANNADA" && (
-                          <span className="text-[8px] text-amber-400 block font-semibold">ಕನ್ನಡ</span>
-                        )}
-                        {opt.languageMix === "MALAYALAM" && (
-                          <span className="text-[8px] text-amber-400 block font-semibold">മലയാളം</span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+                {isGenerating ? (
+                  <div className="p-8 text-center space-y-2 bg-slate-800/80 rounded-2xl border border-slate-700">
+                    <Loader2 className="w-6 h-6 text-amber-400 animate-spin mx-auto" />
+                    <p className="text-xs text-slate-300 font-medium">
+                      Crafting authentic review variations...
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 gap-1 sm:gap-2">
+                    {reviewOptions.map((opt) => {
+                      const isSelected = selectedOptionId === opt.id;
+                      return (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => handleSelectOption(opt)}
+                          className={`p-1.5 sm:p-2.5 rounded-xl border text-center transition-all ${
+                            isSelected
+                              ? "border-amber-400 bg-gradient-to-br from-amber-400/25 via-amber-500/15 to-slate-900 text-white font-black shadow-lg shadow-amber-500/20 ring-1 ring-amber-400/60"
+                              : "border-slate-800 bg-slate-950/60 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                          }`}
+                        >
+                          <span className="text-[9.5px] xs:text-[10px] sm:text-xs block truncate font-bold">{opt.headline || opt.tone}</span>
+                          {opt.languageMix === "TELUGU_SCRIPT" && (
+                            <span className="text-[8px] text-amber-400 block font-semibold">తెలుగు</span>
+                          )}
+                          {opt.languageMix === "HINDI" && (
+                            <span className="text-[8px] text-amber-400 block font-semibold">हिंदी</span>
+                          )}
+                          {opt.languageMix === "TAMIL" && (
+                            <span className="text-[8px] text-amber-400 block font-semibold">தமிழ்</span>
+                          )}
+                          {opt.languageMix === "KANNADA" && (
+                            <span className="text-[8px] text-amber-400 block font-semibold">ಕನ್ನಡ</span>
+                          )}
+                          {opt.languageMix === "MALAYALAM" && (
+                            <span className="text-[8px] text-amber-400 block font-semibold">മലയാളം</span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Interactive Editable Review Card */}
             <div className="p-4 rounded-2xl bg-slate-950/80 border border-amber-400/40 space-y-2.5 shadow-inner">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
                   <Edit3 className="w-3.5 h-3.5 text-amber-400" />
-                  Your Review Draft (Tap to edit or add details)
+                  Your review draft
                 </span>
                 <span className="text-[10px] text-slate-400 font-mono">
                   {editableDraftText.length} chars
@@ -1399,7 +1369,7 @@ export default function ReviewExperience({
                 rows={4}
                 value={editableDraftText}
                 onChange={(e) => setEditableDraftText(e.target.value)}
-                placeholder="Type or edit your review here..."
+                placeholder="What would you like to share about your visit? Type directly or edit this draft..."
                 className="w-full text-xs p-3 rounded-xl bg-slate-900 border border-slate-700 text-white leading-relaxed focus:outline-none focus:ring-2 focus:ring-amber-400 font-sans"
               />
 
@@ -1407,11 +1377,11 @@ export default function ReviewExperience({
                 <span className="text-emerald-400 font-semibold flex items-center gap-1">
                   <Check className="w-3 h-3" /> Ready to copy
                 </span>
-                <span>You can edit this anytime before posting</span>
+                <span>You finish posting directly on Google</span>
               </div>
             </div>
 
-            {/* Primary Action Button */}
+            {/* Primary Action Button: "Copy review and open Google" */}
             <div className="pt-2">
               <button
                 type="button"
@@ -1419,36 +1389,126 @@ export default function ReviewExperience({
                 className="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-xl shadow-amber-500/30 transition-all transform active:scale-97 cursor-pointer shimmer-sweep btn-press border border-amber-200/60"
               >
                 <Copy className="w-4 h-4" />
-                <span>Copy Review &amp; Post on Google</span>
+                <span>Copy review and open Google</span>
                 <ExternalLink className="w-4 h-4" />
               </button>
               <p className="text-[11px] text-center text-slate-400 font-medium mt-2">
-                ⚡ 1 Tap automatically copies your review &amp; opens Google review composer!
+                Copies your draft to clipboard and opens Google Maps. You finish posting your review there.
               </p>
+            </div>
 
-              {business.enableScratchCard && (
-                <div className="mt-2.5 p-2 rounded-xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center gap-2 text-center">
-                  <Gift className="w-3.5 h-3.5 text-amber-400 animate-pulse shrink-0" />
-                  <span className="text-[11px] font-semibold text-amber-300">
-                    Your <strong className="text-white">Up to {business.scratchCardMaxDiscount || 5}% Discount Scratch Card</strong> unlocks immediately upon posting your review!
-                  </span>
-                </div>
-              )}
+            {/* Independent Private Feedback Option (Always Available) */}
+            <div className="pt-3 border-t border-slate-800">
+              <button
+                type="button"
+                onClick={() => setShowPrivateFeedback(!showPrivateFeedback)}
+                className="w-full text-left py-2 px-3 rounded-xl bg-slate-950/70 hover:bg-slate-950 border border-slate-800 text-xs font-semibold text-slate-300 flex items-center justify-between transition"
+              >
+                <span className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-amber-400" />
+                  <span>Prefer to send private feedback to the owner?</span>
+                </span>
+                <span className="text-[11px] text-amber-400">
+                  {showPrivateFeedback ? "Hide ▲" : "Write note ▼"}
+                </span>
+              </button>
 
-              {hasOpenedGoogle && business.enableScratchCard && (
-                <div className="mt-3">
-                  <button
-                    type="button"
-                    onClick={() => setShowRewardCard(true)}
-                    className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl shadow-emerald-950/40 transition active:scale-98"
-                  >
-                    <Gift className="w-4 h-4 animate-bounce" />
-                    <span>View / Scratch Your Discount Voucher</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
+              {showPrivateFeedback && (
+                <div className="mt-3 p-4 rounded-2xl bg-slate-950/90 border border-slate-800 space-y-3 animate-fadeIn">
+                  {feedbackSubmitted ? (
+                    <div className="text-center py-4 space-y-2">
+                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                        <Check className="w-5 h-5" />
+                      </div>
+                      <p className="text-xs font-bold text-white">Private feedback delivered to management</p>
+                      <p className="text-[11px] text-slate-400">Thank you for sharing your experience with the owner directly.</p>
+                      {whatsappUrl && (
+                        <a
+                          href={whatsappUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 text-slate-950 text-xs font-bold mt-1"
+                        >
+                          <MessageSquare className="w-3.5 h-3.5" />
+                          Chat with Owner on WhatsApp
+                        </a>
+                      )}
+                    </div>
+                  ) : (
+                    <form onSubmit={handleFeedbackSubmit} className="space-y-3">
+                      <div>
+                        <label className="block text-xs font-semibold text-slate-300 mb-1">
+                          Private note for store management (not shared on Google):
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={feedbackComments}
+                          onChange={(e) => setFeedbackComments(e.target.value)}
+                          placeholder="Tell the owner directly what happened or what could be improved..."
+                          className="w-full text-xs p-3 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <input
+                          type="text"
+                          value={customerName}
+                          onChange={(e) => setCustomerName(e.target.value)}
+                          placeholder="Your Name (optional)"
+                          className="w-full text-xs p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500"
+                        />
+                        <input
+                          type="text"
+                          value={customerContact}
+                          onChange={(e) => setCustomerContact(e.target.value)}
+                          placeholder="Phone / Email (optional callback)"
+                          className="w-full text-xs p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={feedbackSubmitting || !feedbackComments.trim()}
+                        className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-md transition disabled:opacity-50"
+                      >
+                        {feedbackSubmitting ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <>
+                            <Send className="w-3.5 h-3.5" />
+                            Send Note to Store Management
+                          </>
+                        )}
+                      </button>
+                    </form>
+                  )}
                 </div>
               )}
             </div>
+
+            {/* Independent Customer Reward Voucher (Independent of Rating) */}
+            {business.enableScratchCard && (
+              <div className="pt-3 border-t border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setShowRewardCard(true)}
+                  className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-500/20 via-teal-500/15 to-emerald-600/20 hover:from-emerald-500/30 hover:to-teal-500/25 border border-emerald-500/40 text-left flex items-center justify-between transition"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Gift className="w-5 h-5 text-emerald-400" />
+                    <div>
+                      <span className="text-xs font-bold text-white block">
+                        🎁 Visitor Appreciation Voucher
+                      </span>
+                      <span className="text-[10px] text-emerald-300">
+                        Tap to scratch your surprise discount (up to {business.scratchCardMaxDiscount || 5}%)
+                      </span>
+                    </div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-emerald-400" />
+                </button>
+              </div>
+            )}
 
             {/* Direct Counter Payment Acceptance Strip */}
             {customUpi && business.enableUpiPayments !== false && (
@@ -1561,31 +1621,24 @@ export default function ReviewExperience({
 
             {/* Celebration Icon */}
             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-400/15 border-2 border-amber-400 text-amber-400 flex items-center justify-center mx-auto mb-2.5 shadow-lg shadow-amber-400/20">
-              <Sparkles className="w-7 h-7 sm:w-8 sm:h-8 animate-bounce" />
+              <Check className="w-7 h-7 sm:w-8 sm:h-8 text-amber-400" />
             </div>
 
             <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
-              Review Copied! 🎉
+              Review draft copied to clipboard
             </h3>
-            <p className="text-xs text-emerald-400 font-bold mt-0.5 flex items-center justify-center gap-1.5">
-              {isRedirecting ? (
-                <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  <span>Opening Google Review Page Automatically...</span>
-                </>
-              ) : (
-                <span>Ready to Paste on Google!</span>
-              )}
+            <p className="text-xs text-amber-300 font-semibold mt-0.5 flex items-center justify-center gap-1.5">
+              <span>Paste your review on Google to finish publishing</span>
             </p>
 
-            {/* Copied Review Snippet Box */}
+            {/* Copied Review Snippet Box with Manual Copy Fallback */}
             <div
               onClick={handleReCopyInModal}
               className="my-4 p-3.5 rounded-2xl bg-slate-950/90 border border-slate-700 hover:border-amber-400/50 text-left relative cursor-pointer transition active:scale-98"
             >
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-[10px] font-bold text-amber-400 flex items-center gap-1">
-                  ★★★★★ {rating >= 4 ? "5-Star" : "Your"} Review Draft
+                  Your Review Draft ({modalCopiedText.length} chars)
                 </span>
                 <button
                   type="button"
@@ -1593,7 +1646,8 @@ export default function ReviewExperience({
                     e.stopPropagation();
                     handleReCopyInModal();
                   }}
-                  className="text-[10px] font-bold text-slate-300 hover:text-white flex items-center gap-1 bg-slate-800 px-2 py-0.5 rounded-md"
+                  className="text-[10px] font-bold text-slate-200 hover:text-white flex items-center gap-1 bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded-md border border-slate-700 transition"
+                  title="Manual copy fallback"
                 >
                   {modalReCopied ? (
                     <>
@@ -1603,7 +1657,7 @@ export default function ReviewExperience({
                   ) : (
                     <>
                       <Copy className="w-3 h-3" />
-                      <span>Re-Copy</span>
+                      <span>Copy draft again</span>
                     </>
                   )}
                 </button>
@@ -1620,7 +1674,7 @@ export default function ReviewExperience({
                   ✓
                 </div>
                 <p className="text-slate-200">
-                  <strong className="text-white">Review copied</strong> to your clipboard automatically ✅
+                  <strong className="text-white">Draft copied</strong> to your clipboard automatically
                 </p>
               </div>
               <div className="flex items-start gap-2.5 text-xs">
@@ -1628,29 +1682,20 @@ export default function ReviewExperience({
                   2
                 </div>
                 <p className="text-slate-200">
-                  Tap the button below &darr; &rarr; <strong className="text-white">Google review page opens</strong>
+                  Tap below &rarr; <strong className="text-white">Google review composer opens</strong>
                 </p>
               </div>
               <div className="flex items-start gap-2.5 text-xs">
                 <div className="w-5 h-5 rounded-full bg-indigo-500 text-white font-black flex items-center justify-center shrink-0 text-[11px]">
                   3
                 </div>
-                <div className="space-y-2 flex-1">
+                <div className="space-y-1.5 flex-1">
                   <p className="text-slate-200 font-semibold">
-                    In Google: select <strong className="text-amber-300">&#x2B50;&#x2B50;&#x2B50;&#x2B50;&#x2B50;</strong> &rarr; tap <strong className="text-amber-300">Post</strong>
+                    Paste your review into the box, select your rating, and tap <strong className="text-amber-300">Post</strong>
                   </p>
-                  <div className="w-full bg-gradient-to-r from-amber-500/20 to-amber-400/10 border-2 border-amber-400/60 rounded-xl px-3 py-2.5 flex items-start gap-2">
-                    <span className="text-xl leading-none shrink-0">📋</span>
-                    <div>
-                      <p className="text-xs font-black text-amber-300 leading-snug">
-                        {isIOS ? "📱 iPhone:" : "📱 Android:"} Tap inside the review text box &rarr; {isIOS ? "tap \"Paste\" on the popup" : "long-press → tap \"Paste\""}
-                      </p>
-                      <p className="text-[11px] text-white/80 font-bold mt-0.5">
-                        ✨ Your review fills in instantly!
-                      </p>
-                    </div>
-                  </div>
-                  
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    ReviewSmart prepares your draft for convenience. Google requires you to finish and submit your review on their official page.
+                  </p>
                 </div>
               </div>
             </div>
@@ -1679,7 +1724,7 @@ export default function ReviewExperience({
               <span>
                 {modalCountdown > 0
                   ? `Opening Google in ${modalCountdown}s...`
-                  : "Tap Here → Open Google & Paste Review"}
+                  : "Open Google Maps to paste & publish"}
               </span>
               <ExternalLink className="w-4 h-4 text-slate-500" />
             </a>

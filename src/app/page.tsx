@@ -56,6 +56,7 @@ import {
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import BrandLogo, { BrandIcon } from "@/components/brand/BrandLogo";
+import Navbar from "@/components/Navbar";
 import HeroCustomizer from "@/components/landing/HeroCustomizer";
 import ReviewGapCalculator from "@/components/landing/ReviewGapCalculator";
 import MobileAppDock from "@/components/landing/MobileAppDock";
@@ -690,16 +691,16 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#fafbfe] text-slate-900 overflow-x-hidden selection:bg-indigo-600 selection:text-white relative">
+    <div className="min-h-screen bg-[var(--background,#f7f6f2)] text-[var(--foreground,#172033)] overflow-x-hidden selection:bg-[#4338ca] selection:text-white relative font-sans">
       {/* ─── 3D AMBIENT LIGHT MESH BACKGROUND ────────────────────────────── */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[1100px] h-[650px] bg-gradient-to-b from-indigo-100/70 via-purple-50/50 to-transparent blur-[120px] rounded-full" />
-        <div className="absolute top-[40%] -left-32 w-[500px] h-[500px] bg-blue-100/40 blur-[130px] rounded-full" />
-        <div className="absolute top-[60%] -right-32 w-[550px] h-[550px] bg-emerald-100/40 blur-[140px] rounded-full" />
-        <div className="absolute bottom-10 left-1/3 w-[600px] h-[400px] bg-indigo-50/60 blur-[120px] rounded-full" />
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[1100px] h-[650px] bg-gradient-to-b from-indigo-100/40 via-amber-50/20 to-transparent blur-[120px] rounded-full" />
+        <div className="absolute top-[40%] -left-32 w-[500px] h-[500px] bg-blue-100/30 blur-[130px] rounded-full" />
+        <div className="absolute top-[60%] -right-32 w-[550px] h-[550px] bg-amber-100/30 blur-[140px] rounded-full" />
+        <div className="absolute bottom-10 left-1/3 w-[600px] h-[400px] bg-indigo-50/40 blur-[120px] rounded-full" />
         {/* Subtle grid lines */}
         <div
-          className="absolute inset-0 opacity-[0.035]"
+          className="absolute inset-0 opacity-[0.025]"
           style={{
             backgroundImage:
               "linear-gradient(to right, #000000 1px, transparent 1px), linear-gradient(to bottom, #000000 1px, transparent 1px)",
@@ -708,192 +709,8 @@ export default function HomePage() {
         />
       </div>
 
-      {/* ─── TOP NOTIFICATION BANNER (META ADS EXCLUSIVE) ─────────────────── */}
-      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 text-white text-xs py-2.5 px-4 text-center font-bold tracking-wide flex items-center justify-center gap-2 shadow-sm">
-        <span className="w-2 h-2 rounded-full bg-emerald-300 animate-ping shrink-0" />
-        <span>
-          PAN-INDIA LAUNCH: Tier 1 Starter ₹2,999 &bull; Smart Business Hub ₹3,999 &bull; 360° Growth ₹4,999 &bull; Zero Subscriptions &bull; 🆓 Free GMB Setup Included!
-        </span>
-        <a
-          href="#pricing"
-          className="underline underline-offset-2 ml-1 text-emerald-200 hover:text-white hidden sm:inline"
-        >
-          View Packages &rarr;
-        </a>
-      </div>
-
-      {/* ─── NAVBAR ───────────────────────────────────────────────────────── */}
-      <nav className="sticky top-0 z-50 bg-white/85 backdrop-blur-2xl border-b border-slate-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
-        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <BrandLogo href="/" size="md" theme="light" />
-
-          {/* Desktop Nav Links */}
-          <div className="hidden lg:flex items-center gap-1 xl:gap-2">
-            <a
-              href="#how-it-works"
-              className="text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3 py-1.5 rounded-full transition"
-            >
-              How It Works
-            </a>
-            <a
-              href="#demo"
-              className="text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3 py-1.5 rounded-full transition"
-            >
-              6-Language Demo
-            </a>
-            <a
-              href="#gmb-setup"
-              className="text-xs font-semibold text-emerald-700 hover:text-emerald-800 hover:bg-emerald-50 border border-emerald-200/80 bg-emerald-50/50 px-3 py-1.5 rounded-full transition flex items-center gap-1"
-            >
-              <Sparkles className="w-3 h-3 text-emerald-600" />
-              <span>Free GMB Setup</span>
-            </a>
-            <a
-              href="#ranking-boost"
-              className="text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3 py-1.5 rounded-full transition"
-            >
-              Ranking Booster
-            </a>
-            <a
-              href="#hardware"
-              className="text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3 py-1.5 rounded-full transition"
-            >
-              3D Standee Studio
-            </a>
-            <a
-              href="#pricing"
-              className="text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3 py-1.5 rounded-full transition"
-            >
-              Lifetime Pricing
-            </a>
-            <a
-              href="#faq"
-              className="text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3 py-1.5 rounded-full transition"
-            >
-              FAQ
-            </a>
-            <Link
-              href="/r/mana-tours-travels"
-              target="_blank"
-              className="flex items-center gap-1 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-3 py-1 rounded-full transition hover:bg-indigo-100/80"
-            >
-              <Play className="w-3 h-3 text-indigo-600" /> Live Customer Card
-            </Link>
-          </div>
-
-          {/* Action Area */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/login"
-              className="text-xs font-bold text-slate-700 hover:text-slate-900 px-3 py-2 sm:px-3.5 sm:py-2 rounded-xl border border-slate-200 hover:bg-slate-50 transition flex items-center gap-1.5"
-            >
-              <Lock className="w-3.5 h-3.5 text-indigo-600" />
-              <span className="hidden xs:inline">Admin Portal</span>
-            </Link>
-
-            <a
-              href="#pricing"
-              className="px-3.5 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-black transition shadow-lg shadow-emerald-600/25 active:scale-95 flex items-center gap-1.5 shrink-0"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
-              <span>Packages &bull; From ₹2,999</span>
-            </a>
-
-            {/* Mobile / Tablet Hamburger Toggle */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-              className="lg:hidden p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition active:scale-95"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5 text-slate-900" /> : <Menu className="w-5 h-5 text-slate-900" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-2xl px-4 py-4 space-y-1.5 shadow-2xl animate-fadeIn">
-            <a
-              href="#how-it-works"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
-            >
-              <CheckCircle className="w-4 h-4 text-indigo-600" />
-              <span>How It Works (3 Steps)</span>
-            </a>
-            <a
-              href="#demo"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
-            >
-              <Globe className="w-4 h-4 text-indigo-600" />
-              <span>6-Language Simulator</span>
-            </a>
-            <a
-              href="#gmb-setup"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-emerald-700 hover:bg-emerald-50 transition border border-emerald-100 bg-emerald-50/40"
-            >
-              <Sparkles className="w-4 h-4 text-emerald-600" />
-              <span>Free Google Business Profile Setup</span>
-            </a>
-            <a
-              href="#ranking-boost"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
-            >
-              <TrendingUp className="w-4 h-4 text-blue-600" />
-              <span>Google Maps Ranking Booster</span>
-            </a>
-            <a
-              href="#hardware"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
-            >
-              <Printer className="w-4 h-4 text-amber-600" />
-              <span>3D Standee Studio &amp; PDF Exports</span>
-            </a>
-            <a
-              href="#pricing"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
-            >
-              <Zap className="w-4 h-4 text-amber-500" />
-              <span>₹2,999 Lifetime Pricing</span>
-            </a>
-            <a
-              href="#faq"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 transition"
-            >
-              <HelpCircle className="w-4 h-4 text-purple-600" />
-              <span>Frequently Asked Questions</span>
-            </a>
-            <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
-              <Link
-                href="/r/mana-tours-travels"
-                target="_blank"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition"
-              >
-                <Play className="w-3.5 h-3.5 text-indigo-600" />
-                <span>Test Live Customer Review Portal</span>
-              </Link>
-              <a
-                href={whatsappInquiryUrl}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold transition"
-              >
-                <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
-                <span>WhatsApp Instant Demo &amp; Support</span>
-              </a>
-            </div>
-          </div>
-        )}
-      </nav>
+      {/* ─── SHOWROOM NAVBAR ─────────────────────────────────────────────────── */}
+      <Navbar variant="light" />
 
       <HeroCustomizer />
 
@@ -1037,242 +854,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── NEW KILLER FEATURE: 100% FREE GOOGLE BUSINESS PROFILE SETUP ──── */}
-      <section id="gmb-setup" className="py-20 px-4 sm:px-6 relative scroll-mt-16 bg-gradient-to-b from-white via-emerald-50/40 to-white border-t border-slate-200/80">
-        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
-          {/* Header */}
-          <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-black shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-              <span>SPECIAL INCLUDED SERVICE &bull; VALUE: ₹2,500 &bull; YOUR COST: ₹0</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 leading-tight">
-              Don&apos;t Have a Google Business Profile?
-              <br />
-              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">
-                We&apos;ll Create, Verify &amp; Optimize It 100% FREE!
-              </span>
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
-              Never listed your shop on Google Maps before? Don&apos;t worry! Our expert team handles the entire Google verification, category setup, and pin placement at zero extra charge with your ₹2,999 Lifetime Pass.
-            </p>
-          </div>
-
-          {/* 4-Step Illustrated Roadmap Grid (Swipeable on Mobile) */}
-          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
-            {/* Step 1 */}
-            <div className="w-[260px] xs:w-[280px] shrink-0 snap-center sm:w-auto p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 font-black text-sm flex items-center justify-center border border-emerald-200">
-                    01
-                  </span>
-                  <MessageCircle className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 transition" />
-                </div>
-                <h4 className="text-base font-bold text-slate-900">Send Shop Details on WhatsApp</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Simply share your store name, category, shop address, and 2-3 storefront photos over WhatsApp. That&apos;s all we need from you!
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-bold text-emerald-700 flex items-center gap-1">
-                <Check className="w-3.5 h-3.5" /> Takes 2 minutes
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="w-[260px] xs:w-[280px] shrink-0 snap-center sm:w-auto p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 font-black text-sm flex items-center justify-center border border-emerald-200">
-                    02
-                  </span>
-                  <ShieldCheck className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 transition" />
-                </div>
-                <h4 className="text-base font-bold text-slate-900">Google Verification Handled</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Our verification specialists coordinate directly with Google Maps to verify your business location and claim ownership without paperwork hassles.
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-bold text-emerald-700 flex items-center gap-1">
-                <Check className="w-3.5 h-3.5" /> Official Google verification
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="w-[260px] xs:w-[280px] shrink-0 snap-center sm:w-auto p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 font-black text-sm flex items-center justify-center border border-emerald-200">
-                    03
-                  </span>
-                  <Search className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 transition" />
-                </div>
-                <h4 className="text-base font-bold text-slate-900">Local SEO Category Setup</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  We configure high-volume &quot;near me&quot; search categories, opening hours, business tags, and generate your direct 1-tap review shortlink.
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-bold text-emerald-700 flex items-center gap-1">
-                <Check className="w-3.5 h-3.5" /> Search optimized profile
-              </div>
-            </div>
-
-            {/* Step 4 */}
-            <div className="w-[260px] xs:w-[280px] shrink-0 snap-center sm:w-auto p-6 rounded-3xl bg-white border border-slate-200/90 relative overflow-hidden shadow-sm flex flex-col justify-between group hover:border-emerald-500/50 hover:shadow-md transition">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 font-black text-sm flex items-center justify-center border border-emerald-200">
-                    04
-                  </span>
-                  <Zap className="w-5 h-5 text-slate-400 group-hover:text-emerald-600 transition" />
-                </div>
-                <h4 className="text-base font-bold text-slate-900">Standee Goes Live on Counter</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Your custom Smart QR standee and digital review portal are activated. From day 1, walk-in customers scan &amp; post genuine Google reviews effortlessly!
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 text-[11px] font-bold text-emerald-700 flex items-center gap-1">
-                <Check className="w-3.5 h-3.5" /> Ready for customer reviews
-              </div>
-            </div>
-          </div>
-
-          {/* Direct CTA for Free GMB Setup */}
-          <div className="mt-10 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-200/90 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
-            <div className="space-y-1 text-center md:text-left">
-              <h4 className="text-lg font-black text-slate-900">
-                Ready to Put Your Shop on Google Maps for Free?
-              </h4>
-              <p className="text-xs text-slate-600">
-                Claim your ₹2,999 Lifetime Pass now, and our team will start your Google Business Profile setup immediately!
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-              <a
-                href={whatsappGmbSetupUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 transition active:scale-95"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Request Free GMB Setup on WhatsApp</span>
-              </a>
-              <Link
-                href="/dashboard/billing?plan=ONLINE_LIFETIME"
-                className="px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-900 font-bold text-xs flex items-center justify-center gap-2 border border-slate-300 shadow-sm transition"
-              >
-                <span>Get Lifetime Pass (₹2,999)</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── BEFORE VS AFTER GOOGLE MAPS RANKING BOOSTER ───────────────────── */}
-      <section id="ranking-boost" className="py-20 px-4 sm:px-6 relative scroll-mt-16 bg-slate-50/70 border-t border-slate-200/80">
-        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold shadow-xs">
-              <TrendingUp className="w-3.5 h-3.5 text-blue-600" /> Google Maps Local Discovery
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-              Accelerate Local Discovery with High Review Velocity
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
-              Compare the organic search difference when your store empowers walk-in customers to share real experiences at checkout:
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-5xl mx-auto">
-            {/* Before Card */}
-            <div className="p-7 sm:p-8 rounded-3xl bg-white border border-rose-200/90 space-y-5 shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-rose-700 bg-rose-50 px-3 py-1 rounded-full border border-rose-200">
-                    ❌ WITHOUT AUTOMATION
-                  </span>
-                  <span className="text-xs text-rose-600 font-bold">Low Local Search Visibility</span>
-                </div>
-
-                <h3 className="text-lg font-black text-slate-900 mb-2">
-                  Struggling for Organic Walk-ins
-                </h3>
-
-                <div className="space-y-3 text-xs text-slate-600 pt-2">
-                  <div className="flex items-start gap-2.5">
-                    <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                    <span>Only 10-15 reviews collected after years of running business</span>
-                  </div>
-                  <div className="flex items-start gap-2.5">
-                    <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                    <span>Satisfied customers promise to review later but forget once they leave</span>
-                  </div>
-                  <div className="flex items-start gap-2.5">
-                    <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                    <span>A single unresolved complaint drops your public rating disproportionately</span>
-                  </div>
-                  <div className="flex items-start gap-2.5">
-                    <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                    <span>Nearby competitors with higher review counts capture local footfall</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center">
-                <span className="text-xs text-slate-500 font-medium">Monthly Google Maps Impressions:</span>
-                <div className="text-2xl font-black text-slate-400 mt-0.5">~350 Views / Mo</div>
-              </div>
-            </div>
-
-            {/* After Card */}
-            <div className="p-7 sm:p-8 rounded-3xl bg-gradient-to-b from-white via-emerald-50/30 to-white border-2 border-emerald-500/80 space-y-5 shadow-xl shadow-emerald-500/10 flex flex-col justify-between relative">
-              <div className="absolute -top-3 right-6 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md">
-                ★ LOCAL 3-PACK DISCOVERY
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                    ✅ WITH REVIEWSMART AI
-                  </span>
-                  <span className="text-xs text-emerald-700 font-bold">🏆 Prominent Local Pack Presence</span>
-                </div>
-
-                <h3 className="text-lg font-black text-slate-900 mb-2">
-                  Consistent Organic Discovery &bull; Daily Inquiries
-                </h3>
-
-                <div className="space-y-3 text-xs text-slate-700 pt-2">
-                  <div className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong className="text-slate-900">High review cadence</strong>: 50–100+ authentic customer reviews per month</span>
-                  </div>
-                  <div className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>Gemini AI drafts detailed reviews in <strong className="text-slate-900">6 native Indian languages</strong></span>
-                  </div>
-                  <div className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong className="text-slate-900">Private Grievance Line</strong>: Disgruntled customers message owner directly for instant care</span>
-                  </div>
-                  <div className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong className="text-slate-900">Organic Maps Prominence</strong>: High volume of positive keywords attracts nearby shoppers</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-center">
-                <span className="text-xs text-emerald-800 font-medium">Monthly Google Maps Impressions:</span>
-                <div className="text-2xl font-black text-emerald-600 mt-0.5">3,200+ Impressions / Mo 🚀</div>
-                <p className="text-[10px] text-emerald-700/80 mt-1">*Based on typical retail conversion averages in active urban markets.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ─── LIVE 6-LANGUAGE INTERACTIVE DEMO ─────────────────────────────── */}
       <section id="demo" className="py-20 px-4 sm:px-6 relative scroll-mt-16 bg-white border-t border-slate-200/80">
         <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
@@ -1399,21 +980,8 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* 1-3 Stars Negative Shield Alert */}
-                {demoStars > 0 && demoStars < 4 && (
-                  <div className="p-3.5 bg-amber-500/15 border border-amber-500/40 rounded-2xl text-left space-y-1 animate-fadeIn">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300">
-                      <Shield className="w-4 h-4 text-emerald-400" />
-                      <span>Private Feedback Shield Active</span>
-                    </div>
-                    <p className="text-[11px] text-slate-300 leading-relaxed">
-                      This customer grievance is redirected directly to your private WhatsApp desk. Google Maps remains 100% clean and protected from public rating drop!
-                    </p>
-                  </div>
-                )}
-
-                {/* 4-5 Stars AI Review Card */}
-                {demoStars >= 4 && (
+                {/* All Ratings Review Draft Card */}
+                {demoStars > 0 && (
                   <div className="space-y-3 animate-fadeIn text-left">
                     <div className="flex flex-wrap gap-1 justify-center">
                       {activeDemo.chips.map((chip) => (
@@ -1430,19 +998,21 @@ export default function HomePage() {
                       <div className="flex items-center justify-between text-[11px] font-bold">
                         <span className="flex items-center gap-1.5 text-indigo-300">
                           <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                          <span>AI Review ({selectedLang})</span>
+                          <span>Your review draft ({selectedLang})</span>
                         </span>
-                        <span className="text-amber-400 text-xs">★★★★★</span>
+                        <span className="text-amber-400 text-xs">
+                          {"★".repeat(demoStars) + "☆".repeat(5 - demoStars)}
+                        </span>
                       </div>
 
                       <p className="text-xs text-slate-200 leading-relaxed font-normal italic bg-black/40 p-3 rounded-xl border border-white/5">
-                        &quot;{activeReviewText}&quot;
+                        &quot;{demoStars <= 3 ? `Visited ${activeDemo.name}. The experience had a few areas that could be improved, particularly regarding service and wait times. Sharing constructive feedback for the team to look into.` : activeReviewText}&quot;
                       </p>
 
                       {/* Interactive Voice AI Speaker Demonstration */}
                       <button
                         type="button"
-                        onClick={() => handleToggleSpeakReview(activeReviewText, selectedLang)}
+                        onClick={() => handleToggleSpeakReview(demoStars <= 3 ? `Visited ${activeDemo.name}. Sharing constructive feedback.` : activeReviewText, selectedLang)}
                         className={`w-full py-2.5 px-3 rounded-xl border text-xs font-black flex items-center justify-center gap-2 transition active:scale-95 ${
                           isSpeaking && speakingLang === selectedLang
                             ? "bg-amber-500/20 border-amber-400/50 text-amber-300 ring-2 ring-amber-400/30 animate-pulse shadow-lg shadow-amber-950/40"
@@ -1478,26 +1048,18 @@ export default function HomePage() {
                       <div className="flex items-center gap-2 pt-1">
                         <button
                           type="button"
-                          onClick={() => handleCopyReview(activeReviewText, activeDemo.slug)}
+                          onClick={() => handleCopyReview(demoStars <= 3 ? `Visited ${activeDemo.name}. Sharing constructive feedback.` : activeReviewText, activeDemo.slug)}
                           className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition active:scale-95"
                         >
                           {copiedDraft ? (
                             <>
                               <Check className="w-4 h-4 text-emerald-300" />
-                              <span>
-                                {activeDemo.slug === "momo-it-technologies"
-                                  ? "Copied! Opening Google Review..."
-                                  : "Copied to Clipboard!"}
-                              </span>
+                              <span>Copied draft to clipboard!</span>
                             </>
                           ) : (
                             <>
                               <Sparkles className="w-4 h-4 text-amber-300" />
-                              <span>
-                                {activeDemo.slug === "momo-it-technologies"
-                                  ? "Copy & Post Review on Google"
-                                  : "Copy & Post Review"}
-                              </span>
+                              <span>Copy review and open Google</span>
                             </>
                           )}
                         </button>
@@ -1511,6 +1073,19 @@ export default function HomePage() {
                         >
                           <span>Live Portal</span>
                           <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+
+                      {/* Independent Private Feedback option */}
+                      <div className="pt-1.5 border-t border-slate-700/60 flex items-center justify-between text-[10px] text-slate-400">
+                        <span>Prefer private note to owner?</span>
+                        <a
+                          href={`https://wa.me/918639831132?text=${encodeURIComponent(`Hi ${activeDemo.name}, I want to share private feedback directly.`)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-amber-300 hover:underline font-semibold"
+                        >
+                          Send private feedback &rarr;
                         </a>
                       </div>
                     </div>
@@ -1586,327 +1161,60 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── 3D HARDWARE & STANDEE STUDIO SHOWCASE ─────────────────────────── */}
-      <section id="hardware" className="py-20 px-4 sm:px-6 relative scroll-mt-16 border-t border-slate-200/80 bg-slate-50/70">
+      {/* ─── REAL VERIFIED MERCHANTS SHOWCASE ─────────────────────────────── */}
+      <section id="merchants" className="py-20 px-4 sm:px-6 relative bg-slate-50/60 border-t border-slate-200/80">
         <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold shadow-sm">
-              <Printer className="w-3.5 h-3.5 text-amber-600" /> Physical Counter Display Formats
+          <div className="text-center max-w-3xl mx-auto mb-12 space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold shadow-xs">
+              <Award className="w-3.5 h-3.5 text-emerald-600" /> Real Verified Stores
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900">
-              Luxury Counter Displays &bull; Print Instantly
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              Trusted by Merchants Across South &amp; North India
             </h2>
-            <p className="text-sm sm:text-base text-slate-600">
-              Download high-resolution 300 DPI vector PDFs directly from your dashboard for 4&quot;×6&quot; Acrylic Standees, CR80 PVC Cards, or A4 Posters.
-            </p>
-
-            {/* Display Format Tabs */}
-            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-              <button
-                type="button"
-                onClick={() => setMockupFormat("stand")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-                  mockupFormat === "stand"
-                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
-                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
-                }`}
-              >
-                <Printer className="w-4 h-4" />
-                <span>4&quot;×6&quot; Acrylic Standee</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setMockupFormat("pvc-vertical")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-                  mockupFormat === "pvc-vertical"
-                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
-                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
-                }`}
-              >
-                <CreditCard className="w-4 h-4" />
-                <span>Dual-Sided PVC Card</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setMockupFormat("poster-a4")}
-                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
-                  mockupFormat === "poster-a4"
-                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
-                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
-                }`}
-              >
-                <FileText className="w-4 h-4" />
-                <span>A4 Wall Poster</span>
-              </button>
-            </div>
-
-            {/* Theme switcher */}
-            <div className="flex items-center justify-center gap-1.5 pt-1">
-              <span className="text-[10px] font-bold text-slate-500 mr-1 flex items-center gap-1">
-                <Palette className="w-3 h-3 text-indigo-600" /> Luxury Theme:
+            <p className="text-xs sm:text-sm text-slate-500 flex items-center justify-center gap-2">
+              <span>Click any store below to experience their live public review portal:</span>
+              <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full sm:hidden">
+                Swipe &rarr;
               </span>
-              {(Object.keys(DISPLAY_THEMES) as Array<keyof typeof DISPLAY_THEMES>).map((tKey) => {
-                const item = DISPLAY_THEMES[tKey];
-                const isActive = mockupTheme === tKey;
-                return (
-                  <button
-                    key={tKey}
-                    type="button"
-                    onClick={() => setMockupTheme(tKey)}
-                    className={`px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1.5 transition ${
-                      isActive ? "bg-slate-900 text-white font-black shadow-sm" : "bg-white text-slate-700 border border-slate-200"
-                    }`}
-                  >
-                    <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: item.dot }} />
-                    <span>{item.name}</span>
-                  </button>
-                );
-              })}
-            </div>
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* 3D Realistic Render Mockup (lg:col-span-6) */}
-            <div className="lg:col-span-6 flex flex-col items-center justify-center bg-gradient-to-b from-slate-100/80 via-white to-slate-100/60 border border-slate-200/90 rounded-3xl p-6 sm:p-10 shadow-lg">
-              {(() => {
-                const currentTheme = DISPLAY_THEMES[mockupTheme];
-
-                if (mockupFormat === "stand") {
-                  return (
-                    <div
-                      className="relative flex flex-col items-center justify-center p-2 py-6 w-full max-w-sm"
-                      style={{ perspective: "1200px" }}
-                    >
-                      <div
-                        className={`relative w-64 sm:w-72 rounded-3xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-2 ${currentTheme.border} text-center transition-all duration-500 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] [transform:none] sm:[transform:rotateY(-7deg)_rotateX(4deg)]`}
-                        style={{
-                          transformStyle: "preserve-3d",
-                        }}
-                      >
-                        <div
-                          className="absolute inset-0 rounded-3xl pointer-events-none"
-                          style={{
-                            background:
-                              "linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.03) 40%, transparent 60%)",
-                          }}
-                        />
-
-                        <div className="flex items-center justify-between gap-2 mb-2">
-                          <span className="text-[8px] font-black uppercase tracking-wider text-slate-400">
-                            SMARTREVIEW AI
-                          </span>
-                          <span className={`px-2 py-0.5 rounded-full text-[9px] ${currentTheme.badge}`}>
-                            ★ 5.0 GOOGLE
-                          </span>
-                        </div>
-
-                        <div className="w-14 h-14 rounded-full bg-white border-2 border-amber-400 p-3 mx-auto mb-2 flex items-center justify-center shadow-lg">
-                          <svg className="w-full h-full" viewBox="0 0 24 24">
-                            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.28-2.1 3.665-5.2 3.665-9.12z" />
-                            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.28 21.43 7.37 24 12 24z" />
-                            <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.13z" />
-                            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.28 2.57 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
-                          </svg>
-                        </div>
-
-                        <h4 className="text-sm font-black text-white truncate px-2">{activeDemo.name}</h4>
-                        <p className="text-[10px] text-slate-400 truncate mb-3">{activeDemo.category}</p>
-
-                        <div className="w-36 h-36 bg-white p-2.5 rounded-2xl mx-auto shadow-2xl flex items-center justify-center relative border border-white/20 mb-3">
-                          <QrCode className="w-full h-full text-slate-950" />
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div className="w-8 h-8 rounded-lg bg-indigo-600 border-2 border-white flex items-center justify-center shadow-lg">
-                              <Sparkles className="w-4 h-4 text-white" />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-center gap-1 text-amber-400 text-xs font-black mb-1">
-                          <span>★ ★ ★ ★ ★</span>
-                        </div>
-                        <p className="text-[11px] font-black text-white tracking-wide">
-                          POINT CAMERA TO REVIEW
-                        </p>
-                        <p className="text-[9px] text-slate-400 mt-0.5">
-                          FAST GOOGLE MAPS REDIRECT &bull; ZERO APP INSTALL
-                        </p>
-                      </div>
-
-                      <div
-                        className="w-56 sm:w-64 h-5 rounded-b-2xl bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 backdrop-blur-md border border-slate-300 shadow-md -mt-2.5 [transform:none] sm:[transform:rotateY(-7deg)_rotateX(28deg)]"
-                      />
-                    </div>
-                  );
-                }
-
-                if (mockupFormat === "pvc-vertical") {
-                  return (
-                    <div
-                      className="relative flex flex-col items-center justify-center p-2 py-6 w-full max-w-sm"
-                      style={{ perspective: "1200px" }}
-                    >
-                      <div
-                        className={`relative w-56 sm:w-60 rounded-2xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-2 ${currentTheme.border} text-center transition-all duration-500 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] [transform:none] sm:[transform:rotateY(7deg)_rotateX(4deg)]`}
-                        style={{
-                          aspectRatio: "54 / 85.6",
-                          transformStyle: "preserve-3d",
-                        }}
-                      >
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-[8px] font-black uppercase tracking-wider text-slate-400">
-                            CR80 PVC
-                          </span>
-                          <span className={`px-2 py-0.5 rounded-full text-[8px] ${currentTheme.badge}`}>
-                            REVIEW PASS
-                          </span>
-                        </div>
-
-                        <div className="w-12 h-12 rounded-full bg-white border-2 border-amber-400 p-2.5 mx-auto mb-2 flex items-center justify-center shadow-md">
-                          <svg className="w-full h-full" viewBox="0 0 24 24">
-                            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.28-2.1 3.665-5.2 3.665-9.12z" />
-                            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.28 21.43 7.37 24 12 24z" />
-                            <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.13z" />
-                            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.28 2.57 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
-                          </svg>
-                        </div>
-
-                        <h4 className="text-xs font-black text-white truncate px-1">{activeDemo.name}</h4>
-                        <p className="text-[9px] text-slate-400 truncate mb-2.5">Official Customer Review Pass</p>
-
-                        <div className="w-28 h-28 bg-white p-2 rounded-xl mx-auto shadow-xl flex items-center justify-center border border-white/20 mb-2.5">
-                          <QrCode className="w-full h-full text-slate-950" />
-                        </div>
-
-                        <p className="text-[10px] font-black text-white tracking-wider uppercase">
-                          POINT CAMERA &amp; REVIEW
-                        </p>
-                        <p className="text-[8px] text-slate-400 mt-0.5 font-mono">
-                          PAN CARD SIZE &bull; 54×85.6 MM
-                        </p>
-                      </div>
-                    </div>
-                  );
-                }
-
-                // Poster
-                return (
-                  <div
-                    className="relative flex flex-col items-center justify-center p-2 py-6 w-full max-w-sm"
-                    style={{ perspective: "1200px" }}
-                  >
-                    <div
-                      className={`relative w-64 sm:w-72 rounded-2xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-4 border-slate-700/80 text-center transition-all duration-500 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.4)] ring-1 ${currentTheme.border} [transform:none] sm:[transform:rotateY(-4deg)_rotateX(2deg)]`}
-                      style={{
-                        aspectRatio: "210 / 297",
-                        transformStyle: "preserve-3d",
-                      }}
-                    >
-                      <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 block mb-0.5">
-                        OFFICIAL CUSTOMER NOTICE
-                      </span>
-                      <h4 className="text-sm font-black text-white leading-tight mb-2">WE VALUE YOUR FEEDBACK</h4>
-
-                      <div className="w-12 h-12 rounded-full bg-white border-2 border-amber-400 p-2.5 mx-auto mb-2 flex items-center justify-center shadow-md">
-                        <svg className="w-full h-full" viewBox="0 0 24 24">
-                          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.28-2.1 3.665-5.2 3.665-9.12z" />
-                          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.28 21.43 7.37 24 12 24z" />
-                          <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.13z" />
-                          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.28 2.57 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
-                        </svg>
-                      </div>
-
-                      <div className="text-xs font-black text-white truncate">{activeDemo.name}</div>
-                      <div className="text-amber-400 text-xs my-1">★ ★ ★ ★ ★</div>
-
-                      <div className="w-32 h-32 bg-white p-2.5 rounded-2xl mx-auto shadow-2xl flex items-center justify-center border border-white/20 my-2">
-                        <QrCode className="w-full h-full text-slate-950" />
-                      </div>
-
-                      <p className="text-[8px] text-slate-400 mt-2 font-mono">
-                        A4 PRINTABLE &bull; 210×297 MM &bull; 300 DPI VECTOR PDF
-                      </p>
-                    </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+            {DEMO_PRESETS.map((m) => (
+              <div
+                key={m.id}
+                className="p-5 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-400 hover:shadow-lg transition-all duration-200 flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/80 truncate max-w-[180px]">
+                      {m.category}
+                    </span>
+                    <span className="text-amber-500 text-xs font-black shrink-0">★ 5.0</span>
                   </div>
-                );
-              })()}
-            </div>
-
-            {/* Specifications & Features */}
-            <div className="lg:col-span-6 space-y-5">
-              <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-600">
-                  Instant Vector PDF Exports
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
-                  Ready to Print at Any Local Xerox or Photo Studio
-                </h3>
-                <p className="text-slate-600 text-sm leading-relaxed">
-                  Every ReviewSmart merchant receives lifetime access to our digital Standee Studio. You can generate custom PDF templates with your store brand colors, high-density QR code, and logo anytime with zero reprint costs.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="font-bold text-slate-900 text-xs mb-1 flex items-center gap-1.5">
-                    <Camera className="w-4 h-4 text-indigo-600" />
-                    <span>Instant Camera Scan</span>
-                  </div>
-                  <p className="text-[11px] text-slate-500">
-                    Works on iPhone &amp; Android cameras, plus Google Lens and PhonePe/GPay scanner.
+                  <h3 className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors mb-1 truncate">
+                    {m.name}
+                  </h3>
+                  <p className="text-xs text-slate-500 flex items-center gap-1 mb-4 truncate">
+                    <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
+                    <span>{m.location}</span>
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="font-bold text-slate-900 text-xs mb-1 flex items-center gap-1.5">
-                    <QrCode className="w-4 h-4 text-amber-500" />
-                    <span>Dynamic QR Guarantee</span>
-                  </div>
-                  <p className="text-[11px] text-slate-500">
-                    Change your Google review link anytime from dashboard without changing physical standee!
-                  </p>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="font-bold text-slate-900 text-xs mb-1 flex items-center gap-1.5">
-                    <Shield className="w-4 h-4 text-emerald-600" />
-                    <span>100% Ad-Free Experience</span>
-                  </div>
-                  <p className="text-[11px] text-slate-500">
-                    Zero popups or third-party ads. A high-speed, luxury experience that elevates your brand.
-                  </p>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
-                  <div className="font-bold text-slate-900 text-xs mb-1 flex items-center gap-1.5">
-                    <Truck className="w-4 h-4 text-purple-600" />
-                    <span>Doorstep Acrylic Delivery</span>
-                  </div>
-                  <p className="text-[11px] text-slate-500">
-                    Prefer physical pre-printed acrylic standees? Order directly on WhatsApp anytime!
-                  </p>
-                </div>
-              </div>
-
-              <div className="pt-2">
                 <a
-                  href={whatsappInquiryUrl}
+                  href={`/r/${m.slug}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-900 font-bold text-xs shadow-sm transition"
+                  className="w-full py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-200 hover:border-indigo-200 transition"
                 >
-                  <MessageCircle className="w-4 h-4 text-emerald-600" />
-                  <span>Order Physical Standees on WhatsApp</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>Open Live Portal</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
-
-      <ReviewGapCalculator />
 
       {/* ─── PRICING SECTION (3-TIER MODULAR SUITE) ──────────────── */}
       <section id="pricing" className="py-24 px-4 sm:px-6 relative scroll-mt-16 bg-gradient-to-b from-white via-indigo-50/20 to-white border-t border-slate-200/80">
@@ -2256,60 +1564,327 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── REAL VERIFIED MERCHANTS SHOWCASE ─────────────────────────────── */}
-      <section className="py-20 px-4 sm:px-6 relative bg-slate-50/60 border-t border-slate-200/80">
+      {/* ─── 3D HARDWARE & STANDEE STUDIO SHOWCASE ─────────────────────────── */}
+      <section id="hardware" className="py-20 px-4 sm:px-6 relative scroll-mt-16 border-t border-slate-200/80 bg-slate-50/70">
         <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-12 space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold shadow-xs">
-              <Award className="w-3.5 h-3.5 text-emerald-600" /> Real Verified Stores
+          <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold shadow-sm">
+              <Printer className="w-3.5 h-3.5 text-amber-600" /> Physical Counter Display Formats
             </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Trusted by Merchants Across South &amp; North India
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900">
+              Luxury Counter Displays &bull; Print Instantly
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 flex items-center justify-center gap-2">
-              <span>Click any store below to experience their live public review portal:</span>
-              <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full sm:hidden">
-                Swipe &rarr;
-              </span>
+            <p className="text-sm sm:text-base text-slate-600">
+              Download high-resolution 300 DPI vector PDFs directly from your dashboard for 4&quot;×6&quot; Acrylic Standees, CR80 PVC Cards, or A4 Posters.
             </p>
+
+            {/* Display Format Tabs */}
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setMockupFormat("stand")}
+                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
+                  mockupFormat === "stand"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <Printer className="w-4 h-4" />
+                <span>4&quot;×6&quot; Acrylic Standee</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setMockupFormat("pvc-vertical")}
+                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
+                  mockupFormat === "pvc-vertical"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <CreditCard className="w-4 h-4" />
+                <span>Dual-Sided PVC Card</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setMockupFormat("poster-a4")}
+                className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition ${
+                  mockupFormat === "poster-a4"
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/20"
+                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                }`}
+              >
+                <FileText className="w-4 h-4" />
+                <span>A4 Wall Poster</span>
+              </button>
+            </div>
+
+            {/* Theme switcher */}
+            <div className="flex items-center justify-center gap-1.5 pt-1">
+              <span className="text-[10px] font-bold text-slate-500 mr-1 flex items-center gap-1">
+                <Palette className="w-3 h-3 text-indigo-600" /> Luxury Theme:
+              </span>
+              {(Object.keys(DISPLAY_THEMES) as Array<keyof typeof DISPLAY_THEMES>).map((tKey) => {
+                const item = DISPLAY_THEMES[tKey];
+                const isActive = mockupTheme === tKey;
+                return (
+                  <button
+                    key={tKey}
+                    type="button"
+                    onClick={() => setMockupTheme(tKey)}
+                    className={`px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1.5 transition ${
+                      isActive ? "bg-slate-900 text-white font-black shadow-sm" : "bg-white text-slate-700 border border-slate-200"
+                    }`}
+                  >
+                    <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: item.dot }} />
+                    <span>{item.name}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-            {DEMO_PRESETS.map((m) => (
-              <div
-                key={m.id}
-                className="p-5 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-400 hover:shadow-lg transition-all duration-200 flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/80 truncate max-w-[180px]">
-                      {m.category}
-                    </span>
-                    <span className="text-amber-500 text-xs font-black shrink-0">★ 5.0</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* 3D Realistic Render Mockup (lg:col-span-6) */}
+            <div className="lg:col-span-6 flex flex-col items-center justify-center bg-gradient-to-b from-slate-100/80 via-white to-slate-100/60 border border-slate-200/90 rounded-3xl p-6 sm:p-10 shadow-lg">
+              {(() => {
+                const currentTheme = DISPLAY_THEMES[mockupTheme];
+
+                if (mockupFormat === "stand") {
+                  return (
+                    <div
+                      className="relative flex flex-col items-center justify-center p-2 py-6 w-full max-w-sm"
+                      style={{ perspective: "1200px" }}
+                    >
+                      <div
+                        className={`relative w-64 sm:w-72 rounded-3xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-2 ${currentTheme.border} text-center transition-all duration-500 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] [transform:none] sm:[transform:rotateY(-7deg)_rotateX(4deg)]`}
+                        style={{
+                          transformStyle: "preserve-3d",
+                        }}
+                      >
+                        <div
+                          className="absolute inset-0 rounded-3xl pointer-events-none"
+                          style={{
+                            background:
+                              "linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.03) 40%, transparent 60%)",
+                          }}
+                        />
+
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <span className="text-[8px] font-black uppercase tracking-wider text-slate-400">
+                            SMARTREVIEW AI
+                          </span>
+                          <span className={`px-2 py-0.5 rounded-full text-[9px] ${currentTheme.badge}`}>
+                            ★ 5.0 GOOGLE
+                          </span>
+                        </div>
+
+                        <div className="w-14 h-14 rounded-full bg-white border-2 border-amber-400 p-3 mx-auto mb-2 flex items-center justify-center shadow-lg">
+                          <svg className="w-full h-full" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.28-2.1 3.665-5.2 3.665-9.12z" />
+                            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.28 21.43 7.37 24 12 24z" />
+                            <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.13z" />
+                            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.28 2.57 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
+                          </svg>
+                        </div>
+
+                        <h4 className="text-sm font-black text-white truncate px-2">{activeDemo.name}</h4>
+                        <p className="text-[10px] text-slate-400 truncate mb-3">{activeDemo.category}</p>
+
+                        <div className="w-36 h-36 bg-white p-2.5 rounded-2xl mx-auto shadow-2xl flex items-center justify-center relative border border-white/20 mb-3">
+                          <QrCode className="w-full h-full text-slate-950" />
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div className="w-8 h-8 rounded-lg bg-indigo-600 border-2 border-white flex items-center justify-center shadow-lg">
+                              <Sparkles className="w-4 h-4 text-white" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-center gap-1 text-amber-400 text-xs font-black mb-1">
+                          <span>★ ★ ★ ★ ★</span>
+                        </div>
+                        <p className="text-[11px] font-black text-white tracking-wide">
+                          POINT CAMERA TO REVIEW
+                        </p>
+                        <p className="text-[9px] text-slate-400 mt-0.5">
+                          FAST GOOGLE MAPS REDIRECT &bull; ZERO APP INSTALL
+                        </p>
+                      </div>
+
+                      <div
+                        className="w-56 sm:w-64 h-5 rounded-b-2xl bg-gradient-to-r from-slate-200 via-slate-300 to-slate-200 backdrop-blur-md border border-slate-300 shadow-md -mt-2.5 [transform:none] sm:[transform:rotateY(-7deg)_rotateX(28deg)]"
+                      />
+                    </div>
+                  );
+                }
+
+                if (mockupFormat === "pvc-vertical") {
+                  return (
+                    <div
+                      className="relative flex flex-col items-center justify-center p-2 py-6 w-full max-w-sm"
+                      style={{ perspective: "1200px" }}
+                    >
+                      <div
+                        className={`relative w-56 sm:w-60 rounded-2xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-2 ${currentTheme.border} text-center transition-all duration-500 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] [transform:none] sm:[transform:rotateY(7deg)_rotateX(4deg)]`}
+                        style={{
+                          aspectRatio: "54 / 85.6",
+                          transformStyle: "preserve-3d",
+                        }}
+                      >
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-[8px] font-black uppercase tracking-wider text-slate-400">
+                            CR80 PVC
+                          </span>
+                          <span className={`px-2 py-0.5 rounded-full text-[8px] ${currentTheme.badge}`}>
+                            REVIEW PASS
+                          </span>
+                        </div>
+
+                        <div className="w-12 h-12 rounded-full bg-white border-2 border-amber-400 p-2.5 mx-auto mb-2 flex items-center justify-center shadow-md">
+                          <svg className="w-full h-full" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.28-2.1 3.665-5.2 3.665-9.12z" />
+                            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.28 21.43 7.37 24 12 24z" />
+                            <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.13z" />
+                            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.28 2.57 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
+                          </svg>
+                        </div>
+
+                        <h4 className="text-xs font-black text-white truncate px-1">{activeDemo.name}</h4>
+                        <p className="text-[9px] text-slate-400 truncate mb-2.5">Official Customer Review Pass</p>
+
+                        <div className="w-28 h-28 bg-white p-2 rounded-xl mx-auto shadow-xl flex items-center justify-center border border-white/20 mb-2.5">
+                          <QrCode className="w-full h-full text-slate-950" />
+                        </div>
+
+                        <p className="text-[10px] font-black text-white tracking-wider uppercase">
+                          POINT CAMERA &amp; REVIEW
+                        </p>
+                        <p className="text-[8px] text-slate-400 mt-0.5 font-mono">
+                          PAN CARD SIZE &bull; 54×85.6 MM
+                        </p>
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Poster
+                return (
+                  <div
+                    className="relative flex flex-col items-center justify-center p-2 py-6 w-full max-w-sm"
+                    style={{ perspective: "1200px" }}
+                  >
+                    <div
+                      className={`relative w-64 sm:w-72 rounded-2xl bg-gradient-to-b ${currentTheme.cardBg} p-5 border-4 border-slate-700/80 text-center transition-all duration-500 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.4)] ring-1 ${currentTheme.border} [transform:none] sm:[transform:rotateY(-4deg)_rotateX(2deg)]`}
+                      style={{
+                        aspectRatio: "210 / 297",
+                        transformStyle: "preserve-3d",
+                      }}
+                    >
+                      <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 block mb-0.5">
+                        OFFICIAL CUSTOMER NOTICE
+                      </span>
+                      <h4 className="text-sm font-black text-white leading-tight mb-2">WE VALUE YOUR FEEDBACK</h4>
+
+                      <div className="w-12 h-12 rounded-full bg-white border-2 border-amber-400 p-2.5 mx-auto mb-2 flex items-center justify-center shadow-md">
+                        <svg className="w-full h-full" viewBox="0 0 24 24">
+                          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.28-2.1 3.665-5.2 3.665-9.12z" />
+                          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.28 21.43 7.37 24 12 24z" />
+                          <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.58H1.25C.45 8.18 0 10.03 0 12s.45 3.82 1.25 5.42l4.03-3.13z" />
+                          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.37 0 3.28 2.57 1.25 6.58l4.03 3.13c.95-2.83 3.6-4.96 6.72-4.96z" />
+                        </svg>
+                      </div>
+
+                      <div className="text-xs font-black text-white truncate">{activeDemo.name}</div>
+                      <div className="text-amber-400 text-xs my-1">★ ★ ★ ★ ★</div>
+
+                      <div className="w-32 h-32 bg-white p-2.5 rounded-2xl mx-auto shadow-2xl flex items-center justify-center border border-white/20 my-2">
+                        <QrCode className="w-full h-full text-slate-950" />
+                      </div>
+
+                      <p className="text-[8px] text-slate-400 mt-2 font-mono">
+                        A4 PRINTABLE &bull; 210×297 MM &bull; 300 DPI VECTOR PDF
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors mb-1 truncate">
-                    {m.name}
-                  </h3>
-                  <p className="text-xs text-slate-500 flex items-center gap-1 mb-4 truncate">
-                    <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
-                    <span>{m.location}</span>
+                );
+              })()}
+            </div>
+
+            {/* Specifications & Features */}
+            <div className="lg:col-span-6 space-y-5">
+              <div className="space-y-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-amber-600">
+                  Instant Vector PDF Exports
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
+                  Ready to Print at Any Local Xerox or Photo Studio
+                </h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  Every ReviewSmart merchant receives lifetime access to our digital Standee Studio. You can generate custom PDF templates with your store brand colors, high-density QR code, and logo anytime with zero reprint costs.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div className="font-bold text-slate-900 text-xs mb-1 flex items-center gap-1.5">
+                    <Camera className="w-4 h-4 text-indigo-600" />
+                    <span>Instant Camera Scan</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Works on iPhone &amp; Android cameras, plus Google Lens and PhonePe/GPay scanner.
                   </p>
                 </div>
 
+                <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div className="font-bold text-slate-900 text-xs mb-1 flex items-center gap-1.5">
+                    <QrCode className="w-4 h-4 text-amber-500" />
+                    <span>Dynamic QR Guarantee</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Change your Google review link anytime from dashboard without changing physical standee!
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div className="font-bold text-slate-900 text-xs mb-1 flex items-center gap-1.5">
+                    <Shield className="w-4 h-4 text-emerald-600" />
+                    <span>100% Ad-Free Experience</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Zero popups or third-party ads. A high-speed, luxury experience that elevates your brand.
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div className="font-bold text-slate-900 text-xs mb-1 flex items-center gap-1.5">
+                    <Truck className="w-4 h-4 text-purple-600" />
+                    <span>Doorstep Acrylic Delivery</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Prefer physical pre-printed acrylic standees? Order directly on WhatsApp anytime!
+                  </p>
+                </div>
+              </div>
+
+              <div className="pt-2">
                 <a
-                  href={`/r/${m.slug}`}
+                  href={whatsappInquiryUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full py-2.5 px-3 rounded-xl bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 text-xs font-bold flex items-center justify-center gap-1.5 border border-slate-200 hover:border-indigo-200 transition"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-900 font-bold text-xs shadow-sm transition"
                 >
-                  <span>Open Live Portal</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <MessageCircle className="w-4 h-4 text-emerald-600" />
+                  <span>Order Physical Standees on WhatsApp</span>
+                  <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
+
+      <ReviewGapCalculator />
 
       {/* ─── INTERACTIVE ROI CALCULATOR ───────────────────────────────────── */}
       <section className="py-20 px-4 sm:px-6 relative border-t border-slate-200/80 bg-white">

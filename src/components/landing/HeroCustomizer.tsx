@@ -481,23 +481,50 @@ export default function HeroCustomizer() {
           </a>
         </div>
 
-        {/* 2-Column Hero Grid: Value Pitch (Left 7 Cols) + 3D Standee Customizer (Right 5 Cols) */}
+        {/* 2-Column Hero Grid: Value Pitch (Left 6 Cols) + 3D Standee Customizer (Right 6 Cols) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-center">
-          {/* LEFT COLUMN: Headings, Value proposition & Instant lead input */}
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <h1 className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight text-slate-900 leading-[1.15] sm:leading-[1.12]">
-              Turn Walk-In Customers Into{" "}
-              <span className="bg-gradient-to-r from-amber-500 via-amber-600 to-orange-500 bg-clip-text text-transparent block sm:inline mt-1 sm:mt-0">
-                5-Star Google Reviews.
-              </span>
+          {/* LEFT COLUMN: Headings, Value proposition & Action CTAs */}
+          <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
+            <h1 className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight text-[#172033] leading-[1.12]">
+              Your counter standee, ready for customer reviews.
             </h1>
 
-            <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-              Customers simply scan the smart QR code on your luxury acrylic standee with any phone camera or UPI app. Gemini AI guides them to write authentic, detailed 5-star reviews in their native language in 10 seconds. Private feedback is routed direct to the owner.
+            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+              Add your business name, preview your QR standee, and try the review experience your customers will see.
+            </p>
+
+            {/* Action Group */}
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const input = heroSearchContainerRef.current?.querySelector("input");
+                  input?.focus();
+                  setIsModalOpen(true);
+                }}
+                className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#4338ca] hover:bg-[#3730a3] text-white font-bold text-sm shadow-md shadow-indigo-900/15 flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4 text-amber-300" />
+                <span>Preview my standee</span>
+              </button>
+
+              <a
+                href={`/r/${businessName.toLowerCase().replace(/[^\w-]/g, "-").trim() || "new-roshan-tours-and-travels"}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-[#e3ded6] text-[#172033] font-bold text-sm shadow-xs flex items-center justify-center gap-2 transition"
+              >
+                <Smartphone className="w-4 h-4 text-[#4338ca]" />
+                <span>Try the customer experience</span>
+              </a>
+            </div>
+
+            <p className="text-xs text-slate-500 font-medium">
+              Modular packages from ₹1,999 • Lifetime access &amp; physical standee delivery
             </p>
 
             {/* Quick Live Preview Input Form */}
-            <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.08)] space-y-4">
+            <div className="p-5 sm:p-6 rounded-3xl bg-white border border-[#e3ded6] shadow-[0_15px_35px_-10px_rgba(23,32,51,0.06)] space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5 uppercase tracking-wider">
                   <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-spin" />
@@ -702,49 +729,46 @@ export default function HeroCustomizer() {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Photorealistic 3D Luxury Acrylic Standee */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
-            {/* Standee Theme Selector Pills */}
-            <div className="mb-4 flex flex-wrap items-center justify-center gap-1.5 p-1 rounded-2xl bg-white border border-slate-200 shadow-md">
+          {/* RIGHT COLUMN: Photorealistic Luxury Acrylic Standee */}
+          <div className="lg:col-span-6 flex flex-col items-center justify-center relative">
+            {/* Standee Theme Selector Swatches with explicit text labels */}
+            <div className="mb-4 flex flex-wrap items-center justify-center gap-1.5 p-1.5 rounded-2xl bg-white border border-[#e3ded6] shadow-xs">
               {Object.values(THEMES).map((t) => (
                 <button
                   key={t.id}
                   type="button"
                   onClick={() => setSelectedTheme(t.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${
                     selectedTheme === t.id
-                      ? "bg-slate-900 text-white shadow"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                      ? "bg-[#172033] text-white border-[#172033] shadow-xs"
+                      : "bg-white text-slate-700 border-transparent hover:bg-slate-100"
                   }`}
                 >
                   <span
-                    className="w-2.5 h-2.5 rounded-full"
+                    className="w-2.5 h-2.5 rounded-full border border-black/10 shrink-0"
                     style={{ backgroundColor: t.dotColor }}
                   />
-                  <span>{t.name.split(" ")[0]}</span>
+                  <span>{t.name}</span>
                 </button>
               ))}
             </div>
 
-            {/* 3D Acrylic Standee Container on Illuminated Countertop */}
+            {/* 3D Acrylic Standee Container on Grounded Countertop */}
             <div
               className="relative p-2 flex flex-col items-center justify-center w-full max-w-sm"
               style={{ perspective: "1200px" }}
             >
               {/* Luxury Acrylic Standee Card */}
               <div
-                className={`relative w-[270px] xs:w-[280px] sm:w-80 max-w-[calc(100vw-36px)] rounded-[28px] bg-gradient-to-b ${theme.bgGradient} p-5 sm:p-6 border-2 ${theme.borderClass} text-center transition-all duration-500 [transform:none] sm:[transform:rotateY(-6deg)_rotateX(4deg)]`}
-                style={{
-                  transformStyle: "preserve-3d",
-                }}
+                className={`acrylic-card-preview relative w-[280px] xs:w-[290px] sm:w-80 max-w-[calc(100vw-36px)] rounded-[28px] bg-gradient-to-b ${theme.bgGradient} p-5 sm:p-6 border-2 ${theme.borderClass} text-center transition-all duration-300`}
               >
                 {/* Acrylic Gloss Reflection Highlight */}
-                <div className="absolute inset-0 rounded-[26px] bg-gradient-to-tr from-white/20 via-transparent to-white/10 pointer-events-none" />
+                <div className="acrylic-edge-highlight" />
 
                 {/* Top Badge: Google Review Official Accent */}
                 <div className="flex items-center justify-between mb-4">
                   <div className={`px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider ${theme.badgeBg}`}>
-                    Scan Smart QR &bull; 10s AI Review
+                    Scan Smart QR &bull; 10s Review
                   </div>
                   <div className="flex items-center gap-1 bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/20">
                     <span className="text-[10px] font-black text-amber-300">5.0</span>
@@ -764,57 +788,42 @@ export default function HeroCustomizer() {
                 </div>
 
                 {/* QR Code Inlay with High Contrast Card */}
-                <div className="my-3 p-3 rounded-2xl bg-white shadow-xl mx-auto w-40 sm:w-44 flex flex-col items-center justify-center relative border border-slate-100">
+                <div className="my-3 p-3.5 rounded-2xl bg-white shadow-xl mx-auto w-44 flex flex-col items-center justify-center relative border border-slate-100">
                   {qrCodeDataUrl ? (
                     <img
                       src={qrCodeDataUrl}
                       alt="ReviewSmart QR Code"
-                      className="w-32 sm:w-36 h-32 sm:h-36 object-contain"
+                      className="w-36 h-36 object-contain"
                     />
                   ) : (
-                    <div className="w-32 h-32 flex items-center justify-center">
+                    <div className="w-36 h-36 flex items-center justify-center">
                       <Loader2 className="w-6 h-6 animate-spin text-slate-400" />
                     </div>
                   )}
 
-                  <div className="mt-1 text-[9px] font-black text-slate-900 tracking-wider uppercase">
+                  <div className="mt-1.5 text-[9px] font-black text-slate-900 tracking-wider uppercase">
                     Scan for 5-Star Review
                   </div>
                 </div>
 
-                {/* Interactive QR Scan Test Target */}
-                <div className="mt-3 pt-3 border-t border-white/15 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="relative">
-                      <div className="w-8 h-8 rounded-full bg-indigo-500/20 border border-indigo-400 flex items-center justify-center">
-                        <QrCode className="w-4 h-4 text-indigo-300" />
-                      </div>
-                    </div>
-                    <div className="text-left">
-                      <p className={`text-[11px] font-black leading-tight ${theme.textColor}`}>SCAN WITH ANY PHONE</p>
-                      <p className="text-[9px] text-slate-300">Camera / Google Lens / UPI</p>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleSimulateScan}
-                    disabled={isSimulating}
-                    className="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 border border-white/30 text-white text-[10px] font-bold transition active:scale-95 flex items-center gap-1"
+                {/* Obvious Mobile / Desktop Action: Open Demo on this phone */}
+                <div className="mt-3 pt-3 border-t border-white/15">
+                  <a
+                    href={`/r/${businessName.toLowerCase().replace(/[^\w-]/g, "-").trim() || "new-roshan-tours-and-travels"}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-2.5 px-3 rounded-xl bg-white/20 hover:bg-white/30 border border-white/30 text-white text-xs font-bold transition flex items-center justify-center gap-2 active:scale-95"
                   >
-                    {isSimulating ? (
-                      <Loader2 className="w-3 h-3 animate-spin text-amber-300" />
-                    ) : (
-                      <Play className="w-3 h-3 text-emerald-300" />
-                    )}
-                    <span>{isSimulating ? "Scanning..." : "Test Scan"}</span>
-                  </button>
+                    <Smartphone className="w-4 h-4 text-amber-300" />
+                    <span>Open demo on this phone</span>
+                    <ExternalLink className="w-3 h-3 opacity-70" />
+                  </a>
                 </div>
               </div>
 
               {/* 3D Acrylic Base Standee Foot (Reflected shadow) */}
-              <div className="w-52 h-4 rounded-full bg-slate-900/15 blur-lg mx-auto -mt-2 -z-10" />
-              <div className="w-64 h-3 bg-gradient-to-r from-transparent via-slate-300 to-transparent rounded-full mx-auto mt-1 border-t border-slate-200" />
+              <div className="acrylic-base-stand w-56 h-3.5 mx-auto -mt-1.5 z-10" />
+              <div className="acrylic-contact-shadow w-64 h-4 mx-auto -mt-1" />
             </div>
 
             {/* Quick Helper text */}

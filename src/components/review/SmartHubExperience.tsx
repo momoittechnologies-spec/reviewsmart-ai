@@ -84,6 +84,7 @@ export default function SmartHubExperience({
   const [upiQrDataUrl, setUpiQrDataUrl] = useState<string>("");
   const [upiCopied, setUpiCopied] = useState(false);
   const [mobileCopied, setMobileCopied] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   // Parse all configured phone numbers (deduplicating across phone and visitingCardPhone)
   const phoneList = useMemo(() => {
@@ -218,12 +219,13 @@ export default function SmartHubExperience({
         {/* Logo Container with Luxury Adaptive Display */}
         <div className="relative mb-3.5 mt-1 group">
           <div className="absolute -inset-1.5 bg-gradient-to-tr from-amber-400 via-yellow-300 to-amber-600 rounded-3xl blur-md opacity-40 group-hover:opacity-75 transition duration-500 animate-pulse-glow" />
-          {business.logoUrl ? (
+          {business.logoUrl && !logoError ? (
             <div className="relative w-20 h-20 rounded-2xl bg-white border-2 border-white/90 p-2 shadow-2xl flex items-center justify-center overflow-hidden">
               <img
                 src={business.logoUrl}
                 alt={business.name}
                 className="w-full h-full object-contain"
+                onError={() => setLogoError(true)}
               />
             </div>
           ) : (
@@ -322,7 +324,7 @@ export default function SmartHubExperience({
                 Win Up to 5% Instant Discount!
               </p>
               <p className="text-[10.5px] text-slate-300 leading-tight">
-                Post a 5-star review &amp; scratch card to claim your discount.
+                Scratch card to claim your surprise discount voucher.
               </p>
             </div>
           </div>
