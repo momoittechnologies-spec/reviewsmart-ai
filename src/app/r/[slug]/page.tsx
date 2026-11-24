@@ -82,6 +82,7 @@ export default async function PublicReviewPage({
       enableSocialLinks: true,
       enableDigitalMenu: true,
       visitingCardOwnerName: true,
+      visitingCardPhone: true,
       isPaid: true,
       demoExpiresAt: true,
       demoUsed: true,

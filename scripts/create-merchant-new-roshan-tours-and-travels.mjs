@@ -10,7 +10,8 @@ const prisma = new PrismaClient();
 // ── Config ──────────────────────────────────────────────────────────────────
 const MERCHANT_NAME     = "New Roshan Tours & Travels";
 const OWNER_NAME        = "Shafi Shaik";
-const MERCHANT_PHONE    = "9959578900";   // Primary calling & WhatsApp number
+const USER_PHONE        = "9959578900";   // Primary merchant account user login
+const MERCHANT_PHONE    = "9059057239 / 9959578900";   // Dual calling & WhatsApp contacts
 const MERCHANT_EMAIL    = "9959578900@merchant.reviewsmart.local";
 const RAW_PIN           = "8900";         // 4-digit PIN for merchant login
 const AGENT_CODE        = "DIRECT_ADMIN"; // Direct admin onboarding
@@ -40,7 +41,7 @@ async function main() {
 
   // 2. Upsert merchant user
   let merchantUser = await prisma.user.findFirst({
-    where: { OR: [{ userIdTag: MERCHANT_PHONE }, { phone: MERCHANT_PHONE }, { email: MERCHANT_EMAIL }] },
+    where: { OR: [{ userIdTag: USER_PHONE }, { phone: USER_PHONE }, { email: MERCHANT_EMAIL }] },
   });
 
   if (!merchantUser) {
@@ -48,8 +49,8 @@ async function main() {
       data: {
         email: MERCHANT_EMAIL,
         name: "Shafi Shaik",
-        phone: MERCHANT_PHONE,
-        userIdTag: MERCHANT_PHONE,
+        phone: USER_PHONE,
+        userIdTag: USER_PHONE,
         pinCode: hashedPin,
         password: hashedPassword,
         role: "BUSINESS_OWNER",
@@ -63,8 +64,8 @@ async function main() {
       where: { id: merchantUser.id },
       data: {
         name: "Shafi Shaik",
-        phone: MERCHANT_PHONE,
-        userIdTag: MERCHANT_PHONE,
+        phone: USER_PHONE,
+        userIdTag: USER_PHONE,
         pinCode: hashedPin,
         password: hashedPassword,
         isActive: true,

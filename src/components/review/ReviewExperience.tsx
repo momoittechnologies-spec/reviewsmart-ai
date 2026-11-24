@@ -46,6 +46,7 @@ import {
 } from "@/lib/vision-voice-translator";
 import ScratchRewardCard from "./ScratchRewardCard";
 import WhatsAppInviteGenerator from "./WhatsAppInviteGenerator";
+import { parsePhoneNumbers } from "@/lib/utils";
 
 interface BusinessData {
   id: string;
@@ -74,6 +75,7 @@ interface BusinessData {
   enableSocialLinks?: boolean | null;
   enableDigitalMenu?: boolean | null;
   visitingCardOwnerName?: string | null;
+  visitingCardPhone?: string | null;
   googleMapsUrl?: string | null;
 }
 
@@ -136,9 +138,17 @@ export default function ReviewExperience({
   const [upiCopied, setUpiCopied] = useState(false);
   const [mobileCopied, setMobileCopied] = useState(false);
 
+  // Parse all configured phone numbers (deduplicating across phone and visitingCardPhone)
+  const phoneList = useMemo(() => {
+    const combined = [business.phone, business.visitingCardPhone].filter(Boolean).join(" / ");
+    return parsePhoneNumbers(combined);
+  }, [business.phone, business.visitingCardPhone]);
+
   const customUpi = (business.customUpiId || "").trim();
   const payeeOwnerName = (business.visitingCardOwnerName || business.name || "").trim();
-  const cleanMobile = (business.phone || business.whatsapp || "").replace(/\D/g, "").slice(-10);
+  const cleanMobile =
+    (business.whatsapp || "").replace(/\D/g, "").slice(-10) ||
+    (phoneList[0]?.clean10 ?? "");
 
   const upiBundle = useMemo(() => {
     if (!customUpi) return null;
@@ -793,21 +803,15 @@ export default function ReviewExperience({
   const isNeedsImprovement = rating > 0 && rating < 4;
 
   const getWhatsAppUrl = () => {
-    if (!business.whatsapp) return null;
-    const digits = business.whatsapp.replace(/\D/g, "");
+    const rawWa = business.whatsapp || (phoneList[0]?.clean10 ? `91${phoneList[0].clean10}` : "");
+    if (!rawWa) return null;
+    const digits = rawWa.replace(/\D/g, "");
     if (!digits) return null;
     const fullNumber = digits.length === 10 ? `91${digits}` : digits;
     return `https://wa.me/${fullNumber}?text=${encodeURIComponent(`Hi ${business.name}, I visited your store today!`)}`;
   };
 
-  const getPhoneUrl = () => {
-    if (!business.phone) return null;
-    const clean = business.phone.replace(/[^0-9+]/g, "");
-    return clean ? `tel:${clean}` : null;
-  };
-
   const whatsappUrl = getWhatsAppUrl();
-  const phoneUrl = getPhoneUrl();
 
   return (
     <div
@@ -878,7 +882,7 @@ export default function ReviewExperience({
             </div>
 
             {/* Quick Contact Buttons */}
-            {(whatsappUrl || phoneUrl || business.website || business.instagram || business.facebook) && (
+            {(whatsappUrl || phoneList.length > 0 || business.website || business.instagram || business.facebook) && (
               <div className="flex flex-wrap items-center justify-center gap-2 mt-4 pt-3.5 border-t border-slate-800">
                 {whatsappUrl && (
                   <a
@@ -891,15 +895,17 @@ export default function ReviewExperience({
                     <span>WhatsApp</span>
                   </a>
                 )}
-                {phoneUrl && (
+                {phoneList.map((p, idx) => (
                   <a
-                    href={phoneUrl}
+                    key={idx}
+                    href={p.tel}
                     className="px-3 py-1.5 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/30 text-blue-400 text-xs font-bold flex items-center gap-1.5 transition active:scale-95"
+                    title={`Call ${p.display}`}
                   >
                     <Phone className="w-3.5 h-3.5" />
-                    <span>Call Store</span>
+                    <span>{phoneList.length > 1 ? `Call ${p.display}` : "Call Store"}</span>
                   </a>
-                )}
+                ))}
                 {business.website && (
                   <a
                     href={business.website.startsWith("http") ? business.website : `https://${business.website}`}
@@ -1741,7 +1747,7 @@ export default function ReviewExperience({
         <ScratchRewardCard
           businessName={business.name}
           businessSlug={business.slug}
-          whatsappNumber={business.whatsapp || business.phone}
+          whatsappNumber={business.whatsapp || (phoneList[0]?.clean10 ? `91${phoneList[0].clean10}` : business.phone)}
           maxDiscountPct={business.scratchCardMaxDiscount || 5}
           onClose={() => setShowRewardCard(false)}
         />

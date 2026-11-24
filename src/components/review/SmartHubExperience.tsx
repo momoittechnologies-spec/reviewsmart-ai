@@ -32,6 +32,7 @@ import {
 import ReviewExperience from "./ReviewExperience";
 import { copyToClipboard } from "@/lib/clipboard";
 import { buildUpiLinks } from "@/lib/upi-engine";
+import { parsePhoneNumbers } from "@/lib/utils";
 
 interface BusinessData {
   id: string;
@@ -62,6 +63,7 @@ interface BusinessData {
   enableSocialLinks?: boolean | null;
   enableDigitalMenu?: boolean | null;
   visitingCardOwnerName?: string | null;
+  visitingCardPhone?: string | null;
   googleMapsUrl?: string | null;
 }
 
@@ -83,10 +85,18 @@ export default function SmartHubExperience({
   const [upiCopied, setUpiCopied] = useState(false);
   const [mobileCopied, setMobileCopied] = useState(false);
 
+  // Parse all configured phone numbers (deduplicating across phone and visitingCardPhone)
+  const phoneList = useMemo(() => {
+    const combined = [business.phone, business.visitingCardPhone].filter(Boolean).join(" / ");
+    return parsePhoneNumbers(combined);
+  }, [business.phone, business.visitingCardPhone]);
+
   // Clean UPI ID and deep link bundle with NPCI Merchant Category compliance
   const customUpi = (business.customUpiId || "").trim();
   const payeeOwnerName = (business.visitingCardOwnerName || business.name || "").trim();
-  const cleanMobile = (business.phone || business.whatsapp || "").replace(/\D/g, "").slice(-10);
+  const cleanMobile =
+    (business.whatsapp || "").replace(/\D/g, "").slice(-10) ||
+    (phoneList[0]?.clean10 ?? "");
 
   const upiBundle = useMemo(() => {
     if (!customUpi) return null;
@@ -120,8 +130,11 @@ export default function SmartHubExperience({
   }, [qrPayload]);
 
   // Clean WhatsApp number
-  const rawWa = business.whatsapp || business.phone || "";
-  const cleanWaNumber = rawWa.replace(/[^0-9]/g, "");
+  const cleanWaNumber = business.whatsapp
+    ? business.whatsapp.replace(/\D/g, "")
+    : phoneList[0]?.clean10
+    ? `91${phoneList[0].clean10}`
+    : "";
   const waFullNumber = cleanWaNumber.startsWith("91")
     ? cleanWaNumber
     : cleanWaNumber.length === 10
@@ -266,6 +279,23 @@ export default function SmartHubExperience({
             <MapPin className="w-3 h-3 text-red-400 shrink-0 group-hover:scale-110 transition" />
             <span className="truncate underline decoration-dotted underline-offset-2">{business.googleAddress}</span>
           </a>
+        )}
+
+        {/* Quick Phone Contacts */}
+        {phoneList.length > 0 && (
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-2.5 max-w-xs">
+            {phoneList.map((p, idx) => (
+              <a
+                key={idx}
+                href={p.tel}
+                className="text-[11px] font-semibold text-slate-300 hover:text-white transition px-2.5 py-1 rounded-full bg-slate-800/80 hover:bg-slate-700 border border-slate-700/80 flex items-center gap-1.5 shadow-sm active:scale-95"
+                title={`Call ${p.display}`}
+              >
+                <Phone className="w-3 h-3 text-emerald-400 shrink-0" />
+                <span>{p.display}</span>
+              </a>
+            ))}
+          </div>
         )}
       </div>
 
@@ -578,28 +608,29 @@ export default function SmartHubExperience({
           </a>
         )}
 
-        {/* 6. Direct Phone Call */}
-        {business.phone && (
+        {/* 6. Direct Phone Calls */}
+        {phoneList.map((p, idx) => (
           <a
-            href={`tel:${business.phone}`}
+            key={idx}
+            href={p.tel}
             className="w-full p-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800/90 border border-slate-700 hover:border-slate-500 shadow-lg flex items-center justify-between gap-3 transition group transform active:scale-98"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center shrink-0 border border-slate-700 group-hover:scale-105 transition">
-                <Phone className="w-5 h-5" />
+                <Phone className="w-5 h-5 text-emerald-400" />
               </div>
               <div className="text-left">
                 <span className="text-sm font-bold text-white group-hover:text-slate-200 transition block">
-                  Call {business.phone}
+                  Call {p.display}
                 </span>
                 <span className="text-[11px] text-slate-400 block">
-                  Direct phone connection
+                  {phoneList.length > 1 ? `Direct contact #${idx + 1}` : "Direct phone connection"}
                 </span>
               </div>
             </div>
             <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-slate-300 transition shrink-0" />
           </a>
-        )}
+        ))}
       </div>
 
       {/* ─── UPI PAYMENT ACCEPTANCE MODAL ───────────────────────────────────── */}
