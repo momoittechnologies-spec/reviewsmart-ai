@@ -12,6 +12,7 @@ export type IndustryType =
   | "PRINTING_GRAPHICS"
   | "GOLD_BUYERS"
   | "TOURS_TRAVELS"
+  | "PILGRIMAGE_UMRAH"
   | "TATTOO_STUDIO"
   | "APPLIANCE_REPAIR"
   | "PACKERS_MOVERS"
@@ -482,6 +483,43 @@ export const INDUSTRY_CONFIGS: Record<IndustryType, IndustryConfig> = {
     },
   },
 
+  PILGRIMAGE_UMRAH: {
+    type: "PILGRIMAGE_UMRAH",
+    label: "Umrah, Hajj & Pilgrimage Tours",
+    tagline: "Direct Saudia Flights, Walking Distance 5-Star Hotels near Haram & Guided Ziyarath",
+    tags: [
+      "Deluxe Saudia Umrah",
+      "Walking Distance Hotels",
+      "Direct Saudia Flights",
+      "Guided Holy Ziyarath",
+      "Indian Buffet Meals",
+      "Fast Saudi e-Visa",
+      "Senior Citizen Care",
+      "Complimentary Luggage Kit",
+      "Experienced Muallim",
+      "100% Price Transparency",
+    ],
+    placeholder: "Mention package (Deluxe Saudia, Classic), hotel distance to Haram, direct flight, or family experience (optional)...",
+    keywords: "new roshan tours travels kadapa umrah packages 2026 hajj pilgrimage guided ziyarath direct saudia airlines flights hyderabad jeddah walking distance hotels haram sharif diyar alnada hotel indian hyderabadi buffet food free pilgrim kit luggage saudi evisa processing muallim guide kadapa travel agency",
+    reviewDrafts: {
+      direct: {
+        headline: "Blessed Umrah Journey with Walking Distance Hotel!",
+        text: (name, tags, note) =>
+          `Performed our sacred Umrah pilgrimage through ${name} and the experience was truly spiritually uplifting. The ${tags || "walking distance hotel near Haram and direct Saudia flights"} made our prayers and rituals completely peaceful and stress-free.${note ? ` Specially grateful for their arrangements for ${note}.` : ""} Everything promised during booking was delivered with 100% honesty. Highly recommended Umrah agency in Kadapa!`,
+      },
+      detailed: {
+        headline: "Superb Pilgrimage Management & Caring Muallims",
+        text: (name, tags, note) =>
+          `We booked the Deluxe Umrah package with ${name} for our family. From direct Saudia Airlines flights from Hyderabad to walking-distance hotels in Makkah (Diyar Alnada) and Madinah, the arrangements were exceptional. The daily 3 Indian buffet meals with tea were authentic and delicious, and the guided historical Ziyarath with knowledgeable Muallims enriched our understanding.${note ? ` Impressed with how they handled ${note}.` : ""} Shafi Shaik and the team took personal care of every pilgrim. Truly dependable pilgrimage partner!`,
+      },
+      enthusiastic: {
+        headline: "Best Umrah & Ziyarath Agency in Kadapa!",
+        text: (name, tags, note) =>
+          `Alhamdulillah, traveling for Umrah with ${name} was the best spiritual decision for our family! Zero flight delays, fast visa processing, top-tier luxury AC coaches in Saudi, and excellent care for our elderly parents.${note ? ` Their dedication for ${note} was heartwarming!` : ""} Transparent pricing with zero hidden charges. May Allah bless this team!`,
+      },
+    },
+  },
+
   TATTOO_STUDIO: {
     type: "TATTOO_STUDIO",
     label: "Tattoo & Body Piercing Studio",
@@ -887,6 +925,23 @@ export function detectIndustry(
   }
 
   if (
+    hasWord(normCat, "umrah") ||
+    hasWord(normCat, "hajj") ||
+    hasWord(normCat, "ziyarat") ||
+    hasWord(normCat, "ziyarath") ||
+    hasWord(normCat, "pilgrimage") ||
+    hasWord(normCat, "pilgrim") ||
+    hasWord(normCat, "makkah") ||
+    hasWord(normCat, "madinah") ||
+    normCat.includes("umrah package") ||
+    normCat.includes("hajj package") ||
+    normCat.includes("ziyarat tour") ||
+    normCat.includes("pilgrimage package")
+  ) {
+    return INDUSTRY_CONFIGS.PILGRIMAGE_UMRAH;
+  }
+
+  if (
     hasWord(normCat, "tours") ||
     hasWord(normCat, "travel") ||
     hasWord(normCat, "travels") ||
@@ -1088,6 +1143,18 @@ export function detectIndustry(
   }
 
   if (
+    hasWord(normName, "umrah") ||
+    hasWord(normName, "hajj") ||
+    hasWord(normName, "ziyarat") ||
+    hasWord(normName, "ziyarath") ||
+    hasWord(normName, "pilgrimage") ||
+    normName.includes("new roshan") ||
+    normName.includes("roshan tours")
+  ) {
+    return INDUSTRY_CONFIGS.PILGRIMAGE_UMRAH;
+  }
+
+  if (
     hasWord(normName, "tours") ||
     hasWord(normName, "travels") ||
     hasWord(normName, "travel") ||
@@ -1200,6 +1267,20 @@ export function detectIndustry(
   }
 
   if (
+    normTag.includes("umrah") ||
+    normTag.includes("hajj") ||
+    normTag.includes("ziyarat") ||
+    normTag.includes("ziyarath") ||
+    normTag.includes("pilgrim") ||
+    normTag.includes("haram") ||
+    normTag.includes("makkah") ||
+    normTag.includes("madinah") ||
+    normTag.includes("saudia")
+  ) {
+    return INDUSTRY_CONFIGS.PILGRIMAGE_UMRAH;
+  }
+
+  if (
     normTag.includes("tours") ||
     normTag.includes("travels") ||
     normTag.includes("cab") ||
@@ -1207,8 +1288,7 @@ export function detectIndustry(
     normTag.includes("self drive") ||
     normTag.includes("car rental") ||
     normTag.includes("airport drop") ||
-    normTag.includes("darshan") ||
-    normTag.includes("pilgrimage")
+    normTag.includes("darshan")
   ) {
     return INDUSTRY_CONFIGS.TOURS_TRAVELS;
   }

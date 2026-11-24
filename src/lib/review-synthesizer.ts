@@ -573,6 +573,63 @@ export const DOMAIN_LEXICONS: Record<IndustryType, DomainLexicon> = {
     ],
   },
 
+  PILGRIMAGE_UMRAH: {
+    items: [
+      "Deluxe Saudia Umrah package from Hyderabad",
+      "all-inclusive family Umrah pilgrimage package",
+      "Classic group Umrah package with walking distance hotels",
+      "guided Ziyarath tour in Makkah and Madinah",
+      "Saudi Umrah e-Visa and medical insurance processing",
+      "direct Saudia Airlines roundtrip flight booking",
+      "5-star hotel stay within walking distance from Haram Sharif",
+      "daily authentic Indian and Hyderabadi buffet meals with tea",
+      "senior citizen Umrah package with wheelchair and ground support",
+      "complimentary 8-piece luggage and pilgrim travel kit",
+      "guided holy Ziyarat to historical Islamic landmarks",
+      "international air ticketing and Saudi visa services",
+    ],
+    qualities: [
+      "walking distance hotel accommodation just 150m-400m from Haram Sharif and Masjid an-Nabawi",
+      "direct Saudia Airlines roundtrip flights from Hyderabad (HYD-JED) with zero layovers",
+      "delicious 3-times daily authentic Indian and Hyderabadi buffet food with hot chai",
+      "knowledgeable and patient Muallims guiding every Umrah ritual, Tawaf, and Sa'i step-by-step",
+      "complimentary 8-piece pilgrim kit with premium luggage trolley, shoulder bag, and Ehram/Abaya",
+      "air-conditioned luxury coach transfers for airport, inter-city, and all sacred Ziyarath sites",
+      "compassionate care and dedicated wheelchair assistance for elderly parents and senior pilgrims",
+      "100% price transparency with verified Saudi e-Visa, confirmed flight PNR, and zero hidden costs",
+      "informative pre-departure Umrah rituals orientation seminar at their Kadapa office",
+      "smooth Zamzam water can handling and baggage coordination on return",
+    ],
+    adjectives: [
+      "spiritually fulfilling and peaceful",
+      "blessed and deeply memorable",
+      "honest and 100% transparent",
+      "caring and respectful toward elders",
+      "comfortable and well-organized",
+      "reliable and trustworthy",
+      "professional and punctual",
+    ],
+    actions: [
+      "performed our blessed Umrah pilgrimage through",
+      "booked our family Umrah package with",
+      "availed their Deluxe Saudia Umrah package from",
+      "traveled for holy Umrah and Ziyarath with",
+      "entrusted our parents' sacred journey to",
+      "processed our Saudi Umrah e-Visa and direct flight with",
+      "participated in their guided group Umrah batch with",
+    ],
+    occasions: [
+      "for our first-time blessed Umrah pilgrimage",
+      "for our family sacred journey with elderly parents",
+      "for our 15-day Deluxe Saudia group Umrah batch",
+      "for our holy Ziyarath in Makkah and Madinah",
+      "during the blessed pilgrimage season",
+      "for our custom VIP family Umrah package",
+      "recently",
+      "last month",
+    ],
+  },
+
   TATTOO_STUDIO: {
     items: [
       "custom tattoo design",
@@ -858,6 +915,17 @@ export interface TagIntent {
   isIntercityShifting: boolean;
   isZeroDamage: boolean;
   isPoliteTeam: boolean;
+  // Pilgrimage & Umrah
+  isDeluxeUmrah: boolean;
+  isWalkingHotel: boolean;
+  isSaudiaFlight: boolean;
+  isZiyarath: boolean;
+  isIndianFood: boolean;
+  isSaudiVisa: boolean;
+  isElderlyCare: boolean;
+  isPilgrimKit: boolean;
+  isMuallimGuide: boolean;
+  isPriceTransparency: boolean;
   rawTag: string;
 }
 
@@ -919,6 +987,17 @@ export function detectTagIntent(tags: string[], ind: IndustryType): TagIntent {
     isIntercityShifting: /intercity|bangalore|hyderabad|tirupati|outstation|లాంగ్\s*డిస్టెన్స్/i.test(combined),
     isZeroDamage: /zero\s*damage|safe|careful|damage\s*free|సురక్షితం|డ్యామేజ్/i.test(combined),
     isPoliteTeam: /polite|loading|team|staff|boys|సిబ్బంది|లోడింగ్/i.test(combined),
+    // Pilgrimage & Umrah
+    isDeluxeUmrah: /deluxe|classic|umrah|hajj|package|batch|ఉమ్రా|హజ్జ్/i.test(combined),
+    isWalkingHotel: /walking|hotel|150m|400m|close|near|haram|markazia|stay|diyar|alnada|హోటల్/i.test(combined),
+    isSaudiaFlight: /saudia|flight|direct|airlines|hyd|jeddah|ఫ్లైట్/i.test(combined),
+    isZiyarath: /ziyarat|ziyarath|hira|saur|quba|uhud|holy|sacred|దర్శనీయ|జియారత్/i.test(combined),
+    isIndianFood: /food|buffet|hyderabadi|tea|chai|meals|dining|భోజనం|ఫుడ్/i.test(combined),
+    isSaudiVisa: /visa|evisa|passport|insurance|వీసా/i.test(combined),
+    isElderlyCare: /senior|elderly|parents|wheelchair|family|తల్లిదండ్రులు|ఫ్యామిలీ/i.test(combined),
+    isPilgrimKit: /kit|luggage|bag|baggage|trolley|ehram|zamzam|కిట్|లగేజ్/i.test(combined),
+    isMuallimGuide: /muallim|guide|ritual|tawaf|training|గైడ్|ముఅల్లిమ్/i.test(combined),
+    isPriceTransparency: /transparent|pricing|cost|honest|fair|ధర|ట్రాన్స్‌పరెంట్/i.test(combined),
     rawTag: tags[0] || "",
   };
 }
@@ -1778,6 +1857,49 @@ function generateProblemSolution(
       }
       break;
 
+    case "PILGRIMAGE_UMRAH":
+      if (intent.isWalkingHotel) {
+        problem = pickRandom([
+          `Was deeply concerned about finding a hotel within walking distance from Haram Sharif for our elderly parents.`,
+          `Wanted to ensure our family would not have to rely on crowded shuttle buses for daily prayers in Makkah.`,
+        ]);
+        solution = pickRandom([
+          `${bName} arranged verified hotel accommodation within 150m-300m walking distance from Haram Sharif.`,
+          `Shafi Shaik and the team provided Diyar Alnada Hotel near Haram, with spacious clean rooms and reliable lifts.`,
+        ]);
+        result = pickRandom([
+          `Our parents performed all five daily prayers in Haram Sharif peacefully without fatigue. Truly blessed!`,
+          `Zero transit stress, pristine room cleanliness, and unparalleled spiritual peace. Outstanding arrangement!`,
+        ]);
+      } else if (intent.isSaudiaFlight) {
+        problem = pickRandom([
+          `Wanted to avoid exhausting connecting flights and long airport layovers when traveling for Umrah from Hyderabad.`,
+          `Needed confirmed direct Saudia Airlines tickets with proper baggage allowance and zero flight re-scheduling stress.`,
+        ]);
+        solution = pickRandom([
+          `${bName} booked confirmed direct Saudia roundtrip flights (HYD-JED-HYD) and managed group immigration smoothly.`,
+          `They organized executive AC coach transfers directly from Jeddah airport to our Makkah hotel.`,
+        ]);
+        result = pickRandom([
+          `Landed directly in Saudi Arabia fresh and ready for Umrah rituals without any transit fatigue. 10/10 service!`,
+          `Punctual flights, zero delays, and effortless return with Zamzam water cans. Exceptional travel partner!`,
+        ]);
+      } else {
+        problem = pickRandom([
+          `Planning our family Umrah pilgrimage and was looking for a completely transparent and honest agency in Kadapa.`,
+          `First time traveling for Umrah and needed step-by-step guidance on rituals, visa processing, and holy Ziyarath.`,
+        ]);
+        solution = pickRandom([
+          `${bName} managed our Saudi e-Visas, direct Saudia flights, 5-star walking hotels, and delicious 3-times Indian buffet meals.`,
+          `Their experienced Muallims conducted a pre-departure seminar in Kadapa and guided every Tawaf and sacred Ziyarath with utmost care.`,
+        ]);
+        result = pickRandom([
+          `Alhamdulillah, our sacred pilgrimage was peaceful, dignified, and spiritually fulfilling. Every commitment was honored!`,
+          `Transparent pricing with zero hidden costs. Highly recommend New Roshan Tours & Travels to every pilgrim in Andhra Pradesh!`,
+        ]);
+      }
+      break;
+
     case "TATTOO_STUDIO":
       if (intent.isPiercing) {
         problem = pickRandom([
@@ -1950,6 +2072,29 @@ function generateConversationalFlow(
   lex: DomainLexicon,
   ind: IndustryType
 ): string {
+  if (ind === "PILGRIMAGE_UMRAH") {
+    const openers = [
+      `Performed our blessed Umrah pilgrimage with ${bName}.`,
+      `Booked our family Umrah package through ${bName}.`,
+      `Traveled for holy Umrah and Ziyarath with ${bName}.`,
+      `Entrusted our sacred Umrah pilgrimage to ${bName}.`,
+    ];
+    const middles = [
+      `From direct Saudia flights to walking-distance hotels near Haram Sharif, every arrangement was seamless.`,
+      `Their experienced Muallims guided every ritual with great patience and the daily Indian buffet food was delicious.`,
+      `The hotel proximity to Haram made daily prayers effortless, especially for our elderly parents.`,
+      `Visa processing was fast, flight tickets were confirmed on time, and ground transport in Saudi was top-notch.`,
+    ];
+    const closers = [
+      `Alhamdulillah, a deeply peaceful and spiritually uplifting journey!`,
+      `100% honest and transparent pilgrimage agency in Kadapa.`,
+      `Shafi Shaik and the team took exceptional care of every pilgrim.`,
+      `May Allah reward them abundantly. Highly recommended!`,
+    ];
+    const notePart = note ? ` Specially grateful for their personal care regarding ${note.toLowerCase()}.` : "";
+    return `${pickRandom(openers)} ${pickRandom(middles)}${notePart} ${pickRandom(closers)}`;
+  }
+
   const item = tags[0] || pickRandom(lex.items);
   const openers = [
     `Dropped in at ${bName} for ${item}.`,
@@ -1981,6 +2126,28 @@ function generateCalmPersonal(
   lex: DomainLexicon,
   ind: IndustryType
 ): string {
+  if (ind === "PILGRIMAGE_UMRAH") {
+    const reactions = [
+      `Really appreciated the respectful and patient approach at ${bName}.`,
+      `Honest communication and complete transparency for our Umrah package.`,
+      `Dignified, caring, and deeply dependable pilgrimage service.`,
+      `Quite content and blessed with the Umrah arrangements made by ${bName}.`,
+    ];
+    const observations = [
+      `Hotel was genuinely walking distance from Haram Sharif and food was delicious.`,
+      `They didn't charge a single rupee above the agreed package and delivered everything promised.`,
+      `Their Muallims guided our rituals with great patience and care.`,
+    ];
+    const closers = [
+      `Will definitely book our next pilgrimage with them.`,
+      `May Allah bless this team for their dedicated Khidmat.`,
+      `A truly dependable Umrah agency in Kadapa.`,
+      `Deeply satisfied with our spiritual journey.`,
+    ];
+    const notePart = note ? ` Specially grateful for ${note.toLowerCase()}.` : "";
+    return `${pickRandom(reactions)} ${pickRandom(observations)}${notePart} ${pickRandom(closers)}`;
+  }
+
   const item = tags[0] || pickRandom(lex.items);
   const reactions = [
     `Really appreciated the polite approach at ${bName}.`,

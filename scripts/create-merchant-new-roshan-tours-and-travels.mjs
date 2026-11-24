@@ -23,13 +23,13 @@ const GOOGLE_PLACE_ID   = "ChIJgUHgPjpzszsRTYUDNrgZtC4";
 const GOOGLE_CID        = "3365343100523480397";
 const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJgUHgPjpzszsRTYUDNrgZtC4";
 const GOOGLE_MAPS_URL   = "https://share.google/odil5WTbGmas4G1dr";
-const WEBSITE_URL       = null;           // Business does not have website
+const WEBSITE_URL       = "https://new-roshan-tours-and-travels.vercel.app/";
 const INSTAGRAM_URL     = "https://www.instagram.com/newroshantoursandtravels/";
 const FACEBOOK_URL      = null;
-const TAG_CHIPS         = "Customized Umrah Packages,Guided Baghdad Ziyarath,International Air Ticketing,Hassle-Free Visa Services,Makkah & Madinah Luxury Hotels,Local Pilgrim Support,Transparent Pricing,Direct Saudi Flights,Experienced Tour Guides,Group & Family Packages";
-const KEYWORDS          = "new roshan tours and travels kadapa umrah packages hajj ziyarath baghdad international air ticketing visa services ganagapeta rahmatullah street yv street kadapa travel agency";
-const CATEGORY          = "Umrah & Hajj Pilgrimage Packages · International Air Ticketing & Visa Services";
-const TAGLINE           = "Trusted Umrah & Ziyarat Pilgrimage Partner in Kadapa · Direct Flights, Luxury Hotels & Guided Ziyarat";
+const TAG_CHIPS         = "Deluxe Saudia Umrah,5-Star Walking Hotels near Haram,Direct Saudia Flights,Guided Holy Ziyarath,Authentic Indian Buffet Meals,Fast Saudi e-Visa,Senior Citizen Care,Complimentary Luggage Kit,Experienced Muallim Guide,100% Price Transparency";
+const KEYWORDS          = "new roshan tours travels kadapa umrah packages 2026 hajj pilgrimage guided ziyarath direct saudia airlines flights hyderabad jeddah walking distance hotels haram sharif diyar alnada hotel indian hyderabadi buffet food free pilgrim kit luggage saudi evisa processing muallim guide kadapa travel agency";
+const CATEGORY          = "Umrah & Hajj Pilgrimage Agency · Direct Saudia Flights & Guided Ziyarath";
+const TAGLINE           = "Kadapa's Premier Umrah & Ziyarat Pilgrimage Partner · Direct Saudia Flights & 5-Star Walking Distance Hotels";
 const LOGO_URL          = null;
 
 async function main() {

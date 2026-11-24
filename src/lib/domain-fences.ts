@@ -395,6 +395,44 @@ export const DOMAIN_FENCES: Record<IndustryType, DomainFenceConfig> = {
     ],
   },
 
+  PILGRIMAGE_UMRAH: {
+    industryType: "PILGRIMAGE_UMRAH",
+    allowedKeywords: [
+      "umrah", "hajj", "ziyarat", "ziyarath", "pilgrim", "pilgrimage", "pilgrims",
+      "makkah", "madinah", "haram", "haram sharif", "masjid al haram", "masjid nabawi",
+      "kaaba", "tawaf", "sai", "saudi", "saudia", "saudia airlines", "flight", "flights",
+      "direct flight", "hyderabad", "jeddah", "hyd", "jed", "diyar alnada", "hotel", "hotels",
+      "walking distance", "markazia", "muallim", "muallims", "guide", "guides", "buffet",
+      "indian food", "hyderabadi food", "tea", "chai", "luggage", "luggage kit", "zamzam",
+      "visa", "evisa", "passport", "insurance", "family", "parents", "elderly", "spiritual",
+      "peaceful", "transparent", "blessed", "package", "packages", "deluxe", "classic",
+      "shafi", "roshan", "baghdad", "mina", "arafat", "muzdafilah", "jabal al noor",
+      "ghar e hira", "ghar e saur", "quba", "uhud", "kit", "coach", "ac coach", "kadapa",
+      "proddatur", "rayalaseema", "pricing", "cost", "transparent pricing", "ritual", "rituals",
+    ],
+    forbiddenKeywords: [
+      "self drive", "self-drive", "cab", "cabs", "taxi", "taxis", "car rental", "rentals",
+      "etios", "innova crysta", "dzire", "fastag", "canyon", "gandikota", "belum caves",
+      "puncture", "mechanic", "oil change", "gold", "bullion", "pledged", "xrf", "karat",
+      "haircut", "facial", "salon", "spa", "doctor", "dental", "clinic", "hospital", "teeth",
+      "software", "app dev", "code", "tattoo", "piercing", "inked", "pre-wedding", "candid shoot",
+    ],
+    forbiddenPhrases: [
+      /\b(self-?drives?|car\s*rentals?|cabs?|taxis?|outstation\s*cabs?|innova\s*crysta|etios|fastag)\b/i,
+      /\b(gandikota|belum\s*caves?|tirupati\s*darshan)\b/i,
+      /\b(gold|bullion|pledged|xrf|karat|carat)\b/i,
+      /\b(haircuts?|facials?|makeups?|salons?|spas?)\b/i,
+      /\b(doctors?|dentals?|clinics?|hospitals?|medicines?)\b/i,
+      /\b(software\s*dev|app\s*dev|clean\s*code)\b/i,
+      /\b(tattoos?|piercings?|get\s*inked)\b/i,
+    ],
+    positiveIdentifiers: [
+      /\b(umrah|hajj|ziyarat|ziyarath|pilgrimage|pilgrims?|makkah|madinah|haram|saudia|muallim|zamzam|kaaba|tawaf|e-?visa|luggage\s*kit|diyar\s*alnada)\b/i,
+      /(ఉమ్రా|హజ్జ్|జియారత్|మక్కా|మదీనా|హరమ్|సౌదియా|తీర్థయాత్ర|ముఅల్లిమ్|జమ్‌జమ్)/i,
+      /(عمرة|حج|زيارة|مكة|مدينة|حرم|طواف|زمزم|معلم)/i,
+    ],
+  },
+
   TATTOO_STUDIO: {
     industryType: "TATTOO_STUDIO",
     allowedKeywords: [
