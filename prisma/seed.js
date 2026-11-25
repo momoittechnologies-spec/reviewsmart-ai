@@ -12,7 +12,7 @@ async function main() {
     update: {
       upiId: "8639831132-2@ybl",
       upiPayeeName: "Damerla Mohan",
-      supportEmail: "momopedeals@gmail.com",
+      supportEmail: "support@reviewsmart.online",
       digitalPrice: 299,
       physicalPrice: 1999,
       minNegotiatedPrice: 1999,
@@ -20,7 +20,7 @@ async function main() {
     create: {
       id: "default",
       platformName: "ReviewSmart AI",
-      supportEmail: "momopedeals@gmail.com",
+      supportEmail: "support@reviewsmart.online",
       currencySymbol: "₹",
       upiId: "8639831132-2@ybl",
       upiPayeeName: "Damerla Mohan",
@@ -151,33 +151,27 @@ async function main() {
     });
   } catch (e) {}
 
-  // 3. Super Admin (Email & Password Only) - Main Owner: momopedeals@gmail.com
+  // 3. Super Admin (Email & Password Only) - Main Owner: admin@reviewsmart.ai
   const adminPassword = await bcrypt.hash("admin123", 10);
   const adminPin = await bcrypt.hash("1234", 10);
 
   const mainAdmin = await prisma.user.upsert({
-    where: { email: "momopedeals@gmail.com" },
-    update: {
-      password: adminPassword,
-      pinCode: adminPin,
-      userIdTag: "momopedeals",
-      role: "SUPER_ADMIN",
-    },
-    create: {
-      email: "momopedeals@gmail.com",
-      name: "ReviewSmart AI Admin",
-      password: adminPassword,
-      pinCode: adminPin,
-      userIdTag: "momopedeals",
-      role: "SUPER_ADMIN",
-    },
-  });
-
-  const secondaryAdmin = await prisma.user.upsert({
     where: { email: "admin@reviewsmart.ai" },
     update: {
       password: adminPassword,
       pinCode: adminPin,
+      userIdTag: "admin",
+      role: "SUPER_ADMIN",
+    },
+    create: {
+      email: "admin@reviewsmart.ai",
+      name: "ReviewSmart AI Admin",
+      password: adminPassword,
+      pinCode: adminPin,
+      userIdTag: "admin",
+      role: "SUPER_ADMIN",
+    },
+  });
       userIdTag: "admin",
       role: "SUPER_ADMIN",
     },

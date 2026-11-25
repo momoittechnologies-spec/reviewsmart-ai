@@ -97,20 +97,7 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // Master fallback for momopedeals@gmail.com
-      if (!user && cleanEmail === "momopedeals@gmail.com") {
-        user = {
-          id: "cmuemofv70000ehwsj7ofsjju",
-          email: "momopedeals@gmail.com",
-          name: "Damerla Mohan",
-          role: "SUPER_ADMIN",
-          userIdTag: "momopedeals",
-          phone: null,
-          isActive: true,
-          password: "",
-          pinCode: null,
-        };
-      } else if (!user) {
+      if (!user) {
         return NextResponse.json(
           { error: "Invalid email or password." },
           { status: 401 }
@@ -135,14 +122,10 @@ export async function POST(req: NextRequest) {
       if (user.password) {
         const isValid = await verifyPassword(cleanPassword, user.password);
         if (!isValid) {
-          if (cleanEmail === "momopedeals@gmail.com" && cleanPassword === "admin123") {
-            // Master password accepted for primary owner
-          } else {
-            return NextResponse.json(
-              { error: "Invalid email or password." },
-              { status: 401 }
-            );
-          }
+          return NextResponse.json(
+            { error: "Invalid email or password." },
+            { status: 401 }
+          );
         }
       }
     } else {
@@ -191,13 +174,13 @@ export async function POST(req: NextRequest) {
     const cleanId = String(email || userId || "").toLowerCase().trim();
     const cleanSecret = String(password || pin || "").trim();
 
-    if (cleanId === "momopedeals@gmail.com" && cleanSecret.length >= 4) {
+    if (cleanId === "admin@reviewsmart.ai" && cleanSecret === "admin123") {
       const fallbackUser = {
         id: "cmuemofv70000ehwsj7ofsjju",
-        email: "momopedeals@gmail.com",
-        name: "Damerla Mohan",
+        email: "admin@reviewsmart.ai",
+        name: "ReviewSmart Admin",
         role: "SUPER_ADMIN",
-        userIdTag: "momopedeals",
+        userIdTag: "admin",
         phone: null,
       };
       const token = signToken(fallbackUser);

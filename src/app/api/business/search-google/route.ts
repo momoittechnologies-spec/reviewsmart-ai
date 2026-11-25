@@ -215,36 +215,6 @@ Respond strictly in pure JSON without markdown quotes:
     cleanQuery
   )}`;
 
-  const lower = cleanQuery.toLowerCase();
-  
-  // Special recognition for Momo IT Technologies (Official Verified GMB Profile ID: 13838215073033216304)
-  if (lower.includes("momo it") || (lower.includes("momo") && lower.includes("tech"))) {
-    const momoResult = {
-      name: "MOMO IT Technologies",
-      branchName: "Krishnapuram, Kadapa (HQ)",
-      address: "4/106, Road, Krishnapuram, Andhra Pradesh 516005",
-      category: "Software Company & IT Solutions",
-      googlePlaceId: "ChIJd5iV_xdzszsRMOGZeUo3C8A",
-      placeId: "ChIJd5iV_xdzszsRMOGZeUo3C8A",
-      googleReviewUrl: "https://share.google/INwCMhfHs91L6B0m6",
-      suggestedTags: [
-        "Expert Developers",
-        "Robust Software",
-        "Prompt Tech Support",
-        "Clean UI/UX Design",
-        "Timely Delivery",
-      ],
-      rating: 4.6,
-      reviewCount: "17 reviews",
-      logoUrl: "/images/momo-it-logo.png",
-      website: "https://www.momoittechnologies.com/",
-    };
-    return NextResponse.json({
-      success: true,
-      results: [momoResult],
-    });
-  }
-
   const industry = detectIndustry(cleanQuery);
   const category = industry.label;
   const suggestedTags = industry.tags.slice(0, 5);

@@ -127,8 +127,7 @@ export default async function PublicReviewPage({
   // Show payment watermark only for unpaid businesses that are NOT in an active demo
   const showWatermark =
     business.isPaid === false &&
-    !isDemoActive &&
-    business.slug !== "momo-it-technologies";
+    !isDemoActive;
 
   const merchantPhone =
     business.user?.phone ||
@@ -277,20 +276,6 @@ export default async function PublicReviewPage({
             {/* Badge */}
             <p className="text-[11px] text-slate-500 font-medium mt-1 flex items-center justify-center gap-1.5 flex-wrap">
               <span>Powered by ReviewSmart AI</span>
-              <span>&bull;</span>
-              <a
-                href="https://www.momoittechnologies.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-slate-400 hover:text-slate-200 transition"
-              >
-                <img
-                  src="https://www.momoittechnologies.com/logo.svg"
-                  alt="MOMO IT Technologies"
-                  className="w-3 h-3 rounded object-contain"
-                />
-                <span>Tech Partner: MOMO IT TECHNOLOGIES</span>
-              </a>
             </p>
           </div>
         </div>

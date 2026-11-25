@@ -81,7 +81,7 @@ export default function BillingClient({
   const [selectedAppGuide, setSelectedAppGuide] = useState<"phonepe" | "gpay" | "paytm">("phonepe");
 
   const rawUpiId = settings?.upiId;
-  const upiId = rawUpiId && rawUpiId !== "momopedeals@oksbi" ? rawUpiId : "8639831132-2@ybl";
+  const upiId = rawUpiId || "8639831132-2@ybl";
   const upiPhoneNumber = "8639831132";
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [paymentTab, setPaymentTab] = useState<"apps" | "qr" | "manual">("apps");

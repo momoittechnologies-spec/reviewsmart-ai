@@ -94,7 +94,7 @@ Every field marketing agent must verify these 6 items before stepping out into t
 4. **Physical Demo Bag:**
    - 1x Sample 4″×6″ Crystal Acrylic Counter Standee.
    - 1x Sample Dual-Sided Vertical CR80 PVC Smart Card.
-5. **Pre-Loaded Live Demo Tabs:** Have `https://reviewsmart.online/r/sri-guru-fashions-kadapa` or `https://reviewsmart.online/r/momo-it-technologies` ready on your mobile browser.
+5. **Pre-Loaded Live Demo Tabs:** Have `https://reviewsmart.online/r/sri-guru-fashions-kadapa` or `https://reviewsmart.online/r/new-roshan-tours-and-travels` ready on your mobile browser.
 6. **30-Second Pre-Entry Scout:** Before walking into any shop, spend 30 seconds searching the business on Google Maps to check their current star rating, total review count, and primary local competitor.
 
 ---

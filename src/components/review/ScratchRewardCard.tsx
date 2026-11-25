@@ -505,20 +505,7 @@ export default function ScratchRewardCard({
 
           {/* Technology Partner Footer */}
           <div className="pt-2.5 border-t border-slate-800 flex items-center justify-center gap-1.5 text-[9.5px] text-slate-500">
-            <span>Powered by -</span>
-            <a
-              href="https://www.momoittechnologies.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-slate-400 hover:text-slate-200 font-bold transition"
-            >
-              <img
-                src="https://www.momoittechnologies.com/logo.svg"
-                alt="MOMO IT Technologies"
-                className="w-3 h-3 rounded object-contain"
-              />
-              <span>MOMO IT TECHNOLOGIES | KADAPA</span>
-            </a>
+            <span>Powered by ReviewSmart AI</span>
           </div>
         </div>
       </div>

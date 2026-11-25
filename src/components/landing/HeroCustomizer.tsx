@@ -129,7 +129,7 @@ const POPULAR_PRESETS = [
   { name: "Golden Hair Wig Studio", city: "Kadapa, Andhra Pradesh", category: "Hair Wigs & Replacement" },
   { name: "New Roshan Tours & Travels", city: "Kadapa, Andhra Pradesh", category: "Umrah, Ziyarat & Flights" },
   { name: "MANA Tours & Travels", city: "Kadapa, Andhra Pradesh", category: "Tours & Travels" },
-  { name: "MOMO IT Technologies", city: "Kadapa, Andhra Pradesh", category: "Software & Technology" },
+  { name: "Evania Luxury Salon", city: "Kadapa, Andhra Pradesh", category: "Beauty & Hair Salon" },
   { name: "VR Gold Company", city: "Kadapa, Andhra Pradesh", category: "Gold Buying & Pledged Gold" },
   { name: "City Grafix Flex & Printing", city: "Kadapa, Andhra Pradesh", category: "Flex & Digital Printing" },
   { name: "AS Refrigeration & AC Services", city: "Kadapa, Andhra Pradesh", category: "AC & Appliance Repair" },
@@ -641,8 +641,6 @@ export default function HeroCustomizer() {
                 {POPULAR_PRESETS.map((p) => {
                   const shortLabel = p.name.startsWith("MANA")
                     ? "MANA"
-                    : p.name.startsWith("MOMO")
-                    ? "MOMO IT"
                     : p.name.startsWith("VR")
                     ? "VR Gold"
                     : p.name.startsWith("City")
@@ -946,7 +944,7 @@ export default function HeroCustomizer() {
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Verified Merchant
                     </span>
                   </div>
-                  <span className="text-[10px] text-slate-400 block font-medium">MOMO IT Technologies &bull; Direct Peer-to-Bank Rails</span>
+                  <span className="text-[10px] text-slate-400 block font-medium">ReviewSmart AI &bull; Direct Peer-to-Bank Rails</span>
                 </div>
               </div>
 
@@ -1011,7 +1009,7 @@ export default function HeroCustomizer() {
 
                   <a
                     href={`https://wa.me/918639831132?text=${encodeURIComponent(
-                      `Hi MOMO IT Technologies team, I just paid ₹2,999 for my ReviewSmart standee for ${orderSuccessData.businessName}. Please share dispatch tracking!`
+                      `Hi ReviewSmart AI team, I just paid ₹2,999 for my ReviewSmart standee for ${orderSuccessData.businessName}. Please share dispatch tracking!`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"

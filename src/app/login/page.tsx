@@ -30,7 +30,7 @@ export default function LoginPage() {
   const [pin, setPin] = useState("");
 
   // Admin Credentials (Email + Password)
-  const [email, setEmail] = useState("momopedeals@gmail.com");
+  const [email, setEmail] = useState("admin@reviewsmart.ai");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -192,7 +192,7 @@ export default function LoginPage() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="momopedeals@gmail.com"
+                      placeholder="admin@reviewsmart.ai"
                       autoComplete="email"
                       className="w-full text-sm pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-[#e3ded6] text-[#172033] placeholder-slate-400 focus:outline-none focus:border-[#4338ca] focus:bg-white focus:ring-2 focus:ring-[#4338ca]/15 font-medium transition"
                     />
@@ -287,7 +287,7 @@ export default function LoginPage() {
             &larr; Return to Homepage
           </Link>
           <p className="text-slate-400 text-[11px]">
-            &copy; {new Date().getFullYear()} ReviewSmart AI &bull; MOMO IT Technologies
+            &copy; {new Date().getFullYear()} ReviewSmart AI. All rights reserved.
           </p>
         </div>
       </div>

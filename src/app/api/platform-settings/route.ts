@@ -9,8 +9,8 @@ export async function GET() {
     let settings = await prisma.platformSetting.findUnique({
       where: { id: "default" },
     });
-    // Auto-migrate legacy UPI ID to official YesBank/PhonePe native handle
-    if (settings && (settings.upiId === "momopedeals@oksbi" || !settings.upiId)) {
+    // Auto-migrate legacy settings if needed
+    if (settings && !settings.upiId) {
       try {
         settings = await prisma.platformSetting.update({
           where: { id: "default" },
@@ -43,7 +43,7 @@ export async function PUT(req: NextRequest) {
       where: { id: "default" },
       update: {
         platformName: body.platformName || "ReviewSmart AI",
-        supportEmail: body.supportEmail || "momopedeals@gmail.com",
+        supportEmail: body.supportEmail || "support@reviewsmart.online",
         supportWhatsapp: body.supportWhatsapp || "+918639831132",
         currencySymbol: body.currencySymbol || "₹",
         upiId: body.upiId || "8639831132-2@ybl",
@@ -54,7 +54,7 @@ export async function PUT(req: NextRequest) {
       create: {
         id: "default",
         platformName: body.platformName || "ReviewSmart AI",
-        supportEmail: body.supportEmail || "momopedeals@gmail.com",
+        supportEmail: body.supportEmail || "support@reviewsmart.online",
         supportWhatsapp: body.supportWhatsapp || "+918639831132",
         currencySymbol: body.currencySymbol || "₹",
         upiId: body.upiId || "8639831132-2@ybl",

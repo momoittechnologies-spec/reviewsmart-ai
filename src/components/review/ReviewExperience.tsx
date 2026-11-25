@@ -247,8 +247,6 @@ export default function ReviewExperience({
       placeId = "ChIJ-_3HayRzszsRhE95URiMOqc";
     } else if (business.slug === "mana-tours-travels" && !placeId) {
       placeId = "ChIJz-6hOcbQVaYRELARxZjPbrE";
-    } else if (business.slug === "momo-it-technologies" && !placeId) {
-      placeId = "ChIJd5iV_xdzszsRlGLwd6hWTD4";
     } else if (business.slug === "evania-luxury-salon" && !placeId) {
       placeId = "ChIJY8WhWVmTyzsRUz83m4gzT_0";
     } else if (business.slug === "her-choice-kadapa" && !placeId) {
@@ -293,11 +291,6 @@ export default function ReviewExperience({
     // 0. Known coordinate / non-writereview place IDs fallback to clean Google Maps search
     if (business.slug.includes("vijaya")) {
       return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("Vijaya's Yummy Food Kadugodi Bengaluru")}`;
-    }
-    if (business.slug === "momo-it-technologies") {
-      return (business.googleReviewUrl && !business.googleReviewUrl.includes("#lrd=0x3bb37317ff959877"))
-        ? business.googleReviewUrl
-        : "https://share.google/K9uqux6IBsMG2AeeZ";
     }
     if (business.slug === "evania-luxury-salon") {
       return "https://search.google.com/local/writereview?placeid=ChIJY8WhWVmTyzsRUz83m4gzT_0";
@@ -367,9 +360,6 @@ export default function ReviewExperience({
 
   // Universal HTTPS Google Maps Profile Link (opens Maps app naturally via Android/iOS App Links without Play Store fallback)
   const getMapsAppUrl = () => {
-    if (business.slug === "momo-it-technologies") {
-      return "https://share.google/K9uqux6IBsMG2AeeZ";
-    }
     if (business.slug === "evania-luxury-salon") {
       return business.googleMapsUrl || "https://share.google/kOhlZAitT8HfL51yo";
     }
@@ -1585,20 +1575,6 @@ export default function ReviewExperience({
           </a>
           <p className="text-[10px] text-slate-500 flex items-center justify-center gap-1.5 flex-wrap">
             <span>Powered by ReviewSmart AI &bull; Smart AI Google Review Cards 🇮🇳</span>
-            <span>&bull;</span>
-            <a
-              href="https://www.momoittechnologies.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-slate-400 hover:text-slate-200 transition"
-            >
-              <img
-                src="https://www.momoittechnologies.com/logo.svg"
-                alt="MOMO IT Technologies"
-                className="w-3.5 h-3.5 rounded object-contain inline"
-              />
-              <span className="font-semibold">Tech Partner: MOMO IT TECHNOLOGIES</span>
-            </a>
           </p>
         </div>
       )}
@@ -1748,23 +1724,7 @@ export default function ReviewExperience({
               Done / Close
             </button>
 
-            {/* Minimal Technology Partner */}
-            <div className="mt-3.5 pt-2.5 border-t border-slate-800 flex items-center justify-center gap-1.5 text-[10px] text-slate-500">
-              <span>Technology Partner:</span>
-              <a
-                href="https://www.momoittechnologies.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-slate-400 hover:text-slate-200 font-semibold transition"
-              >
-                <img
-                  src="https://www.momoittechnologies.com/logo.svg"
-                  alt="MOMO IT Technologies"
-                  className="w-3.5 h-3.5 rounded object-contain"
-                />
-                <span>MOMO IT TECHNOLOGIES</span>
-              </a>
-            </div>
+
           </div>
         </div>
       )}

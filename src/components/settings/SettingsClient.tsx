@@ -654,7 +654,7 @@ export default function SettingsClient({ business }: { business: BusinessData })
                     onFocus={() => {
                       if (searchResults.length > 0) setIsDropdownOpen(true);
                     }}
-                    placeholder="Search Google profile (e.g. Momo IT Technologies or Royal Bakery)..."
+                    placeholder="Search Google profile (e.g. City Grafix or Royal Bakery)..."
                     className="w-full text-xs pl-9 pr-8 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-slate-50/70"
                   />
                   {searchQuery && (
@@ -798,7 +798,7 @@ export default function SettingsClient({ business }: { business: BusinessData })
                 </div>
                 <a
                   href={`https://wa.me/918639831132?text=${encodeURIComponent(
-                    `Hi MomoPe team! I need help setting up a new Google Business Profile (Google Maps) for my business: "${form.name}".`
+                    `Hi ReviewSmart AI team! I need help setting up a new Google Business Profile (Google Maps) for my business: "${form.name}".`
                   )}`}
                   target="_blank"
                   rel="noreferrer"
@@ -1116,7 +1116,7 @@ export default function SettingsClient({ business }: { business: BusinessData })
                     name="instagram"
                     value={form.instagram}
                     onChange={handleChange}
-                    placeholder="e.g. @momo_it_technologies"
+                    placeholder="e.g. @reviewsmart_ai"
                     className="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-pink-400"
                   />
                 </div>

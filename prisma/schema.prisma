@@ -168,7 +168,7 @@ model UpiPayment {
 model PlatformSetting {
   id                 String   @id @default("default")
   platformName       String   @default("ReviewSmart AI")
-  supportEmail       String   @default("momopedeals@gmail.com")
+  supportEmail       String   @default("support@reviewsmart.online")
   supportWhatsapp    String   @default("+918639831132")
   customDomain       String?
   currencySymbol     String   @default("₹")

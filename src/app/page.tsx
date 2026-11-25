@@ -96,31 +96,31 @@ interface DemoPreset {
 
 const DEMO_PRESETS: DemoPreset[] = [
   {
-    id: "tech",
-    name: "MOMO IT Technologies",
-    category: "Software, Cloud & AI Solutions",
-    location: "Krishnapuram, Kadapa, AP",
-    icon: Laptop,
-    color: "#4f46e5",
-    slug: "momo-it-technologies",
+    id: "studio",
+    name: "Golden Hair Wig Studio",
+    category: "Hair Replacement & Styling Studio",
+    location: "Opposite RTC Bus Stand, Kadapa, AP",
+    icon: Sparkles,
+    color: "#059669",
+    slug: "golden-hair-wig-studio",
     chips: [
-      "Web & SaaS Products",
-      "Mobile App Development",
-      "QA & Automation Testing",
-      "Business ERP Systems",
-      "Custom AI Solutions",
-      "UI/UX Design",
+      "Natural Hair Patch",
+      "Hair Fixing & Bonding",
+      "Professional Hair Service",
+      "Confidential Consultation",
+      "Experienced Stylists",
+      "Premium Quality Wigs",
     ],
     reviews: {
-      ALL: "Outstanding software engineering and AI solutions by MOMO IT Technologies! They built our custom web platform and mobile app with rock-solid quality, seamless UI, and timely delivery. Highly recommended!",
-      ENGLISH: "Outstanding software engineering and AI solutions by MOMO IT Technologies! They built our custom web platform and mobile app with rock-solid quality, seamless UI, and timely delivery. Highly recommended!",
-      HINDI: "मोमो आईटी टेक्नोलॉजीज की कस्टम वेब, मोबाइल ऐप और QA ऑटोमेशन सेवाएं वास्तव में बेहतरीन हैं! समय पर हाई-क्वालिटी सॉफ्टवेयर डिलीवरी और शानदार टेक्निकल सपोर्ट।",
-      TELUGU: "మోమో ఐటీ టెక్నాలజీస్ అందించిన సాఫ్ట్‌వేర్, వెబ్ & మొబైల్ యాప్ డెవలప్‌మెంట్ మరియు క్యూఏ ఆటోమేషన్ సేవలు అత్యుత్తమం! ఆధునిక టెక్నాలజీతో సూపర్ క్వాలిటీ ప్రాజెక్ట్ అందించారు. హైలీ రికమెండెడ్!",
-      TAMIL: "மோமோ ஐடி டெக்னாலஜிஸின் மென்பொருள், செயலி வடிவமைப்பு மற்றும் ஏஐ தொழில்நுட்ப சேவைகள் மிகச் சிறப்பானது! தரமான மற்றும் விரைவான சேவை.",
-      KANNADA: "ಮೊಮೊ ಐಟಿ ಟೆಕ್ನಾಲಜೀಸ್ ಅತ್ಯುತ್ತಮ ಸಾಫ್ಟ್‌ವೇರ್, ವೆಬ್ ಮತ್ತು ಮೊಬೈಲ್ ಆಪ್‌ಗಳನ್ನು ಅಭಿವೃದ್ಧಿಪಡಿಸಿದೆ! ಅತ್ಯುತ್ತಮ ಗುಣಮಟ್ಟ ಮತ್ತು ವಿಶ್ವಾಸಾರ್ಹ ಸೇವೆ.",
-      MALAYALAM: "മോമോ ഐടി ടെക്നോളജീസിന്റെ സോഫ്റ്റ്‌വെയർ, മൊബൈൽ ആപ്പ് ഡെവലപ്‌മെന്റും കസ്റ്റമർ സപ്പോർട്ടും അതിശയകരമാണ്! മികച്ച നിലവാരമുള്ള സേവനങ്ങൾ.",
+      ALL: "Best hair fixing studio in Kadapa! Excellent customer service, very natural look hair patch, and skilled technicians. Highly recommended!",
+      ENGLISH: "Best hair fixing studio in Kadapa! Excellent customer service, very natural look hair patch, and skilled technicians. Highly recommended!",
+      HINDI: "कडपा में सबसे अच्छा हेयर फिक्सिंग स्टूडियो! बहुत ही नेचुरल हेयर पैच और बेहतरीन स्टाफ सर्विस। अत्यधिक अनुशंसित!",
+      TELUGU: "కడపలో బెస్ట్ హెయిర్ విగ్ మరియు ప్యాచ్ స్టూడియో! చాలా సహజమైన లుక్ మరియు నాణ్యమైన సర్వీస్ అందించారు. థాంక్యూ!",
+      TAMIL: "கடப்பாவில் சிறந்த ஹேர் ஃபிக்சிங் ஸ்டுடியோ! மிக இயல்பான முடி பேட்ச் மற்றும் சிறந்த சேவை. மிகவும் பரிந்துரைக்கப்படுகிறது!",
+      KANNADA: "ಕಡಪಾದ ಅತ್ಯುತ್ತಮ ಹೇರ್ ಫಿಕ್ಸಿಂಗ್ ಸ್ಟುಡಿಯೋ! ಅತ್ಯಂತ ನೈಸರ್ಗಿಕ ನೋಟ ಮತ್ತು ಅತ್ಯುತ್ತಮ ಸೇವೆ.",
+      MALAYALAM: "കടപ്പയിലെ ഏറ്റവും മികച്ച ഹെയർ ഫിക്സിംഗ് സ്റ്റുഡിയോ! വളരെ സ്വാഭാവികമായ ലുക്കും മികച്ച സേവനവും.",
     },
-    author: "Rajesh K.",
+    author: "Suresh R.",
   },
   {
     id: "travel",
@@ -532,15 +532,7 @@ export default function HomePage() {
       setTimeout(() => setCopiedDraft(false), 2400);
 
       // If user clicked Copy & Post, open the verified Google review destination
-      if (slug === "momo-it-technologies") {
-        setTimeout(() => {
-          window.open(
-            "https://share.google/K9uqux6IBsMG2AeeZ",
-            "_blank",
-            "noopener,noreferrer"
-          );
-        }, 550);
-      } else if (slug === "mana-tours-travels") {
+      if (slug === "mana-tours-travels") {
         setTimeout(() => {
           window.open(
             "https://search.google.com/local/writereview?placeid=ChIJz-6hOcbQVaYRELARxZjPbrE",
@@ -2080,30 +2072,6 @@ export default function HomePage() {
         <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto space-y-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-200/80">
             <BrandLogo href="/" size="sm" theme="light" />
-
-            {/* Official Technology Partner Pill */}
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                Technology Partner:
-              </span>
-              <a
-                href="https://www.momoittechnologies.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 shadow-sm hover:shadow-md transition-all group"
-                title="MOMO IT Technologies"
-              >
-                <img
-                  src="https://www.momoittechnologies.com/logo.svg"
-                  alt="MOMO IT Technologies Logo"
-                  className="w-5 h-5 rounded-md object-contain group-hover:scale-110 transition-transform"
-                />
-                <span className="font-black text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">
-                  MOMO IT TECHNOLOGIES
-                </span>
-                <ExternalLink className="w-3 h-3 text-slate-400 group-hover:text-indigo-600 transition-colors shrink-0" />
-              </a>
-            </div>
 
             <div className="flex items-center gap-4">
               <a
