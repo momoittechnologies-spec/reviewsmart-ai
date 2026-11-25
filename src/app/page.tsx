@@ -654,7 +654,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--background,#f7f6f2)] text-[var(--foreground,#172033)] overflow-x-hidden selection:bg-[#4338ca] selection:text-white relative font-sans">
+    <div className="min-h-screen bg-[var(--background,#f7f6f2)] text-[var(--foreground,#172033)] overflow-x-clip selection:bg-[#4338ca] selection:text-white relative font-sans">
       {/* ─── 3D AMBIENT LIGHT MESH BACKGROUND ────────────────────────────── */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[1100px] h-[650px] bg-gradient-to-b from-indigo-100/40 via-amber-50/20 to-transparent blur-[120px] rounded-full" />

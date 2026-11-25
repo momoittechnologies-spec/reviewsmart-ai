@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Sparkles, ArrowRight, Lock, Mail, User, Store, Loader2 } from "lucide-react";
+import BrandLogo from "@/components/brand/BrandLogo";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -44,14 +45,9 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-indigo-50/30 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200">
-            <Sparkles className="w-6 h-6" />
-          </div>
-          <span className="font-black text-2xl tracking-tight text-slate-900">
-            Review<span className="text-indigo-600">Smart</span> AI
-          </span>
-        </Link>
+        <div className="flex justify-center mb-4">
+          <BrandLogo href="/" size="lg" theme="light" priority />
+        </div>
         <h2 className="text-xl font-bold text-slate-800">
           Create your Smart Review Card
         </h2>

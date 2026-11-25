@@ -82,19 +82,19 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
       }`;
 
   const navLinkCls = isDark
-    ? "text-slate-300 hover:text-white px-3.5 py-1.5 rounded-full hover:bg-white/5 transition font-medium"
-    : "text-[#172033]/80 hover:text-[#4338ca] px-3.5 py-1.5 rounded-full hover:bg-white/60 transition font-medium";
+    ? "text-slate-300 hover:text-white px-2.5 lg:px-3.5 py-1.5 rounded-full hover:bg-white/5 transition font-medium whitespace-nowrap"
+    : "text-[#172033]/80 hover:text-[#4338ca] px-2.5 lg:px-3.5 py-1.5 rounded-full hover:bg-white/60 transition font-medium whitespace-nowrap";
 
   return (
     <header className={headerCls}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 lg:gap-4">
         {/* Brand */}
-        <div className="flex items-center gap-3">
-          <BrandLogo href="/" size="md" theme={isDark ? "dark" : "light"} />
+        <div className="flex items-center shrink-0">
+          <BrandLogo href="/" size="md" theme={isDark ? "dark" : "light"} priority />
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-2 text-xs font-semibold">
+        <nav className="hidden md:flex items-center gap-0.5 lg:gap-2 text-xs font-semibold shrink-0">
           <Link href="/#how-it-works" className={navLinkCls}>
             How it works
           </Link>
@@ -107,23 +107,23 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
         </nav>
 
         {/* Right Action */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-1.5 lg:gap-3 shrink-0">
           {user ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 lg:gap-2">
               {user.role === "SUPER_ADMIN" ? (
                 <Link
                   href="/admin"
-                  className="text-xs font-bold px-3.5 py-2 rounded-xl bg-amber-500/15 text-amber-900 border border-amber-300 hover:bg-amber-500/25 transition flex items-center gap-1.5"
+                  className="text-xs font-bold px-3 lg:px-3.5 py-2 rounded-xl bg-amber-500/15 text-amber-900 border border-amber-300 hover:bg-amber-500/25 transition flex items-center gap-1.5 whitespace-nowrap"
                 >
-                  <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                   <span>Admin Panel</span>
                 </Link>
               ) : (
                 <Link
                   href="/dashboard"
-                  className="text-xs font-bold px-4 py-2 rounded-xl bg-[#4338ca] text-white hover:bg-[#3730a3] transition shadow-xs flex items-center gap-1.5"
+                  className="text-xs font-bold px-3 lg:px-4 py-2 rounded-xl bg-[#4338ca] text-white hover:bg-[#3730a3] transition shadow-xs flex items-center gap-1.5 whitespace-nowrap"
                 >
-                  <LayoutDashboard className="w-3.5 h-3.5" />
+                  <LayoutDashboard className="w-3.5 h-3.5 shrink-0" />
                   <span>Dashboard</span>
                 </Link>
               )}
@@ -136,19 +136,19 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-1.5 lg:gap-2.5">
               <Link
                 href="/login"
-                className="text-xs font-bold px-3.5 py-2 rounded-xl text-slate-700 hover:text-[#4338ca] transition"
+                className="text-xs font-bold px-2.5 lg:px-3.5 py-2 rounded-xl text-slate-700 hover:text-[#4338ca] transition whitespace-nowrap"
               >
                 Sign in
               </Link>
               <Link
                 href="/#customizer"
                 onClick={scrollToCustomizer}
-                className="text-xs font-bold px-4 py-2 rounded-xl bg-[#4338ca] hover:bg-[#3730a3] text-white transition shadow-sm flex items-center gap-1.5"
+                className="text-xs font-bold px-3 lg:px-4 py-2 rounded-xl bg-[#4338ca] hover:bg-[#3730a3] text-white transition shadow-sm flex items-center gap-1.5 whitespace-nowrap"
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
                 <span>Preview my standee</span>
               </Link>
             </div>

@@ -17,7 +17,7 @@ import {
   Store,
   Shield,
 } from "lucide-react";
-import { BrandIcon } from "@/components/brand/BrandLogo";
+import BrandLogo from "@/components/brand/BrandLogo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -78,12 +78,7 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-md">
         {/* Brand Header */}
         <div className="flex flex-col items-center mb-6 text-center">
-          <Link href="/" className="flex items-center gap-2 mb-2 group">
-            <BrandIcon size="lg" className="group-hover:scale-105 transition-transform" />
-            <span className="text-2xl font-black tracking-tight text-[#172033]">
-              Review<span className="text-[#4338ca]">Smart</span> <span className="text-xs bg-[#4338ca] text-white px-2 py-0.5 rounded-full font-bold">AI</span>
-            </span>
-          </Link>
+          <BrandLogo href="/" size="lg" theme="light" className="mb-3" priority />
           <p className="text-sm text-slate-600 font-medium">
             Sign in to access your counter standees and review portal
           </p>
