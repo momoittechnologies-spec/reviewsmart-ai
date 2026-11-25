@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 export default function MobileAppDock() {
-  const [activeTab, setActiveTab] = useState<"home" | "demo" | "hardware" | "pricing">("home");
+  const [activeTab, setActiveTab] = useState<"home" | "demo" | "pricing">("home");
 
   // Track active section as user scrolls
   useEffect(() => {
@@ -19,13 +19,10 @@ export default function MobileAppDock() {
       const scrollPos = window.scrollY + 250;
 
       const demoEl = document.getElementById("demo");
-      const hardwareEl = document.getElementById("hardware");
       const pricingEl = document.getElementById("pricing");
 
       if (pricingEl && scrollPos >= pricingEl.offsetTop) {
         setActiveTab("pricing");
-      } else if (hardwareEl && scrollPos >= hardwareEl.offsetTop) {
-        setActiveTab("hardware");
       } else if (demoEl && scrollPos >= demoEl.offsetTop) {
         setActiveTab("demo");
       } else {
