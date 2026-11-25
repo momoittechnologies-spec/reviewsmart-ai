@@ -101,6 +101,7 @@ model Business {
   visitingCardAddress  String?
   visitingCardImageUrl String?
   isPaid             Boolean           @default(false) // false until admin explicitly approves payment
+  activatedAt        DateTime?         // Timestamp when paid merchant setup is complete & QR standee is live
   gmbStatus          String            @default("NOT_REQUESTED") // "NOT_REQUESTED" | "DETAILS_SUBMITTED" | "IN_PROGRESS" | "VERIFICATION_PENDING" | "VERIFIED_LIVE"
   gmbNotes           String?           // Super Admin or Agent notes on GMB optimization & verification
   demoExpiresAt      DateTime?         // If set and in future, card is temporarily active for evaluation
@@ -152,8 +153,10 @@ model UpiPayment {
   amount         Float    @default(2999)
   utrNumber      String   // 12-digit UPI reference number submitted by customer/agent
   customerPhone  String?
-  status         String   @default("PENDING") // "PENDING" | "APPROVED" | "REJECTED"
-  commission     Float?   // Auto-calculated: 40% of amount for agent deals (on approval)
+  status         String    @default("PENDING") // "PENDING" | "APPROVED" | "REJECTED"
+  confirmedAt    DateTime? // Timestamp when manager approved / confirmed offline or UPI payment
+  verifiedBy     String?   // Admin user ID who confirmed the payment
+  commission     Float?    // Auto-calculated: 40% of amount for agent deals (on approval)
   commissionPaid Boolean  @default(false)
   packageTier    String?  @default("EXECUTIVE_STANDEE") // "STARTER_PVC" | "EXECUTIVE_STANDEE" | "ALL_IN_ONE_HUB" | "ENTERPRISE_CUSTOM"
   screenshotUrl  String?  // Base64 or uploaded URL of payment screenshot/receipt
@@ -235,6 +238,13 @@ model LeadCapture {
   lastOutcome        String?        // "SPOKE_TO_OWNER" | "NO_ANSWER" | "CALLBACK_REQUESTED" | "VISITED_STORE" | "NOT_INTERESTED"
   doNotContact       Boolean        @default(false)
   confirmedPaidAt    DateTime?      // Admin-verified payment conversion timestamp
+  convertedBusinessId String?       @unique // Stable link to created/resumed Business record (idempotency)
+  convertedOrderId   String?        @unique // Stable link to UpiPayment order record (idempotency)
+  claimedAt          DateTime?      // Timestamp when claimed by an agent from the Growth Pool
+  lostReason         String?        // Required reason when status === "LOST"
+  conflictFlag       Boolean        @default(false) // True if possible cross-agent duplicate needs manager resolution
+  conflictLeadId     String?        // ID of the existing lead owned by another agent (manager visibility only)
+  conflictNote       String?        // Manager-visible explanation of duplicate / branch flag
 
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
@@ -246,6 +256,7 @@ model LeadCapture {
   @@index([priority])
   @@index([nextActionDue])
   @@index([assignedAgentId])
+  @@index([claimedAt])
   @@index([createdAt])
 }
 

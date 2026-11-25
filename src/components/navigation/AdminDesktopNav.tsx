@@ -34,6 +34,12 @@ export default function AdminDesktopNav() {
       active: pathname.startsWith("/admin/merchants"),
     },
     {
+      label: "Field Sales Agents",
+      href: "/admin/agents",
+      icon: Users,
+      active: pathname.startsWith("/admin/agents"),
+    },
+    {
       label: "All Businesses Directory",
       href: "/admin/businesses",
       icon: Building2,

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSessionUser, hashPin, hashPassword } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { slugify, getCleanLogoUrl } from "@/lib/utils";
+import { syncBusinessActivation } from "@/lib/merchantActivation";
 import { resolveGoogleMapsUrl } from "@/lib/googleMapsResolver";
 
 export const dynamic = "force-dynamic";
@@ -350,6 +351,7 @@ export async function PUT(req: NextRequest) {
           ...(gmbNotes !== undefined && { gmbNotes }),
         },
       });
+      await syncBusinessActivation(targetBusinessId);
     }
 
     return NextResponse.json({

@@ -61,8 +61,12 @@ export default function LoginPage() {
         return;
       }
 
-      if (roleMode === "admin") {
+      if (data.redirectUrl) {
+        window.location.href = data.redirectUrl;
+      } else if (roleMode === "admin") {
         window.location.href = "/admin";
+      } else if (data.user?.role === "MARKETING_AGENT") {
+        window.location.href = "/agent";
       } else {
         window.location.href = "/dashboard";
       }
@@ -101,7 +105,7 @@ export default function LoginPage() {
               }`}
             >
               <Store className="w-3.5 h-3.5 text-[#4338ca]" />
-              <span>Merchant / Shop Owner</span>
+              <span>Merchant / Field Agent</span>
             </button>
             <button
               type="button"
@@ -132,10 +136,10 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {roleMode === "merchant" ? (
               <>
-                {/* Merchant User ID / Phone */}
+                {/* Merchant User ID / Agent Code */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Registered Mobile / User ID
+                    Phone Number or Agent Code
                   </label>
                   <div className="relative">
                     <Smartphone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -144,7 +148,7 @@ export default function LoginPage() {
                       required
                       value={userId}
                       onChange={(e) => setUserId(e.target.value)}
-                      placeholder="e.g. 9876543210"
+                      placeholder="e.g. 9876543210 or MKT-01"
                       className="w-full text-sm pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-[#e3ded6] text-[#172033] placeholder-slate-400 focus:outline-none focus:border-[#4338ca] focus:bg-white focus:ring-2 focus:ring-[#4338ca]/15 font-medium transition"
                     />
                   </div>
@@ -244,7 +248,7 @@ export default function LoginPage() {
                 <>
                   <span>
                     {roleMode === "merchant"
-                      ? "Sign In to Merchant Dashboard"
+                      ? "Sign In with PIN"
                       : "Sign In to Command Center"}
                   </span>
                   <ArrowRight className="w-4 h-4" />

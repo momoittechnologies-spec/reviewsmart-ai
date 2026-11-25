@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSessionUser } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { resolveGoogleMapsUrl } from '@/lib/googleMapsResolver';
+import { syncBusinessActivation } from '@/lib/merchantActivation';
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -101,6 +102,8 @@ export async function PATCH(req: NextRequest) {
         ...(minRatingForGoogle !== undefined && { minRatingForGoogle: Number(minRatingForGoogle) }),
       },
     });
+
+    await syncBusinessActivation(updated.id);
 
     return NextResponse.json({ success: true, business: updated });
   } catch (error) {

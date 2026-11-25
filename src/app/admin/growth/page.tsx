@@ -93,6 +93,9 @@ interface CrmMetrics {
   fieldContactsCount: number;
   agentReportedConversions: number;
   confirmedPaidSales: number;
+  newLeadsInPeriod?: number;
+  overdueFollowUpsCount?: number;
+  conflictLeadsCount?: number;
   stageCounts: Record<string, number>;
 }
 
@@ -147,8 +150,14 @@ export default function AdminGrowthPage() {
   const [filterPriority, setFilterPriority] = useState("");
   const [filterAgent, setFilterAgent] = useState("");
   const [filterSource, setFilterSource] = useState("");
+  const [dateRange, setDateRange] = useState<"TODAY" | "7D" | "30D" | "ALL">("30D");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [managerScorecard, setManagerScorecard] = useState<any | null>(null);
+  const [activeDrilldown, setActiveDrilldown] = useState<
+    "confirmedSales" | "activatedMerchants" | "paidAwaitingActivation" | "conflictLeads" | null
+  >("paidAwaitingActivation");
+  const [assigningTop5, setAssigningTop5] = useState(false);
 
   // Active Lead Outreach / Action Modals
   const [selectedLead, setSelectedLead] = useState<CrmLead | null>(null);
@@ -212,11 +221,12 @@ export default function AdminGrowthPage() {
       const params = new URLSearchParams({
         view: activeView,
         page: String(currentPage),
-        pageSize: "25",
+        limit: "25",
+        dateRange,
       });
       if (searchTerm) params.set("search", searchTerm);
       if (filterCity) params.set("city", filterCity);
-      if (filterStage) params.set("stage", filterStage);
+      if (filterStage) params.set("status", filterStage);
       if (filterPriority) params.set("priority", filterPriority);
       if (filterAgent) params.set("agentId", filterAgent);
       if (filterSource) params.set("source", filterSource);
@@ -228,7 +238,8 @@ export default function AdminGrowthPage() {
       const data = await res.json();
       setLeads(data.leads || []);
       setMetrics(data.metrics || null);
-      setAgents(data.agents || []);
+      setManagerScorecard(data.managerScorecard || null);
+      setAgents(data.managerScorecard?.teamAgents || data.agents || []);
       setTotalPages(data.pagination?.totalPages || 1);
     } catch (err: any) {
       console.error("Failed to load CRM data:", err);
@@ -236,7 +247,7 @@ export default function AdminGrowthPage() {
     } finally {
       setIsLoadingCrm(false);
     }
-  }, [activeView, currentPage, searchTerm, filterCity, filterStage, filterPriority, filterAgent, filterSource]);
+  }, [activeView, currentPage, searchTerm, filterCity, filterStage, filterPriority, filterAgent, filterSource, dateRange]);
 
   useEffect(() => {
     if (activeView !== "DISCOVER") {
@@ -1031,6 +1042,50 @@ export default function AdminGrowthPage() {
                   <option value="CSV_IMPORT">CSV Import</option>
                   <option value="FIELD_VISIT">Field Visit</option>
                 </select>
+
+                <select
+                  value={filterAgent}
+                  onChange={(e) => setFilterAgent(e.target.value)}
+                  className="px-2.5 py-1.5 rounded-xl border border-stone-300 text-xs font-bold text-stone-700 bg-stone-50"
+                >
+                  <option value="ALL">All Agents</option>
+                  <option value="UNASSIGNED">Unassigned Pool</option>
+                  {agents.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name} ({a.agentCode || "Agent"})
+                    </option>
+                  ))}
+                </select>
+
+                {agents.length > 0 && (
+                  <button
+                    type="button"
+                    disabled={assigningTop5}
+                    onClick={async () => {
+                      const target = agents[0];
+                      if (!target) return;
+                      setAssigningTop5(true);
+                      try {
+                        const poolRes = await fetch("/api/agent/pool");
+                        const poolData = await poolRes.json();
+                        const top5Ids = (poolData.pool || []).slice(0, 5).map((p: any) => p.id);
+                        if (top5Ids.length > 0) {
+                          await fetch("/api/agent/pool", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ leadIds: top5Ids, targetAgentId: target.id }),
+                          });
+                          fetchCrmData();
+                        }
+                      } finally {
+                        setAssigningTop5(false);
+                      }
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition disabled:opacity-50"
+                  >
+                    {assigningTop5 ? "Assigning..." : `Assign 5 Pool Leads → ${agents[0]?.name}`}
+                  </button>
+                )}
               </div>
 
               <span className="text-xs text-stone-500 font-mono">
@@ -1048,7 +1103,7 @@ export default function AdminGrowthPage() {
                       <th className="py-3 px-4">Phone</th>
                       <th className="py-3 px-4">Rating / Reviews</th>
                       <th className="py-3 px-4">Priority & Reason</th>
-                      <th className="py-3 px-4">Source</th>
+                      <th className="py-3 px-4">Owner</th>
                       <th className="py-3 px-4">Stage</th>
                       <th className="py-3 px-4 text-right">Actions</th>
                     </tr>
@@ -1087,8 +1142,29 @@ export default function AdminGrowthPage() {
                             </div>
                           )}
                         </td>
-                        <td className="py-3 px-4 text-stone-500 text-[11px]">
-                          {lead.source.replace(/_/g, " ")}
+                        <td className="py-3 px-4">
+                          <select
+                            value={lead.assignedAgentId || ""}
+                            onChange={async (e) => {
+                              await fetch("/api/admin/growth/crm", {
+                                method: "PATCH",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                  id: lead.id,
+                                  assignedAgentId: e.target.value,
+                                }),
+                              });
+                              fetchCrmData();
+                            }}
+                            className="bg-stone-50 border border-stone-200 rounded-lg px-2 py-1 text-[11px] font-bold text-stone-700"
+                          >
+                            <option value="">Unassigned</option>
+                            {agents.map((a) => (
+                              <option key={a.id} value={a.id}>
+                                {a.name} ({a.agentCode})
+                              </option>
+                            ))}
+                          </select>
                         </td>
                         <td className="py-3 px-4">
                           <select
@@ -1123,71 +1199,258 @@ export default function AdminGrowthPage() {
 
         {/* VIEW 4: SERVER-SIDE RECONCILED REPORTS */}
         {activeView === "REPORTS" && metrics && (
-          <div className="space-y-4">
-            <div className="bg-white border border-stone-200 rounded-3xl p-5 shadow-sm">
-              <h2 className="text-base sm:text-lg font-black text-[#172033]">
-                Sales & Verification Performance
-              </h2>
-              <p className="text-xs text-stone-500 mt-0.5">
-                Aggregated server-side metrics across your full database. Tap any card to filter the contributing records.
-              </p>
+          <div className="space-y-5">
+            {/* Manager Filters Header */}
+            <div className="bg-white border border-stone-200 rounded-3xl p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h2 className="text-base sm:text-lg font-black text-[#172033]">
+                  Manager Sales, Follow-up &amp; Activation Scorecard
+                </h2>
+                <p className="text-xs text-stone-500 mt-0.5">
+                  Confirmed sales group by payment confirmation timestamp; activations group by setup completion date. Click any metric card below to inspect records.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center bg-stone-100 p-1 rounded-xl border border-stone-200">
+                  {(["TODAY", "7D", "30D", "ALL"] as const).map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => setDateRange(r)}
+                      className={`px-3 py-1 rounded-lg text-[11px] font-bold transition ${
+                        dateRange === r
+                          ? "bg-white text-[#172033] shadow-sm"
+                          : "text-stone-500 hover:text-stone-800"
+                      }`}
+                    >
+                      {r === "TODAY" ? "Today" : r === "7D" ? "7 Days" : r === "30D" ? "30 Days" : "All Time"}
+                    </button>
+                  ))}
+                </div>
+
+                <select
+                  value={filterAgent}
+                  onChange={(e) => setFilterAgent(e.target.value)}
+                  className="px-3 py-1.5 rounded-xl border border-stone-300 bg-white text-xs font-bold text-[#172033]"
+                >
+                  <option value="ALL">All Agents</option>
+                  {agents.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name} ({a.agentCode})
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
-            {/* Metrics Cards Grid */}
+            {/* Primary Manager Scorecard Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               <div
                 onClick={() => { setFilterSource(""); setFilterStage(""); setActiveView("PIPELINE"); }}
                 className="bg-white border border-stone-200 rounded-2xl p-4 shadow-sm hover:border-indigo-400 cursor-pointer transition"
               >
-                <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">Total Leads</span>
-                <span className="text-2xl font-black text-[#172033] mt-1 block">{metrics.totalLeads}</span>
-                <span className="text-[10px] text-stone-400 mt-1 block">Full CRM database</span>
+                <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">New Leads</span>
+                <span className="text-2xl font-black text-[#172033] mt-1 block">
+                  {managerScorecard?.newLeadsCount ?? metrics.newLeadsInPeriod ?? metrics.totalLeads}
+                </span>
+                <span className="text-[10px] text-stone-400 mt-1 block">In selected period</span>
               </div>
 
               <div
                 onClick={() => setActiveView("TODAYS_FOLLOWUPS")}
-                className="bg-white border border-indigo-200 rounded-2xl p-4 shadow-sm hover:border-indigo-400 cursor-pointer transition"
+                className="bg-white border border-rose-200 rounded-2xl p-4 shadow-sm hover:border-rose-400 cursor-pointer transition"
               >
-                <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-wider block">Follow-ups Due</span>
-                <span className="text-2xl font-black text-indigo-900 mt-1 block">{metrics.todaysFollowUpsCount}</span>
-                <span className="text-[10px] text-indigo-500 mt-1 block">Due today or pending</span>
+                <span className="text-[11px] font-bold text-rose-700 uppercase tracking-wider block">Overdue Follow-ups</span>
+                <span className="text-2xl font-black text-rose-900 mt-1 block">
+                  {managerScorecard?.overdueFollowUpsCount ?? metrics.overdueFollowUpsCount ?? 0}
+                </span>
+                <span className="text-[10px] text-rose-500 mt-1 block">Past scheduled due time</span>
               </div>
 
               <div
-                onClick={() => { setFilterSource("WEBSITE_ENQUIRY"); setActiveView("PIPELINE"); }}
-                className="bg-white border border-stone-200 rounded-2xl p-4 shadow-sm hover:border-indigo-400 cursor-pointer transition"
+                onClick={() => setActiveDrilldown("confirmedSales")}
+                className={`bg-emerald-50 border rounded-2xl p-4 shadow-sm cursor-pointer transition ${
+                  activeDrilldown === "confirmedSales" ? "border-emerald-600 ring-2 ring-emerald-200" : "border-emerald-300"
+                }`}
               >
-                <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">Website Enquiries</span>
-                <span className="text-2xl font-black text-[#172033] mt-1 block">{metrics.websiteEnquiriesCount}</span>
-                <span className="text-[10px] text-stone-400 mt-1 block">Inbound visitors</span>
+                <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">Confirmed Sales</span>
+                <span className="text-2xl font-black text-emerald-950 mt-1 block">
+                  {managerScorecard?.confirmedSalesCount ?? metrics.confirmedPaidSales}
+                </span>
+                <span className="text-[11px] font-bold text-emerald-800 mt-1 block">
+                  ₹{Number(managerScorecard?.confirmedSalesValue || 0).toLocaleString("en-IN")}
+                </span>
               </div>
 
               <div
-                onClick={() => { setFilterSource("RADAR_DISCOVERY"); setActiveView("PIPELINE"); }}
-                className="bg-white border border-stone-200 rounded-2xl p-4 shadow-sm hover:border-indigo-400 cursor-pointer transition"
+                onClick={() => setActiveDrilldown("activatedMerchants")}
+                className={`bg-white border rounded-2xl p-4 shadow-sm cursor-pointer transition ${
+                  activeDrilldown === "activatedMerchants" ? "border-indigo-600 ring-2 ring-indigo-100" : "border-indigo-200"
+                }`}
               >
-                <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider block">Radar Discovered</span>
-                <span className="text-2xl font-black text-[#172033] mt-1 block">{metrics.radarDiscoveredCount}</span>
-                <span className="text-[10px] text-stone-400 mt-1 block">OSM & Maps hunters</span>
+                <span className="text-[11px] font-bold text-indigo-700 uppercase tracking-wider block">Activated Merchants</span>
+                <span className="text-2xl font-black text-indigo-950 mt-1 block">
+                  {managerScorecard?.activatedMerchantsCount ?? 0}
+                </span>
+                <span className="text-[10px] text-indigo-500 mt-1 block">Paid + QR setup live</span>
               </div>
 
               <div
-                onClick={() => { setFilterStage("CONVERTED"); setActiveView("PIPELINE"); }}
-                className="bg-white border border-emerald-200 rounded-2xl p-4 shadow-sm hover:border-emerald-400 cursor-pointer transition"
+                onClick={() => setActiveDrilldown("paidAwaitingActivation")}
+                className={`bg-amber-50 border rounded-2xl p-4 shadow-sm cursor-pointer transition ${
+                  activeDrilldown === "paidAwaitingActivation" ? "border-amber-600 ring-2 ring-amber-200" : "border-amber-300"
+                }`}
               >
-                <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider block">Agent Conversions</span>
-                <span className="text-2xl font-black text-emerald-900 mt-1 block">{metrics.agentReportedConversions}</span>
-                <span className="text-[10px] text-emerald-600 mt-1 block">Reported in field</span>
+                <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider block">Paid • Awaiting Setup</span>
+                <span className="text-2xl font-black text-amber-950 mt-1 block">
+                  {managerScorecard?.paidAwaitingActivationCount ?? 0}
+                </span>
+                <span className="text-[10px] text-amber-700 mt-1 block">Pending logo / GMB link</span>
               </div>
 
               <div
-                className="bg-emerald-50 border border-emerald-300 rounded-2xl p-4 shadow-sm"
+                onClick={() => setActiveDrilldown("conflictLeads")}
+                className={`bg-white border rounded-2xl p-4 shadow-sm cursor-pointer transition ${
+                  activeDrilldown === "conflictLeads" ? "border-rose-600 ring-2 ring-rose-100" : "border-stone-200"
+                }`}
               >
-                <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">Confirmed Paid</span>
-                <span className="text-2xl font-black text-emerald-950 mt-1 block">{metrics.confirmedPaidSales}</span>
-                <span className="text-[10px] text-emerald-700 mt-1 block">Admin-verified sales</span>
+                <span className="text-[11px] font-bold text-stone-600 uppercase tracking-wider block">Branch / Conflict Flags</span>
+                <span className="text-2xl font-black text-[#172033] mt-1 block">
+                  {managerScorecard?.conflictLeadsCount ?? metrics.conflictLeadsCount ?? 0}
+                </span>
+                <span className="text-[10px] text-stone-400 mt-1 block">Cross-agent match checks</span>
               </div>
             </div>
+
+            {/* Drilldown Details Panel */}
+            {managerScorecard?.drilldowns && activeDrilldown && (
+              <div className="bg-white border border-stone-200 rounded-3xl p-5 shadow-sm space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-black text-[#172033]">
+                    {activeDrilldown === "confirmedSales" && "Confirmed Sales (Payment Verified)"}
+                    {activeDrilldown === "activatedMerchants" && "Activated Merchants (Setup Complete)"}
+                    {activeDrilldown === "paidAwaitingActivation" && "Paid Merchants Awaiting Activation"}
+                    {activeDrilldown === "conflictLeads" && "Cross-Agent Duplicate / Branch Conflicts"}
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setActiveDrilldown(null)}
+                    className="text-xs font-bold text-stone-400 hover:text-stone-700"
+                  >
+                    Close
+                  </button>
+                </div>
+
+                {activeDrilldown === "confirmedSales" && (
+                  <div className="divide-y divide-stone-100 text-xs">
+                    {(managerScorecard.drilldowns.confirmedSales || []).length === 0 ? (
+                      <p className="text-stone-500 py-3">No confirmed payments in this period.</p>
+                    ) : (
+                      managerScorecard.drilldowns.confirmedSales.map((p: any) => (
+                        <div key={p.id} className="py-2.5 flex items-center justify-between gap-3 flex-wrap">
+                          <div>
+                            <span className="font-bold text-[#172033]">
+                              {p.user?.name || "Merchant"} • ₹{Number(p.amount).toLocaleString("en-IN")}
+                            </span>
+                            <span className="ml-2 font-mono text-[11px] text-stone-500">
+                              UTR: {p.utrNumber}
+                            </span>
+                            {p.agentCode && (
+                              <span className="ml-2 px-2 py-0.5 rounded bg-indigo-50 text-indigo-800 font-mono text-[10px] font-bold">
+                                Credited: {p.agentCode}
+                              </span>
+                            )}
+                          </div>
+                          <span className="font-mono text-[11px] text-emerald-700">
+                            Confirmed {new Date(p.confirmedAt || p.updatedAt).toLocaleString("en-IN")}
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+
+                {activeDrilldown === "activatedMerchants" && (
+                  <div className="divide-y divide-stone-100 text-xs">
+                    {(managerScorecard.drilldowns.activatedMerchants || []).length === 0 ? (
+                      <p className="text-stone-500 py-3">No activated merchants in this period.</p>
+                    ) : (
+                      managerScorecard.drilldowns.activatedMerchants.map((b: any) => (
+                        <div key={b.id} className="py-2.5 flex items-center justify-between gap-3 flex-wrap">
+                          <div>
+                            <span className="font-bold text-[#172033]">{b.name}</span>
+                            <Link href={`/r/${b.slug}`} target="_blank" className="ml-2 text-indigo-600 underline font-mono text-[11px]">
+                              /r/{b.slug}
+                            </Link>
+                          </div>
+                          <span className="font-mono text-[11px] text-indigo-700">
+                            Activated {new Date(b.activatedAt).toLocaleString("en-IN")}
+                          </span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+
+                {activeDrilldown === "paidAwaitingActivation" && (
+                  <div className="divide-y divide-stone-100 text-xs">
+                    {(managerScorecard.drilldowns.paidAwaitingActivation || []).length === 0 ? (
+                      <p className="text-stone-500 py-3">No paid merchants waiting for setup assets.</p>
+                    ) : (
+                      managerScorecard.drilldowns.paidAwaitingActivation.map((b: any) => (
+                        <div key={b.id} className="py-2.5 flex items-center justify-between gap-3 flex-wrap">
+                          <div>
+                            <span className="font-bold text-[#172033]">{b.name}</span>
+                            <span className="ml-2 font-mono text-[11px] text-stone-500">/r/{b.slug}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {(b.missingItems || []).map((m: string) => (
+                              <span key={m} className="px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold text-[10.5px]">
+                                {m}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+
+                {activeDrilldown === "conflictLeads" && (
+                  <div className="divide-y divide-stone-100 text-xs">
+                    {(managerScorecard.drilldowns.conflictLeads || []).length === 0 ? (
+                      <p className="text-stone-500 py-3">No unresolved duplicate/branch flags.</p>
+                    ) : (
+                      managerScorecard.drilldowns.conflictLeads.map((c: any) => (
+                        <div key={c.id} className="py-2.5 flex items-center justify-between gap-3 flex-wrap">
+                          <div>
+                            <p className="font-bold text-[#172033]">
+                              {c.businessName} ({c.assignedAgentName || "Unassigned"})
+                            </p>
+                            <p className="text-[11px] text-stone-500">{c.conflictNote}</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              await fetch("/api/admin/growth/crm", {
+                                method: "PATCH",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ id: c.id, resolveConflict: true }),
+                              });
+                              fetchCrmData();
+                            }}
+                            className="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold text-[11px]"
+                          >
+                            Resolve Conflict
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </main>

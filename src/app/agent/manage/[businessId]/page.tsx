@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getAppUrl, getCleanLogoUrl } from "@/lib/utils";
 import {
@@ -26,6 +27,11 @@ export default async function AgentManageBusinessPage({
 }: {
   params: { businessId: string };
 }) {
+  const session = await getSessionUser();
+  if (!session || (session.role !== "MARKETING_AGENT" && session.role !== "SUPER_ADMIN")) {
+    redirect("/login");
+  }
+
   const { businessId } = params;
 
   const business = await prisma.business.findFirst({

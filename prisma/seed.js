@@ -13,8 +13,6 @@ async function main() {
       upiId: "9036909110@apl",
       upiPayeeName: "Damerla Mohan",
       supportEmail: "support@reviewsmart.online",
-      digitalPrice: 299,
-      physicalPrice: 2999,
       minNegotiatedPrice: 2999,
     },
     create: {
@@ -24,8 +22,6 @@ async function main() {
       currencySymbol: "₹",
       upiId: "9036909110@apl",
       upiPayeeName: "Damerla Mohan",
-      digitalPrice: 299,
-      physicalPrice: 2999,
       minNegotiatedPrice: 2999,
     },
   });
@@ -188,25 +184,27 @@ async function main() {
     },
   });
 
-  // 4. Marketing Agent (Field Sales Rep: MKT-01, PIN: 1234)
+  // 4. Marketing Agent (Field Sales Rep: Subrahmanyam, MKT-01, PIN: 1234)
   const agentPin = await bcrypt.hash("1234", 10);
   const agentUser = await prisma.user.upsert({
-    where: { email: "mkt01@agent.reviewsmart.local" },
+    where: { userIdTag: "MKT-01" },
     update: {
+      name: "Subrahmanyam",
       agentCode: "MKT-01",
-      userIdTag: "MKT-01",
       pinCode: agentPin,
       role: "MARKETING_AGENT",
+      isActive: true,
     },
     create: {
       email: "mkt01@agent.reviewsmart.local",
-      name: "Rajesh Sharma (Field Rep)",
+      name: "Subrahmanyam",
       agentCode: "MKT-01",
       userIdTag: "MKT-01",
       phone: "9876543200",
       pinCode: agentPin,
       password: agentPin,
       role: "MARKETING_AGENT",
+      isActive: true,
     },
   });
 

@@ -3,6 +3,7 @@ import { getSessionUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/utils";
 import { resolveGoogleMapsUrl } from "@/lib/googleMapsResolver";
+import { syncBusinessActivation } from "@/lib/merchantActivation";
 
 async function canUserAccessBusiness(
   user: { id: string; role: string },
@@ -104,6 +105,8 @@ export async function PUT(
         visitingCardImageUrl: body.visitingCardImageUrl !== undefined ? body.visitingCardImageUrl : business.visitingCardImageUrl,
       },
     });
+
+    await syncBusinessActivation(updated.id);
 
     return NextResponse.json({ success: true, business: updated });
   } catch (error) {

@@ -17,13 +17,14 @@ export async function POST(req: NextRequest) {
   try {
     let user: any = null;
 
-    // ─── FLOW 1: User ID + PIN (Merchants) ───────────────────────────────────
+    // ─── FLOW 1: User ID / Agent Code / Phone + PIN (Merchants & Field Agents) ─
     if (userId && pin) {
       const rawId = String(userId).trim();
+      const upperId = rawId.toUpperCase();
       const cleanDigits = rawId.replace(/[^0-9]/g, "").slice(-10);
       const cleanPin = String(pin).trim();
 
-      // Must be exactly 4 digits for merchants
+      // Must be exactly 4 digits for merchants & field agents
       if (!/^\d{4}$/.test(cleanPin) && cleanPin !== "admin123") {
         return NextResponse.json(
           { error: "PIN must be a 4-digit number." },
@@ -35,6 +36,8 @@ export async function POST(req: NextRequest) {
         where: {
           OR: [
             { userIdTag: rawId },
+            { userIdTag: upperId },
+            { agentCode: upperId },
             { phone: rawId },
             ...(cleanDigits.length === 10
               ? [
@@ -49,7 +52,7 @@ export async function POST(req: NextRequest) {
 
       if (!user) {
         return NextResponse.json(
-          { error: "No account found with this User ID. Please contact your administrator." },
+          { error: "No account found with this User ID or Agent Code. Please contact your manager." },
           { status: 401 }
         );
       }
@@ -66,14 +69,6 @@ export async function POST(req: NextRequest) {
       if (user.isActive === false) {
         return NextResponse.json(
           { error: "Your account has been suspended. Please contact ReviewSmart AI support." },
-          { status: 403 }
-        );
-      }
-
-      // Block old marketing agent accounts from logging in
-      if (user.role === "MARKETING_AGENT") {
-        return NextResponse.json(
-          { error: "Marketing agent accounts have been decommissioned. Please contact the administrator." },
           { status: 403 }
         );
       }
@@ -188,16 +183,26 @@ export async function POST(req: NextRequest) {
       role: user.role,
       userIdTag: user.userIdTag,
       phone: user.phone,
+      agentCode: user.agentCode,
     });
+
+    const redirectUrl =
+      user.role === "SUPER_ADMIN"
+        ? "/admin"
+        : user.role === "MARKETING_AGENT"
+        ? "/agent"
+        : "/dashboard";
 
     const response = NextResponse.json({
       success: true,
+      redirectUrl,
       user: {
         id: user.id,
         email: user.email,
         name: user.name,
         role: user.role,
         userIdTag: user.userIdTag,
+        agentCode: user.agentCode,
       },
     });
 

@@ -34,10 +34,10 @@ export default function AdminMobileBottomNav() {
       active: pathname.startsWith("/admin/merchants"),
     },
     {
-      label: "Directory",
-      href: "/admin/businesses",
-      icon: Building2,
-      active: pathname.startsWith("/admin/businesses"),
+      label: "Agents",
+      href: "/admin/agents",
+      icon: Users,
+      active: pathname.startsWith("/admin/agents"),
     },
     {
       label: "Payments",
