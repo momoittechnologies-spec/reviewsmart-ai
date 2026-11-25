@@ -143,36 +143,36 @@ interface GoogleSearchResult {
   logoUrl?: string | null;
 }
 
-const POPULAR_PRESETS = [
-  { name: "MANA Tours & Travels", city: "Kadapa, Andhra Pradesh", category: "Tours & Travels" },
-  { name: "New Roshan Tours & Travels", city: "Kadapa, Andhra Pradesh", category: "Umrah, Ziyarat & Flights" },
-  { name: "Golden Hair Wig Studio", city: "Kadapa, Andhra Pradesh", category: "Hair Wigs & Replacement" },
-  { name: "Evania Luxury Salon", city: "Kadapa, Andhra Pradesh", category: "Beauty & Hair Salon" },
-  { name: "VR Gold Company", city: "Kadapa, Andhra Pradesh", category: "Gold Buying & Pledged Gold" },
-  { name: "City Grafix Flex & Printing", city: "Kadapa, Andhra Pradesh", category: "Flex & Digital Printing" },
-  { name: "AS Refrigeration & AC Services", city: "Kadapa, Andhra Pradesh", category: "AC & Appliance Repair" },
-];
+const SAMPLE_REVIEW_DRAFTS = {
+  en: {
+    label: "English",
+    lang: "en",
+    text: "I visited the shop to ask about a few options. The staff explained the differences clearly. I\u2019d have liked to know the waiting time upfront.",
+  },
+  te: {
+    label: "\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41",
+    lang: "te",
+    text: "\u0C15\u0C4A\u0C28\u0C4D\u0C28\u0C3F \u0C35\u0C3F\u0C35\u0C30\u0C3E\u0C32\u0C41 \u0C24\u0C46\u0C32\u0C41\u0C38\u0C41\u0C15\u0C4B\u0C35\u0C21\u0C3E\u0C28\u0C3F\u0C15\u0C3F \u0C37\u0C3E\u0C2A\u0C41\u0C15\u0C3F \u0C35\u0C46\u0C33\u0C4D\u0C32\u0C3E\u0C28\u0C41. \u0C05\u0C15\u0C4D\u0C15\u0C21\u0C3F \u0C38\u0C3F\u0C2C\u0C4D\u0C2C\u0C02\u0C26\u0C3F \u0C12\u0C15\u0C4D\u0C15\u0C4B \u0C26\u0C3E\u0C28\u0C3F\u0C32\u0C4B \u0C24\u0C47\u0C21\u0C3E \u0C0F\u0C02\u0C1F\u0C4B \u0C05\u0C30\u0C4D\u0C25\u0C2E\u0C2F\u0C4D\u0C2F\u0C47\u0C32\u0C3E \u0C1A\u0C46\u0C2A\u0C4D\u0C2A\u0C3E\u0C30\u0C41. \u0C0E\u0C02\u0C24\u0C38\u0C47\u0C2A\u0C41 \u0C35\u0C47\u0C1A\u0C3F \u0C09\u0C02\u0C21\u0C3E\u0C32\u0C4B \u0C2E\u0C41\u0C02\u0C26\u0C47 \u0C1A\u0C46\u0C2A\u0C4D\u0C2A\u0C3F \u0C09\u0C02\u0C1F\u0C47 \u0C2C\u0C3E\u0C17\u0C41\u0C02\u0C21\u0C47\u0C26\u0C3F.",
+  },
+} as const;
+
+type SampleReviewLang = keyof typeof SAMPLE_REVIEW_DRAFTS;
 
 export default function HeroCustomizer() {
-  const [businessName, setBusinessName] = useState("MANA Tours & Travels");
-  const [city, setCity] = useState("Kadapa, Andhra Pradesh");
-  const [category, setCategory] = useState("Tours & Travels");
+  const [sampleLang, setSampleLang] = useState<SampleReviewLang>("en");
+  const [businessName, setBusinessName] = useState("");
+  const [city, setCity] = useState("");
+  const [category, setCategory] = useState("Local Business");
   const [selectedPlanId, setSelectedPlanId] = useState<"starter" | "hub" | "growth">("starter");
 
-  // Google Places Live Search State (Modal & Hero)
+  // Google Places Live Search State (Checkout Modal only)
   const [modalSearchResults, setModalSearchResults] = useState<GoogleSearchResult[]>([]);
   const [isSearchingModal, setIsSearchingModal] = useState(false);
   const [isModalDropdownOpen, setIsModalDropdownOpen] = useState(false);
   const [verifiedGoogleProfile, setVerifiedGoogleProfile] = useState<GoogleSearchResult | null>(null);
 
-  const [heroSearchResults, setHeroSearchResults] = useState<GoogleSearchResult[]>([]);
-  const [isSearchingHero, setIsSearchingHero] = useState(false);
-  const [isHeroDropdownOpen, setIsHeroDropdownOpen] = useState(false);
-
   const modalDebounceRef = useRef<NodeJS.Timeout | null>(null);
-  const heroDebounceRef = useRef<NodeJS.Timeout | null>(null);
   const modalSearchContainerRef = useRef<HTMLDivElement | null>(null);
-  const heroSearchContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Modal & Self-Onboarding Flow State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -196,6 +196,7 @@ export default function HeroCustomizer() {
   const upiPhoneNumber = /^\d{10}/.exec(platformUpiId)?.[0] || "9036909110";
 
   useEffect(() => {
+    if (!isModalOpen) return;
     fetch("/api/platform-settings")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
@@ -203,7 +204,7 @@ export default function HeroCustomizer() {
         if (data?.settings?.upiPayeeName) setPlatformUpiPayee(data.settings.upiPayeeName);
       })
       .catch(() => {});
-  }, []);
+  }, [isModalOpen]);
 
   const handleCopyPhone = async () => {
     await copyToClipboard(upiPhoneNumber);
@@ -249,23 +250,20 @@ export default function HeroCustomizer() {
     return () => window.removeEventListener("reviewsmart:select-plan", handleSelectPlan as EventListener);
   }, []);
 
-  // Close dropdown on outside click
+  // Close modal dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (modalSearchContainerRef.current && !modalSearchContainerRef.current.contains(e.target as Node)) {
         setIsModalDropdownOpen(false);
-      }
-      if (heroSearchContainerRef.current && !heroSearchContainerRef.current.contains(e.target as Node)) {
-        setIsHeroDropdownOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Resolve canonical or preview review portal destination
-  const activeDemoHref = resolveDemoDestination(businessName, city, category, "custom-brand");
-  const isKnownMerchant = Boolean(CANONICAL_MERCHANTS[businessName.trim().toLowerCase()]);
+  // Featured live demo portal linked from the hero
+  const activeDemoHref = "/r/mana-tours-travels?demo=true";
+  const activeSampleDraft = SAMPLE_REVIEW_DRAFTS[sampleLang];
 
   // Generate Payment QR code for modal
   useEffect(() => {
@@ -281,13 +279,6 @@ export default function HeroCustomizer() {
       .then((url) => setPaymentQrUrl(url))
       .catch((err) => console.error("Payment QR Error", err));
   }, [upiDeepLink]);
-
-  const handleSelectPreset = (preset: typeof POPULAR_PRESETS[0]) => {
-    setBusinessName(preset.name);
-    setCity(preset.city);
-    setCategory(preset.category);
-    setVerifiedGoogleProfile(null);
-  };
 
   const handleCopyUpi = async () => {
     await copyToClipboard(upiId);
@@ -328,40 +319,7 @@ export default function HeroCustomizer() {
     }, 300);
   };
 
-  // Google Places Search Handlers (Hero)
-  const handleHeroBusinessSearch = (val: string) => {
-    setBusinessName(val);
-    if (heroDebounceRef.current) clearTimeout(heroDebounceRef.current);
-
-    if (!val || val.trim().length < 2) {
-      setHeroSearchResults([]);
-      setIsHeroDropdownOpen(false);
-      setIsSearchingHero(false);
-      return;
-    }
-
-    setIsSearchingHero(true);
-    setIsHeroDropdownOpen(true);
-
-    heroDebounceRef.current = setTimeout(async () => {
-      try {
-        const res = await fetch(`/api/business/search-google?query=${encodeURIComponent(val.trim())}`);
-        const data = await res.json();
-        if (data.success && Array.isArray(data.results)) {
-          setHeroSearchResults(data.results);
-        } else {
-          setHeroSearchResults([]);
-        }
-      } catch (err) {
-        console.error("Hero search error:", err);
-        setHeroSearchResults([]);
-      } finally {
-        setIsSearchingHero(false);
-      }
-    }, 300);
-  };
-
-  // When user selects a matching Google Business Profile
+  // When user selects a matching Google Business Profile inside the checkout modal
   const handleSelectGoogleProfile = (profile: GoogleSearchResult) => {
     setBusinessName(profile.name);
     setGoogleMapsUrl(profile.googleReviewUrl);
@@ -377,7 +335,6 @@ export default function HeroCustomizer() {
 
     setVerifiedGoogleProfile(profile);
     setIsModalDropdownOpen(false);
-    setIsHeroDropdownOpen(false);
   };
 
   // 1. Direct Self-Serve Order Submission
@@ -534,235 +491,62 @@ export default function HeroCustomizer() {
               Modular packages from ₹2,999 &bull; Custom standee artwork, lifetime portal access &amp; physical delivery
             </p>
 
-            {/* Google Business Quick Lookup & Portal Checker */}
+            {/* Interactive Customer Review Preview */}
             <div className="p-5 sm:p-6 rounded-3xl bg-white border border-[#e3ded6] shadow-[0_15px_35px_-10px_rgba(23,32,51,0.06)] space-y-4 text-left">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5 uppercase tracking-wider">
-                  <MapPin className="w-3.5 h-3.5 text-indigo-600" />
-                  Check Your Business on Google Maps
-                </span>
-                <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                  Instant Setup Check
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div className="space-y-1">
+                  <h2 className="text-base sm:text-lg font-black text-[#172033] tracking-tight">
+                    See what your customers see
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-600">
+                    Switch languages to preview a sample review draft.
+                  </p>
+                </div>
+
+                <span className="inline-flex items-center self-start px-2.5 py-1 rounded-full bg-indigo-50 border border-indigo-200/80 text-[#4338ca] text-[11px] font-bold shrink-0">
+                  Sample review
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {/* Hero Store Name Input with Google Places Autocomplete */}
-                <div ref={heroSearchContainerRef} className="relative">
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center justify-between">
-                    <span>Find Your Shop / Clinic</span>
-                    <span className="text-[10px] text-indigo-600 font-semibold flex items-center gap-1">
-                      <Search className="w-2.5 h-2.5" /> Live Google Search
-                    </span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={businessName}
-                      onChange={(e) => handleHeroBusinessSearch(e.target.value)}
-                      onFocus={() => {
-                        if (heroSearchResults.length > 0) setIsHeroDropdownOpen(true);
-                      }}
-                      placeholder="Search your business name..."
-                      className="w-full pl-3.5 pr-8 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold focus:outline-none focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 transition"
-                    />
-                    <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
-                      {isSearchingHero ? (
-                        <Loader2 className="w-3.5 h-3.5 text-indigo-600 animate-spin" />
-                      ) : (
-                        <Search className="w-3.5 h-3.5 text-slate-400" />
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Hero Google Places Dropdown */}
-                  {isHeroDropdownOpen && (
-                    <div className="absolute left-0 right-0 top-full mt-1.5 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-800 animate-fadeIn text-left max-h-56 overflow-y-auto">
-                      <div className="px-3 py-1.5 bg-slate-950 text-[10px] font-bold text-slate-400 flex items-center justify-between">
-                        <span>{isSearchingHero ? "Searching Google Maps..." : `Google Places (${heroSearchResults.length})`}</span>
-                        <span className="text-amber-400 font-normal">Tap to select</span>
-                      </div>
-
-                      {isSearchingHero && heroSearchResults.length === 0 && (
-                        <div className="p-3 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
-                          <Loader2 className="w-3 h-3 animate-spin text-amber-400" />
-                          <span>Finding matching Google profiles...</span>
-                        </div>
-                      )}
-
-                      {!isSearchingHero && heroSearchResults.length === 0 && businessName.trim().length >= 2 && (
-                        <div className="p-3 text-center text-xs text-slate-400">
-                          No exact match found on Google Maps. Keep typing or preview anyway!
-                        </div>
-                      )}
-
-                      {heroSearchResults.map((r, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => handleSelectGoogleProfile(r)}
-                          className="w-full p-2.5 text-left hover:bg-slate-800 flex items-start gap-2.5 transition text-xs group cursor-pointer"
-                        >
-                          <div className="w-6 h-6 rounded-lg bg-amber-400/10 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 border border-amber-400/20">
-                            <MapPin className="w-3.5 h-3.5" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between gap-1">
-                              <span className="text-xs font-bold text-white group-hover:text-amber-300 truncate">
-                                {r.name}
-                              </span>
-                              {r.rating && (
-                                <span className="text-[10px] font-bold text-amber-400 shrink-0">
-                                  ★ {r.rating} {r.reviewCount ? `(${r.reviewCount})` : ""}
-                                </span>
-                              )}
-                            </div>
-                            {r.branchName && (
-                              <span className="text-[10px] font-semibold text-indigo-400 block truncate">
-                                {r.branchName}
-                              </span>
-                            )}
-                            <span className="text-[10px] text-slate-400 block truncate mt-0.5">
-                              {r.address}
-                            </span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">
-                    City / Area
-                  </label>
-                  <input
-                    type="text"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder="e.g. Kadapa, Hyderabad, Bangalore"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold focus:outline-none focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 transition"
-                  />
-                </div>
-              </div>
-
-              {/* Verified Client Shortcuts */}
-              <div className="pt-0.5 flex flex-wrap items-center gap-1.5">
-                <span className="text-[10px] text-slate-500 font-bold">Live Client Examples:</span>
-                {POPULAR_PRESETS.map((p) => {
-                  const isActive = businessName.trim().toLowerCase() === p.name.toLowerCase();
-                  const shortLabel = p.name.startsWith("MANA")
-                    ? "MANA"
-                    : p.name.startsWith("New Roshan")
-                    ? "New Roshan"
-                    : p.name.startsWith("Golden Hair")
-                    ? "Golden Hair"
-                    : p.name.startsWith("VR")
-                    ? "VR Gold"
-                    : p.name.startsWith("City")
-                    ? "City Grafix"
-                    : p.name.startsWith("AS")
-                    ? "AS Ref"
-                    : p.name.split(" ")[0];
+              {/* Language Switch */}
+              <div
+                role="group"
+                aria-label="Sample review language"
+                className="inline-flex items-center gap-1.5 p-1 rounded-2xl bg-[#f7f6f2] border border-[#e3ded6]"
+              >
+                {(Object.keys(SAMPLE_REVIEW_DRAFTS) as SampleReviewLang[]).map((langKey) => {
+                  const isSelected = sampleLang === langKey;
+                  const item = SAMPLE_REVIEW_DRAFTS[langKey];
                   return (
                     <button
-                      key={p.name}
+                      key={langKey}
                       type="button"
-                      onClick={() => handleSelectPreset(p)}
-                      className={`text-[10px] px-2.5 py-1 rounded-full font-semibold border transition active:scale-95 cursor-pointer ${
-                        isActive
-                          ? "bg-[#172033] text-white border-[#172033]"
-                          : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200"
+                      aria-pressed={isSelected}
+                      onClick={() => setSampleLang(langKey)}
+                      className={`min-h-[40px] px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4338ca] focus-visible:ring-offset-1 ${
+                        isSelected
+                          ? "bg-[#172033] text-white shadow-xs"
+                          : "text-slate-700 hover:text-[#172033] hover:bg-white/80"
                       }`}
                     >
-                      {shortLabel}
+                      {item.label}
                     </button>
                   );
                 })}
               </div>
 
-              {/* Store Readiness Summary Panel */}
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-2.5">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="min-w-0">
-                    <p className="text-xs font-black text-slate-900 truncate">
-                      {businessName.trim() || "Your Business Name"}
-                    </p>
-                    <p className="text-[11px] text-slate-500 truncate">
-                      {verifiedGoogleProfile?.address || city || "India"} &bull; {category}
-                    </p>
-                  </div>
-                  <span
-                    className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border shrink-0 ${
-                      verifiedGoogleProfile
-                        ? "bg-amber-50 text-amber-800 border-amber-200"
-                        : isKnownMerchant
-                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                        : "bg-indigo-50 text-indigo-700 border-indigo-200"
-                    }`}
-                  >
-                    {verifiedGoogleProfile?.rating
-                      ? `Google ★ ${verifiedGoogleProfile.rating} ${verifiedGoogleProfile.reviewCount ? `(${verifiedGoogleProfile.reviewCount})` : ""}`
-                      : isKnownMerchant
-                      ? "Verified Live Client"
-                      : "Portal Preview Ready"}
-                  </span>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold text-slate-600">
-                  <span className="inline-flex items-center gap-1 text-emerald-700">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Custom Brand Design
-                  </span>
-                  <span>&bull;</span>
-                  <span className="inline-flex items-center gap-1 text-indigo-700">
-                    <CheckCircle2 className="w-3 h-3 text-indigo-600" /> 6-Language AI Writer
-                  </span>
-                  <span>&bull;</span>
-                  <span className="inline-flex items-center gap-1 text-slate-700">
-                    <CheckCircle2 className="w-3 h-3 text-amber-600" /> Private Grievance Shield
-                  </span>
-                </div>
-              </div>
-
-              {/* Direct Conversion & Preview Actions */}
-              <div className="pt-1 space-y-2.5">
-                <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setIsModalOpen(true)}
-                    className="sm:col-span-7 group relative py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm tracking-wide shadow-[0_12px_32px_rgba(16,185,129,0.28)] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer overflow-hidden"
-                  >
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none" />
-                    <span>BUY NOW &bull; From ₹2,999</span>
-                    <ArrowRight className="w-4 h-4 text-emerald-100 group-hover:translate-x-1 transition-transform" />
-                  </button>
-
-                  <a
-                    href={activeDemoHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="sm:col-span-5 py-3.5 px-4 rounded-2xl bg-[#172033] hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition active:scale-[0.98]"
-                  >
-                    <Smartphone className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-                    <span>Open Review Demo</span>
-                    <ExternalLink className="w-3 h-3 opacity-75 shrink-0" />
-                  </a>
-                </div>
-
-                {/* Purchase Trust Badges */}
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-1.5 text-[11px] text-slate-500 font-semibold pt-0.5">
-                  <span className="flex items-center gap-1 text-emerald-700 font-bold">
-                    <Truck className="w-3.5 h-3.5 text-emerald-600" /> Free Doorstep Delivery
-                  </span>
-                  <span className="hidden sm:inline">&bull;</span>
-                  <span className="flex items-center gap-1 text-indigo-700 font-bold">
-                    <Zap className="w-3.5 h-3.5 text-amber-500" /> ₹0 Recurring AMC Forever
-                  </span>
-                  <span className="hidden sm:inline">&bull;</span>
-                  <span className="flex items-center gap-1 text-slate-700 font-bold">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Instant Portal Activation
-                  </span>
-                </div>
+              {/* Sample Review Draft Card (fixed min-height prevents layout jump) */}
+              <div className="p-4 rounded-2xl bg-[#f7f6f2]/85 border border-[#e3ded6] min-h-[168px] sm:min-h-[124px] flex items-center">
+                <p
+                  lang={activeSampleDraft.lang}
+                  className={
+                    sampleLang === "te"
+                      ? "text-sm sm:text-[15px] leading-[1.85] text-[#172033] font-medium"
+                      : "text-sm sm:text-[15px] leading-relaxed text-[#172033] font-medium"
+                  }
+                >
+                  {activeSampleDraft.text}
+                </p>
               </div>
             </div>
 
