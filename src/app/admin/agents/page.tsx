@@ -16,6 +16,7 @@ import {
   Compass,
   Phone,
   Trash2,
+  Edit3,
 } from "lucide-react";
 
 interface AgentRecord {
@@ -51,6 +52,12 @@ export default function AdminAgentsPage() {
   const [resetTarget, setResetTarget] = useState<AgentRecord | null>(null);
   const [newPin, setNewPin] = useState("");
   const [savingPin, setSavingPin] = useState(false);
+
+  // Edit agent profile state
+  const [editTarget, setEditTarget] = useState<AgentRecord | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [savingEdit, setSavingEdit] = useState(false);
 
   const loadAgents = useCallback(async () => {
     setLoading(true);
@@ -161,6 +168,33 @@ export default function AdminAgentsPage() {
       await loadAgents();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to remove agent");
+    }
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editTarget) return;
+    setSavingEdit(true);
+    setError("");
+    try {
+      const res = await fetch("/api/admin/agents", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: editTarget.id,
+          name: editName.trim(),
+          phone: editPhone.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Update failed");
+      setNotice(`Updated profile for ${data.agent.name} (${data.agent.agentCode}).`);
+      setEditTarget(null);
+      await loadAgents();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update agent details");
+    } finally {
+      setSavingEdit(false);
     }
   };
 
@@ -352,7 +386,18 @@ export default function AdminAgentsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center gap-2 shrink-0 flex-wrap">
+                    <button
+                      onClick={() => {
+                        setEditTarget(agent);
+                        setEditName(agent.name || "");
+                        setEditPhone(agent.phone || "");
+                      }}
+                      className="px-3 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-bold inline-flex items-center gap-1.5 transition"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>Edit</span>
+                    </button>
                     <button
                       onClick={() => {
                         setResetTarget(agent);
@@ -442,6 +487,59 @@ export default function AdminAgentsPage() {
                 className="px-4 py-2 rounded-xl bg-[#4338ca] text-white text-xs font-bold disabled:opacity-50"
               >
                 {savingPin ? "Saving..." : "Save PIN"}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* Edit Agent Modal */}
+      {editTarget && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <form
+            onSubmit={handleSaveEdit}
+            className="w-full max-w-sm bg-white border border-stone-200 rounded-3xl p-6 shadow-xl space-y-4"
+          >
+            <div className="flex items-center gap-2">
+              <Edit3 className="w-5 h-5 text-[#4338ca]" />
+              <h3 className="text-sm font-black text-[#172033]">
+                Edit Agent — {editTarget.agentCode}
+              </h3>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-stone-600 mb-1">Name</label>
+              <input
+                type="text"
+                required
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                className="w-full px-3 py-2.5 rounded-xl border border-stone-300 bg-stone-50 text-xs font-medium text-[#172033]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-stone-600 mb-1">Contact Number</label>
+              <input
+                type="tel"
+                value={editPhone}
+                onChange={(e) => setEditPhone(e.target.value)}
+                placeholder="10-digit mobile"
+                className="w-full px-3 py-2.5 rounded-xl border border-stone-300 bg-stone-50 text-xs font-medium text-[#172033]"
+              />
+            </div>
+            <div className="flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setEditTarget(null)}
+                className="px-4 py-2 rounded-xl text-xs font-bold text-stone-600 hover:bg-stone-100"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={savingEdit}
+                className="px-4 py-2 rounded-xl bg-[#4338ca] text-white text-xs font-bold disabled:opacity-50"
+              >
+                {savingEdit ? "Saving..." : "Save Details"}
               </button>
             </div>
           </form>

@@ -191,6 +191,7 @@ async function main() {
     update: {
       name: "Subrahmanyam",
       agentCode: "MKT-01",
+      phone: "6305053832",
       pinCode: agentPin,
       role: "MARKETING_AGENT",
       isActive: true,
@@ -200,7 +201,7 @@ async function main() {
       name: "Subrahmanyam",
       agentCode: "MKT-01",
       userIdTag: "MKT-01",
-      phone: "9876543200",
+      phone: "6305053832",
       pinCode: agentPin,
       password: agentPin,
       role: "MARKETING_AGENT",
