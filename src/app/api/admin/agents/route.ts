@@ -235,3 +235,51 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Failed to update agent" }, { status: 500 });
   }
 }
+
+/**
+ * DELETE /api/admin/agents?id=...
+ * Permanently remove a MARKETING_AGENT after returning assigned leads to the unassigned pool.
+ */
+export async function DELETE(req: NextRequest) {
+  try {
+    const user = await getSessionUser();
+    if (!user || user.role !== "SUPER_ADMIN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    if (!id) {
+      return NextResponse.json({ error: "Agent ID is required." }, { status: 400 });
+    }
+
+    const existing = await prisma.user.findFirst({
+      where: { id, role: "MARKETING_AGENT" },
+      select: { id: true, name: true, agentCode: true },
+    });
+    if (!existing) {
+      return NextResponse.json({ error: "Marketing agent not found." }, { status: 404 });
+    }
+
+    await Promise.all([
+      prisma.leadCapture.updateMany({
+        where: { assignedAgentId: existing.id },
+        data: { assignedAgentId: null, assignedAgentName: null },
+      }),
+      prisma.user.updateMany({
+        where: { referredBy: existing.id },
+        data: { referredBy: null },
+      }),
+    ]);
+
+    await prisma.user.delete({ where: { id: existing.id } });
+
+    return NextResponse.json({
+      success: true,
+      message: `Removed field agent ${existing.name} (${existing.agentCode}).`,
+    });
+  } catch (error) {
+    console.error("DELETE /api/admin/agents error:", error);
+    return NextResponse.json({ error: "Failed to delete agent" }, { status: 500 });
+  }
+}

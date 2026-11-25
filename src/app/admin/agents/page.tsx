@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   Compass,
   Phone,
+  Trash2,
 } from "lucide-react";
 
 interface AgentRecord {
@@ -137,6 +138,29 @@ export default function AdminAgentsPage() {
       setError(err instanceof Error ? err.message : "Failed to reset PIN");
     } finally {
       setSavingPin(false);
+    }
+  };
+
+  const handleDeleteAgent = async (agent: AgentRecord) => {
+    if (
+      !window.confirm(
+        `Permanently remove ${agent.name} (${agent.agentCode})? Their open leads will move to the Unassigned pool.`
+      )
+    ) {
+      return;
+    }
+    setError("");
+    setNotice("");
+    try {
+      const res = await fetch(`/api/admin/agents?id=${encodeURIComponent(agent.id)}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Delete failed");
+      setNotice(data.message || `Removed ${agent.name}.`);
+      await loadAgents();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to remove agent");
     }
   };
 
@@ -349,6 +373,14 @@ export default function AdminAgentsPage() {
                     >
                       <Power className="w-3.5 h-3.5" />
                       <span>{agent.isActive ? "Suspend" : "Activate"}</span>
+                    </button>
+                    <button
+                      onClick={() => handleDeleteAgent(agent)}
+                      className="px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold inline-flex items-center gap-1.5 transition"
+                      title="Delete agent permanently"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete</span>
                     </button>
                   </div>
                 </div>
