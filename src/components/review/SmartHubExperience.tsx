@@ -72,11 +72,13 @@ export default function SmartHubExperience({
   staff,
   customerName,
   serviceName,
+  isDemo = false,
 }: {
   business: BusinessData;
   staff?: string | null;
   customerName?: string | null;
   serviceName?: string | null;
+  isDemo?: boolean;
 }) {
   const [showReviewBooster, setShowReviewBooster] = useState(true);
   const [linkCopied, setLinkCopied] = useState(false);
@@ -396,6 +398,7 @@ export default function SmartHubExperience({
                 customerName={customerName}
                 serviceName={serviceName}
                 embedded={true}
+                isDemo={isDemo}
               />
             </div>
           )}

@@ -96,12 +96,14 @@ export default function ReviewExperience({
   customerName: incomingCustomerName,
   serviceName: incomingServiceName,
   embedded = false,
+  isDemo = false,
 }: {
   business: BusinessData;
   staff?: string | null;
   customerName?: string | null;
   serviceName?: string | null;
   embedded?: boolean;
+  isDemo?: boolean;
 }) {
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
@@ -391,8 +393,9 @@ export default function ReviewExperience({
   const googleUrl = getResolvedGoogleUrl();
   const mapsAppUrl = getMapsAppUrl();
 
-  // Track page view once
+  // Track page view once (bypass if demo)
   useEffect(() => {
+    if (isDemo) return;
     fetch("/api/analytics/track", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -403,7 +406,7 @@ export default function ReviewExperience({
         deviceType: /Mobi|Android/i.test(navigator.userAgent) ? "mobile" : "desktop",
       }),
     }).catch(() => {});
-  }, [business.id, business.slug]);
+  }, [business.id, business.slug, isDemo]);
 
   // Dynamic client-side synthesis: zero hardcoded templates, non-repeating, supports Photo Vision
   const buildInstantDrafts = (
@@ -620,16 +623,18 @@ export default function ReviewExperience({
       reviewSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 200);
 
-    fetch("/api/analytics/track", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        slug: business.slug,
-        businessId: business.id,
-        eventType: "STAR_SELECTED",
-        rating: star,
-      }),
-    }).catch(() => {});
+    if (!isDemo) {
+      fetch("/api/analytics/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug: business.slug,
+          businessId: business.id,
+          eventType: "STAR_SELECTED",
+          rating: star,
+        }),
+      }).catch(() => {});
+    }
   };
 
   const toggleTag = (tag: string) => {
@@ -723,6 +728,15 @@ export default function ReviewExperience({
     if (!feedbackComments.trim()) return;
 
     setFeedbackSubmitting(true);
+
+    if (isDemo) {
+      setTimeout(() => {
+        setFeedbackSubmitting(false);
+        setFeedbackSubmitted(true);
+      }, 350);
+      return;
+    }
+
     try {
       const res = await fetch("/api/feedback/submit", {
         method: "POST",
@@ -784,18 +798,20 @@ export default function ReviewExperience({
       });
     } catch {}
 
-    // Track Google redirect
-    fetch("/api/analytics/track", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      keepalive: true,
-      body: JSON.stringify({
-        slug: business.slug,
-        businessId: business.id,
-        eventType: "GOOGLE_REDIRECT",
-        rating: rating || 5,
-      }),
-    }).catch(() => {});
+    // Track Google redirect (bypass if demo)
+    if (!isDemo) {
+      fetch("/api/analytics/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        keepalive: true,
+        body: JSON.stringify({
+          slug: business.slug,
+          businessId: business.id,
+          eventType: "GOOGLE_REDIRECT",
+          rating: rating || 5,
+        }),
+      }).catch(() => {});
+    }
 
     // Snappy 1-second countdown then clean HTTPS redirect (never uses broken intent:// package wrapper)
     if (countdownRef.current) clearTimeout(countdownRef.current);
@@ -815,17 +831,19 @@ export default function ReviewExperience({
     setIsRedirecting(true);
     await copyToClipboard(modalCopiedText);
 
-    fetch("/api/analytics/track", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      keepalive: true,
-      body: JSON.stringify({
-        slug: business.slug,
-        businessId: business.id,
-        eventType: "GOOGLE_REDIRECT",
-        rating: rating || 5,
-      }),
-    }).catch(() => {});
+    if (!isDemo) {
+      fetch("/api/analytics/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        keepalive: true,
+        body: JSON.stringify({
+          slug: business.slug,
+          businessId: business.id,
+          eventType: "GOOGLE_REDIRECT",
+          rating: rating || 5,
+        }),
+      }).catch(() => {});
+    }
 
     window.location.assign(targetUrl);
   };

@@ -56,7 +56,7 @@ export default async function PublicReviewPage({
   searchParams,
 }: {
   params: { slug: string };
-  searchParams?: { staff?: string; cust?: string; service?: string };
+  searchParams?: { staff?: string; cust?: string; service?: string; demo?: string };
 }) {
   const business = await prisma.business.findUnique({
     where: { slug: params.slug },
@@ -124,10 +124,13 @@ export default async function PublicReviewPage({
     business.isPaid === false &&
     Boolean(business.demoUsed && business.demoExpiresAt && new Date(business.demoExpiresAt) <= now);
 
-  // Show payment watermark only for unpaid businesses that are NOT in an active demo
+  const isDemoParam = searchParams?.demo === "true";
+
+  // Show payment watermark only for unpaid businesses that are NOT in an active demo or customer preview
   const showWatermark =
     business.isPaid === false &&
-    !isDemoActive;
+    !isDemoActive &&
+    !isDemoParam;
 
   const merchantPhone =
     business.user?.phone ||
@@ -168,6 +171,21 @@ export default async function PublicReviewPage({
         className="fixed bottom-12 -left-20 w-80 h-80 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none -z-0"
         aria-hidden="true"
       />
+      {/* Customer Preview Mode Banner */}
+      {isDemoParam && (
+        <div className="w-full max-w-sm px-4 pt-3 pb-1 sm:pt-0 no-print">
+          <div className="px-3.5 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-400/30 text-indigo-200 text-[11px] font-bold flex items-center justify-between shadow-lg backdrop-blur-md">
+            <div className="flex items-center gap-1.5 truncate">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+              <span className="truncate">Customer Preview Mode</span>
+            </div>
+            <span className="text-[10px] text-slate-300 bg-slate-900/80 px-2 py-0.5 rounded-full border border-slate-700 shrink-0">
+              Isolated from live data
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* 24-Hour Live Evaluation Banner (discreet top pill) */}
       {isDemoActive && business.demoExpiresAt && (
         <div className="w-full max-w-sm px-4 pt-3 pb-1 sm:pt-0 no-print">
@@ -192,6 +210,7 @@ export default async function PublicReviewPage({
             staff={searchParams?.staff || null}
             customerName={searchParams?.cust || null}
             serviceName={searchParams?.service || null}
+            isDemo={isDemoParam}
           />
         ) : (
           <ReviewExperience
@@ -199,6 +218,7 @@ export default async function PublicReviewPage({
             staff={searchParams?.staff || null}
             customerName={searchParams?.cust || null}
             serviceName={searchParams?.service || null}
+            isDemo={isDemoParam}
           />
         )}
       </div>

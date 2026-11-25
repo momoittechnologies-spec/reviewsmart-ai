@@ -78,7 +78,7 @@ export default function ReviewGapCalculator() {
       confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
 
       const whatsappMsg = encodeURIComponent(
-        `Hi ReviewSmart AI! I used your Review Gap Calculator for my *${catData.name}*. I currently have ${currentReviews} reviews (${currentRating}★) and my competitor has ${competitorReviews}. Please send me the custom ${daysToBeatCompetitor}-day action plan to reach #1 on Google Maps.`
+        `Hi ReviewSmart AI! I used your Review Gap Calculator for my *${catData.name}*. I currently have ${currentReviews} reviews (${currentRating}★) and my competitor has ${competitorReviews}. Please send me the custom ${daysToBeatCompetitor}-day action plan to boost local discovery on Google Maps.`
       );
 
       setTimeout(() => {
@@ -102,7 +102,7 @@ export default function ReviewGapCalculator() {
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold mb-3 shadow-sm">
             <Target className="w-3.5 h-3.5 text-amber-500" />
-            <span>AI GOOGLE MAPS RANKING AUDIT</span>
+            <span>AI GOOGLE MAPS DISCOVERY AUDIT (Illustrative Estimate)</span>
           </div>
 
           <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
@@ -113,7 +113,7 @@ export default function ReviewGapCalculator() {
           </h2>
 
           <p className="text-slate-600 text-sm sm:text-base mt-3 leading-relaxed">
-            Google Maps ranks businesses with higher review velocity and higher ratings. Adjust the sliders below to see your personalized growth timeline.
+            Google Maps highlights businesses with consistent review velocity and authentic customer sentiment. Adjust the sliders below to see your personalized growth timeline.
           </p>
         </div>
 

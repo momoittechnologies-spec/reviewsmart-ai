@@ -283,26 +283,6 @@ const DEMO_PRESETS: DemoPreset[] = [
     author: "Syed Imran",
   },
   {
-    id: "hair-studio",
-    name: "Golden Hair Wig Studio",
-    category: "Hair Wigs & Replacement Studio",
-    location: "Railway Station Rd, Kadapa, AP",
-    icon: Scissors,
-    color: "#d97706",
-    slug: "golden-hair-wig-studio",
-    chips: ["100% Natural Hair Wigs", "Hair Patch Fixing", "Non-Surgical Hair Replacement", "Ladies & Gents Wigs", "Lightweight Comfort", "Experienced Stylist"],
-    reviews: {
-      ALL: "Incredible hair wig and non-surgical hair replacement experience at Golden Hair Wig Studio near Railway Station Road, Kadapa! 100% natural look, lightweight comfort, and seamless styling by Mr. Swarup Maji. Highly recommended!",
-      ENGLISH: "Incredible hair wig and non-surgical hair replacement experience at Golden Hair Wig Studio near Railway Station Road, Kadapa! 100% natural look, lightweight comfort, and seamless styling by Mr. Swarup Maji. Highly recommended!",
-      HINDI: "कड़पा रेलवे स्टेशन रोड पर गोल्डन हेयर विग स्टूडियो में हेयर पैच और विग फिक्सिंग का अनुभव बहुत बेहतरीन रहा! 100% नेचुरल लुक, हल्का और बहुत आरामदायक। स्वरूपा जी की सर्विस बहुत शानदार है!",
-      TELUGU: "కడప రైల్వే స్టేషన్ రోడ్ లోని గోల్డెన్ హెయిర్ విగ్ స్టూడియో లో హెయిర్ ప్యాచ్ & విగ్ ఫిక్సింగ్ సర్వీస్ అద్భుతంగా ఉంది! 100% న్యాచురల్ లుక్, చాలా తేలికగా మరియు కంఫర్టబుల్ గా ఉంది. స్వరూప్ గారి సపోర్ట్ సూపర్!",
-      TAMIL: "கடப்பா ரயில்வே ஸ்டேஷன் சாலையில் உள்ள கோல்டன் ஹேர் விக் ஸ்டுடியோவில் ஹேர் பேட்ச் மற்றும் விக் பொருத்துதல் மிகச் சிறப்பாக உள்ளது! 100% இயற்கையான தோற்றம் மற்றும் வசதியானது. சிறந்த சேவை!",
-      KANNADA: "ಕಡಪ ರೈಲ್ವೆ ಸ್ಟೇಷನ್ ರಸ್ತೆಯ ಗೋಲ್ಡನ್ ಹೇರ್ ವಿಗ್ ಸ್ಟುಡಿಯೋದಲ್ಲಿ ಹೇರ್ ಪ್ಯಾಚ್ ಮತ್ತು ವಿಗ್ ಫಿಕ್ಸಿಂಗ್ ಸೇವೆ ಅದ್ಭುತವಾಗಿದೆ! 100% ನೈಸರ್ಗಿಕ ನೋಟ ಮತ್ತು ಅತ್ಯಂತ ಆರಾಮದಾಯಕ. ಉತ್ತಮ ಸೇವೆ!",
-      MALAYALAM: "കടപ്പ റെയിൽവേ സ്റ്റേഷൻ റോഡിലെ ഗോൾഡൻ ഹെയർ വിഗ് സ്റ്റുഡിയോയിൽ മികച്ച ഹെയർ പാച്ച്, വിഗ് ഫിക്സിംഗ് അനുഭവം! 100% നാച്ചുറൽ ലുക്കും മികച്ച സേവനവും.",
-    },
-    author: "Venkat R.",
-  },
-  {
     id: "hair-studio-nandyal",
     name: "Golden Hair Wig Studio - Nandyal",
     category: "Hair Wigs & Replacement Studio",
@@ -362,26 +342,6 @@ const DEMO_PRESETS: DemoPreset[] = [
     },
     author: "Ravi Teja S.",
   },
-  {
-    id: "umrah-travels",
-    name: "New Roshan Tours & Travels",
-    category: "Umrah, Ziyarat & Flights",
-    location: "Ganagapeta, Kadapa, AP",
-    icon: Plane,
-    color: "#059669",
-    slug: "new-roshan-tours-and-travels",
-    chips: ["Umrah Packages", "Baghdad Ziyarath", "International Air Ticketing", "Visa Services", "Luxury Makkah Hotels", "Dedicated Guide"],
-    reviews: {
-      ALL: "Alhamdulillah! Truly blessed and seamless Umrah pilgrimage arrangement by New Roshan Tours & Travels in Ganagapeta, Kadapa. Direct flights, excellent hotel proximity near Haram, and very caring support by Janab Shafi Shaik. JazakAllah Khair!",
-      ENGLISH: "Alhamdulillah! Truly blessed and seamless Umrah pilgrimage arrangement by New Roshan Tours & Travels in Ganagapeta, Kadapa. Direct flights, excellent hotel proximity near Haram, and very caring support by Janab Shafi Shaik. JazakAllah Khair!",
-      HINDI: "अल्हम्दुलिल्लाह! न्यू रोशन टूर्स एंड ट्रैवल्स कडपा द्वारा उमराह और जियारत की व्यवस्था बहुत ही शानदार और शांतिपूर्ण रही। हरम के पास होटल और शफी शेख साहब का बहुत अच्छा मार्गदर्शन। बहुत अनुशंसित!",
-      TELUGU: "అల్హందులిల్లాహ్! కడప గంగపేట లోని న్యూ రోషన్ టూర్స్ & ట్రావెల్స్ ద్వారా ఉమ్రా మరియు జియారత్ యాత్ర ఏర్పాట్లు చాలా అద్భుతంగా జరిగాయి. హరమ్ దగ్గర లగ్జరీ హోటల్స్ మరియు షఫీ షేక్ గారి సపోర్ట్ చాలా బాగుంది!",
-      TAMIL: "அல்ஹம்துலில்லாஹ்! நியூ ரோஷன் டூர்ஸ் & டிராவல்ஸ் மூலம் உம்ரா மற்றும் ஜியாரத் பயணம் மிகவும் சிறப்பாக அமைந்தது. சிறந்த வழிகாட்டல் மற்றும் அருமையான தங்குமிடம்.",
-      KANNADA: "ಅಲ್ಹಮ್ದುಲಿಲ್ಲಾಹ್! ನ್ಯೂ ರೋಷನ್ ಟೂರ್ಸ್ & ಟ್ರಾವೆಲ್ಸ್ ಮೂಲಕ ಉಮ್ರಾ ಮತ್ತು ಝಿಯಾರತ್ ಪ್ರವಾಸ ಅತ್ಯಂತ ಶಾಂತಿಯುತವಾಗಿ ನಡೆಯಿತು. ಅತ್ಯುತ್ತಮ ಹೋಟೆಲ್‌ಗಳು ಮತ್ತು ಉತ್ತಮ ಮಾರ್ಗದರ್ಶನ.",
-      MALAYALAM: "അൽഹംദുലില്ലാഹ്! ന്യൂ റോഷൻ ടൂർസ് & ട്രാവൽസ് വഴി ചെയ്ത ഉംറ യാത്ര വളരെ മികച്ചതും അനുഗ്രഹീതവുമായിരുന്നു. മികച്ച സേവനവും താമസ സൗകര്യവും.",
-    },
-    author: "Mohammed Aslam K.",
-  },
 ];
 
 // ─── 3D HARDWARE THEMES ──────────────────────────────────────────────────────
@@ -430,6 +390,17 @@ export default function HomePage() {
   const [referralPartner, setReferralPartner] = useState<string | null>(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [speakingLang, setSpeakingLang] = useState<string | null>(null);
+  const [showDemoFeedbackExplainer, setShowDemoFeedbackExplainer] = useState(false);
+
+  const handleSelectPlanFromPage = (plan: "starter" | "hub" | "growth") => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("reviewsmart:select-plan", { detail: { plan } }));
+      const customizerEl = document.getElementById("customizer");
+      if (customizerEl) {
+        customizerEl.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
 
   useEffect(() => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
@@ -706,11 +677,354 @@ export default function HomePage() {
 
       <HeroCustomizer />
 
-      {/* ─── HOW IT WORKS: CONNECTED 3-STEP JOURNEY ───────────────────────── */}
+      {/* ─── 1. TRY CUSTOMER EXPERIENCE: 6-LANGUAGE DEMO ─────────────────── */}
+      <section id="demo" className="py-20 px-4 sm:px-6 relative scroll-mt-16 bg-white border-t border-slate-200/80">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold">
+              <Globe className="w-3.5 h-3.5 text-indigo-600" /> Pan-India Multi-Language Simulator
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900">
+              Try the 6-Language Review Generator
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600">
+              Select your store industry and any of the 6 Indian languages below to experience how your customers will draft authentic, local-keyword reviews in 10 seconds.
+            </p>
+          </div>
+
+          {/* 1. Language Tabs Bar */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 mb-6">
+            <span className="text-xs font-bold text-slate-500 flex items-center gap-1 shrink-0">
+              <Globe className="w-3.5 h-3.5 text-indigo-600" /> Select Language:
+            </span>
+            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+              {LANGUAGES.map((lang) => {
+                const isSelected = selectedLang === lang.key;
+                return (
+                  <button
+                    key={lang.key}
+                    type="button"
+                    onClick={() => setSelectedLang(lang.key)}
+                    className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold flex items-center gap-1 sm:gap-1.5 transition-all cursor-pointer ${
+                      isSelected
+                        ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-600/25 border border-indigo-500 scale-105"
+                        : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
+                    }`}
+                  >
+                    <span>{lang.flag}</span>
+                    <span>{lang.native}</span>
+                    <span className="text-[10px] opacity-75 hidden sm:inline">({lang.label})</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 2. Industry Selector Tabs */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
+            {DEMO_PRESETS.map((p, idx) => {
+              const IconComp = p.icon;
+              const isSelected = selectedDemoIndex === idx;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedDemoIndex(idx);
+                    setDemoStars(5);
+                  }}
+                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
+                    isSelected
+                      ? "bg-slate-900 text-white shadow-md font-extrabold scale-105"
+                      : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
+                  }`}
+                >
+                  <IconComp className="w-3.5 h-3.5" />
+                  <span>{p.name}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* 3. Interactive Split Simulator */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left 3D Smartphone View (lg:col-span-6) */}
+            <div className="lg:col-span-6 flex justify-center" style={{ perspective: "1000px" }}>
+              <div
+                className="w-full max-w-sm rounded-[2.5rem] bg-slate-900 border-4 border-slate-800 p-5 sm:p-6 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35),0_0_30px_rgba(99,102,241,0.15)] text-center relative overflow-hidden transition-all duration-300 [transform:none] lg:[transform:rotateY(-4deg)]"
+              >
+                {/* Phone Speaker pill */}
+                <div className="w-20 h-3.5 bg-slate-800 rounded-full mx-auto mb-4 border border-slate-700 flex items-center justify-center gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-slate-600" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+                </div>
+
+                {/* Business Profile */}
+                <div className="mb-4">
+                  <div className="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-black text-xl mx-auto mb-2 shadow-inner">
+                    {activeDemo.name.slice(0, 2).toUpperCase()}
+                  </div>
+                  <h3 className="font-extrabold text-white text-base leading-tight">
+                    {activeDemo.name}
+                  </h3>
+                  <div className="flex items-center justify-center gap-1 text-[11px] text-amber-400 font-semibold mt-0.5">
+                    <span>★ 4.9</span>
+                    <span className="text-slate-400">&bull; {activeDemo.category}</span>
+                  </div>
+                  <p className="text-[10px] text-slate-400 mt-0.5 flex items-center justify-center gap-1">
+                    <MapPin className="w-3 h-3 text-slate-400" /> {activeDemo.location}
+                  </p>
+                </div>
+
+                {/* Star Rating Picker */}
+                <div className="mb-4 p-3 rounded-2xl bg-slate-800/80 border border-slate-700/80">
+                  <p className="text-[11px] font-bold text-slate-300 mb-2">
+                    How was your experience today?
+                  </p>
+                  <div className="flex justify-center gap-2">
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onMouseEnter={() => setHoveredStar(s)}
+                        onMouseLeave={() => setHoveredStar(0)}
+                        onClick={() => setDemoStars(s)}
+                        className="transition-transform hover:scale-125 cursor-pointer"
+                      >
+                        <Star
+                          className={`w-7 h-7 transition ${
+                            s <= (hoveredStar || demoStars)
+                              ? "fill-amber-400 text-amber-400 drop-shadow-[0_2px_8px_rgba(251,191,36,0.5)]"
+                              : "text-slate-600"
+                          }`}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* All Ratings Review Draft Card */}
+                {demoStars > 0 && (
+                  <div className="space-y-3 animate-fadeIn text-left">
+                    <div className="flex flex-wrap gap-1 justify-center">
+                      {activeDemo.chips.map((chip) => (
+                        <span
+                          key={chip}
+                          className="text-[9px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30"
+                        >
+                          ✓ {chip}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-gradient-to-b from-slate-800 to-slate-850 border border-indigo-500/30 space-y-2.5 shadow-lg">
+                      <div className="flex items-center justify-between text-[11px] font-bold">
+                        <span className="flex items-center gap-1.5 text-indigo-300">
+                          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                          <span>Your review draft ({selectedLang})</span>
+                        </span>
+                        <span className="text-amber-400 text-xs">
+                          {"★".repeat(demoStars) + "☆".repeat(5 - demoStars)}
+                        </span>
+                      </div>
+
+                      <div>
+                        <span className="text-[9px] text-slate-400 block mb-1 font-medium">(Illustrative sample review)</span>
+                        <p className="text-xs text-slate-200 leading-relaxed font-normal italic bg-black/40 p-3 rounded-xl border border-white/5">
+                          &quot;{demoStars <= 3 ? `Visited ${activeDemo.name}. The experience had a few areas that could be improved, particularly regarding service and wait times. Sharing constructive feedback for the team to look into.` : activeReviewText}&quot;
+                        </p>
+                      </div>
+
+                      {/* Interactive Voice AI Speaker Demonstration */}
+                      <button
+                        type="button"
+                        onClick={() => handleToggleSpeakReview(demoStars <= 3 ? `Visited ${activeDemo.name}. Sharing constructive feedback.` : activeReviewText, selectedLang)}
+                        className={`w-full py-2.5 px-3 rounded-xl border text-xs font-black flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer ${
+                          isSpeaking && speakingLang === selectedLang
+                            ? "bg-amber-500/20 border-amber-400/50 text-amber-300 ring-2 ring-amber-400/30 animate-pulse shadow-lg shadow-amber-950/40"
+                            : "bg-slate-800/80 hover:bg-slate-750 border-indigo-500/30 text-indigo-200 hover:text-white"
+                        }`}
+                      >
+                        {isSpeaking && speakingLang === selectedLang ? (
+                          <>
+                            <VolumeX className="w-4 h-4 text-amber-400 animate-bounce" />
+                            <span>🔊 Playing Natural Voice AI • Tap to Stop</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className="w-4 h-4 text-amber-400" />
+                            <span>
+                              🎙️ Listen to AI Speak in{" "}
+                              {selectedLang === "TELUGU"
+                                ? "Telugu (తెలుగు)"
+                                : selectedLang === "HINDI"
+                                ? "Hindi (हिंदी)"
+                                : selectedLang === "TAMIL"
+                                ? "Tamil (தமிழ்)"
+                                : selectedLang === "KANNADA"
+                                ? "Kannada (ಕನ್ನಡ)"
+                                : selectedLang === "MALAYALAM"
+                                ? "Malayalam (മലയാളം)"
+                                : "English"}
+                            </span>
+                          </>
+                        )}
+                      </button>
+
+                      <div className="flex items-center gap-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => handleCopyReview(demoStars <= 3 ? `Visited ${activeDemo.name}. Sharing constructive feedback.` : activeReviewText, activeDemo.slug)}
+                          className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition active:scale-95 cursor-pointer"
+                        >
+                          {copiedDraft ? (
+                            <>
+                              <Check className="w-4 h-4 text-emerald-300" />
+                              <span>Copied draft to clipboard!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="w-4 h-4 text-amber-300" />
+                              <span>Copy review and open Google</span>
+                            </>
+                          )}
+                        </button>
+
+                        <a
+                          href={`/r/${activeDemo.slug}?demo=true`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-white/10 transition flex items-center justify-center gap-1.5 text-xs font-semibold"
+                          title="Open full interactive customer review portal"
+                        >
+                          <span>Live Portal</span>
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+
+                      {/* Isolated Private Feedback Explainer (No Fake WhatsApp Routing) */}
+                      <div className="pt-1.5 border-t border-slate-700/60 flex items-center justify-between text-[10px] text-slate-400">
+                        <span>Prefer private note to owner?</span>
+                        <button
+                          type="button"
+                          onClick={() => setShowDemoFeedbackExplainer(!showDemoFeedbackExplainer)}
+                          className="text-amber-300 hover:underline font-semibold cursor-pointer"
+                        >
+                          How private feedback works &rarr;
+                        </button>
+                      </div>
+
+                      {/* Demo Feedback Explainer Card */}
+                      {showDemoFeedbackExplainer && (
+                        <div className="mt-2 p-3 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-200 text-xs animate-fadeIn space-y-1.5 text-left">
+                          <div className="flex items-center justify-between font-bold text-amber-300 text-[11px]">
+                            <span className="flex items-center gap-1">
+                              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                              <span>Private Grievance Shield:</span>
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setShowDemoFeedbackExplainer(false)}
+                              className="text-amber-300 hover:text-white text-xs font-bold cursor-pointer"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                          <p className="text-[10px] leading-relaxed text-slate-200">
+                            In production, selecting 1–3 stars routes feedback straight to the merchant&apos;s private dashboard and triggers an instant WhatsApp notification to the owner—protecting public Google rating while resolving customer issues privately.
+                          </p>
+                          <div className="pt-1 flex items-center justify-between text-[9px]">
+                            <span className="text-slate-400">Demo isolated from real store alerts</span>
+                            <a
+                              href="https://wa.me/918639831132?text=Hi%20ReviewSmart%20Sales%2C%20I%20have%20questions%20about%20the%20private%20feedback%20shield"
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-amber-300 hover:underline font-bold"
+                            >
+                              Ask ReviewSmart Sales &rarr;
+                            </a>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Right Explanation */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="space-y-2">
+                <span className="text-xs font-black uppercase tracking-wider text-indigo-600 flex items-center gap-1.5">
+                  <Flame className="w-4 h-4 text-amber-500" /> High-Converting Pan-India Strategy
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
+                  Why Regional Language Reviews Boost Local Discovery on Google Maps
+                </h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  In India, over 70% of local Google Maps and voice searches happen in native regional languages or Hinglish/Tanglish terms. When customers post reviews in Hindi, Telugu, Tamil, Kannada, or Malayalam:
+                </p>
+              </div>
+
+              <div className="space-y-3.5">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-start gap-3.5 shadow-sm">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600 shrink-0 font-bold">
+                    <TrendingUp className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900">Dominates Local Voice Search Keywords</h4>
+                    <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                      Google Maps indexes phrases like &quot;బెస్ట్ షాప్&quot; or &quot;शानदार स्वाद&quot; directly to your Google Business Profile, bringing high-intent nearby customers to your door.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-start gap-3.5 shadow-sm">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600 shrink-0 font-bold">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900">Zero Typing Friction for Customers</h4>
+                    <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                      Customers are shy or uncomfortable typing long English paragraphs. With 1 tap, our AI generates authentic, warm reviews in their native language effortlessly.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-start gap-3.5 shadow-sm">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shrink-0 font-bold">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900">100% Genuine Human Profiles</h4>
+                    <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                      Zero fake bots. Real walk-in customers submit from their own smartphones, passing Google&apos;s spam filters with zero penalty risk.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => handleSelectPlanFromPage("starter")}
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs shadow-md shadow-indigo-600/20 transition active:scale-95 cursor-pointer"
+                >
+                  <Zap className="w-4 h-4 text-amber-300" />
+                  <span>Get Started for ₹2,999 Lifetime</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 2. HOW IT WORKS: CONNECTED 3-STEP JOURNEY WITH REAL PHOTOGRAPHY ─ */}
       <section id="how-it-works" className="py-20 px-4 sm:px-6 relative scroll-mt-16 bg-white border-t border-slate-200/80">
         <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
           {/* Section Header */}
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+          <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold shadow-xs">
               <Zap className="w-3.5 h-3.5 text-indigo-600" />
               <span>SEAMLESS 10-SECOND WALK-IN EXPERIENCE</span>
@@ -721,6 +1035,41 @@ export default function HomePage() {
             <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
               Zero app downloads. Zero typing friction. An effortless 3-step loop that converts everyday customer visits into authentic, keyword-rich Google reviews.
             </p>
+          </div>
+
+          {/* Real Customer Scan Photography Banner */}
+          <div className="mb-12 rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl bg-slate-900 grid grid-cols-1 lg:grid-cols-12 items-center">
+            <div className="lg:col-span-7 h-64 sm:h-80 relative overflow-hidden">
+              <img
+                src="/images/customer-scan-action.webp"
+                alt="Walk-in customer scanning ReviewSmart acrylic standee with smartphone camera at store counter"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-slate-950/75 backdrop-blur-md text-white text-[11px] font-bold border border-white/20 flex items-center gap-1.5 shadow-md">
+                <Camera className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Real Customer Walk-In Experience</span>
+              </div>
+            </div>
+            <div className="lg:col-span-5 p-6 sm:p-8 text-left space-y-3">
+              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2.5 py-0.5 rounded-full">
+                Zero Friction
+              </span>
+              <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
+                Scan With Any Phone Camera. No App Required.
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Customers point their iPhone camera, Android camera, Google Lens, or PhonePe/GPay scanner. In under 1 second, your store&apos;s branded review portal opens instantly.
+              </p>
+              <div className="pt-1 flex items-center gap-3 text-xs text-slate-400 font-medium">
+                <span className="flex items-center gap-1 text-slate-200">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> &lt;1s Page Load
+                </span>
+                <span>&bull;</span>
+                <span className="flex items-center gap-1 text-slate-200">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> 100% Mobile Optimized
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* 3-Step Connected Progression Grid */}
@@ -840,313 +1189,6 @@ export default function HomePage() {
               <div className="mt-5 pt-3 border-t border-slate-200/60 text-[11px] font-bold text-emerald-700 flex items-center gap-1">
                 <span>Step 3: Direct Google Maps Post</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── LIVE 6-LANGUAGE INTERACTIVE DEMO ─────────────────────────────── */}
-      <section id="demo" className="py-20 px-4 sm:px-6 relative scroll-mt-16 bg-white border-t border-slate-200/80">
-        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold">
-              <Globe className="w-3.5 h-3.5 text-indigo-600" /> Pan-India Multi-Language Simulator
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900">
-              Try the 6-Language Review Generator
-            </h2>
-            <p className="text-sm sm:text-base text-slate-600">
-              Select your store industry and any of the 6 Indian languages below to experience how your customers will draft authentic, local-keyword reviews in 10 seconds.
-            </p>
-          </div>
-
-          {/* 1. Language Tabs Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 mb-6">
-            <span className="text-xs font-bold text-slate-500 flex items-center gap-1 shrink-0">
-              <Globe className="w-3.5 h-3.5 text-indigo-600" /> Select Language:
-            </span>
-            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-              {LANGUAGES.map((lang) => {
-                const isSelected = selectedLang === lang.key;
-                return (
-                  <button
-                    key={lang.key}
-                    type="button"
-                    onClick={() => setSelectedLang(lang.key)}
-                    className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold flex items-center gap-1 sm:gap-1.5 transition-all ${
-                      isSelected
-                        ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-600/25 border border-indigo-500 scale-105"
-                        : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
-                    }`}
-                  >
-                    <span>{lang.flag}</span>
-                    <span>{lang.native}</span>
-                    <span className="text-[10px] opacity-75 hidden sm:inline">({lang.label})</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 2. Industry Selector Tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-            {DEMO_PRESETS.map((p, idx) => {
-              const IconComp = p.icon;
-              const isSelected = selectedDemoIndex === idx;
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => {
-                    setSelectedDemoIndex(idx);
-                    setDemoStars(5);
-                  }}
-                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-bold flex items-center gap-1.5 sm:gap-2 transition-all ${
-                    isSelected
-                      ? "bg-slate-900 text-white shadow-md font-extrabold scale-105"
-                      : "bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200"
-                  }`}
-                >
-                  <IconComp className="w-3.5 h-3.5" />
-                  <span>{p.name}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* 3. Interactive Split Simulator */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left 3D Smartphone View (lg:col-span-6) */}
-            <div className="lg:col-span-6 flex justify-center" style={{ perspective: "1000px" }}>
-              <div
-                className="w-full max-w-sm rounded-[2.5rem] bg-slate-900 border-4 border-slate-800 p-5 sm:p-6 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35),0_0_30px_rgba(99,102,241,0.15)] text-center relative overflow-hidden transition-all duration-300 [transform:none] lg:[transform:rotateY(-4deg)]"
-              >
-                {/* Phone Speaker pill */}
-                <div className="w-20 h-3.5 bg-slate-800 rounded-full mx-auto mb-4 border border-slate-700 flex items-center justify-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-slate-600" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-                </div>
-
-                {/* Business Profile */}
-                <div className="mb-4">
-                  <div className="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-black text-xl mx-auto mb-2 shadow-inner">
-                    {activeDemo.name.slice(0, 2).toUpperCase()}
-                  </div>
-                  <h3 className="font-extrabold text-white text-base leading-tight">
-                    {activeDemo.name}
-                  </h3>
-                  <div className="flex items-center justify-center gap-1 text-[11px] text-amber-400 font-semibold mt-0.5">
-                    <span>★ 4.9</span>
-                    <span className="text-slate-400">&bull; {activeDemo.category}</span>
-                  </div>
-                  <p className="text-[10px] text-slate-400 mt-0.5 flex items-center justify-center gap-1">
-                    <MapPin className="w-3 h-3 text-slate-400" /> {activeDemo.location}
-                  </p>
-                </div>
-
-                {/* Star Rating Picker */}
-                <div className="mb-4 p-3 rounded-2xl bg-slate-800/80 border border-slate-700/80">
-                  <p className="text-[11px] font-bold text-slate-300 mb-2">
-                    How was your experience today?
-                  </p>
-                  <div className="flex justify-center gap-2">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        onMouseEnter={() => setHoveredStar(s)}
-                        onMouseLeave={() => setHoveredStar(0)}
-                        onClick={() => setDemoStars(s)}
-                        className="transition-transform hover:scale-125"
-                      >
-                        <Star
-                          className={`w-7 h-7 transition ${
-                            s <= (hoveredStar || demoStars)
-                              ? "fill-amber-400 text-amber-400 drop-shadow-[0_2px_8px_rgba(251,191,36,0.5)]"
-                              : "text-slate-600"
-                          }`}
-                        />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* All Ratings Review Draft Card */}
-                {demoStars > 0 && (
-                  <div className="space-y-3 animate-fadeIn text-left">
-                    <div className="flex flex-wrap gap-1 justify-center">
-                      {activeDemo.chips.map((chip) => (
-                        <span
-                          key={chip}
-                          className="text-[9px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30"
-                        >
-                          ✓ {chip}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-gradient-to-b from-slate-800 to-slate-850 border border-indigo-500/30 space-y-2.5 shadow-lg">
-                      <div className="flex items-center justify-between text-[11px] font-bold">
-                        <span className="flex items-center gap-1.5 text-indigo-300">
-                          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                          <span>Your review draft ({selectedLang})</span>
-                        </span>
-                        <span className="text-amber-400 text-xs">
-                          {"★".repeat(demoStars) + "☆".repeat(5 - demoStars)}
-                        </span>
-                      </div>
-
-                      <p className="text-xs text-slate-200 leading-relaxed font-normal italic bg-black/40 p-3 rounded-xl border border-white/5">
-                        &quot;{demoStars <= 3 ? `Visited ${activeDemo.name}. The experience had a few areas that could be improved, particularly regarding service and wait times. Sharing constructive feedback for the team to look into.` : activeReviewText}&quot;
-                      </p>
-
-                      {/* Interactive Voice AI Speaker Demonstration */}
-                      <button
-                        type="button"
-                        onClick={() => handleToggleSpeakReview(demoStars <= 3 ? `Visited ${activeDemo.name}. Sharing constructive feedback.` : activeReviewText, selectedLang)}
-                        className={`w-full py-2.5 px-3 rounded-xl border text-xs font-black flex items-center justify-center gap-2 transition active:scale-95 ${
-                          isSpeaking && speakingLang === selectedLang
-                            ? "bg-amber-500/20 border-amber-400/50 text-amber-300 ring-2 ring-amber-400/30 animate-pulse shadow-lg shadow-amber-950/40"
-                            : "bg-slate-800/80 hover:bg-slate-750 border-indigo-500/30 text-indigo-200 hover:text-white"
-                        }`}
-                      >
-                        {isSpeaking && speakingLang === selectedLang ? (
-                          <>
-                            <VolumeX className="w-4 h-4 text-amber-400 animate-bounce" />
-                            <span>🔊 Playing Natural Voice AI • Tap to Stop</span>
-                          </>
-                        ) : (
-                          <>
-                            <Volume2 className="w-4 h-4 text-amber-400" />
-                            <span>
-                              🎙️ Listen to AI Speak in{" "}
-                              {selectedLang === "TELUGU"
-                                ? "Telugu (తెలుగు)"
-                                : selectedLang === "HINDI"
-                                ? "Hindi (हिंदी)"
-                                : selectedLang === "TAMIL"
-                                ? "Tamil (தமிழ்)"
-                                : selectedLang === "KANNADA"
-                                ? "Kannada (ಕನ್ನಡ)"
-                                : selectedLang === "MALAYALAM"
-                                ? "Malayalam (മലയാളം)"
-                                : "English"}
-                            </span>
-                          </>
-                        )}
-                      </button>
-
-                      <div className="flex items-center gap-2 pt-1">
-                        <button
-                          type="button"
-                          onClick={() => handleCopyReview(demoStars <= 3 ? `Visited ${activeDemo.name}. Sharing constructive feedback.` : activeReviewText, activeDemo.slug)}
-                          className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-md transition active:scale-95"
-                        >
-                          {copiedDraft ? (
-                            <>
-                              <Check className="w-4 h-4 text-emerald-300" />
-                              <span>Copied draft to clipboard!</span>
-                            </>
-                          ) : (
-                            <>
-                              <Sparkles className="w-4 h-4 text-amber-300" />
-                              <span>Copy review and open Google</span>
-                            </>
-                          )}
-                        </button>
-
-                        <a
-                          href={`/r/${activeDemo.slug}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-white/10 transition flex items-center justify-center gap-1.5 text-xs font-semibold"
-                          title="Open full interactive customer review portal"
-                        >
-                          <span>Live Portal</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
-                      </div>
-
-                      {/* Independent Private Feedback option */}
-                      <div className="pt-1.5 border-t border-slate-700/60 flex items-center justify-between text-[10px] text-slate-400">
-                        <span>Prefer private note to owner?</span>
-                        <a
-                          href={`https://wa.me/918639831132?text=${encodeURIComponent(`Hi ${activeDemo.name}, I want to share private feedback directly.`)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-amber-300 hover:underline font-semibold"
-                        >
-                          Send private feedback &rarr;
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Right Explanation */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="space-y-2">
-                <span className="text-xs font-black uppercase tracking-wider text-indigo-600 flex items-center gap-1.5">
-                  <Flame className="w-4 h-4 text-amber-500" /> High-Converting Pan-India Meta Strategy
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
-                  Why Regional Language Reviews Rank You #1 on Google Maps
-                </h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  In India, over 70% of local Google Maps and voice searches happen in native regional languages or Hinglish/Tanglish terms. When customers post reviews in Hindi, Telugu, Tamil, Kannada, or Malayalam:
-                </p>
-              </div>
-
-              <div className="space-y-3.5">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-start gap-3.5 shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600 shrink-0 font-bold">
-                    <TrendingUp className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900">Dominates Local Voice Search Keywords</h4>
-                    <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
-                      Google Maps indexes phrases like &quot;బెస్ట్ షాప్&quot; or &quot;शानदार स्वाद&quot; directly to your Google Business Profile, bringing high-intent nearby customers to your door.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-start gap-3.5 shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600 shrink-0 font-bold">
-                    <Users className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900">Zero Typing Friction for Customers</h4>
-                    <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
-                      Customers are shy or uncomfortable typing long English paragraphs. With 1 tap, our AI generates authentic, warm reviews in their native language effortlessly.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex items-start gap-3.5 shadow-sm">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shrink-0 font-bold">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900">100% Genuine Human Profiles</h4>
-                    <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
-                      Zero fake bots. Real walk-in customers submit from their own smartphones, passing Google&apos;s spam filters with zero penalty risk.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-2">
-                <a
-                  href="#pricing"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-xs shadow-md shadow-indigo-600/20 transition active:scale-95"
-                >
-                  <Zap className="w-4 h-4 text-amber-300" />
-                  <span>Get Started for ₹2,999 Lifetime</span>
-                  <ArrowRight className="w-4 h-4" />
-                </a>
               </div>
             </div>
           </div>
@@ -1283,13 +1325,14 @@ export default function HomePage() {
               </div>
 
               <div className="pt-6 mt-6 border-t border-slate-100">
-                <a
-                  href="#customizer"
-                  className="w-full py-3.5 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition active:scale-98 shadow"
+                <button
+                  type="button"
+                  onClick={() => handleSelectPlanFromPage("starter")}
+                  className="w-full py-3.5 px-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-2 transition active:scale-98 shadow cursor-pointer"
                 >
                   <span>Select Starter &bull; ₹2,999</span>
                   <ArrowRight className="w-3.5 h-3.5" />
-                </a>
+                </button>
               </div>
             </div>
 
@@ -1349,13 +1392,14 @@ export default function HomePage() {
               </div>
 
               <div className="pt-6 mt-6 border-t border-slate-100">
-                <a
-                  href="#customizer"
-                  className="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition active:scale-98 shadow-lg shadow-emerald-600/30"
+                <button
+                  type="button"
+                  onClick={() => handleSelectPlanFromPage("hub")}
+                  className="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition active:scale-98 shadow-lg shadow-emerald-600/30 cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
                   <span>Choose Smart Business Hub &bull; ₹3,999</span>
-                </a>
+                </button>
               </div>
             </div>
 
@@ -1411,13 +1455,14 @@ export default function HomePage() {
               </div>
 
               <div className="pt-6 mt-6 border-t border-slate-100">
-                <a
-                  href="#customizer"
-                  className="w-full py-3.5 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition active:scale-98 shadow-md"
+                <button
+                  type="button"
+                  onClick={() => handleSelectPlanFromPage("growth")}
+                  className="w-full py-3.5 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition active:scale-98 shadow-md cursor-pointer"
                 >
                   <span>Select 360° Growth &bull; ₹4,999</span>
                   <ArrowRight className="w-3.5 h-3.5" />
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -1859,6 +1904,26 @@ export default function HomePage() {
                 </div>
               </div>
 
+              {/* Photorealistic Acrylic Macro Detail */}
+              <div className="rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm bg-white p-3 flex flex-col sm:flex-row items-center gap-3.5">
+                <img
+                  src="/images/acrylic-standee-detail.webp"
+                  alt="Macro shot of 3mm laser-beveled cast acrylic edge and slotted base"
+                  className="w-full sm:w-36 h-28 object-cover rounded-xl border border-slate-100 shrink-0"
+                />
+                <div className="space-y-1 text-left">
+                  <span className="text-[10px] font-black uppercase text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                    Physical Build Quality
+                  </span>
+                  <h4 className="text-xs font-bold text-slate-900 leading-tight">
+                    3mm Optical Cast Acrylic with Diamond Laser Bevel
+                  </h4>
+                  <p className="text-[11px] text-slate-500 leading-relaxed">
+                    Heavyweight slot base with zero wobble, high UV stability against sunlight fading, and scratch-resistant coating.
+                  </p>
+                </div>
+              </div>
+
               <div className="pt-2">
                 <a
                   href={whatsappInquiryUrl}
@@ -1883,7 +1948,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold shadow-xs">
-              <TrendingUp className="w-3.5 h-3.5 text-indigo-600" /> ROI Revenue Projection
+              <TrendingUp className="w-3.5 h-3.5 text-indigo-600" /> ROI Revenue Projection (Illustrative Estimate)
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
               See How Fast You Recover ₹2,999

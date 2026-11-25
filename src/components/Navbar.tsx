@@ -98,11 +98,11 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
           <Link href="/#how-it-works" className={navLinkCls}>
             How it works
           </Link>
+          <Link href="/#demo" className={navLinkCls}>
+            Customer demo
+          </Link>
           <Link href="/#pricing" className={navLinkCls}>
             Pricing
-          </Link>
-          <Link href="/login" className={navLinkCls}>
-            Sign in
           </Link>
         </nav>
 

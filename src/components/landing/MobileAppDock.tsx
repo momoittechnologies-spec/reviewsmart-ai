@@ -59,11 +59,11 @@ export default function MobileAppDock() {
 
   const whatsappOrderUrl =
     "https://wa.me/918639831132?text=" +
-    encodeURIComponent("Hi ReviewSmart AI! I want to order the ReviewSmart AI 3D Smart QR Standee for my business (₹2,999 Lifetime Pass). Please guide me with the next steps.");
+    encodeURIComponent("Hi ReviewSmart AI! I want to order the ReviewSmart AI Smart QR Standee (packages starting ₹2,999). Please guide me with the next steps.");
 
   const whatsappInquiryUrl =
     "https://wa.me/918639831132?text=" +
-    encodeURIComponent("Hi ReviewSmart AI! I'm on your website and want to see an instant demo & get the ₹2,999 Lifetime Pass for my business.");
+    encodeURIComponent("Hi ReviewSmart AI! I'm on your website and would like a consultation on ReviewSmart AI packages (starting ₹2,999) for my business.");
 
   return (
     <nav
@@ -141,7 +141,7 @@ export default function MobileAppDock() {
             <Zap className="w-4 h-4 mb-0.5 text-amber-500" />
             <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
           </div>
-          <span className="text-[10px] tracking-tight font-black">₹2,999</span>
+          <span className="text-[10px] tracking-tight font-black">₹2,999+</span>
         </button>
 
         {/* TAB 5: WHATSAPP CHAT (DIRECT 1-TAP ACTION) */}
