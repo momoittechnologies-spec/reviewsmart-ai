@@ -62,6 +62,11 @@ export async function getSessionUser(): Promise<SessionUser | null> {
     const decoded = verifyToken(token);
     if (!decoded || !decoded.id) return null;
 
+    // Immediately invalidate sessions for removed admin@reviewsmart.ai
+    if (decoded.email?.toLowerCase() === "admin@reviewsmart.ai") {
+      return null;
+    }
+
     // Verify in database to ensure user still exists & isActive
     try {
       const user = await prisma.user.findUnique({
@@ -78,6 +83,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
       });
 
       if (user) {
+        if (user.email?.toLowerCase() === "admin@reviewsmart.ai") return null;
         if (user.isActive === false) return null;
         return user;
       }
@@ -97,6 +103,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
           },
         });
         if (userByEmail) {
+          if (userByEmail.email?.toLowerCase() === "admin@reviewsmart.ai") return null;
           if (userByEmail.isActive === false) return null;
           return userByEmail;
         }

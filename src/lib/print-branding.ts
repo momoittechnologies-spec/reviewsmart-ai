@@ -4,7 +4,7 @@
  * Standees, A4 Posters, A3 Posters, Flyers, and PVC Cards.
  */
 
-export const UNIVERSAL_BRANDING_LINE = "Powered by ReviewSmart AI";
+export const UNIVERSAL_BRANDING_LINE = "Powered by - MOMO IT TECHNOLOGIES | KADAPA";
 export const VERIFIED_PARTNER_LINE = "✨ ReviewSmart AI • Verified Google Partner";
 
 export interface PrintThemeColors {
@@ -20,7 +20,7 @@ export interface PrintThemeColors {
 /**
  * Draws the universal 2-line branding footer on an HTML5 Canvas at 300 DPI.
  * Line 1: Verified Partner badge
- * Line 2: Mandatory "Powered by ReviewSmart AI" line
+ * Line 2: Mandatory "Powered by - MOMO IT TECHNOLOGIES | KADAPA" line
  */
 export function drawCanvasUniversalFooter(
   ctx: CanvasRenderingContext2D,
@@ -47,7 +47,7 @@ export function drawCanvasUniversalFooter(
   ctx.font = `bold ${partnerFontSize}px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`;
   ctx.fillText(partnerText, centerX, partnerLineY);
 
-  // Line 2: Universal ReviewSmart AI Branding
+  // Line 2: Universal MOMO IT TECHNOLOGIES Branding
   ctx.fillStyle =
     theme.id === "pearl-gold"
       ? "#334155"

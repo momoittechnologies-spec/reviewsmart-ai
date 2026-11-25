@@ -30,7 +30,7 @@ export default function LoginPage() {
   const [pin, setPin] = useState("");
 
   // Admin Credentials (Email + Password)
-  const [email, setEmail] = useState("admin@reviewsmart.ai");
+  const [email, setEmail] = useState("momoit.technologies@gmail.com");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -192,7 +192,7 @@ export default function LoginPage() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="admin@reviewsmart.ai"
+                      placeholder="momoit.technologies@gmail.com"
                       autoComplete="email"
                       className="w-full text-sm pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-[#e3ded6] text-[#172033] placeholder-slate-400 focus:outline-none focus:border-[#4338ca] focus:bg-white focus:ring-2 focus:ring-[#4338ca]/15 font-medium transition"
                     />

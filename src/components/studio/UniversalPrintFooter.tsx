@@ -69,7 +69,7 @@ export default function UniversalPrintFooter({
         <span>{partnerText}</span>
       </div>
 
-      {/* Line 2: Universal ReviewSmart AI Branding */}
+      {/* Line 2: Universal MOMO IT TECHNOLOGIES Branding */}
       <div
         className={`font-black uppercase font-mono ${sizeConfig.brandingTextSize} ${sizeConfig.letterSpacing}`}
         style={{ color: brandingColor }}

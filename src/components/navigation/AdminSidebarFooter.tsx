@@ -14,8 +14,8 @@ interface AdminSidebarFooterProps {
 }
 
 export default function AdminSidebarFooter({ user }: AdminSidebarFooterProps) {
-  const displayName = user.name || "Super Admin";
-  const displayEmail = user.email || "admin@reviewsmart.online";
+  const displayName = user.name || "MOMO IT Technologies";
+  const displayEmail = user.email || "momoit.technologies@gmail.com";
   const initials =
     displayName
       .split(" ")

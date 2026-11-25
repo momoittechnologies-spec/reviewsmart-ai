@@ -974,6 +974,11 @@ export default function HeroCustomizer() {
                         <span>Open demo on this phone</span>
                         <ExternalLink className="w-3 h-3 opacity-70" />
                       </a>
+                      <p className={`text-[7.5px] font-mono font-bold uppercase tracking-widest mt-2.5 ${
+                        selectedTheme === "pearl-rose" ? "text-slate-600" : "text-amber-300/80"
+                      }`}>
+                        Powered by - MOMO IT TECHNOLOGIES | KADAPA
+                      </p>
                     </div>
                   </div>
 

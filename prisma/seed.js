@@ -151,37 +151,40 @@ async function main() {
     });
   } catch (e) {}
 
-  // 3. Super Admin (Email & Password Only) - Main Owner: admin@reviewsmart.ai
+  // 3. Super Admin (Email & Password Only) - Main Owner: momoit.technologies@gmail.com
   const adminPassword = await bcrypt.hash("admin123", 10);
   const adminPin = await bcrypt.hash("1234", 10);
 
+  // Revoke and remove access for legacy admin@reviewsmart.ai if present
+  try {
+    await prisma.user.deleteMany({
+      where: { email: "admin@reviewsmart.ai" },
+    });
+  } catch (e) {
+    await prisma.user.updateMany({
+      where: { email: "admin@reviewsmart.ai" },
+      data: { isActive: false, role: "REVOKED" },
+    });
+  }
+
   const mainAdmin = await prisma.user.upsert({
-    where: { email: "admin@reviewsmart.ai" },
+    where: { email: "momoit.technologies@gmail.com" },
     update: {
+      name: "MOMO IT Technologies",
       password: adminPassword,
       pinCode: adminPin,
-      userIdTag: "admin",
+      userIdTag: "momoit",
       role: "SUPER_ADMIN",
+      isActive: true,
     },
     create: {
-      email: "admin@reviewsmart.ai",
-      name: "ReviewSmart AI Admin",
+      email: "momoit.technologies@gmail.com",
+      name: "MOMO IT Technologies",
       password: adminPassword,
       pinCode: adminPin,
-      userIdTag: "admin",
+      userIdTag: "momoit",
       role: "SUPER_ADMIN",
-    },
-  });
-      userIdTag: "admin",
-      role: "SUPER_ADMIN",
-    },
-    create: {
-      email: "admin@reviewsmart.ai",
-      name: "Platform Admin",
-      password: adminPassword,
-      pinCode: adminPin,
-      userIdTag: "admin",
-      role: "SUPER_ADMIN",
+      isActive: true,
     },
   });
 

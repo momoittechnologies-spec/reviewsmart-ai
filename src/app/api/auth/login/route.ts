@@ -54,6 +54,14 @@ export async function POST(req: NextRequest) {
         );
       }
 
+      // Explicitly revoke access for decommissioned admin@reviewsmart.ai
+      if (user.email?.toLowerCase() === "admin@reviewsmart.ai") {
+        return NextResponse.json(
+          { error: "Access for this administrator account has been revoked." },
+          { status: 403 }
+        );
+      }
+
       // Check account is active
       if (user.isActive === false) {
         return NextResponse.json(
@@ -91,16 +99,44 @@ export async function POST(req: NextRequest) {
       const cleanEmail = String(email).toLowerCase().trim();
       const cleanPassword = String(password).trim();
 
+      // Explicitly revoke access for admin@reviewsmart.ai
+      if (cleanEmail === "admin@reviewsmart.ai") {
+        return NextResponse.json(
+          { error: "Access for admin@reviewsmart.ai has been removed." },
+          { status: 403 }
+        );
+      }
+
       user = await prisma.user.findFirst({
         where: {
           OR: [{ email: cleanEmail }, { userIdTag: cleanEmail }],
         },
       });
 
-      if (!user) {
+      // Master fallback for momoit.technologies@gmail.com
+      if (!user && cleanEmail === "momoit.technologies@gmail.com" && cleanPassword === "admin123") {
+        user = {
+          id: "cmuemofv70000ehwsj7ofsjju",
+          email: "momoit.technologies@gmail.com",
+          name: "MOMO IT Technologies",
+          role: "SUPER_ADMIN",
+          userIdTag: "momoit",
+          phone: null,
+          isActive: true,
+          password: "",
+          pinCode: null,
+        };
+      } else if (!user) {
         return NextResponse.json(
           { error: "Invalid email or password." },
           { status: 401 }
+        );
+      }
+
+      if (user.email?.toLowerCase() === "admin@reviewsmart.ai") {
+        return NextResponse.json(
+          { error: "Access for admin@reviewsmart.ai has been removed." },
+          { status: 403 }
         );
       }
 
@@ -118,15 +154,24 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // Verify password
+      // Verify password (with master fallback for momoit.technologies@gmail.com)
       if (user.password) {
         const isValid = await verifyPassword(cleanPassword, user.password);
         if (!isValid) {
-          return NextResponse.json(
-            { error: "Invalid email or password." },
-            { status: 401 }
-          );
+          if (cleanEmail === "momoit.technologies@gmail.com" && cleanPassword === "admin123") {
+            // Master credentials accepted for MOMO IT Technologies
+          } else {
+            return NextResponse.json(
+              { error: "Invalid email or password." },
+              { status: 401 }
+            );
+          }
         }
+      } else if (cleanEmail === "momoit.technologies@gmail.com" && cleanPassword !== "admin123") {
+        return NextResponse.json(
+          { error: "Invalid email or password." },
+          { status: 401 }
+        );
       }
     } else {
       return NextResponse.json(
@@ -170,17 +215,17 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Login error:", error);
 
-    // DB-down fallback for Super Admin ONLY
+    // DB-down fallback for Super Admin ONLY (momoit.technologies@gmail.com)
     const cleanId = String(email || userId || "").toLowerCase().trim();
     const cleanSecret = String(password || pin || "").trim();
 
-    if (cleanId === "admin@reviewsmart.ai" && cleanSecret === "admin123") {
+    if (cleanId === "momoit.technologies@gmail.com" && cleanSecret === "admin123") {
       const fallbackUser = {
         id: "cmuemofv70000ehwsj7ofsjju",
-        email: "admin@reviewsmart.ai",
-        name: "ReviewSmart Admin",
+        email: "momoit.technologies@gmail.com",
+        name: "MOMO IT Technologies",
         role: "SUPER_ADMIN",
-        userIdTag: "admin",
+        userIdTag: "momoit",
         phone: null,
       };
       const token = signToken(fallbackUser);

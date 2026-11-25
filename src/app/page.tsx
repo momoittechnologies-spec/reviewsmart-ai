@@ -1747,6 +1747,9 @@ export default function HomePage() {
                         <p className="text-[9px] text-slate-400 mt-0.5">
                           FAST GOOGLE MAPS REDIRECT &bull; ZERO APP INSTALL
                         </p>
+                        <p className="text-[7.5px] font-mono font-bold uppercase tracking-widest text-amber-300/80 mt-2 pt-1.5 border-t border-white/10">
+                          Powered by - MOMO IT TECHNOLOGIES | KADAPA
+                        </p>
                       </div>
 
                       <div
@@ -1800,6 +1803,9 @@ export default function HomePage() {
                         <p className="text-[8px] text-slate-400 mt-0.5 font-mono">
                           PAN CARD SIZE &bull; 54×85.6 MM
                         </p>
+                        <p className="text-[6.5px] font-mono font-bold uppercase tracking-wider text-amber-300/80 mt-1.5 pt-1 border-t border-white/10">
+                          Powered by - MOMO IT TECHNOLOGIES
+                        </p>
                       </div>
                     </div>
                   );
@@ -1841,6 +1847,9 @@ export default function HomePage() {
 
                       <p className="text-[8px] text-slate-400 mt-2 font-mono">
                         A4 PRINTABLE &bull; 210×297 MM &bull; 300 DPI VECTOR PDF
+                      </p>
+                      <p className="text-[7.5px] font-mono font-bold uppercase tracking-widest text-amber-300/80 mt-2 pt-1.5 border-t border-white/10">
+                        Powered by - MOMO IT TECHNOLOGIES | KADAPA
                       </p>
                     </div>
                   </div>
@@ -2122,7 +2131,7 @@ export default function HomePage() {
             </a>
 
             <Link
-              href="/r/mana-tours-travels"
+              href="/r/mana-tours-travels?demo=true"
               className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm flex items-center justify-center gap-2 border border-white/20 transition transform active:scale-98"
             >
               <Play className="w-4 h-4 fill-white" />
@@ -2137,6 +2146,30 @@ export default function HomePage() {
         <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto space-y-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-200/80">
             <BrandLogo href="/" size="sm" theme="light" />
+
+            {/* Official Technology Partner Pill */}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                Technology Partner:
+              </span>
+              <a
+                href="https://momoittechnologies.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 shadow-sm hover:shadow-md transition-all group"
+                title="MOMO IT Technologies"
+              >
+                <img
+                  src="/images/momo-it-logo.svg"
+                  alt="MOMO IT Technologies Logo"
+                  className="w-5 h-5 rounded-md object-contain group-hover:scale-110 transition-transform"
+                />
+                <span className="font-black text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">
+                  MOMO IT TECHNOLOGIES
+                </span>
+                <ExternalLink className="w-3 h-3 text-slate-400 group-hover:text-indigo-600 transition-colors shrink-0" />
+              </a>
+            </div>
 
             <div className="flex items-center gap-4">
               <a
@@ -2155,7 +2188,16 @@ export default function HomePage() {
 
           <div className="text-center text-slate-500 text-[11px]">
             <p>
-              &copy; {new Date().getFullYear()} ReviewSmart AI &bull; Pan-India Google Review Engine &bull; All Rights Reserved.
+              &copy; {new Date().getFullYear()} ReviewSmart AI &bull;{" "}
+              <a
+                href="https://momoittechnologies.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-slate-700 hover:text-indigo-600 transition"
+              >
+                MOMO IT Technologies
+              </a>
+              {" "}&bull; Pan-India Google Review Engine &bull; All Rights Reserved.
             </p>
           </div>
         </div>
