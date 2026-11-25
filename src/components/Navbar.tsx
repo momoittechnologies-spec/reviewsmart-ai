@@ -59,10 +59,10 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
     router.refresh();
   };
 
-  const scrollToCustomizer = (e: React.MouseEvent) => {
+  const scrollToHeroShowcase = (e: React.MouseEvent) => {
     if (pathname === "/") {
       e.preventDefault();
-      const el = document.getElementById("customizer") || document.getElementById("hero-preview");
+      const el = document.getElementById("hero-showcase") || document.getElementById("pricing");
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
@@ -144,12 +144,12 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
                 Sign in
               </Link>
               <Link
-                href="/#customizer"
-                onClick={scrollToCustomizer}
+                href="/#hero-showcase"
+                onClick={scrollToHeroShowcase}
                 className="text-xs font-bold px-3 lg:px-4 py-2 rounded-xl bg-[#4338ca] hover:bg-[#3730a3] text-white transition shadow-sm flex items-center gap-1.5 whitespace-nowrap"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-                <span>Preview my standee</span>
+                <span>Get your standee</span>
               </Link>
             </div>
           )}
@@ -222,15 +222,15 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
               </div>
             ) : (
               <Link
-                href="/#customizer"
+                href="/#hero-showcase"
                 onClick={(e) => {
                   setMobileMenuOpen(false);
-                  scrollToCustomizer(e);
+                  scrollToHeroShowcase(e);
                 }}
                 className="w-full py-2.5 rounded-xl bg-[#4338ca] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span>Preview my standee</span>
+                <span>Get your standee</span>
               </Link>
             )}
           </div>

@@ -395,9 +395,9 @@ export default function HomePage() {
   const handleSelectPlanFromPage = (plan: "starter" | "hub" | "growth") => {
     if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent("reviewsmart:select-plan", { detail: { plan } }));
-      const customizerEl = document.getElementById("customizer");
-      if (customizerEl) {
-        customizerEl.scrollIntoView({ behavior: "smooth" });
+      const heroEl = document.getElementById("hero-showcase");
+      if (heroEl) {
+        heroEl.scrollIntoView({ behavior: "smooth" });
       }
     }
   };

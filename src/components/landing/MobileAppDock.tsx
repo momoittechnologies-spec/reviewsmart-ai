@@ -111,10 +111,10 @@ export default function MobileAppDock() {
           type="button"
           onClick={() => {
             triggerHaptic();
-            scrollToSection("customizer");
+            scrollToSection("hero-showcase");
           }}
           className="flex flex-col items-center justify-center -mt-4 py-1 relative group cursor-pointer"
-          aria-label="Order 3D Standee"
+          aria-label="Order ReviewSmart Standee"
         >
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-500/35 border-2 border-white transition-all transform active:scale-90 group-hover:scale-105">
             <Sparkles className="w-5 h-5 fill-white text-white animate-pulse" />

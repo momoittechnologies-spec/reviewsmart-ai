@@ -143,81 +143,21 @@ interface GoogleSearchResult {
   logoUrl?: string | null;
 }
 
-const THEMES: Record<string, ThemeOption> = {
-  "royal-gold": {
-    id: "royal-gold",
-    name: "Obsidian & 24K Gold",
-    subtitle: "Luxury Black with Metallic Gold Accents",
-    bgGradient: "from-slate-950 via-zinc-900 to-black",
-    borderClass: "border-amber-400/90 shadow-[0_20px_50px_-10px_rgba(245,158,11,0.35)]",
-    glowColor: "rgba(245, 158, 11, 0.4)",
-    accentText: "text-amber-400",
-    badgeBg: "bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black",
-    qrColorDark: "#09090b",
-    dotColor: "#f59e0b",
-    textColor: "text-white",
-  },
-  "crystal-sapphire": {
-    id: "crystal-sapphire",
-    name: "Crystal Sapphire",
-    subtitle: "Frosted Glass Acrylic with Electric Blue",
-    bgGradient: "from-slate-950 via-slate-900 to-blue-950",
-    borderClass: "border-cyan-400/90 shadow-[0_20px_50px_-10px_rgba(6,182,212,0.35)]",
-    glowColor: "rgba(6, 182, 212, 0.4)",
-    accentText: "text-cyan-400",
-    badgeBg: "bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 font-black",
-    qrColorDark: "#0284c7",
-    dotColor: "#06b6d4",
-    textColor: "text-white",
-  },
-  "emerald-jade": {
-    id: "emerald-jade",
-    name: "Emerald & Gold",
-    subtitle: "Deep Regal Green with Warm Gold",
-    bgGradient: "from-slate-950 via-zinc-900 to-emerald-950",
-    borderClass: "border-emerald-400/90 shadow-[0_20px_50px_-10px_rgba(16,185,129,0.35)]",
-    glowColor: "rgba(16, 185, 129, 0.4)",
-    accentText: "text-emerald-400",
-    badgeBg: "bg-gradient-to-r from-emerald-400 to-teal-500 text-slate-950 font-black",
-    qrColorDark: "#064e3b",
-    dotColor: "#10b981",
-    textColor: "text-white",
-  },
-  "pearl-rose": {
-    id: "pearl-rose",
-    name: "Pearl Alabaster",
-    subtitle: "Minimalist Pure White with Rose Gold",
-    bgGradient: "from-white via-rose-50/50 to-pink-50/40",
-    borderClass: "border-rose-300 shadow-[0_20px_50px_-10px_rgba(244,63,94,0.25)] ring-1 ring-rose-200",
-    glowColor: "rgba(244, 63, 94, 0.3)",
-    accentText: "text-rose-600",
-    badgeBg: "bg-gradient-to-r from-rose-500 to-pink-500 text-white font-black",
-    qrColorDark: "#881337",
-    dotColor: "#fb7185",
-    textColor: "text-slate-900",
-  },
-};
-
 const POPULAR_PRESETS = [
-  { name: "Golden Hair Wig Studio", city: "Kadapa, Andhra Pradesh", category: "Hair Wigs & Replacement" },
-  { name: "New Roshan Tours & Travels", city: "Kadapa, Andhra Pradesh", category: "Umrah, Ziyarat & Flights" },
   { name: "MANA Tours & Travels", city: "Kadapa, Andhra Pradesh", category: "Tours & Travels" },
+  { name: "New Roshan Tours & Travels", city: "Kadapa, Andhra Pradesh", category: "Umrah, Ziyarat & Flights" },
+  { name: "Golden Hair Wig Studio", city: "Kadapa, Andhra Pradesh", category: "Hair Wigs & Replacement" },
   { name: "Evania Luxury Salon", city: "Kadapa, Andhra Pradesh", category: "Beauty & Hair Salon" },
   { name: "VR Gold Company", city: "Kadapa, Andhra Pradesh", category: "Gold Buying & Pledged Gold" },
   { name: "City Grafix Flex & Printing", city: "Kadapa, Andhra Pradesh", category: "Flex & Digital Printing" },
   { name: "AS Refrigeration & AC Services", city: "Kadapa, Andhra Pradesh", category: "AC & Appliance Repair" },
-  { name: "Paradise Biryani Point", city: "Hyderabad, Telangana", category: "Restaurant & Cafe" },
 ];
 
 export default function HeroCustomizer() {
   const [businessName, setBusinessName] = useState("MANA Tours & Travels");
   const [city, setCity] = useState("Kadapa, Andhra Pradesh");
   const [category, setCategory] = useState("Tours & Travels");
-  const [selectedTheme, setSelectedTheme] = useState<string>("royal-gold");
   const [selectedPlanId, setSelectedPlanId] = useState<"starter" | "hub" | "growth">("starter");
-  const [viewMode, setViewMode] = useState<"customizer" | "photo">("customizer");
-  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
-  const [isSimulating, setIsSimulating] = useState(false);
 
   // Google Places Live Search State (Modal & Hero)
   const [modalSearchResults, setModalSearchResults] = useState<GoogleSearchResult[]>([]);
@@ -268,7 +208,6 @@ export default function HeroCustomizer() {
     dashboardUrl: string;
   } | null>(null);
 
-  const theme = THEMES[selectedTheme] || THEMES["royal-gold"];
   const currentPlan = PACKAGES[selectedPlanId] || PACKAGES.starter;
   const upiId = "8639831132-2@ybl";
   const upiPayee = "Damerla Mohan";
@@ -311,27 +250,9 @@ export default function HeroCustomizer() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Generate Review Card Preview QR code linked to canonical/preview destination
-  const activeDemoHref = resolveDemoDestination(businessName, city, category, selectedTheme);
-
-  useEffect(() => {
-    const targetDemoUrl =
-      typeof window !== "undefined"
-        ? `${window.location.origin}${activeDemoHref}`
-        : `https://www.reviewsmart.online${activeDemoHref}`;
-
-    QRCode.toDataURL(targetDemoUrl, {
-      width: 320,
-      margin: 1,
-      color: {
-        dark: theme.qrColorDark,
-        light: "#ffffff",
-      },
-      errorCorrectionLevel: "H",
-    })
-      .then((url) => setQrCodeDataUrl(url))
-      .catch((err) => console.error("QR Error", err));
-  }, [activeDemoHref, theme.qrColorDark]);
+  // Resolve canonical or preview review portal destination
+  const activeDemoHref = resolveDemoDestination(businessName, city, category, "custom-brand");
+  const isKnownMerchant = Boolean(CANONICAL_MERCHANTS[businessName.trim().toLowerCase()]);
 
   // Generate Payment QR code for modal
   useEffect(() => {
@@ -353,14 +274,6 @@ export default function HeroCustomizer() {
     setCity(preset.city);
     setCategory(preset.category);
     setVerifiedGoogleProfile(null);
-  };
-
-  const handleSimulateScan = () => {
-    setIsSimulating(true);
-    setTimeout(() => {
-      setIsSimulating(false);
-      confetti({ particleCount: 70, spread: 70, origin: { y: 0.6 } });
-    }, 1200);
   };
 
   const handleCopyUpi = async () => {
@@ -486,8 +399,8 @@ export default function HeroCustomizer() {
           phone: phone.trim(),
           category: category.trim(),
           googleReviewUrl: googleMapsUrl.trim() || undefined,
-          primaryColor: theme.dotColor,
-          tagline: `Tasted or experienced ${businessName}? Rate us 5-stars!`,
+          primaryColor: "#4338ca",
+          tagline: `Visited ${businessName}? Share your experience in seconds!`,
         }),
       });
 
@@ -505,7 +418,7 @@ export default function HeroCustomizer() {
           amount: currentPlan.price,
           customerPhone: phone.trim(),
           packageTier: currentPlan.id === "starter" ? "STARTER" : currentPlan.id === "hub" ? "SMART_HUB" : "GROWTH_SUITE",
-          notes: `Delivery Address: ${deliveryAddress.trim()}, Pincode: ${pincode.trim()} | Package: ${currentPlan.name} (₹${currentPlan.price}) | Theme: ${theme.name}${
+          notes: `Delivery Address: ${deliveryAddress.trim()}, Pincode: ${pincode.trim()} | Package: ${currentPlan.name} (₹${currentPlan.price}) | Custom Standee Design${
             verifiedGoogleProfile ? ` | Verified GMB: ${verifiedGoogleProfile.name}` : ""
           }`,
         }),
@@ -544,7 +457,7 @@ export default function HeroCustomizer() {
   };
 
   return (
-    <div id="customizer" className="relative pt-6 pb-16 sm:pt-10 sm:pb-24 overflow-hidden bg-gradient-to-b from-[#fafbfe] via-slate-50 to-white">
+    <div id="hero-showcase" className="relative pt-6 pb-16 sm:pt-10 sm:pb-24 overflow-hidden bg-gradient-to-b from-[#fafbfe] via-slate-50 to-white">
       {/* Ambient background glow behind Hero */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1440px] h-[480px] bg-gradient-to-b from-indigo-100/50 via-purple-100/25 to-transparent blur-[120px] pointer-events-none -z-10" />
 
@@ -553,7 +466,7 @@ export default function HeroCustomizer() {
         <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 mb-6">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indigo-50/90 border border-indigo-200/80 text-indigo-700 text-xs font-bold shadow-xs">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
-            <span>INDIA&apos;S #1 SMART AI REVIEW STANDEE</span>
+            <span>CUSTOM AI REVIEW STANDEES FOR INDIAN BUSINESSES</span>
           </div>
 
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50/90 border border-emerald-200/80 text-emerald-800 text-xs font-bold shadow-xs">
@@ -570,31 +483,27 @@ export default function HeroCustomizer() {
           </a>
         </div>
 
-        {/* 2-Column Hero Grid: Value Pitch (Left 6 Cols) + 3D Standee Customizer (Right 6 Cols) */}
+        {/* 2-Column Hero Grid: Store Checker & Value Pitch (Left 6 Cols) + MANA Acrylic Standee Showcase (Right 6 Cols) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-14 items-center">
-          {/* LEFT COLUMN: Headings, Value proposition & Action CTAs */}
+          {/* LEFT COLUMN: Headings, Business Lookup & Action CTAs */}
           <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
             <h1 className="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight text-[#172033] leading-[1.12]">
               Your counter standee, ready for customer reviews.
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-              Add your business name, preview your QR standee, and try the review experience your customers will see.
+              Customers scan your custom-designed counter standee, tap a rating, and draft an authentic Google review in their preferred language in seconds.
             </p>
 
-            {/* Action Group */}
+            {/* Primary Action Group */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-1">
               <button
                 type="button"
-                onClick={() => {
-                  const input = heroSearchContainerRef.current?.querySelector("input");
-                  input?.focus();
-                  setIsModalOpen(true);
-                }}
+                onClick={() => setIsModalOpen(true)}
                 className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#4338ca] hover:bg-[#3730a3] text-white font-bold text-sm shadow-md shadow-indigo-900/15 flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
-                <span>Preview my standee</span>
+                <span>Order custom standee</span>
               </button>
 
               <a
@@ -609,28 +518,28 @@ export default function HeroCustomizer() {
             </div>
 
             <p className="text-xs text-slate-500 font-medium">
-              Modular packages from ₹2,999 • Lifetime access &amp; physical standee delivery
+              Modular packages from ₹2,999 &bull; Custom standee artwork, lifetime portal access &amp; physical delivery
             </p>
 
-            {/* Quick Live Preview Input Form */}
-            <div className="p-5 sm:p-6 rounded-3xl bg-white border border-[#e3ded6] shadow-[0_15px_35px_-10px_rgba(23,32,51,0.06)] space-y-4">
-              <div className="flex items-center justify-between">
+            {/* Google Business Quick Lookup & Portal Checker */}
+            <div className="p-5 sm:p-6 rounded-3xl bg-white border border-[#e3ded6] shadow-[0_15px_35px_-10px_rgba(23,32,51,0.06)] space-y-4 text-left">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5 uppercase tracking-wider">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-spin" />
-                  Customize Your Standee Live:
+                  <MapPin className="w-3.5 h-3.5 text-indigo-600" />
+                  Check Your Business on Google Maps
                 </span>
                 <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                  Instant Preview Beside &rarr;
+                  Instant Setup Check
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {/* Hero Store Name Input with Google Places Autocomplete */}
                 <div ref={heroSearchContainerRef} className="relative">
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-left flex items-center justify-between">
-                    <span>Shop / Clinic Name</span>
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1 flex items-center justify-between">
+                    <span>Find Your Shop / Clinic</span>
                     <span className="text-[10px] text-indigo-600 font-semibold flex items-center gap-1">
-                      <Search className="w-2.5 h-2.5" /> Google Search
+                      <Search className="w-2.5 h-2.5" /> Live Google Search
                     </span>
                   </label>
                   <div className="relative">
@@ -641,7 +550,7 @@ export default function HeroCustomizer() {
                       onFocus={() => {
                         if (heroSearchResults.length > 0) setIsHeroDropdownOpen(true);
                       }}
-                      placeholder="e.g. Sri Krishna Sweets"
+                      placeholder="Search your business name..."
                       className="w-full pl-3.5 pr-8 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 text-xs font-semibold focus:outline-none focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 transition"
                     />
                     <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
@@ -658,7 +567,7 @@ export default function HeroCustomizer() {
                     <div className="absolute left-0 right-0 top-full mt-1.5 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-800 animate-fadeIn text-left max-h-56 overflow-y-auto">
                       <div className="px-3 py-1.5 bg-slate-950 text-[10px] font-bold text-slate-400 flex items-center justify-between">
                         <span>{isSearchingHero ? "Searching Google Maps..." : `Google Places (${heroSearchResults.length})`}</span>
-                        <span className="text-amber-400 font-normal">Tap to link</span>
+                        <span className="text-amber-400 font-normal">Tap to select</span>
                       </div>
 
                       {isSearchingHero && heroSearchResults.length === 0 && (
@@ -670,7 +579,7 @@ export default function HeroCustomizer() {
 
                       {!isSearchingHero && heroSearchResults.length === 0 && businessName.trim().length >= 2 && (
                         <div className="p-3 text-center text-xs text-slate-400">
-                          No exact match found on Google Maps. Keep typing!
+                          No exact match found on Google Maps. Keep typing or preview anyway!
                         </div>
                       )}
 
@@ -711,8 +620,8 @@ export default function HeroCustomizer() {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-left">
-                    City Location
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1">
+                    City / Area
                   </label>
                   <input
                     type="text"
@@ -724,12 +633,17 @@ export default function HeroCustomizer() {
                 </div>
               </div>
 
-              {/* Quick Try Presets */}
-              <div className="pt-1 flex flex-wrap items-center gap-1.5 justify-start">
-                <span className="text-[10px] text-slate-500 font-bold">Quick Try:</span>
+              {/* Verified Client Shortcuts */}
+              <div className="pt-0.5 flex flex-wrap items-center gap-1.5">
+                <span className="text-[10px] text-slate-500 font-bold">Live Client Examples:</span>
                 {POPULAR_PRESETS.map((p) => {
+                  const isActive = businessName.trim().toLowerCase() === p.name.toLowerCase();
                   const shortLabel = p.name.startsWith("MANA")
                     ? "MANA"
+                    : p.name.startsWith("New Roshan")
+                    ? "New Roshan"
+                    : p.name.startsWith("Golden Hair")
+                    ? "Golden Hair"
                     : p.name.startsWith("VR")
                     ? "VR Gold"
                     : p.name.startsWith("City")
@@ -742,7 +656,11 @@ export default function HeroCustomizer() {
                       key={p.name}
                       type="button"
                       onClick={() => handleSelectPreset(p)}
-                      className="text-[10px] px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold border border-slate-200 transition active:scale-95"
+                      className={`text-[10px] px-2.5 py-1 rounded-full font-semibold border transition active:scale-95 cursor-pointer ${
+                        isActive
+                          ? "bg-[#172033] text-white border-[#172033]"
+                          : "bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200"
+                      }`}
                     >
                       {shortLabel}
                     </button>
@@ -750,32 +668,73 @@ export default function HeroCustomizer() {
                 })}
               </div>
 
-              {/* Ultra High-Conversion Buy Now / Order Now CTA */}
-              <div className="pt-2 space-y-2.5">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(true)}
-                  className="group relative w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm sm:text-base tracking-wide shadow-[0_12px_40px_rgba(16,185,129,0.35)] ring-2 ring-emerald-400/40 hover:ring-emerald-400/70 hover:shadow-[0_16px_50px_rgba(16,185,129,0.45)] active:scale-[0.98] transition-all duration-200 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 cursor-pointer overflow-hidden"
-                >
-                  {/* Subtle Shimmer Light Sweep */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none" />
-
-                  <div className="flex items-center gap-2">
-                    <span className="p-1.5 rounded-xl bg-amber-400/20 text-amber-300 border border-amber-300/30">
-                      <Sparkles className="w-4 h-4 animate-spin" />
-                    </span>
-                    <span className="text-white text-base sm:text-lg font-black tracking-tight">
-                      BUY NOW &bull; From ₹2,999
-                    </span>
+              {/* Store Readiness Summary Panel */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-xs font-black text-slate-900 truncate">
+                      {businessName.trim() || "Your Business Name"}
+                    </p>
+                    <p className="text-[11px] text-slate-500 truncate">
+                      {verifiedGoogleProfile?.address || city || "India"} &bull; {category}
+                    </p>
                   </div>
+                  <span
+                    className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border shrink-0 ${
+                      verifiedGoogleProfile
+                        ? "bg-amber-50 text-amber-800 border-amber-200"
+                        : isKnownMerchant
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                        : "bg-indigo-50 text-indigo-700 border-indigo-200"
+                    }`}
+                  >
+                    {verifiedGoogleProfile?.rating
+                      ? `Google ★ ${verifiedGoogleProfile.rating} ${verifiedGoogleProfile.reviewCount ? `(${verifiedGoogleProfile.reviewCount})` : ""}`
+                      : isKnownMerchant
+                      ? "Verified Live Client"
+                      : "Portal Preview Ready"}
+                  </span>
+                </div>
 
-                  <span className="hidden sm:inline text-emerald-200 font-normal text-xs">&bull;</span>
+                <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold text-slate-600">
+                  <span className="inline-flex items-center gap-1 text-emerald-700">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Custom Brand Design
+                  </span>
+                  <span>&bull;</span>
+                  <span className="inline-flex items-center gap-1 text-indigo-700">
+                    <CheckCircle2 className="w-3 h-3 text-indigo-600" /> 6-Language AI Writer
+                  </span>
+                  <span>&bull;</span>
+                  <span className="inline-flex items-center gap-1 text-slate-700">
+                    <CheckCircle2 className="w-3 h-3 text-amber-600" /> Private Grievance Shield
+                  </span>
+                </div>
+              </div>
 
-                  <div className="flex items-center gap-1.5 text-emerald-100 text-xs sm:text-sm font-bold">
-                    <span>Claim Lifetime Pass</span>
-                    <ArrowRight className="w-4 h-4 text-emerald-200 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </button>
+              {/* Direct Conversion & Preview Actions */}
+              <div className="pt-1 space-y-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsModalOpen(true)}
+                    className="sm:col-span-7 group relative py-3.5 px-5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm tracking-wide shadow-[0_12px_32px_rgba(16,185,129,0.28)] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer overflow-hidden"
+                  >
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-1000 ease-in-out pointer-events-none" />
+                    <span>BUY NOW &bull; From ₹2,999</span>
+                    <ArrowRight className="w-4 h-4 text-emerald-100 group-hover:translate-x-1 transition-transform" />
+                  </button>
+
+                  <a
+                    href={activeDemoHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="sm:col-span-5 py-3.5 px-4 rounded-2xl bg-[#172033] hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition active:scale-[0.98]"
+                  >
+                    <Smartphone className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                    <span>Open Review Demo</span>
+                    <ExternalLink className="w-3 h-3 opacity-75 shrink-0" />
+                  </a>
+                </div>
 
                 {/* Purchase Trust Badges */}
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-1.5 text-[11px] text-slate-500 font-semibold pt-0.5">
@@ -788,7 +747,7 @@ export default function HeroCustomizer() {
                   </span>
                   <span className="hidden sm:inline">&bull;</span>
                   <span className="flex items-center gap-1 text-slate-700 font-bold">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Instant Card Activation
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Instant Portal Activation
                   </span>
                 </div>
               </div>
@@ -816,195 +775,49 @@ export default function HeroCustomizer() {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Photorealistic Luxury Acrylic Standee */}
+          {/* RIGHT COLUMN: Approved MANA Tours & Travels Standee Showcase */}
           <div className="lg:col-span-6 flex flex-col items-center justify-center relative">
-            {/* View Mode Toggle: Interactive 3D Standee vs Real Counter Photograph */}
-            <div className="mb-3 flex items-center p-1 rounded-2xl bg-white border border-[#e3ded6] shadow-xs text-xs font-bold">
-              <button
-                type="button"
-                onClick={() => setViewMode("customizer")}
-                className={`px-3.5 py-1.5 rounded-xl transition flex items-center gap-1.5 cursor-pointer ${
-                  viewMode === "customizer"
-                    ? "bg-[#172033] text-white shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>Live 3D Customizer</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode("photo")}
-                className={`px-3.5 py-1.5 rounded-xl transition flex items-center gap-1.5 cursor-pointer ${
-                  viewMode === "photo"
-                    ? "bg-[#172033] text-white shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                <Store className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Real Counter Photo</span>
-              </button>
+            <div className="relative flex flex-col items-center justify-center w-full max-w-md">
+              {/* Soft studio backdrop halo */}
+              <div className="absolute -inset-4 bg-gradient-to-tr from-indigo-500/10 via-amber-400/10 to-red-500/10 rounded-[40px] blur-2xl pointer-events-none -z-10" />
+
+              {/* Optical Clear 3mm Acrylic Counter Standee Frame */}
+              <div className="relative p-2.5 sm:p-3 rounded-[28px] bg-gradient-to-br from-white/95 via-slate-200/75 to-white/90 border border-white shadow-[0_30px_70px_-15px_rgba(15,23,42,0.42),0_0_0_1px_rgba(148,163,184,0.35)]">
+                <div className="acrylic-edge-highlight" />
+                <img
+                  src="/images/hero-mana-standee.webp"
+                  alt="MANA Tours & Travels custom ReviewSmart AI counter standee with Google review QR code"
+                  width={682}
+                  height={1024}
+                  className="w-[265px] sm:w-[310px] lg:w-[330px] h-auto rounded-[20px] block"
+                />
+              </div>
+
+              {/* Optical Acrylic Standee Base Foot & Grounded Shadow */}
+              <div className="acrylic-base-stand w-56 sm:w-64 h-3.5 mx-auto -mt-1 z-10" />
+              <div className="acrylic-contact-shadow w-64 sm:w-72 h-4 mx-auto -mt-1" />
             </div>
 
-            {viewMode === "photo" ? (
-              /* Real Product Photography Showcase */
-              <div className="relative flex flex-col items-center justify-center w-full max-w-sm animate-fadeIn">
-                <div className="relative rounded-[28px] overflow-hidden border-2 border-slate-300/80 shadow-2xl bg-slate-900">
-                  <img
-                    src="/images/product-hero-standee.webp"
-                    alt="ReviewSmart A6 Acrylic Counter Standee on Limestone Counter in Kadapa Boutique"
-                    className="w-[290px] sm:w-[330px] h-[390px] sm:h-[420px] object-cover"
-                  />
-                  <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-slate-950/90 via-slate-950/50 to-transparent text-left">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[10px] font-bold mb-1">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Real Boutique Counter Shot
-                    </div>
-                    <p className="text-white text-xs font-bold leading-tight">
-                      3mm Cast Optical Acrylic &bull; Beveled Edge &bull; Laser-Crisp QR
-                    </p>
-                    <p className="text-[10px] text-slate-300 mt-0.5">
-                      Actual product manufactured and shipped to your shop counter.
-                    </p>
-                  </div>
-                </div>
+            {/* Standee Caption & Direct Live Action */}
+            <div className="mt-4 flex flex-col items-center gap-2 text-center">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200/90 text-[11px] font-bold text-slate-700 shadow-xs">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                Custom Client Build &bull; MANA Tours &amp; Travels, Kadapa
+              </span>
 
-                <div className="mt-3 flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setViewMode("customizer")}
-                    className="text-xs font-bold text-indigo-600 hover:text-indigo-800 underline flex items-center gap-1 cursor-pointer"
-                  >
-                    <span>&larr; Switch back to 3D Customizer to customize your name</span>
-                  </button>
-                </div>
-              </div>
-            ) : (
-              /* 3D Acrylic Customizer View */
-              <div className="w-full flex flex-col items-center justify-center animate-fadeIn">
-                {/* Standee Theme Selector Swatches with explicit text labels */}
-                <div className="mb-4 flex flex-wrap items-center justify-center gap-1.5 p-1.5 rounded-2xl bg-white border border-[#e3ded6] shadow-xs">
-                  {Object.values(THEMES).map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => setSelectedTheme(t.id)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border cursor-pointer ${
-                        selectedTheme === t.id
-                          ? "bg-[#172033] text-white border-[#172033] shadow-xs"
-                          : "bg-white text-slate-700 border-transparent hover:bg-slate-100"
-                      }`}
-                    >
-                      <span
-                        className="w-2.5 h-2.5 rounded-full border border-black/10 shrink-0"
-                        style={{ backgroundColor: t.dotColor }}
-                      />
-                      <span>{t.name}</span>
-                    </button>
-                  ))}
-                </div>
+              <a
+                href="/r/mana-tours-travels?demo=true"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full max-w-xs py-3 px-5 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 hover:from-slate-800 hover:to-indigo-900 text-white font-black text-xs shadow-lg border border-slate-700/80 transition active:scale-95 flex items-center justify-center gap-2 group"
+              >
+                <QrCode className="w-3.5 h-3.5 text-amber-400" />
+                <span>Open Live MANA Customer Card</span>
+                <ExternalLink className="w-3 h-3 opacity-80 group-hover:translate-x-0.5 transition-transform" />
+              </a>
+            </div>
 
-                {/* 3D Acrylic Standee Container on Grounded Countertop */}
-                <div
-                  className="relative p-2 flex flex-col items-center justify-center w-full max-w-sm"
-                  style={{ perspective: "1200px" }}
-                >
-                  {/* Luxury Acrylic Standee Card */}
-                  <div
-                    className={`acrylic-card-preview relative w-[280px] xs:w-[290px] sm:w-80 max-w-[calc(100vw-36px)] rounded-[28px] bg-gradient-to-b ${theme.bgGradient} p-5 sm:p-6 border-2 ${theme.borderClass} text-center transition-all duration-300`}
-                  >
-                    {/* Acrylic Gloss Reflection Highlight */}
-                    <div className="acrylic-edge-highlight" />
-
-                    {/* Top Badge: Google Review Official Accent */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className={`px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider ${theme.badgeBg}`}>
-                        Scan Smart QR &bull; 10s Review
-                      </div>
-                      <div className="flex items-center gap-1 bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/20">
-                        <span className="text-[10px] font-black text-amber-300">5.0</span>
-                        <span className="text-amber-400 text-xs">★★★★★</span>
-                      </div>
-                    </div>
-
-                    {/* Business Name Heading */}
-                    <div className="py-2">
-                      <h3 className={`text-xl sm:text-2xl font-black tracking-tight leading-tight line-clamp-2 ${theme.textColor}`}>
-                        {businessName || "Your Business Name"}
-                      </h3>
-                      <p className={`text-[11px] font-medium flex items-center justify-center gap-1 mt-1 ${
-                        selectedTheme === "pearl-rose" ? "text-slate-600" : "text-slate-300"
-                      }`}>
-                        <MapPin className="w-3 h-3 text-indigo-400 shrink-0" />
-                        <span className="truncate">{city || "Kadapa / Hyderabad"}</span>
-                      </p>
-                    </div>
-
-                    {/* QR Code Inlay with High Contrast Card */}
-                    <div className="my-3 p-3.5 rounded-2xl bg-white shadow-xl mx-auto w-44 flex flex-col items-center justify-center relative border border-slate-100">
-                      {qrCodeDataUrl ? (
-                        <img
-                          src={qrCodeDataUrl}
-                          alt="ReviewSmart QR Code"
-                          className="w-36 h-36 object-contain"
-                        />
-                      ) : (
-                        <div className="w-36 h-36 flex items-center justify-center">
-                          <Loader2 className="w-6 h-6 animate-spin text-slate-400" />
-                        </div>
-                      )}
-
-                      <div className="mt-1.5 text-[9px] font-black text-slate-900 tracking-wider uppercase">
-                        Scan for 5-Star Review
-                      </div>
-                    </div>
-
-                    {/* Obvious Mobile / Desktop Action: Open Demo on this phone */}
-                    <div className="mt-3 pt-3 border-t border-white/15">
-                      <a
-                        href={activeDemoHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`w-full py-2.5 px-3 rounded-xl border text-xs font-bold transition flex items-center justify-center gap-2 active:scale-95 ${
-                          selectedTheme === "pearl-rose"
-                            ? "bg-slate-900 hover:bg-slate-800 border-slate-800 text-white shadow-md"
-                            : "bg-white/20 hover:bg-white/30 border border-white/30 text-white"
-                        }`}
-                      >
-                        <Smartphone className={`w-4 h-4 ${selectedTheme === "pearl-rose" ? "text-amber-400" : "text-amber-300"}`} />
-                        <span>Open demo on this phone</span>
-                        <ExternalLink className="w-3 h-3 opacity-70" />
-                      </a>
-                      <p className={`text-[7.5px] font-mono font-bold uppercase tracking-widest mt-2.5 ${
-                        selectedTheme === "pearl-rose" ? "text-slate-600" : "text-amber-300/80"
-                      }`}>
-                        Powered by - MOMO IT TECHNOLOGIES | KADAPA
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* 3D Acrylic Base Standee Foot (Reflected shadow) */}
-                  <div className="acrylic-base-stand w-56 h-3.5 mx-auto -mt-1.5 z-10" />
-                  <div className="acrylic-contact-shadow w-64 h-4 mx-auto -mt-1" />
-                </div>
-              </div>
-            )}
-
-            {/* Quick Helper text */}
-            <p className="text-[11px] text-slate-500 mt-2 text-center font-medium">
-              Crystal Acrylic A6 Counter Standee &bull; Laser-Crisp High-Density Dynamic QR &bull; Zero Battery Needed
-            </p>
-
-            {/* Quick Buy Standee CTA */}
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(true)}
-              className="mt-3 w-full max-w-xs py-3 px-5 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 hover:from-slate-800 hover:to-indigo-900 text-white font-black text-xs shadow-lg border border-slate-700/80 transition active:scale-95 flex items-center justify-center gap-2 group cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-12 transition-transform" />
-              <span>Order This Custom Standee Now &rarr;</span>
-            </button>
-
-            {/* 3 Hardware Benefit Badges to fill vertical space */}
+            {/* 3 Hardware Quality Badges */}
             <div className="mt-4 grid grid-cols-3 gap-2 w-full max-w-md text-left">
               <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-xs flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
@@ -1017,20 +830,20 @@ export default function HeroCustomizer() {
               </div>
               <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-xs flex items-center gap-2">
                 <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                  <Sparkles className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold text-slate-800 leading-tight">Custom Design</p>
+                  <p className="text-[9px] text-slate-500">Tailored to your brand</p>
+                </div>
+              </div>
+              <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-xs flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
                   <Zap className="w-4 h-4" />
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-slate-800 leading-tight">Instant Smart QR</p>
                   <p className="text-[9px] text-slate-500">Camera &amp; UPI scanner</p>
-                </div>
-              </div>
-              <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-xs flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
-                  <Flame className="w-4 h-4" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-slate-800 leading-tight">Zero Battery</p>
-                  <p className="text-[9px] text-slate-500">100% passive showpiece</p>
                 </div>
               </div>
             </div>
@@ -1245,7 +1058,7 @@ export default function HeroCustomizer() {
                       <div className="flex justify-between items-start text-slate-600 pt-1">
                         <div>
                           <span className="font-bold text-slate-800 block">{currentPlan.name}</span>
-                          <span className="text-[10px] text-slate-400">Custom Theme: {theme.name} &bull; Laser-Crisp Smart QR</span>
+                          <span className="text-[10px] text-slate-400">Custom Brand Standee Design &bull; Laser-Crisp Smart QR</span>
                         </div>
                         <span className="font-mono font-semibold line-through text-slate-400">₹{currentPlan.price * 2}</span>
                       </div>
