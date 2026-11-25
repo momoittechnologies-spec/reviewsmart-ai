@@ -1772,6 +1772,10 @@ export default function HomePage() {
 
             {/* Official Technology Partner Pill */}
             <div className="flex flex-wrap items-center justify-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-800 text-[11px] font-bold">
+                <MapPin className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                <span>Proudly developed from Kadapa</span>
+              </span>
               <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                 Technology Partner:
               </span>
@@ -1820,7 +1824,7 @@ export default function HomePage() {
               >
                 MOMO IT Technologies
               </a>
-              {" "}&bull; Pan-India Google Review Engine &bull; All Rights Reserved.
+              {" "}&bull; Proudly developed from Kadapa &bull; Pan-India Google Review Engine &bull; All Rights Reserved.
             </p>
           </div>
         </div>

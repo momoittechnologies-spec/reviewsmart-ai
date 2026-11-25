@@ -494,6 +494,11 @@ export default function HeroCustomizer() {
             <Zap className="w-3.5 h-3.5 text-amber-600" />
             <span>Modular Packages From ₹2,999 &bull; Lifetime</span>
           </a>
+
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-[#e3ded6] text-[#172033] text-xs font-bold shadow-xs">
+            <MapPin className="w-3.5 h-3.5 text-[#4338ca] shrink-0" />
+            <span>Proudly developed from Kadapa</span>
+          </div>
         </div>
 
         {/* 2-Column Hero Grid: Store Checker & Value Pitch (Left 6 Cols) + MANA Acrylic Standee Showcase (Right 6 Cols) */}
