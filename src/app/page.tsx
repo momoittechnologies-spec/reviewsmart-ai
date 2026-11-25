@@ -1039,26 +1039,32 @@ export default function HomePage() {
 
           {/* Real Customer Scan Photography Banner */}
           <div className="mb-12 rounded-3xl overflow-hidden border border-slate-200/90 shadow-xl bg-slate-900 grid grid-cols-1 lg:grid-cols-12 items-center">
-            <div className="lg:col-span-7 h-64 sm:h-80 relative overflow-hidden">
-              <img
-                src="/images/customer-scan-action.webp"
-                alt="Walk-in customer scanning ReviewSmart acrylic standee with smartphone camera at store counter"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-slate-950/75 backdrop-blur-md text-white text-[11px] font-bold border border-white/20 flex items-center gap-1.5 shadow-md">
-                <Camera className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Real Customer Walk-In Experience</span>
-              </div>
+            <div className="lg:col-span-7 aspect-[3/2] lg:aspect-auto lg:h-80 relative overflow-hidden">
+              <picture className="block w-full h-full">
+                <source
+                  media="(max-width: 1023px)"
+                  srcSet="/images/customer-scan-action-mobile.webp"
+                  width={1170}
+                  height={780}
+                />
+                <img
+                  src="/images/customer-scan-action.webp"
+                  alt="New Roshan Tours & Travels QR standee beside a phone showing its ReviewSmart rating page."
+                  width={1680}
+                  height={640}
+                  className="w-full h-full object-cover object-[46%_center]"
+                />
+              </picture>
             </div>
             <div className="lg:col-span-5 p-6 sm:p-8 text-left space-y-3">
               <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2.5 py-0.5 rounded-full">
                 Zero Friction
               </span>
               <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
-                Scan With Any Phone Camera. No App Required.
+                Scan the QR to open the review page.
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                Customers point their iPhone camera, Android camera, Google Lens, or PhonePe/GPay scanner. In under 1 second, your store&apos;s branded review portal opens instantly.
+                Customers scan the standee with their phone camera, then choose a rating on the business&apos;s ReviewSmart page.
               </p>
               <div className="pt-1 flex items-center gap-3 text-xs text-slate-400 font-medium">
                 <span className="flex items-center gap-1 text-slate-200">
