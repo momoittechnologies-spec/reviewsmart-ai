@@ -15,7 +15,7 @@ export async function GET() {
         settings = await prisma.platformSetting.update({
           where: { id: "default" },
           data: {
-            upiId: "8639831132-2@ybl",
+            upiId: "9036909110@apl",
             supportWhatsapp: settings.supportWhatsapp || "+918639831132",
             upiPayeeName: settings.upiPayeeName || "Damerla Mohan",
           },
@@ -46,7 +46,7 @@ export async function PUT(req: NextRequest) {
         supportEmail: body.supportEmail || "support@reviewsmart.online",
         supportWhatsapp: body.supportWhatsapp || "+918639831132",
         currencySymbol: body.currencySymbol || "₹",
-        upiId: body.upiId || "8639831132-2@ybl",
+        upiId: body.upiId || "9036909110@apl",
         upiPayeeName: body.upiPayeeName || "Damerla Mohan",
         minNegotiatedPrice: Number(body.minNegotiatedPrice) || 1999,
         commissionRate: Number(body.commissionRate) || 0.40,
@@ -57,7 +57,7 @@ export async function PUT(req: NextRequest) {
         supportEmail: body.supportEmail || "support@reviewsmart.online",
         supportWhatsapp: body.supportWhatsapp || "+918639831132",
         currencySymbol: body.currencySymbol || "₹",
-        upiId: body.upiId || "8639831132-2@ybl",
+        upiId: body.upiId || "9036909110@apl",
         upiPayeeName: body.upiPayeeName || "Damerla Mohan",
         minNegotiatedPrice: Number(body.minNegotiatedPrice) || 1999,
         commissionRate: Number(body.commissionRate) || 0.40,

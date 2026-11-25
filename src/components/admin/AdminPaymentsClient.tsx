@@ -71,7 +71,7 @@ export default function AdminPaymentsClient({
   const [payments, setPayments] = useState(initialPayments);
   const [settings, setSettings] = useState(
     initialSettings || {
-      upiId: "8639831132-2@ybl",
+      upiId: "9036909110@apl",
       upiPayeeName: "Damerla Mohan",
       minNegotiatedPrice: 1999,
       commissionRate: 0.30,
@@ -246,7 +246,7 @@ export default function AdminPaymentsClient({
               type="text" required
               value={settings.upiId}
               onChange={(e) => setSettings({ ...settings, upiId: e.target.value })}
-              placeholder="e.g. 8639831132-2@ybl"
+              placeholder="e.g. 9036909110@apl"
               className="w-full text-xs font-mono p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>

@@ -191,7 +191,19 @@ export default function HeroCustomizer() {
   const [showOrderSummary, setShowOrderSummary] = useState(false);
   const [showUtrHelp, setShowUtrHelp] = useState(false);
   const [selectedAppHelp, setSelectedAppHelp] = useState<"phonepe" | "gpay" | "paytm">("phonepe");
-  const upiPhoneNumber = "8639831132";
+  const [platformUpiId, setPlatformUpiId] = useState("9036909110@apl");
+  const [platformUpiPayee, setPlatformUpiPayee] = useState("Damerla Mohan");
+  const upiPhoneNumber = /^\d{10}/.exec(platformUpiId)?.[0] || "9036909110";
+
+  useEffect(() => {
+    fetch("/api/platform-settings")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.settings?.upiId) setPlatformUpiId(data.settings.upiId);
+        if (data?.settings?.upiPayeeName) setPlatformUpiPayee(data.settings.upiPayeeName);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleCopyPhone = async () => {
     await copyToClipboard(upiPhoneNumber);
@@ -209,19 +221,20 @@ export default function HeroCustomizer() {
   } | null>(null);
 
   const currentPlan = PACKAGES[selectedPlanId] || PACKAGES.starter;
-  const upiId = "8639831132-2@ybl";
-  const upiPayee = "Damerla Mohan";
+  const upiId = platformUpiId;
+  const upiPayee = platformUpiPayee;
   const upiNote = `ReviewSmart - ${currentPlan.name.slice(0, 12)} - ${businessName.slice(0, 12) || "Order"}`;
   const upiEncodedNote = encodeURIComponent(upiNote);
   const upiEncodedPayee = encodeURIComponent(upiPayee);
+  const upiEncodedId = encodeURIComponent(upiId);
 
   // Dynamic Multi-App Protocol Deep Links based on selected package
   const merchantParams = "mc=7372&mode=01&purpose=00";
-  const phonePeDeepLink = `phonepe://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
-  const gpayDeepLink = `tez://upi/pay?pa=${upiId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
-  const paytmDeepLink = `paytmmp://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
-  const credDeepLink = `credpay://upi/pay?pa=${upiId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
-  const upiDeepLink = `upi://pay?pa=${upiId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
+  const phonePeDeepLink = `phonepe://pay?pa=${upiEncodedId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
+  const gpayDeepLink = `tez://upi/pay?pa=${upiEncodedId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
+  const paytmDeepLink = `paytmmp://pay?pa=${upiEncodedId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
+  const credDeepLink = `credpay://upi/pay?pa=${upiEncodedId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
+  const upiDeepLink = `upi://pay?pa=${upiEncodedId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
 
   // Listen for package selection events from pricing section or mobile dock
   useEffect(() => {
@@ -1537,7 +1550,7 @@ export default function HeroCustomizer() {
 
                             {selectedAppHelp === "phonepe" && (
                               <p className="text-slate-600 leading-tight">
-                                👉 PhonePe &rarr; <strong>History</strong> &rarr; Tap ₹{currentPlan.price.toLocaleString("en-IN")} payment to Damerla Mohan &rarr; Copy the 12-digit <strong>UTR</strong>.
+                                👉 PhonePe &rarr; <strong>History</strong> &rarr; Tap ₹{currentPlan.price.toLocaleString("en-IN")} payment to {upiPayee} &rarr; Copy the 12-digit <strong>UTR</strong>.
                               </p>
                             )}
 

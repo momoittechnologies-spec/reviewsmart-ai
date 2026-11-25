@@ -172,7 +172,7 @@ model PlatformSetting {
   supportWhatsapp    String   @default("+918639831132")
   customDomain       String?
   currencySymbol     String   @default("₹")
-  upiId              String   @default("8639831132-2@ybl")
+  upiId              String   @default("9036909110@apl")
   upiPayeeName       String   @default("Damerla Mohan")
   minNegotiatedPrice Float    @default(1999)   // Hard floor for all agent + online deals
   commissionRate     Float    @default(0.30)  // 30% default agent commission on verified sales

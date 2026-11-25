@@ -81,8 +81,8 @@ export default function BillingClient({
   const [selectedAppGuide, setSelectedAppGuide] = useState<"phonepe" | "gpay" | "paytm">("phonepe");
 
   const rawUpiId = settings?.upiId;
-  const upiId = rawUpiId || "8639831132-2@ybl";
-  const upiPhoneNumber = "8639831132";
+  const upiId = rawUpiId || "9036909110@apl";
+  const upiPhoneNumber = /^\d{10}/.exec(upiId)?.[0] || "9036909110";
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [paymentTab, setPaymentTab] = useState<"apps" | "qr" | "manual">("apps");
 
@@ -722,7 +722,7 @@ export default function BillingClient({
                     </div>
                     <ol className="list-decimal pl-4 space-y-1 text-slate-700">
                       <li>Open <strong>PhonePe</strong> and tap <strong>History</strong> at bottom right.</li>
-                      <li>Tap the payment of <strong>₹{currentAmount}</strong> to Damerla Mohan.</li>
+                      <li>Tap the payment of <strong>₹{currentAmount}</strong> to {upiPayee}.</li>
                       <li>Look under <em>Transaction Details</em> for: <span className="font-mono font-bold text-purple-900 bg-purple-100 px-1 py-0.5 rounded">UTR: 4xxxxxxxxxxx (12 Digits)</span>.</li>
                     </ol>
                   </div>
@@ -735,7 +735,7 @@ export default function BillingClient({
                     </div>
                     <ol className="list-decimal pl-4 space-y-1 text-slate-700">
                       <li>Open <strong>Google Pay</strong>, scroll to the bottom &amp; tap <strong>See transaction history</strong>.</li>
-                      <li>Tap the ₹{currentAmount} payment to <strong>8639831132-2@ybl</strong>.</li>
+                      <li>Tap the ₹{currentAmount} payment to <strong>{upiId}</strong>.</li>
                       <li>Look for: <span className="font-mono font-bold text-blue-900 bg-blue-100 px-1 py-0.5 rounded">UPI transaction ID: 4xxxxxxxxxxx (12 Digits)</span>.</li>
                     </ol>
                   </div>

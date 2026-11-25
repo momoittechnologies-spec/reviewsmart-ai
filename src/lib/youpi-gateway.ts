@@ -32,8 +32,8 @@ export interface YouPiOrderResult {
 }
 
 // Default Platform Fallback VPA if not provided
-const PLATFORM_UPI_ID = process.env.NEXT_PUBLIC_PLATFORM_UPI_ID || "7287867584@cub";
-const PLATFORM_PAYEE_NAME = process.env.NEXT_PUBLIC_PLATFORM_PAYEE_NAME || "ReviewSmart AI";
+const PLATFORM_UPI_ID = process.env.NEXT_PUBLIC_PLATFORM_UPI_ID || "9036909110@apl";
+const PLATFORM_PAYEE_NAME = process.env.NEXT_PUBLIC_PLATFORM_PAYEE_NAME || "Damerla Mohan";
 
 /**
  * Creates a deterministic, single-session YouPI-PG order
