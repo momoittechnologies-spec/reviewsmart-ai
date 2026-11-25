@@ -14,8 +14,8 @@ async function main() {
       upiPayeeName: "Damerla Mohan",
       supportEmail: "support@reviewsmart.online",
       digitalPrice: 299,
-      physicalPrice: 1999,
-      minNegotiatedPrice: 1999,
+      physicalPrice: 2999,
+      minNegotiatedPrice: 2999,
     },
     create: {
       id: "default",
@@ -25,8 +25,8 @@ async function main() {
       upiId: "9036909110@apl",
       upiPayeeName: "Damerla Mohan",
       digitalPrice: 299,
-      physicalPrice: 1999,
-      minNegotiatedPrice: 1999,
+      physicalPrice: 2999,
+      minNegotiatedPrice: 2999,
     },
   });
 

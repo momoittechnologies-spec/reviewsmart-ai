@@ -610,12 +610,12 @@ export default function HomePage() {
       a: "When a customer rates 4 or 5 stars, they are seamlessly guided to post on Google Maps with an AI draft. If a customer rates 1, 2, or 3 stars, our intelligent shield intercepts the feedback privately to your WhatsApp desk or email. You resolve the issue with the customer immediately, while Google Maps remains 100% shielded from public negative damage.",
     },
     {
-      q: "How do I get the physical Acrylic Standee or PVC Cards for my counter?",
-      a: "Your merchant dashboard includes our Standee Studio with instant high-resolution 300 DPI vector PDF downloads ready for 4\"×6\" Acrylic Standees, CR80 PVC Cards, and A4 Wall Posters. You can print them locally anywhere, or contact our support team on WhatsApp to order our physical luxury crystal acrylic kits delivered straight to your doorstep.",
+      q: "How do design approval and physical standee shipping work?",
+      a: "After ordering, simply share your shop name and logo (optional). Our design team shares a custom 4″×6″ acrylic standee artwork preview on WhatsApp for your approval before printing. Shipping is completely FREE across India with tracked doorstep courier delivery.",
     },
     {
-      q: "What is the difference between Online and Offline pricing?",
-      a: "Online customers purchasing directly via our website / Meta Ads get instant digital access, the complete 6-language AI review platform, free GMB setup, and full Standee Studio PDF exports for ₹2,999 Lifetime. Offline clients work directly with our executive team who provide in-person store setup, physical hardware standee kits, and custom multi-outlet onboarding.",
+      q: "What is included in each one-time package starting at ₹2,999?",
+      a: "All public packages start from ₹2,999 one-time and include your custom-designed physical counter hardware, the 6-language AI review portal, private negative feedback WhatsApp shield, and lifetime portal access with zero recurring monthly or annual fees.",
     },
   ];
 
@@ -1291,7 +1291,7 @@ export default function HomePage() {
                   </div>
                   <div className="flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span><strong className="text-slate-900">12-Month Cloud Hosting</strong> &amp; operational warranty included</span>
+                    <span><strong className="text-slate-900">Custom Brand Artwork + Lifetime Hosting</strong> (Zero monthly renewal fees)</span>
                   </div>
                 </div>
               </div>

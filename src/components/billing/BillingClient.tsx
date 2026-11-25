@@ -360,38 +360,9 @@ export default function BillingClient({
               </div>
             </div>
 
-            {/* Other Hardware Kits */}
+            {/* Unified Modular Packages (Starting ₹2,999) */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {/* Executive Standee */}
-              <div
-                onClick={() => setSelectedPlan("EXECUTIVE_STANDEE")}
-                className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
-                  selectedPlan === "EXECUTIVE_STANDEE"
-                    ? "border-indigo-600 bg-indigo-50/50 shadow-md ring-2 ring-indigo-500/20"
-                    : "border-slate-200 bg-white hover:border-slate-300"
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[9px] font-black uppercase tracking-wider text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full">
-                      Standee Kit
-                    </span>
-                    <Printer className="w-3.5 h-3.5 text-indigo-600" />
-                  </div>
-                  <h4 className="text-xs font-black text-slate-900">
-                    Executive Counter Standee
-                  </h4>
-                  <div className="flex items-baseline gap-1 my-1">
-                    <span className="text-lg font-black text-slate-900">₹2,499</span>
-                    <span className="text-[10px] text-slate-400 font-semibold">one-time</span>
-                  </div>
-                  <p className="text-[10px] text-slate-500 leading-tight">
-                    1x 4″×6″ Acrylic Standee + 1x PVC Card
-                  </p>
-                </div>
-              </div>
-
-              {/* Starter PVC */}
+              {/* Starter Review Booster (₹2,999) */}
               <div
                 onClick={() => setSelectedPlan("STARTER_PVC")}
                 className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
@@ -403,24 +374,53 @@ export default function BillingClient({
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[9px] font-black uppercase tracking-wider text-slate-700 bg-slate-100 px-2 py-0.5 rounded-full">
-                      Card Only
+                      Tier 1 • Starter
                     </span>
-                    <CreditCard className="w-3.5 h-3.5 text-slate-500" />
+                    <Printer className="w-3.5 h-3.5 text-slate-600" />
                   </div>
                   <h4 className="text-xs font-black text-slate-900">
-                    Starter PVC Card Pack
+                    {HARDWARE_PACKAGES.STARTER_PVC.name}
                   </h4>
                   <div className="flex items-baseline gap-1 my-1">
-                    <span className="text-lg font-black text-slate-900">₹1,999</span>
+                    <span className="text-lg font-black text-slate-900">₹{HARDWARE_PACKAGES.STARTER_PVC.price.toLocaleString("en-IN")}</span>
                     <span className="text-[10px] text-slate-400 font-semibold">one-time</span>
                   </div>
                   <p className="text-[10px] text-slate-500 leading-tight">
-                    1x Dual-Sided PVC Smart QR Card
+                    1x 4″×6″ Acrylic Standee + Lifetime Portal
                   </p>
                 </div>
               </div>
 
-              {/* All-in-One Multi-Counter Hub */}
+              {/* Smart Business Hub (₹3,999) */}
+              <div
+                onClick={() => setSelectedPlan("EXECUTIVE_STANDEE")}
+                className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
+                  selectedPlan === "EXECUTIVE_STANDEE"
+                    ? "border-indigo-600 bg-indigo-50/50 shadow-md ring-2 ring-indigo-500/20"
+                    : "border-slate-200 bg-white hover:border-slate-300"
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[9px] font-black uppercase tracking-wider text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full">
+                      Tier 2 • Most Popular
+                    </span>
+                    <CreditCard className="w-3.5 h-3.5 text-indigo-600" />
+                  </div>
+                  <h4 className="text-xs font-black text-slate-900">
+                    {HARDWARE_PACKAGES.EXECUTIVE_STANDEE.name}
+                  </h4>
+                  <div className="flex items-baseline gap-1 my-1">
+                    <span className="text-lg font-black text-slate-900">₹{HARDWARE_PACKAGES.EXECUTIVE_STANDEE.price.toLocaleString("en-IN")}</span>
+                    <span className="text-[10px] text-slate-400 font-semibold">one-time</span>
+                  </div>
+                  <p className="text-[10px] text-slate-500 leading-tight">
+                    Dual-Sided Standee + Counter UPI + Social Hub
+                  </p>
+                </div>
+              </div>
+
+              {/* 360° Growth & Loyalty (₹4,999) */}
               <div
                 onClick={() => setSelectedPlan("ALL_IN_ONE_HUB")}
                 className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
@@ -432,19 +432,19 @@ export default function BillingClient({
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[9px] font-black uppercase tracking-wider text-purple-700 bg-purple-100 px-2 py-0.5 rounded-full">
-                      VIP Multi-Station
+                      Tier 3 • Best Value
                     </span>
                     <Award className="w-3.5 h-3.5 text-purple-600" />
                   </div>
                   <h4 className="text-xs font-black text-slate-900">
-                    All-in-One Multi-Counter Hub
+                    {HARDWARE_PACKAGES.ALL_IN_ONE_HUB.name}
                   </h4>
                   <div className="flex items-baseline gap-1 my-1">
-                    <span className="text-lg font-black text-slate-900">₹2,999</span>
+                    <span className="text-lg font-black text-slate-900">₹{HARDWARE_PACKAGES.ALL_IN_ONE_HUB.price.toLocaleString("en-IN")}</span>
                     <span className="text-[10px] text-slate-400 font-semibold">one-time</span>
                   </div>
                   <p className="text-[10px] text-slate-500 leading-tight">
-                    1x Standee + 2x PVC Cards + 1x A4 Poster
+                    2x Standees + PVC Smart Cards + Loyalty Rewards
                   </p>
                 </div>
               </div>

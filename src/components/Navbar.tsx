@@ -253,11 +253,27 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
         <div className="md:hidden px-4 pt-3 pb-5 space-y-3 bg-[#f7f6f2] border-b border-[#e3ded6] shadow-xl text-[#172033]">
           <div className="flex flex-col space-y-1">
             <Link
+              href="/#demo"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-white transition flex items-center justify-between"
+            >
+              <span>6-Lang Customer Demo</span>
+              <ChevronRight className="w-3.5 h-3.5 opacity-40" />
+            </Link>
+            <Link
               href="/#how-it-works"
               onClick={() => setMobileMenuOpen(false)}
               className="px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-white transition flex items-center justify-between"
             >
               <span>How it works</span>
+              <ChevronRight className="w-3.5 h-3.5 opacity-40" />
+            </Link>
+            <Link
+              href="/#merchants"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-white transition flex items-center justify-between"
+            >
+              <span>Live Merchant Examples</span>
               <ChevronRight className="w-3.5 h-3.5 opacity-40" />
             </Link>
             <Link
@@ -274,14 +290,6 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
               className="px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-white transition flex items-center justify-between"
             >
               <span>Merchant &amp; Admin Sign In</span>
-              <ChevronRight className="w-3.5 h-3.5 opacity-40" />
-            </Link>
-            <Link
-              href="/agent"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2.5 rounded-xl text-xs font-semibold hover:bg-white transition flex items-center justify-between text-indigo-700"
-            >
-              <span>Field Agent Demonstration Tool</span>
               <ChevronRight className="w-3.5 h-3.5 opacity-40" />
             </Link>
           </div>

@@ -1841,7 +1841,7 @@ export default function AdminMerchantsPage() {
                         onChange={(e) => setEditForm({ ...editForm, packageTier: e.target.value })}
                         className="w-full text-xs p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       >
-                        <option value="STARTER_PVC">Tier 1: Starter Review Booster (₹3,000 Base)</option>
+                        <option value="STARTER_PVC">Tier 1: Starter Review Booster (₹2,999)</option>
                         <option value="EXECUTIVE_STANDEE">Tier 2: Smart Business Hub (₹3,999 - With UPI/Social)</option>
                         <option value="ALL_IN_ONE_HUB">Tier 3: 360° Growth &amp; Loyalty (₹4,999 - Full Suite)</option>
                         <option value="ENTERPRISE_CUSTOM">Enterprise / Custom Package</option>

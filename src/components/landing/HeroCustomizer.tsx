@@ -195,6 +195,46 @@ export default function HeroCustomizer() {
   const [platformUpiPayee, setPlatformUpiPayee] = useState("Damerla Mohan");
   const upiPhoneNumber = /^\d{10}/.exec(platformUpiId)?.[0] || "9036909110";
 
+  const trackFunnel = (
+    event:
+      | "product_view"
+      | "sample_language_toggle"
+      | "order_button_tap"
+      | "checkout_start"
+      | "purchase_confirmed"
+      | "demo_open"
+      | "whatsapp_tap",
+    meta?: { planId?: string; price?: number; language?: string; source?: string }
+  ) => {
+    try {
+      const payload = JSON.stringify({ event, ...meta });
+      if (typeof window !== "undefined") {
+        const w = window as unknown as { dataLayer?: Array<Record<string, unknown>> };
+        if (Array.isArray(w.dataLayer)) {
+          w.dataLayer.push({ event: `reviewsmart_${event}`, ...meta });
+        }
+        if (navigator.sendBeacon) {
+          const blob = new Blob([payload], { type: "application/json" });
+          navigator.sendBeacon("/api/analytics/funnel", blob);
+        } else {
+          fetch("/api/analytics/funnel", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: payload,
+            keepalive: true,
+          }).catch(() => {});
+        }
+      }
+    } catch {
+      // Never block user interactions on analytics
+    }
+  };
+
+  useEffect(() => {
+    trackFunnel("product_view", { planId: "starter", price: PACKAGES.starter.price, source: "hero" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (!isModalOpen) return;
     fetch("/api/platform-settings")
@@ -358,6 +398,7 @@ export default function HeroCustomizer() {
     }
 
     setIsSubmitting(true);
+    trackFunnel("checkout_start", { planId: currentPlan.id, price: currentPlan.price, source: "checkout_modal" });
 
     try {
       // Step A: Create Merchant Account & Business
@@ -393,6 +434,8 @@ export default function HeroCustomizer() {
           }`,
         }),
       });
+
+      trackFunnel("purchase_confirmed", { planId: currentPlan.id, price: currentPlan.price, source: "checkout_modal" });
 
       // Step C: Trigger Autonomous Business DNA Enrichment in background
       if (createData.businessId) {
@@ -469,27 +512,46 @@ export default function HeroCustomizer() {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-1">
               <button
                 type="button"
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                  setSelectedPlanId("starter");
+                  trackFunnel("order_button_tap", { planId: "starter", price: PACKAGES.starter.price, source: "hero_primary" });
+                  setIsModalOpen(true);
+                }}
                 className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-[#4338ca] hover:bg-[#3730a3] text-white font-bold text-sm shadow-md shadow-indigo-900/15 flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
-                <span>Order custom standee</span>
+                <span>Order your standee &bull; ₹2,999</span>
               </button>
 
               <a
                 href={activeDemoHref}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackFunnel("demo_open", { source: "hero_cta" })}
                 className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-[#e3ded6] text-[#172033] font-bold text-sm shadow-xs flex items-center justify-center gap-2 transition"
               >
                 <Smartphone className="w-4 h-4 text-[#4338ca]" />
-                <span>Try the customer experience</span>
+                <span>Try the customer demo</span>
               </a>
             </div>
 
-            <p className="text-xs text-slate-500 font-medium">
-              Modular packages from ₹2,999 &bull; Custom standee artwork, lifetime portal access &amp; physical delivery
-            </p>
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1 text-xs text-slate-600 font-medium">
+              <span>
+                <strong className="text-[#172033]">Starter Review Booster: ₹2,999 one-time</strong> &bull; 4&Prime;&times;6&Prime; acrylic standee, custom design, lifetime portal &amp; free India delivery
+              </span>
+              <a
+                href={`https://wa.me/918639831132?text=${encodeURIComponent(
+                  "Hi ReviewSmart AI, I want to ask about the Starter Review Booster standee (₹2,999 one-time)."
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackFunnel("whatsapp_tap", { planId: "starter", price: 2999, source: "hero_ask" })}
+                className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-bold underline underline-offset-2"
+              >
+                <span>Ask about this standee</span>
+                <ArrowRight className="w-3 h-3" />
+              </a>
+            </div>
 
             {/* Interactive Customer Review Preview */}
             <div className="p-5 sm:p-6 rounded-3xl bg-white border border-[#e3ded6] shadow-[0_15px_35px_-10px_rgba(23,32,51,0.06)] space-y-4 text-left">
@@ -522,7 +584,10 @@ export default function HeroCustomizer() {
                       key={langKey}
                       type="button"
                       aria-pressed={isSelected}
-                      onClick={() => setSampleLang(langKey)}
+                      onClick={() => {
+                        setSampleLang(langKey);
+                        trackFunnel("sample_language_toggle", { language: langKey, source: "hero_sample_card" });
+                      }}
                       className={`min-h-[40px] px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4338ca] focus-visible:ring-offset-1 ${
                         isSelected
                           ? "bg-[#172033] text-white shadow-xs"
@@ -599,13 +664,14 @@ export default function HeroCustomizer() {
             <div className="mt-4 flex flex-col items-center gap-2 text-center">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200/90 text-[11px] font-bold text-slate-700 shadow-xs">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                Custom Client Build &bull; MANA Tours &amp; Travels, Kadapa
+                Design preview &bull; MANA Tours &amp; Travels, Kadapa
               </span>
 
               <a
                 href="/r/mana-tours-travels?demo=true"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackFunnel("demo_open", { source: "hero_standee_card" })}
                 className="w-full max-w-xs py-3 px-5 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 hover:from-slate-800 hover:to-indigo-900 text-white font-black text-xs shadow-lg border border-slate-700/80 transition active:scale-95 flex items-center justify-center gap-2 group"
               >
                 <QrCode className="w-3.5 h-3.5 text-amber-400" />
@@ -1046,6 +1112,27 @@ export default function HeroCustomizer() {
                           className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-900 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         />
                       </div>
+                    </div>
+
+                    {/* What Happens After Order & Support */}
+                    <div className="p-3 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 text-[11px] text-slate-700 space-y-1.5">
+                      <div className="font-bold text-indigo-950 flex items-center justify-between gap-2">
+                        <span>What happens after payment:</span>
+                        <a
+                          href={`https://wa.me/918639831132?text=${encodeURIComponent(
+                            `Hi ReviewSmart AI, I have a quick question before ordering the ${currentPlan.name} (₹${currentPlan.price.toLocaleString("en-IN")}).`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => trackFunnel("whatsapp_tap", { planId: currentPlan.id, price: currentPlan.price, source: "checkout_modal" })}
+                          className="text-emerald-700 hover:underline font-bold shrink-0"
+                        >
+                          Ask on WhatsApp &rarr;
+                        </a>
+                      </div>
+                      <p className="text-[10px] leading-relaxed text-slate-600">
+                        1. Instant digital card activation &bull; 2. Custom standee artwork proof sent on WhatsApp for approval before printing &bull; 3. Free India-wide courier delivery (₹0 monthly software fee).
+                      </p>
                     </div>
 
                     {/* Step 2: Professional Payment Gateway (Razorpay/Stripe Standard) */}

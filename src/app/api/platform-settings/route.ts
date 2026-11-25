@@ -48,7 +48,7 @@ export async function PUT(req: NextRequest) {
         currencySymbol: body.currencySymbol || "₹",
         upiId: body.upiId || "9036909110@apl",
         upiPayeeName: body.upiPayeeName || "Damerla Mohan",
-        minNegotiatedPrice: Number(body.minNegotiatedPrice) || 1999,
+        minNegotiatedPrice: Number(body.minNegotiatedPrice) || 2999,
         commissionRate: Number(body.commissionRate) || 0.40,
       },
       create: {
@@ -59,7 +59,7 @@ export async function PUT(req: NextRequest) {
         currencySymbol: body.currencySymbol || "₹",
         upiId: body.upiId || "9036909110@apl",
         upiPayeeName: body.upiPayeeName || "Damerla Mohan",
-        minNegotiatedPrice: Number(body.minNegotiatedPrice) || 1999,
+        minNegotiatedPrice: Number(body.minNegotiatedPrice) || 2999,
         commissionRate: Number(body.commissionRate) || 0.40,
       },
     });

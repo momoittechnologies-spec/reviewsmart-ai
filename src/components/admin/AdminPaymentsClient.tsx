@@ -73,7 +73,7 @@ export default function AdminPaymentsClient({
     initialSettings || {
       upiId: "9036909110@apl",
       upiPayeeName: "Damerla Mohan",
-      minNegotiatedPrice: 1999,
+      minNegotiatedPrice: 2999,
       commissionRate: 0.30,
     }
   );
@@ -266,8 +266,8 @@ export default function AdminPaymentsClient({
             </label>
             <div className="flex gap-2">
               <input
-                type="number" min={1999}
-                value={settings.minNegotiatedPrice || 1999}
+                type="number" min={2999}
+                value={settings.minNegotiatedPrice || 2999}
                 onChange={(e) => setSettings({ ...settings, minNegotiatedPrice: Number(e.target.value) })}
                 className="w-full text-xs p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-emerald-400 font-bold font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />

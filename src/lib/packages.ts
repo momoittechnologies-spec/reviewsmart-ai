@@ -54,83 +54,75 @@ export const HARDWARE_PACKAGES: Record<PackageTierId, HardwarePackage> = {
   },
   STARTER_PVC: {
     id: "STARTER_PVC",
-    name: "Starter PVC Card Pack",
-    shortName: "Starter PVC",
-    price: 1999,
-    tagline: "Compact review solution for single-till counters",
-    badge: "Compact Entry",
+    name: "Starter Review Booster",
+    shortName: "Starter",
+    price: 2999,
+    tagline: "1 Physical A6 Acrylic Standee + 6-Language AI Portal • Lifetime",
+    badge: "Starter • ₹2,999",
     isPopular: false,
     hardwareDeliverables: [
-      "1x Dual-Sided Vertical PVC Smart Card (CR80 Standard)",
-      "Front: Google 5-Star Review Station with Dynamic Smart QR",
-      "Back: Custom Merchant Business Visiting Card (or Direct UPI QR)",
-      "Scratch & waterproof matte/gloss executive finish",
+      "1x 4″×6″ (A6) Crystal Acrylic Counter Standee with custom brand artwork",
+      "Free Doorstep Express Courier Delivery across India",
     ],
     softwareDeliverables: [
-      "Gemini AI 5-Star Review Generation Engine",
-      "Private WhatsApp Negative Feedback Intercept Shield",
-      "100% Ad-Free Smart Hub Card with Direct UPI",
-      "1 Full Year Platform License & Cloud Hosting",
+      "6-Language Gemini AI Review Generator (EN, TE, HI, TA, KN, ML)",
+      "Private WhatsApp Negative Feedback Shield",
+      "Custom Brand Artwork + Lifetime Cloud Hosting (Zero Monthly Fees)",
     ],
-    bestFor: "Small counter tills, tea/coffee counters, compact boutique desks, takeaway counters",
+    bestFor: "Retail counters, clinics, boutiques, salons, travel offices across India",
     salesPitch:
-      "Pocket-friendly starter kit with 1 Dual-Sided PVC Card (Google Review Front + Store Visiting Card Back).",
+      "Complete counter standee kit for ₹2,999 one-time with custom branding, Pan-India delivery, and zero recurring fees.",
   },
   EXECUTIVE_STANDEE: {
     id: "EXECUTIVE_STANDEE",
-    name: "Executive Counter Standee Kit",
-    shortName: "Executive Standee",
-    price: 2499,
-    tagline: "Heavy crystal acrylic counter showpiece + PVC card",
-    badge: "Most Popular • Retail Best Seller",
+    name: "Smart Business Hub",
+    shortName: "Smart Business Hub",
+    price: 3999,
+    tagline: "Dual-Sided Standee + Direct UPI Pay + Social & Digital Menu Hub",
+    badge: "Most Popular • ₹3,999",
     isPopular: true,
     hardwareDeliverables: [
-      "1x 4″×6″ (A6) Crystal Acrylic L-Standee (Flipkart/Retail standard)",
-      "1x Dual-Sided Vertical PVC Smart Card (Google Review + Store Business Card)",
-      "Official Google 'G' Circular Badge Authentic Brand Styling",
+      "1x Dual-Sided 4″×6″ (A6) Crystal Acrylic Standee (Review QR + Direct UPI Pay)",
+      "Free Doorstep Express Courier Delivery across India",
     ],
     softwareDeliverables: [
-      "Gemini AI 5-Star Review Generation Engine",
-      "Private WhatsApp Negative Feedback Intercept Shield",
-      "All-in-One Smart Hub: Google Reviews + WhatsApp + Direct UPI",
-      "Zero-Reprint Dynamic QR Guarantee (edit anytime without reprinting)",
-      "Priority Merchant Verification & Support",
+      "Everything in Starter Review Booster included",
+      "0% Fee Counter UPI Payment Hub (PhonePe, GPay, Paytm 1-tap)",
+      "Instagram Quick-Follow, Facebook & Digital Menu/Catalog Viewer",
+      "Zero-Reprint Dynamic QR + Lifetime Portal Access",
     ],
-    bestFor: "Retail stores, apparel boutiques, restaurants, clinics, beauty salons",
+    bestFor: "Salons, cafes, printing studios, clinics, retail showrooms",
     salesPitch:
-      "Our best-selling package featuring a luxury 4″×6″ crystal acrylic standee for the cash counter plus a dual-sided PVC smart card.",
+      "Our most popular Smart Business Hub uniting Google review capture with 0%-fee counter UPI payments and social links.",
   },
   ALL_IN_ONE_HUB: {
     id: "ALL_IN_ONE_HUB",
-    name: "All-in-One Multi-Counter Hub",
-    shortName: "All-in-One VIP Hub",
-    price: 2999,
-    tagline: "Complete multi-point storefront presentation & digital menu",
-    badge: "VIP Complete Kit",
+    name: "360° Growth & Loyalty",
+    shortName: "360° Growth",
+    price: 4999,
+    tagline: "2x Acrylic Standees + Dual-Sided PVC Smart Cards + AI Auto-Pilot",
+    badge: "Best Value • ₹4,999",
     isPopular: false,
     hardwareDeliverables: [
-      "1x 4″×6″ (A6) Crystal Acrylic Counter Standee",
-      "2x Dual-Sided Vertical PVC Smart Cards (For billing & dining/service desks)",
-      "1x A4 Framed Entrance / Glass Door Wall Poster",
-      "Staff Attribution QR Badges for team members",
+      "2x 4″×6″ (A6) Crystal Acrylic Counter Standees for multi-counter placement",
+      "Dual-Sided Smart Review PVC Cards with Custom Brand Artwork",
+      "Free Express Pan-India Courier Delivery",
     ],
     softwareDeliverables: [
-      "Full All-in-One Smart Business Hub (Reviews + Menu + UPI + Catalog)",
-      "Digital Menu & Product Showcase URL integration",
-      "Gemini AI 5-Star Review Generator with Staff Credit",
-      "Private WhatsApp Negative Feedback Intercept Shield",
-      "Zero-Reprint Dynamic QR Guarantee",
-      "VIP Dedicated Support & Annual Hardware Replacement Warranty",
+      "Everything in Smart Business Hub included",
+      "Interactive Scratch Card Loyalty & Repeat Visit Coupons",
+      "WhatsApp Personalized Review Inviter + AI Reply Copilot",
+      "Priority Design Support & Lifetime Platform Updates",
     ],
-    bestFor: "Multi-counter showrooms, fine dining restaurants, hotels, multi-stylist salons, studios",
+    bestFor: "High-footfall restaurants, multi-counter showrooms, medical centers",
     salesPitch:
-      "Comprehensive multi-station storefront hardware: 1 Acrylic Standee + 2 PVC Cards + 1 A4 Glass Door Poster + Full Digital Menu & UPI Hub.",
+      "Complete multi-standee growth and customer retention system for ₹4,999 one-time.",
   },
   ENTERPRISE_CUSTOM: {
     id: "ENTERPRISE_CUSTOM",
     name: "Enterprise Multi-Branch Bundle",
     shortName: "Enterprise Bundle",
-    price: 3999,
+    price: 5999,
     tagline: "Tailored multi-branch hardware bundle for chains & franchises",
     badge: "Chains & Multi-Branch",
     isPopular: false,
@@ -152,8 +144,8 @@ export const HARDWARE_PACKAGES: Record<PackageTierId, HardwarePackage> = {
 
 export const PACKAGE_LIST = [
   HARDWARE_PACKAGES.ONLINE_LIFETIME,
-  HARDWARE_PACKAGES.EXECUTIVE_STANDEE,
   HARDWARE_PACKAGES.STARTER_PVC,
+  HARDWARE_PACKAGES.EXECUTIVE_STANDEE,
   HARDWARE_PACKAGES.ALL_IN_ONE_HUB,
   HARDWARE_PACKAGES.ENTERPRISE_CUSTOM,
 ];
@@ -166,16 +158,13 @@ export function getPackageById(id?: string | null): HardwarePackage {
 }
 
 export function getPackageByPrice(price?: number | null): HardwarePackage {
-  if (!price || price === 2999 || price === 3000) {
-    return HARDWARE_PACKAGES.ONLINE_LIFETIME;
-  }
-  if (price < 2200) {
+  if (!price || price <= 3400) {
     return HARDWARE_PACKAGES.STARTER_PVC;
   }
-  if (price >= 2200 && price < 2800) {
+  if (price < 4500) {
     return HARDWARE_PACKAGES.EXECUTIVE_STANDEE;
   }
-  if (price >= 2800 && price < 3500) {
+  if (price < 5500) {
     return HARDWARE_PACKAGES.ALL_IN_ONE_HUB;
   }
   return HARDWARE_PACKAGES.ENTERPRISE_CUSTOM;
