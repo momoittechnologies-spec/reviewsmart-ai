@@ -42,7 +42,7 @@ export default function StickyMobileCta() {
 
         {/* Buy Now ₹2,999 Pass */}
         <a
-          href="#customizer"
+          href="#hero-showcase"
           className="flex-1 py-3 px-3 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white font-black text-xs tracking-wide shadow-md shadow-emerald-600/25 flex items-center justify-center gap-1.5 transition active:scale-95"
         >
           <Zap className="w-3.5 h-3.5 text-amber-300 shrink-0" />
