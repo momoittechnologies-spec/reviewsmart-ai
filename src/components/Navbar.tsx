@@ -110,13 +110,13 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
   const headerCls = isDark
     ? `sticky top-0 z-40 w-full border-b transition-all duration-300 no-print ${
         scrolled
-          ? "border-slate-800/90 bg-slate-950/90 backdrop-blur-xl shadow-lg shadow-black/25"
-          : "border-slate-800/40 bg-slate-950/75 backdrop-blur-md"
+          ? "border-slate-800 bg-slate-950 backdrop-blur-xl shadow-lg shadow-black/25"
+          : "border-slate-800/60 bg-slate-950/95 backdrop-blur-md"
       }`
     : `sticky top-0 z-40 w-full border-b transition-all duration-300 no-print ${
         scrolled
-          ? "border-[#e3ded6]/90 bg-[#f7f6f2]/88 backdrop-blur-2xl shadow-[0_8px_30px_-12px_rgba(23,32,51,0.12)]"
-          : "border-transparent bg-[#f7f6f2]/75 backdrop-blur-md"
+          ? "border-[#e3ded6] bg-[#f7f6f2] shadow-[0_8px_28px_-12px_rgba(23,32,51,0.16)]"
+          : "border-[#e3ded6]/60 bg-[#f7f6f2]/95 backdrop-blur-md"
       }`;
 
   return (
@@ -190,7 +190,7 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
               {user.role === "SUPER_ADMIN" ? (
                 <Link
                   href="/admin"
-                  className="text-xs font-bold px-3.5 py-2 rounded-full bg-amber-500/15 text-amber-900 border border-amber-300 hover:bg-amber-500/25 transition flex items-center gap-1.5 whitespace-nowrap shadow-xs"
+                  className="text-xs font-bold px-3.5 py-2 rounded-full bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100 transition flex items-center gap-1.5 whitespace-nowrap shadow-xs"
                 >
                   <ShieldCheck className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                   <span>Admin Panel</span>
@@ -241,7 +241,11 @@ export default function Navbar({ variant = "light" }: NavbarProps) {
         {/* Mobile menu trigger */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-xl text-slate-700 bg-white border border-[#e3ded6] shadow-xs"
+          className={`md:hidden p-2 rounded-xl border shadow-xs transition ${
+            isDark
+              ? "text-white bg-slate-900 border-slate-700"
+              : "text-[#172033] bg-white border-[#e3ded6]"
+          }`}
           aria-label="Toggle Navigation Menu"
         >
           {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
