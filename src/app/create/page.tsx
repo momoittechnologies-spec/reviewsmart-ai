@@ -5,7 +5,7 @@ export default async function CreatePage() {
   const user = await getSessionUser();
 
   if (!user) {
-    redirect("/#customizer");
+    redirect("/#hero-showcase");
   }
 
   if (user.role === "SUPER_ADMIN") {
@@ -16,5 +16,5 @@ export default async function CreatePage() {
     redirect("/dashboard");
   }
 
-  redirect("/#customizer");
+  redirect("/#hero-showcase");
 }

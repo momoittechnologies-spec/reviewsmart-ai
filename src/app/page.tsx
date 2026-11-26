@@ -53,11 +53,13 @@ import {
   Mic,
   Menu,
   X,
+  Mail,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import BrandLogo, { BrandIcon } from "@/components/brand/BrandLogo";
 import Navbar from "@/components/Navbar";
 import HeroCustomizer from "@/components/landing/HeroCustomizer";
+import ExploreWordCloud from "@/components/landing/ExploreWordCloud";
 import ReviewGapCalculator from "@/components/landing/ReviewGapCalculator";
 import MobileAppDock from "@/components/landing/MobileAppDock";
 
@@ -434,6 +436,10 @@ export default function HomePage() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
+      const langParam = params.get("lang")?.toUpperCase() as LanguageKey | undefined;
+      if (langParam && ["ENGLISH", "HINDI", "TELUGU", "TAMIL", "KANNADA", "MALAYALAM"].includes(langParam)) {
+        setSelectedLang(langParam);
+      }
       const ref = params.get("ref") || params.get("agent") || localStorage.getItem("reviewsmart_ref");
       if (ref) {
         const clean = ref.trim().toUpperCase();
@@ -642,6 +648,8 @@ export default function HomePage() {
       <Navbar variant="light" />
 
       <HeroCustomizer />
+
+      <ExploreWordCloud onSelectDemoLanguage={(lang) => setSelectedLang(lang)} />
 
       {/* ─── 1. TRY CUSTOMER EXPERIENCE: 6-LANGUAGE DEMO ─────────────────── */}
       <section id="demo" className="py-20 px-4 sm:px-6 relative scroll-mt-16 bg-white border-t border-slate-200/80">
@@ -1764,68 +1772,192 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── FOOTER ───────────────────────────────────────────────────────── */}
-      <footer className="border-t border-slate-200 pt-8 pb-28 sm:pb-8 px-4 sm:px-6 bg-slate-100 text-xs text-slate-600">
-        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto space-y-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-200/80">
-            <BrandLogo href="/" size="sm" theme="light" />
+      {/* ─── BUYER-FOCUSED DESKTOP & MOBILE FOOTER ──────────────────────── */}
+      <footer className="border-t border-[#e3ded6] pt-12 pb-28 md:pb-10 px-4 sm:px-6 lg:px-8 bg-[#f7f6f2] text-[#172033]">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto space-y-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pb-10 border-b border-[#e3ded6]">
+            {/* Brand Summary Column */}
+            <div className="lg:col-span-4 space-y-4">
+              <BrandLogo href="/" size="sm" theme="light" />
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-sm">
+                Custom acrylic QR counter standees and 6-language AI review portals for Indian businesses, sold once with zero monthly fees.
+              </p>
 
-            {/* Official Technology Partner Pill */}
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-800 text-[11px] font-bold">
-                <MapPin className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-                <span>Proudly developed from Kadapa</span>
-              </span>
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                Technology Partner:
-              </span>
-              <a
-                href="https://momoittechnologies.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 shadow-sm hover:shadow-md transition-all group"
-                title="MOMO IT Technologies"
-              >
-                <img
-                  src="/images/momo-it-logo.svg"
-                  alt="MOMO IT Technologies Logo"
-                  className="w-5 h-5 rounded-md object-contain group-hover:scale-110 transition-transform"
-                />
-                <span className="font-black text-xs text-slate-900 group-hover:text-indigo-600 transition-colors">
-                  MOMO IT TECHNOLOGIES
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#e3ded6] text-[#172033] text-[11px] font-bold">
+                  <MapPin className="w-3.5 h-3.5 text-[#4338ca] shrink-0" />
+                  <span>Proudly developed from Kadapa</span>
                 </span>
-                <ExternalLink className="w-3 h-3 text-slate-400 group-hover:text-indigo-600 transition-colors shrink-0" />
-              </a>
+                <a
+                  href="https://momoittechnologies.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white hover:bg-indigo-50 border border-[#e3ded6] text-[11px] font-bold text-slate-700 hover:text-[#4338ca] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4338ca]"
+                >
+                  <span>MOMO IT Technologies</span>
+                  <ExternalLink className="w-3 h-3 shrink-0" />
+                </a>
+              </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <a
-                href="https://wa.me/918639831132"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-slate-900 transition flex items-center gap-1 font-medium"
-              >
-                <MessageCircle className="w-3.5 h-3.5 text-emerald-600" /> WhatsApp
-              </a>
-              <Link href="/login" className="hover:text-slate-900 transition flex items-center gap-1 font-medium">
-                <Lock className="w-3.5 h-3.5 text-indigo-600" /> Admin Portal
-              </Link>
+            {/* Buyer Task Link Columns */}
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-8 text-xs">
+              {/* Product */}
+              <div className="space-y-3">
+                <h2 className="text-[11px] font-black uppercase tracking-wider text-[#172033]">
+                  Product
+                </h2>
+                <ul className="space-y-2.5 text-slate-600 font-medium">
+                  <li>
+                    <a
+                      href="/#hero-showcase"
+                      className="hover:text-[#4338ca] transition focus:outline-none focus-visible:underline"
+                    >
+                      QR review standees
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/#design-showcase"
+                      className="hover:text-[#4338ca] transition focus:outline-none focus-visible:underline"
+                    >
+                      Custom branding preview
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/#pricing"
+                      className="hover:text-[#4338ca] transition focus:outline-none focus-visible:underline"
+                    >
+                      Packages &amp; pricing (From ₹2,999)
+                    </a>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectPlanFromPage("starter")}
+                      className="text-left font-bold text-[#4338ca] hover:underline cursor-pointer focus:outline-none focus-visible:underline"
+                    >
+                      Order your standee &rarr;
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Explore */}
+              <div className="space-y-3">
+                <h2 className="text-[11px] font-black uppercase tracking-wider text-[#172033]">
+                  Explore
+                </h2>
+                <ul className="space-y-2.5 text-slate-600 font-medium">
+                  <li>
+                    <a
+                      href="/#how-it-works"
+                      className="hover:text-[#4338ca] transition focus:outline-none focus-visible:underline"
+                    >
+                      How it works
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/#demo"
+                      className="hover:text-[#4338ca] transition focus:outline-none focus-visible:underline"
+                    >
+                      6-language customer demo
+                    </a>
+                  </li>
+                  <li>
+                    <Link
+                      href="/preview"
+                      className="hover:text-[#4338ca] transition focus:outline-none focus-visible:underline"
+                    >
+                      Interactive showroom preview
+                    </Link>
+                  </li>
+                  <li>
+                    <a
+                      href="/#merchants"
+                      className="hover:text-[#4338ca] transition focus:outline-none focus-visible:underline"
+                    >
+                      Verified merchant examples
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Support */}
+              <div className="space-y-3">
+                <h2 className="text-[11px] font-black uppercase tracking-wider text-[#172033]">
+                  Support
+                </h2>
+                <ul className="space-y-2.5 text-slate-600 font-medium">
+                  <li>
+                    <a
+                      href="https://wa.me/918639831132?text=Hi%20ReviewSmart%20AI!%20I%20need%20assistance%20regarding%20a%20standee%20order."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-emerald-700 font-semibold hover:underline focus:outline-none focus-visible:underline"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 shrink-0" />
+                      <span>WhatsApp (+91 86398 31132)</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="mailto:support@reviewsmart.online"
+                      className="inline-flex items-center gap-1.5 hover:text-[#4338ca] transition focus:outline-none focus-visible:underline break-all"
+                    >
+                      <Mail className="w-3.5 h-3.5 shrink-0 text-slate-400" />
+                      <span>support@reviewsmart.online</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/#faq"
+                      className="hover:text-[#4338ca] transition focus:outline-none focus-visible:underline"
+                    >
+                      Common buyer FAQs
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://wa.me/918639831132?text=Hi%20ReviewSmart%20AI!%20Please%20help%20me%20track%20or%20complete%20my%20standee%20order."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-[#4338ca] transition focus:outline-none focus-visible:underline"
+                    >
+                      Order help &amp; dispatch status
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
-          <div className="text-center text-slate-500 text-[11px]">
-            <p>
+          {/* Quiet Bottom Row */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
+            <p className="text-center sm:text-left">
               &copy; {new Date().getFullYear()} ReviewSmart AI &bull;{" "}
               <a
                 href="https://momoittechnologies.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-slate-700 hover:text-indigo-600 transition"
+                className="font-semibold text-slate-700 hover:text-[#4338ca] transition"
               >
                 MOMO IT Technologies
               </a>
-              {" "}&bull; Proudly developed from Kadapa &bull; Pan-India Google Review Engine &bull; All Rights Reserved.
+              {" "}&bull; All Rights Reserved.
             </p>
+
+            <div className="flex items-center gap-4 font-semibold">
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-1 text-slate-600 hover:text-[#4338ca] transition py-1"
+              >
+                <Lock className="w-3 h-3 text-[#4338ca]" />
+                <span>Merchant &amp; Staff Sign In</span>
+              </Link>
+            </div>
           </div>
         </div>
       </footer>

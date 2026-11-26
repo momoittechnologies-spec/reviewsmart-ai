@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { copyToClipboard } from "@/lib/clipboard";
+import MobileAppDock from "@/components/landing/MobileAppDock";
 
 // ─── 6 LANGUAGES REVIEW GENERATOR PRESETS ──────────────────────────────────
 type LanguageKey = "ENGLISH" | "HINDI" | "TELUGU" | "TAMIL" | "KANNADA" | "MALAYALAM";
@@ -43,10 +44,15 @@ function PreviewContent() {
   const city = searchParams.get("city") || "Kadapa, Andhra Pradesh";
   const category = searchParams.get("category") || "Retail & Commercial Services";
   const theme = searchParams.get("theme") || "royal-gold";
+  const initialLangParam = searchParams.get("lang")?.toUpperCase() as LanguageKey | undefined;
+  const initialLang: LanguageKey =
+    initialLangParam && ["ENGLISH", "HINDI", "TELUGU", "TAMIL", "KANNADA", "MALAYALAM"].includes(initialLangParam)
+      ? initialLangParam
+      : "ENGLISH";
 
   const [rating, setRating] = useState<number>(5);
   const [hoverRating, setHoverRating] = useState<number>(0);
-  const [selectedLang, setSelectedLang] = useState<LanguageKey>("ENGLISH");
+  const [selectedLang, setSelectedLang] = useState<LanguageKey>(initialLang);
   const [selectedTags, setSelectedTags] = useState<string[]>(["High Quality", "Polite Staff", "Fast Service"]);
   const [copied, setCopied] = useState(false);
   const [showShieldModal, setShowShieldModal] = useState(false);
@@ -109,13 +115,13 @@ function PreviewContent() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-start py-4 px-3 sm:px-6 relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
+    <main className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-start pt-4 pb-28 md:pb-12 px-3 sm:px-6 relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
       {/* ─── DEMO MODE DISCREET TOP BANNER ───────────────────────────────── */}
       <div className="w-full max-w-lg mb-4">
         <div className="p-3 rounded-2xl bg-gradient-to-r from-indigo-900/90 via-slate-900/90 to-purple-900/90 border border-indigo-500/40 shadow-lg text-center backdrop-blur-md">
           <div className="flex items-center justify-between gap-2">
             <Link
-              href="/#customizer"
+              href="/"
               className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-300 hover:text-white transition bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-lg"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
@@ -128,7 +134,7 @@ function PreviewContent() {
             </div>
 
             <Link
-              href="/#pricing"
+              href="/?order=starter"
               className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold transition shadow-xs shrink-0"
             >
               Order Standee
@@ -445,7 +451,7 @@ function PreviewContent() {
       )}
 
       {/* ─── FOOTER ───────────────────────────────────────────────────────── */}
-      <footer className="w-full max-w-lg mt-8 pt-4 pb-12 border-t border-slate-900 text-center text-xs text-slate-500 space-y-2">
+      <footer className="w-full max-w-lg mt-8 pt-4 pb-6 border-t border-slate-900 text-center text-xs text-slate-500 space-y-2">
         <p>ReviewSmart AI &bull; Interactive Product Showroom</p>
         <p className="text-[11px] text-slate-600">
           Ready to deploy this experience at your shop counter?{" "}
@@ -454,6 +460,7 @@ function PreviewContent() {
           </Link>
         </p>
       </footer>
+      <MobileAppDock />
     </main>
   );
 }

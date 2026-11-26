@@ -277,7 +277,7 @@ export default function HeroCustomizer() {
   const credDeepLink = `credpay://upi/pay?pa=${upiEncodedId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
   const upiDeepLink = `upi://pay?pa=${upiEncodedId}&pn=${upiEncodedPayee}&am=${currentPlan.price}&cu=INR&tn=${upiEncodedNote}&${merchantParams}`;
 
-  // Listen for package selection events from pricing section or mobile dock
+  // Listen for package selection events from pricing section, mobile dock, or ?order= param
   useEffect(() => {
     const handleSelectPlan = (e: Event) => {
       const customEvent = e as CustomEvent<{ plan: "starter" | "hub" | "growth" }>;
@@ -287,6 +287,14 @@ export default function HeroCustomizer() {
       }
     };
     window.addEventListener("reviewsmart:select-plan", handleSelectPlan as EventListener);
+
+    const params = new URLSearchParams(window.location.search);
+    const orderParam = params.get("order");
+    if (orderParam === "starter" || orderParam === "hub" || orderParam === "growth") {
+      setSelectedPlanId(orderParam);
+      setIsModalOpen(true);
+    }
+
     return () => window.removeEventListener("reviewsmart:select-plan", handleSelectPlan as EventListener);
   }, []);
 
@@ -643,7 +651,7 @@ export default function HeroCustomizer() {
           </div>
 
           {/* RIGHT COLUMN: Approved MANA Tours & Travels Standee Showcase */}
-          <div className="lg:col-span-6 flex flex-col items-center justify-center relative">
+          <div id="design-showcase" className="lg:col-span-6 flex flex-col items-center justify-center relative scroll-mt-20">
             <div className="relative flex flex-col items-center justify-center w-full max-w-md">
               {/* Soft studio backdrop halo */}
               <div className="absolute -inset-4 bg-gradient-to-tr from-indigo-500/10 via-amber-400/10 to-red-500/10 rounded-[40px] blur-2xl pointer-events-none -z-10" />
@@ -775,8 +783,8 @@ export default function HeroCustomizer() {
 
       {/* ── SELF-ONBOARDING & DIRECT ORDER MODAL ───────────────────────── */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/75 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-xl rounded-t-[32px] sm:rounded-3xl bg-white border-t sm:border border-slate-200 p-6 sm:p-8 shadow-2xl text-left max-h-[92vh] overflow-y-auto animate-slideUp">
+        <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/75 backdrop-blur-md animate-fadeIn">
+          <div className="relative w-full max-w-xl rounded-t-[32px] sm:rounded-3xl bg-white border-t sm:border border-slate-200 p-6 sm:p-8 shadow-2xl text-left max-h-[92dvh] overflow-y-auto animate-slideUp">
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <div className="flex items-center gap-2.5">

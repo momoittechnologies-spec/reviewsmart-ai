@@ -1,159 +1,190 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  Sparkles,
-  Globe,
-  Printer,
-  Zap,
-  MessageCircle,
-  Home,
-} from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { Home, Globe, Sparkles, MessageCircle } from "lucide-react";
+
+const WHATSAPP_HELP_URL =
+  "https://wa.me/918639831132?text=" +
+  encodeURIComponent(
+    "Hi ReviewSmart AI! I have a question about the QR review standee or need help before ordering."
+  );
 
 export default function MobileAppDock() {
-  const [activeTab, setActiveTab] = useState<"home" | "demo" | "pricing">("home");
+  const pathname = usePathname();
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<"home" | "demo">(
+    pathname === "/preview" ? "demo" : "home"
+  );
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
 
-  // Track active section as user scrolls
+  // Sync active tab based on current route and scroll section on homepage
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPos = window.scrollY + 250;
+    if (pathname === "/preview") {
+      setActiveTab("demo");
+      return;
+    }
+    if (pathname !== "/") return;
 
+    const handleScroll = () => {
       const demoEl = document.getElementById("demo");
       const pricingEl = document.getElementById("pricing");
+      const probe = window.scrollY + 240;
 
-      if (pricingEl && scrollPos >= pricingEl.offsetTop) {
-        setActiveTab("pricing");
-      } else if (demoEl && scrollPos >= demoEl.offsetTop) {
+      if (pricingEl && probe >= pricingEl.offsetTop) {
+        setActiveTab("home");
+      } else if (demoEl && probe >= demoEl.offsetTop) {
         setActiveTab("demo");
       } else {
         setActiveTab("home");
       }
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, [pathname]);
+
+  // Hide mobile bottom bar while the user types into a checkout/support input so the keyboard isn't crowded
+  useEffect(() => {
+    const isFormField = (el: EventTarget | null) => {
+      if (!(el instanceof HTMLElement)) return false;
+      const tag = el.tagName;
+      return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || el.isContentEditable;
+    };
+
+    const onFocusIn = (e: FocusEvent) => {
+      if (isFormField(e.target)) setKeyboardOpen(true);
+    };
+    const onFocusOut = () => {
+      setTimeout(() => {
+        if (!isFormField(document.activeElement)) {
+          setKeyboardOpen(false);
+        }
+      }, 120);
+    };
+
+    const baselineHeight = window.visualViewport?.height || window.innerHeight;
+    const onViewportResize = () => {
+      const currentH = window.visualViewport?.height || window.innerHeight;
+      if (baselineHeight - currentH > 150) {
+        setKeyboardOpen(true);
+      } else if (!isFormField(document.activeElement)) {
+        setKeyboardOpen(false);
+      }
+    };
+
+    document.addEventListener("focusin", onFocusIn);
+    document.addEventListener("focusout", onFocusOut);
+    window.visualViewport?.addEventListener("resize", onViewportResize);
+
+    return () => {
+      document.removeEventListener("focusin", onFocusIn);
+      document.removeEventListener("focusout", onFocusOut);
+      window.visualViewport?.removeEventListener("resize", onViewportResize);
+    };
   }, []);
+
+  if (keyboardOpen) return null;
 
   const triggerHaptic = () => {
     if (typeof navigator !== "undefined" && navigator.vibrate) {
       try {
-        navigator.vibrate(15);
+        navigator.vibrate(12);
       } catch {}
     }
   };
 
-  const scrollToSection = (id: string) => {
+  const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     triggerHaptic();
-    if (id === "top") {
+    if (pathname === "/") {
+      e.preventDefault();
+      setActiveTab("home");
       window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  const whatsappOrderUrl =
-    "https://wa.me/918639831132?text=" +
-    encodeURIComponent("Hi ReviewSmart AI! I want to order the ReviewSmart AI Smart QR Standee (packages starting ₹2,999). Please guide me with the next steps.");
+  const handleDemoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    triggerHaptic();
+    if (pathname === "/") {
+      e.preventDefault();
+      setActiveTab("demo");
+      const demoEl = document.getElementById("demo");
+      if (demoEl) demoEl.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
-  const whatsappInquiryUrl =
-    "https://wa.me/918639831132?text=" +
-    encodeURIComponent("Hi ReviewSmart AI! I'm on your website and would like a consultation on ReviewSmart AI packages (starting ₹2,999) for my business.");
+  const handleOrderClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    triggerHaptic();
+    if (pathname === "/") {
+      e.preventDefault();
+      window.dispatchEvent(
+        new CustomEvent("reviewsmart:select-plan", { detail: { plan: "starter" } })
+      );
+    } else {
+      e.preventDefault();
+      router.push("/?order=starter");
+    }
+  };
 
   return (
     <nav
-      aria-label="Mobile Application Navigation Dock"
-      className="fixed bottom-2.5 inset-x-3 z-50 max-w-md mx-auto bg-white/95 backdrop-blur-2xl border border-slate-200/90 shadow-[0_12px_40px_rgba(0,0,0,0.12)] rounded-2xl lg:hidden px-1.5 py-1"
-      style={{ paddingBottom: "max(0.25rem, env(safe-area-inset-bottom))" }}
+      aria-label="Mobile Navigation"
+      className="fixed bottom-0 inset-x-0 z-40 md:hidden bg-white/95 backdrop-blur-xl border-t border-[#e3ded6] shadow-[0_-8px_28px_rgba(23,32,51,0.08)] no-print"
+      style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      <div className="grid grid-cols-5 items-center gap-1 h-14">
-        {/* TAB 1: HOME */}
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab("home");
-            scrollToSection("top");
-          }}
-          className={`flex flex-col items-center justify-center py-1 rounded-xl transition-all active:scale-90 ${
+      <div className="max-w-md mx-auto grid grid-cols-4 items-center gap-1.5 px-2.5 py-2">
+        {/* 1. HOME */}
+        <Link
+          href="/"
+          onClick={handleHomeClick}
+          aria-current={activeTab === "home" ? "page" : undefined}
+          className={`min-h-[48px] flex flex-col items-center justify-center gap-0.5 rounded-xl px-1.5 py-1.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4338ca] ${
             activeTab === "home"
-              ? "bg-indigo-50 text-indigo-600 font-bold shadow-xs"
-              : "text-slate-500 hover:text-slate-800"
+              ? "bg-indigo-50 text-[#4338ca] font-bold"
+              : "text-slate-600 hover:text-[#172033] font-medium"
           }`}
         >
-          <Home className="w-4 h-4 mb-0.5" />
-          <span className="text-[10px] tracking-tight">Home</span>
-        </button>
+          <Home className="w-4 h-4 shrink-0" />
+          <span className="text-[11px] leading-tight">Home</span>
+        </Link>
 
-        {/* TAB 2: AI DEMO */}
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab("demo");
-            scrollToSection("demo");
-          }}
-          className={`flex flex-col items-center justify-center py-1 rounded-xl transition-all active:scale-90 ${
+        {/* 2. DEMO */}
+        <Link
+          href={pathname === "/preview" ? "/preview" : "/#demo"}
+          onClick={handleDemoClick}
+          aria-current={activeTab === "demo" ? "page" : undefined}
+          className={`min-h-[48px] flex flex-col items-center justify-center gap-0.5 rounded-xl px-1.5 py-1.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4338ca] ${
             activeTab === "demo"
-              ? "bg-indigo-50 text-indigo-600 font-bold shadow-xs"
-              : "text-slate-500 hover:text-slate-800"
+              ? "bg-indigo-50 text-[#4338ca] font-bold"
+              : "text-slate-600 hover:text-[#172033] font-medium"
           }`}
         >
-          <Globe className="w-4 h-4 mb-0.5" />
-          <span className="text-[10px] tracking-tight">Demo</span>
-        </button>
+          <Globe className="w-4 h-4 shrink-0" />
+          <span className="text-[11px] leading-tight">Demo</span>
+        </Link>
 
-        {/* TAB 3: CENTER HERO ACTION (ORDER NOW) */}
-        <button
-          type="button"
-          onClick={() => {
-            triggerHaptic();
-            scrollToSection("hero-showcase");
-          }}
-          className="flex flex-col items-center justify-center -mt-4 py-1 relative group cursor-pointer"
-          aria-label="Order ReviewSmart Standee"
+        {/* 3. ORDER (Primary High-Emphasis Action -> Direct Checkout Flow) */}
+        <Link
+          href="/?order=starter"
+          onClick={handleOrderClick}
+          className="min-h-[48px] flex flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 bg-[#4338ca] hover:bg-[#3730a3] text-white font-black shadow-md shadow-indigo-700/25 active:scale-95 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-[#172033]"
         >
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-500/35 border-2 border-white transition-all transform active:scale-90 group-hover:scale-105">
-            <Sparkles className="w-5 h-5 fill-white text-white animate-pulse" />
-          </div>
-          <span className="text-[9.5px] font-black text-emerald-700 tracking-tight mt-0.5 whitespace-nowrap">
-            Buy Now
-          </span>
-        </button>
+          <Sparkles className="w-4 h-4 shrink-0 text-amber-300" />
+          <span className="text-[11px] leading-tight tracking-tight">Order</span>
+        </Link>
 
-        {/* TAB 4: PRICING (HIGH-CONVERSION) */}
-        <button
-          type="button"
-          onClick={() => {
-            setActiveTab("pricing");
-            scrollToSection("pricing");
-          }}
-          className={`flex flex-col items-center justify-center py-1 rounded-xl transition-all active:scale-90 ${
-            activeTab === "pricing"
-              ? "bg-amber-50 text-amber-600 font-black shadow-xs"
-              : "text-slate-600 hover:text-slate-900"
-          }`}
-        >
-          <div className="relative">
-            <Zap className="w-4 h-4 mb-0.5 text-amber-500" />
-            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-          </div>
-          <span className="text-[10px] tracking-tight font-black">₹2,999+</span>
-        </button>
-
-        {/* TAB 5: WHATSAPP CHAT (DIRECT 1-TAP ACTION) */}
+        {/* 4. HELP (Distinct WhatsApp Concierge Support) */}
         <a
-          href={whatsappInquiryUrl}
+          href={WHATSAPP_HELP_URL}
           target="_blank"
           rel="noopener noreferrer"
           onClick={triggerHaptic}
-          className="flex flex-col items-center justify-center py-1 rounded-xl text-emerald-600 hover:text-emerald-700 transition-all active:scale-90"
-          aria-label="Direct WhatsApp Consultation"
+          className="min-h-[48px] flex flex-col items-center justify-center gap-0.5 rounded-xl px-1.5 py-1.5 text-emerald-800 hover:bg-emerald-50 font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600"
         >
-          <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md shadow-emerald-500/30 mb-0.5">
-            <MessageCircle className="w-3.5 h-3.5 fill-white" />
-          </div>
-          <span className="text-[10px] font-bold text-emerald-700 tracking-tight">Chat</span>
+          <MessageCircle className="w-4 h-4 shrink-0 text-emerald-600" />
+          <span className="text-[11px] leading-tight">Help</span>
         </a>
       </div>
     </nav>
