@@ -1715,59 +1715,115 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── FINAL CTA BANNER (OPTION A: HIGH-CONVERSION RETAIL CLOSER) ───── */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 relative overflow-hidden bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-t border-slate-800 text-center text-white">
-        <div className="max-w-3xl mx-auto space-y-6 relative z-10">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold shadow-lg backdrop-blur-md">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-            <span>🏪 48-Hour Doorstep Delivery Across India</span>
-          </div>
+      {/* ─── FINAL CTA CLOSER (TWO-COLUMN CONVERSION CARD) ────────────────── */}
+      <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white border-t border-[#e3ded6]">
+        <div className="max-w-[1380px] 2xl:max-w-[1440px] mx-auto rounded-[32px] bg-[#172033] text-white border border-slate-800 shadow-[0_28px_70px_-20px_rgba(23,32,51,0.35)] overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
+            {/* Left Column: Offer, Proof & Direct Checkout Actions */}
+            <div className="lg:col-span-7 p-7 sm:p-10 lg:p-12 xl:p-14 flex flex-col justify-center space-y-6">
+              <div className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-[11px] font-black uppercase tracking-wider">
+                <span>One-Time Purchase &bull; Starting ₹2,999</span>
+              </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight tracking-tight">
-            Want ReviewSmart AI For Your Business?
-          </h2>
+              <div className="space-y-3">
+                <h2 className="text-2xl sm:text-4xl lg:text-[42px] font-black text-white leading-[1.12] tracking-tight">
+                  Ready to put a ReviewSmart standee on your counter?
+                </h2>
+                <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
+                  Turn daily walk-in customers into steady 5-star Google reviews across English, Telugu, Hindi, Tamil, Kannada, and Malayalam — with zero monthly software fees.
+                </p>
+              </div>
 
-          <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
-            Get your custom 3D acrylic Smart QR standee delivered straight to your counter. Turn walk-in customers into authentic 5-star Google reviews. Zero monthly subscriptions &bull; Flat ₹2,999 Lifetime Pass.
-          </p>
+              {/* Clean 3-Point Fulfillment Summary */}
+              <ul className="space-y-2.5 text-xs sm:text-sm text-slate-200">
+                <li className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Custom 3mm acrylic standee artwork shared on WhatsApp for approval before printing</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Private Grievance Shield intercepts 1–3 star complaints to your WhatsApp before Google</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <span>Free Google Business Profile assistance and doorstep courier shipping across India</span>
+                </li>
+              </ul>
 
-          {/* Value Highlights Chips */}
-          <div className="flex flex-wrap items-center justify-center gap-2 pt-1 text-xs">
-            <span className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 font-semibold">
-              ⚡ Instant Smart QR Reviews
-            </span>
-            <span className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 font-semibold">
-              🇮🇳 6 Regional Languages
-            </span>
-            <span className="px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700 text-slate-200 font-semibold">
-              🛡️ Private Grievance Shield
-            </span>
-            <span className="px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 font-bold">
-              ✨ ₹2,999 Lifetime Pass
-            </span>
-          </div>
+              {/* Conversion Actions */}
+              <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => handleSelectPlanFromPage("starter")}
+                  className="px-7 py-4 rounded-2xl bg-[#4338ca] hover:bg-[#4f46e5] text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-950/50 ring-1 ring-white/15 transition active:scale-[0.98] cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
+                  <span>Order your standee &bull; From ₹2,999</span>
+                  <ArrowRight className="w-4 h-4 shrink-0" />
+                </button>
 
-          {/* Action CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
-            <a
-              href="https://wa.me/918639831132?text=Hi%20ReviewSmart%20AI!%20I%20want%20to%20order%20the%20ReviewSmart%20AI%203D%20Smart%20QR%20Standee%20for%20my%20business%20(%E2%82%B92%2C999%20Lifetime%20Pass).%20Please%20guide%20me%20with%20the%20next%20steps."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2.5 shadow-2xl shadow-emerald-500/30 transition transform active:scale-98"
-            >
-              <MessageCircle className="w-5 h-5 fill-slate-950" />
-              <span>👉 Order Your Standee on WhatsApp</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
+                <a
+                  href="https://wa.me/918639831132?text=Hi%20ReviewSmart%20AI!%20I%20want%20to%20order%20a%20custom%20QR%20review%20standee%20(starting%20from%20%E2%82%B92%2C999).%20Please%20guide%20me."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-6 py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm flex items-center justify-center gap-2 transition active:scale-[0.98]"
+                >
+                  <MessageCircle className="w-4 h-4 fill-slate-950 shrink-0" />
+                  <span>Order on WhatsApp</span>
+                </a>
 
-            <Link
-              href="/r/mana-tours-travels?demo=true"
-              className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm flex items-center justify-center gap-2 border border-white/20 transition transform active:scale-98"
-            >
-              <Play className="w-4 h-4 fill-white" />
-              <span>▶ Test Live Demo First</span>
-            </Link>
+                <Link
+                  href="/r/mana-tours-travels?demo=true"
+                  className="px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-white/15 transition"
+                >
+                  <Play className="w-3.5 h-3.5 fill-white shrink-0" />
+                  <span>Try Live Demo</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Column: Approved Standee Artwork Preview + 3-Step Handoff */}
+            <div className="lg:col-span-5 bg-slate-900/75 border-t lg:border-t-0 lg:border-l border-white/10 p-7 sm:p-10 flex flex-col justify-between gap-6">
+              <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl p-4">
+                <img
+                  src="/images/hero-mana-standee.webp"
+                  alt="MANA Tours & Travels ReviewSmart AI custom standee design preview"
+                  width={120}
+                  height={180}
+                  className="w-20 sm:w-24 h-auto rounded-xl border border-white/20 shadow-lg shrink-0 object-cover"
+                />
+                <div className="space-y-1.5 text-left min-w-0">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[10px] font-bold">
+                    Design preview
+                  </span>
+                  <h3 className="text-sm sm:text-base font-black text-white leading-snug">
+                    Branded to Your Shop Logo &amp; Colors
+                  </h3>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    Laser-crisp 3mm acrylic counter standee — personalized to your business before print.
+                  </p>
+                </div>
+              </div>
+
+              {/* Simple 3-Step Order Journey */}
+              <div className="grid grid-cols-3 gap-2.5 text-left">
+                <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                  <span className="font-mono text-[10px] font-black text-amber-300 block">01 / ORDER</span>
+                  <p className="text-[11px] font-bold text-white leading-snug">Pick your package</p>
+                  <p className="text-[10px] text-slate-400 leading-tight">From ₹2,999 one-time</p>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                  <span className="font-mono text-[10px] font-black text-amber-300 block">02 / PROOF</span>
+                  <p className="text-[11px] font-bold text-white leading-snug">Approve design</p>
+                  <p className="text-[10px] text-slate-400 leading-tight">Sent on WhatsApp</p>
+                </div>
+                <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                  <span className="font-mono text-[10px] font-black text-amber-300 block">03 / GO LIVE</span>
+                  <p className="text-[11px] font-bold text-white leading-snug">Place on counter</p>
+                  <p className="text-[10px] text-slate-400 leading-tight">Free India shipping</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
