@@ -269,23 +269,27 @@ export const DOMAIN_FENCES: Record<IndustryType, DomainFenceConfig> = {
   FITNESS_GYM: {
     industryType: "FITNESS_GYM",
     allowedKeywords: [
-      "gym", "workout", "fitness", "trainer", "coaching", "equipment", "machines",
-      "weights", "cardio", "body", "health", "energy", "clean floor", "timing",
+      "gym", "workout", "fitness", "trainer", "trainers", "coaching", "coach",
+      "equipment", "machines", "weights", "cardio", "strength", "stamina",
+      "weight loss", "zumba", "ladies", "women", "air conditioned", "a/c",
+      "clean", "safe", "hygiene", "routine", "energy", "timing",
     ],
     forbiddenKeywords: [
       "gold", "photo frame", "flex banner", "haircut", "dental", "doctor clinic",
       "biryani", "food menu", "software code", "car mechanic",
+      "delivered right on time", "output was crisp", "print clarity", "courier",
     ],
     forbiddenPhrases: [
       /\b(gold|pledged)\b/i,
-      /\b(photo\s*frames?|flex\s*banners?)\b/i,
+      /\b(photo\s*frames?|flex\s*banners?|print\s*clarity)\b/i,
+      /\b(delivered\s*right\s*on\s*time|output\s*was\s*crisp|timely\s*delivery)\b/i,
       /\b(haircuts?|facials?)\b/i,
       /\b(dentals?|doctor\s*prescriptions?)\b/i,
       /\b(software\s*code|car\s*service)\b/i,
     ],
     positiveIdentifiers: [
-      /\b(gyms?|workouts?|fitness|trainers?|equipments?|coachings?|exercises?|weights?|cardio)\b/i,
-      /(జిమ్|వర్కౌట్|ఫిట్‌నెస్|ట్రైనర్|ఎక్సర్‌సైజ్)/i,
+      /\b(gyms?|workouts?|fitness|trainers?|coach(es)?|equipments?|machines?|exercises?|weights?|cardio|strength|zumba|stamina|a\/c|ladies)\b/i,
+      /(జిమ్|వర్కౌట్|ఫిట్‌నెస్|ట్రైనర్|వ్యాయామ|ఏసీ|वर्कआउट|ट्रेनर|जिम|फिटनेस|एसी|ஜிம்|ಜಿಮ್|ജിം)/i,
     ],
   },
 

@@ -5,7 +5,7 @@ import { prisma } from "./prisma";
 export function normalizeText(text: string): string {
   return (text || "")
     .toLowerCase()
-    .replace(/[^a-zA-Z0-9\s\u0C00-\u0C7F]/g, " ") // keep English + Telugu letters and digits
+    .replace(/[^a-zA-Z0-9\s\u0900-\u097F\u0B80-\u0BFF\u0C00-\u0C7F\u0C80-\u0CFF\u0D00-\u0D7F]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }

@@ -8,6 +8,7 @@ import {
   extractBusinessLocation,
   BusinessProfile,
 } from "./domain-fences";
+import { buildFitnessGymStyles } from "./fitnessGymReviews";
 
 export type LanguageMode =
   | "ENGLISH"
@@ -6023,6 +6024,41 @@ function generateProceduralFallback(
 ): string {
   const intent = detectTagIntent([tag], ind);
 
+  if (ind === "FITNESS_GYM") {
+    const isLadies = /ladies|women|her heaven/i.test(`${bName} ${tag}`);
+    const byLang: Record<string, string[]> = {
+      TELUGU_SCRIPT: [
+        `${bName} లో వర్కౌట్ వాతావరణం చాలా బాగుంది. ${tag} మరియు ట్రైనర్ల గైడెన్స్ అద్భుతంగా ఉన్నాయి.`,
+        `${isLadies ? "మహిళలకు చాలా సేఫ్ & కంఫర్టబుల్ ఏసీ జిమ్." : "ఆధునిక జిమ్ మెషీన్లు & ఫ్రెండ్లీ ట్రైనర్లు."} ${bName} అందరికీ రికమెండ్ చేస్తున్నాను.`,
+        `${bName} లో కార్డియో, వెయిట్ లాస్ ప్రోగ్రామ్స్ మరియు పరిశుభ్రమైన వాతావరణం చాలా బాగా నచ్చాయి.`,
+      ],
+      HINDI: [
+        `${bName} में वर्कआउट करने का अनुभव शानदार रहा। ट्रेनर्स हर एक्सरसाइज का सही तरीका बताते हैं।`,
+        `${isLadies ? "महिलाओं के लिए बेहद सुरक्षित और साफ-सुथरा एसी जिम।" : "आधुनिक जिम उपकरण और अनुभवी कोच।"} ${bName} फिटनेस के लिए बेहतरीन जगह है।`,
+        `कार्डियो और स्ट्रेंथ ट्रेनिंग के लिए ${bName} बहुत ही बढ़िया जिम है।`,
+      ],
+      TAMIL: [
+        `${bName} ஜிம்மில் பயிற்சி சூழல் மற்றும் பயிற்சியாளர்களின் வழிகாட்டுதல் மிகச் சிறப்பாக உள்ளது.`,
+        `நவீன உடற்பயிற்சி கருவிகள் மற்றும் சுத்தமான ஏசி வசதி கொண்ட சிறந்த ஜிம்.`,
+      ],
+      KANNADA: [
+        `${bName} ಜಿಮ್‌ನಲ್ಲಿ ವರ್ಕೌಟ್ ವಾತಾವರಣ ಮತ್ತು ತರಬೇತುದಾರರ ಮಾರ್ಗದರ್ಶನ ತುಂಬಾ ಚೆನ್ನಾಗಿದೆ.`,
+        `ಸ್ವಚ್ಛವಾದ ಎಸಿ ಜಿಮ್ ಮತ್ತು ಆಧುನಿಕ ಫಿಟ್‌ನೆಸ್ ಉಪಕರಣಗಳು ಇಲ್ಲಿವೆ.`,
+      ],
+      MALAYALAM: [
+        `${bName} ജിമ്മിലെ വർക്കൗട്ട് അന്തരീക്ഷവും പരിശീലകരുടെ പിന്തുണയും വളരെ മികച്ചതാണ്.`,
+        `വൃത്തിയുള്ള എസി സൗകര്യവും ആധുനിക ഉപകരണങ്ങളും ഉള്ള മികച്ച ജിം.`,
+      ],
+      ENGLISH: [
+        `Great workout atmosphere at ${bName}! Their ${tag.toLowerCase()} and certified trainers keep daily sessions effective and motivating.`,
+        `${isLadies ? "Super clean, safe ladies-only A/C gym" : "Clean gym floor and modern cardio & strength machines"} with supportive coaches at ${bName}.`,
+        `Consistent fitness results and attentive form guidance at ${bName}. Really appreciate their ${tag.toLowerCase()}.`,
+      ],
+    };
+    const variants = byLang[targetLang] || byLang.ENGLISH;
+    return variants[roundSeed % variants.length];
+  }
+
   if (targetLang === "HINDI") {
     const s = pickRandom([
       `${bName} से ${tag} का काम बहुत ही बढ़िया तरीके से हुआ।`,
@@ -6739,7 +6775,16 @@ export function synthesizeUniqueReviews(params: SynthesizerParams): SynthesizedR
   }
 
   // 21 distinct style definitions - ALL DOMAIN PARAMETERIZED
-  const allStyles: StyleDefinition[] = [
+  const allStyles: StyleDefinition[] =
+    industry.type === "FITNESS_GYM"
+      ? buildFitnessGymStyles({
+          businessName,
+          selectedTags: activeTags,
+          customNote,
+          tagline,
+          category,
+        })
+      : [
     {
       structure: "STRUCTURE_F",
       style: "short_human",
@@ -6914,12 +6959,24 @@ export function synthesizeUniqueReviews(params: SynthesizerParams): SynthesizedR
     eligibleStyles = allStyles.filter((s) => s.lang === "MALAYALAM");
   } else if (languageMode === "ENGLISH") {
     eligibleStyles = allStyles.filter((s) => s.lang === "ENGLISH");
-  } else if (!isTeluguContext) {
-    eligibleStyles = allStyles.filter((s) => s.lang === "ENGLISH");
+  } else {
+    // AUTO ("All" tab): English primary + Telugu/Tanglish local options in Andhra/Telangana context (never unrequested Tamil/Kannada/Malayalam)
+    eligibleStyles = isTeluguContext
+      ? allStyles.filter(
+          (s) => s.lang === "ENGLISH" || s.lang === "TELUGU_SCRIPT" || s.lang === "TELUGU_ROMAN"
+        )
+      : allStyles.filter((s) => s.lang === "ENGLISH");
   }
 
-  // Shuffle styles
-  const shuffledStyles = [...eligibleStyles].sort(() => 0.5 - Math.random());
+  // Shuffle styles while ensuring Slot 1 starts with English on AUTO mode
+  const shuffledStyles =
+    languageMode === "AUTO" && isTeluguContext
+      ? [
+          ...eligibleStyles.filter((s) => s.lang === "ENGLISH").sort(() => 0.5 - Math.random()).slice(0, 1),
+          ...eligibleStyles.filter((s) => s.lang === "TELUGU_SCRIPT").sort(() => 0.5 - Math.random()).slice(0, 1),
+          ...eligibleStyles.filter((s) => s.lang === "TELUGU_ROMAN" || s.lang === "ENGLISH").sort(() => 0.5 - Math.random()),
+        ]
+      : [...eligibleStyles].sort(() => 0.5 - Math.random());
 
   let styleIndex = 0;
   let attempts = 0;
@@ -6994,6 +7051,26 @@ export function synthesizeUniqueReviews(params: SynthesizerParams): SynthesizedR
           structureTag: "STRUCTURE_PROCEDURAL",
           writingStyle: "conversational",
           languageMix: lang,
+        });
+      }
+    }
+  }
+
+  // Emergency floor guarantee if history is heavily saturated across a language
+  if (acceptedReviews.length < 3) {
+    for (const slot of shuffledStyles) {
+      if (acceptedReviews.length >= 3) break;
+      const text = slot.generator().trim();
+      if (!acceptedTexts.includes(text)) {
+        acceptedTexts.push(text);
+        acceptedReviews.push({
+          id: acceptedReviews.length + 1,
+          headline: buildDynamicHeadline(text, slot.lang, industry.type),
+          text,
+          tone: slot.style,
+          structureTag: slot.structure,
+          writingStyle: slot.style,
+          languageMix: slot.lang,
         });
       }
     }

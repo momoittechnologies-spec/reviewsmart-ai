@@ -193,6 +193,13 @@ This business is an air-conditioned study hall and reading room for students and
 - DO NOT mention food/restaurant dining, buying gold, salon/haircuts, jewellery, cabs, car rental, flex printing, dental clinics, or software dev.
 ` : "";
 
+        const fitnessGymInstruction = industry.type === "FITNESS_GYM" ? `
+CRITICAL POSITIONING (FITNESS GYM & WORKOUT EXPERIENCE):
+This business is a fitness gym${/ladies|women|her heaven/i.test(`${businessName} ${tagline || ""} ${tagsString}`) ? " exclusively for ladies (A/C workout studio)" : ""}.
+- Members review their genuine workout experience: certified trainers guiding exercise posture & routines, cardio & strength training equipment, weight-loss & fitness progress, air-conditioned comfort, clean & hygienic gym floor, motivating music/atmosphere, and safe supportive training environment.
+- ABSOLUTELY DO NOT use retail/printing phrases like "delivered right on time", "timely delivery", "output was crisp", "print clarity", "will visit again" (for shopping), or anything about orders/deliveries.
+` : "";
+
 const prompt = `You are a real customer writing an authentic, human-sounding 5-star Google review on your phone.
 Business Name: "${businessName}"
 Industry: ${industry.label}
@@ -209,6 +216,7 @@ ${toursTravelsInstruction}
 ${tattooStudioInstruction}
 ${applianceRepairInstruction}
 ${studyHallInstruction}
+${fitnessGymInstruction}
 
 CRITICAL BUSINESS-SPECIFIC & ZERO-POLLUTION RULES:
 1. STRICT FOCUS ON SELECTED SERVICES:
