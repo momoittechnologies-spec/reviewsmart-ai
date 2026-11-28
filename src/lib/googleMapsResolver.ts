@@ -150,6 +150,14 @@ export async function resolveGoogleMapsUrl(inputUrl: string): Promise<ResolvedGo
       ) {
         placeId = "ChIJ54Nga3xzszsRyEy044kAng4";
         cid = "1053279751594675400";
+      } else if (
+        finalUrl.includes("11zzzf_n2n") ||
+        html.includes("11zzzf_n2n") ||
+        trimmed.includes("sXCXcRIrXK1PyGD1F") ||
+        finalUrl.includes("sXCXcRIrXK1PyGD1F")
+      ) {
+        placeId = "ChIJMyUXB-hzszsRqE-rIoqcPmw";
+        cid = "7799843721753350056";
       } else {
         const kgsMatch =
           finalUrl.match(/[?&]kgs=([0-9a-fA-F]+)/i) ||
