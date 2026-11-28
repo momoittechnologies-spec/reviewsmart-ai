@@ -9,6 +9,7 @@ import {
   BusinessProfile,
 } from "./domain-fences";
 import { buildFitnessGymStyles } from "./fitnessGymReviews";
+import { buildRestaurantFoodStyles } from "./restaurantFoodReviews";
 
 export type LanguageMode =
   | "ENGLISH"
@@ -2055,8 +2056,8 @@ function generateProblemSolution(
       ]);
       result = pickRandom([
         `Delivered right on time with dependable quality.`,
-        `The final output exceeded what I anticipated, very satisfied.`,
-        `Very happy with the quick turnaround and neat outcome.`,
+        `The end result exceeded expectations, very satisfied.`,
+        `Very happy with the prompt service and quality outcome.`,
       ]);
       break;
   }
@@ -2573,7 +2574,7 @@ function generateDetailedReview(
       middle = pickRandom([
         `Communication was clear from the start and they didn't try to rush any stage of the work.`,
         `The quality of execution and reliable coordination on ${item2} exceeded expectations.`,
-        `Charges were explained clearly upfront and the final output is dependable.`,
+        `Charges were explained clearly upfront and the quality was completely dependable.`,
       ]);
       break;
   }
@@ -2582,7 +2583,7 @@ function generateDetailedReview(
     `A well-managed spot that takes pride in quality.`,
     `Dependable service from start to finish.`,
     `Five stars for reliability and neat execution.`,
-    `Completely satisfied with both the process and outcome.`,
+    `Completely satisfied with the service and overall quality.`,
     `Will certainly be coming back for future requirements.`,
   ]);
 
@@ -2700,7 +2701,7 @@ function generateCasualLocal(
   const middles = [
     `Staff is down to earth, work is neat, and prices are fair.`,
     `They know their craft well and don't make false promises on timing.`,
-    `Turnaround was fast without any compromise on the final output.`,
+    `They take care of every detail smoothly and maintain consistent quality.`,
   ];
   const closers = [
     `Check them out once!`,
@@ -2881,14 +2882,14 @@ function generateEnthusiastic(
 
   const item = tags[0] || pickRandom(lex.items);
   const openers = [
-    `Absolutely loved what ${bName} did with our ${item}!`,
-    `So glad I got the ${item} done here!`,
-    `Such a delightful experience getting ${item} handled.`,
+    `Really impressed with how ${bName} handled our ${item}!`,
+    `So glad I chose ${bName} for ${item}!`,
+    `Such a pleasant experience here with ${item}.`,
   ];
   const middles = [
-    `The quality and finish turned out so much better and neater than I hoped.`,
-    `They delivered it right when promised and the coordination was super smooth.`,
-    `The staff was courteous and genuinely helpful throughout the process.`,
+    `The overall quality turned out much better than I hoped.`,
+    `They kept their word on timing and everything went smoothly.`,
+    `The staff was courteous and genuinely helpful from start to finish.`,
   ];
   const closers = [
     `Big thumbs up to the team!`,
@@ -5703,6 +5704,13 @@ export function buildDynamicHeadline(text: string, lang: string, ind: IndustryTy
           "జీరో డ్యామేజ్ షిఫ్టింగ్ & మినీ లారీ సర్వీస్",
           "సకాలంలో షిఫ్టింగ్ & మర్యాదపూర్వక సిబ్బంది",
         ]);
+      case "RESTAURANT_FOOD":
+        return pickRandom([
+          "రుచికరమైన భోజనం & బిర్యానీ",
+          "ఫ్యామిలీ డైనింగ్ & క్లీన్ అంబియన్స్",
+          "వేడివేడి వంటకాలు & మంచి సర్వీస్",
+          "అద్భుతమైన రుచి & సరసమైన ధరలు",
+        ]);
       default:
         return pickRandom([
           "చాలా మంచి అనుభవం & Super Quality",
@@ -5789,14 +5797,31 @@ export function buildDynamicHeadline(text: string, lang: string, ind: IndustryTy
           "Multi-Layer Bubble Wrap & Careful Moving",
           "On-Time Relocation & Honest Rates",
         ]);
+      case "RESTAURANT_FOOD":
+        return pickRandom([
+          "Delicious Food & Family Dining",
+          "Tasty Biryani & Quick Table Service",
+          "Fresh Hot Dishes & Hygienic Kitchen",
+          "Authentic Taste & Great Value Meals",
+        ]);
       default:
         return pickRandom([
           "Super Neat Work & Timely Delivery",
           "Chala Baga Chesaru, Good Service",
           "Solid Quality & Friendly Staff",
-          "Worth It & Happy with Output",
+          "Worth It & Happy with Quality",
         ]);
     }
+  }
+
+  if (ind === "RESTAURANT_FOOD" && text.length < 80) {
+    return pickRandom([
+      "Fresh & Tasty Food",
+      "Great Family Dining",
+      "Simple & Delicious",
+      "Hot & Flavorful Meal",
+      "Warm Hospitality",
+    ]);
   }
 
   if (text.length < 80) {
@@ -6053,6 +6078,40 @@ function generateProceduralFallback(
         `Great workout atmosphere at ${bName}! Their ${tag.toLowerCase()} and certified trainers keep daily sessions effective and motivating.`,
         `${isLadies ? "Super clean, safe ladies-only A/C gym" : "Clean gym floor and modern cardio & strength machines"} with supportive coaches at ${bName}.`,
         `Consistent fitness results and attentive form guidance at ${bName}. Really appreciate their ${tag.toLowerCase()}.`,
+      ],
+    };
+    const variants = byLang[targetLang] || byLang.ENGLISH;
+    return variants[roundSeed % variants.length];
+  }
+
+  if (ind === "RESTAURANT_FOOD") {
+    const byLang: Record<string, string[]> = {
+      TELUGU_SCRIPT: [
+        `${bName} లో భోజనం రుచి, తాజాదనం మరియు శుభ్రత చాలా బాగున్నాయి. ఫ్యామిలీతో కలిసి వెళ్లడానికి మంచి రెస్టారెంట్.`,
+        `బిర్యానీ మరియు ఇతర వంటకాలు వేడివేడిగా, మంచి రుచితో వడ్డించారు. ${bName} అందరికీ రికమెండ్ చేస్తున్నాను.`,
+        `${bName} లో డైనింగ్ అంబియన్స్, ఫాస్ట్ టేబుల్ సర్వీస్ మరియు స్టాఫ్ మర్యాద ఎంతో నచ్చాయి.`,
+      ],
+      HINDI: [
+        `${bName} में खाना बहुत ही स्वादिष्ट, गरम और ताज़ा मिला। परिवार के साथ डिनर के लिए शानदार जगह है।`,
+        `बिरयानी और स्टार्टर्स का स्वाद लाजवाब था और टेबल सर्विस भी बहुत बढ़िया रही।`,
+        `साफ-सफाई, स्वादिष्ट भोजन और विनम्र स्टाफ के लिए ${bName} को पूरे 5 स्टार!`,
+      ],
+      TAMIL: [
+        `${bName} உணவகத்தில் உணவு மிகவும் சுவையாகவும் சூடாகவும் பரிமாறப்பட்டது. குடும்பத்துடன் சாப்பிட சிறந்த இடம்.`,
+        `சுத்தமான சூழல், விரைவான சேவை மற்றும் அருமையான பிரியாணி சுவை மிகச் சிறப்பு.`,
+      ],
+      KANNADA: [
+        `${bName} ನಲ್ಲಿ ಊಟ ತುಂಬಾ ರುಚಿಕರವಾಗಿ ಮತ್ತು ಬಿಸಿಯಾಗಿತ್ತು. ಕುಟುಂಬದೊಂದಿಗೆ ಊಟ ಮಾಡಲು ಉತ್ತಮ ಸ್ಥಳ.`,
+        `ಸ್ವಚ್ಛವಾದ ವಾತಾವರಣ, ಒಳ್ಳೆಯ ಸೇವೆ ಮತ್ತು ಬಿರಿಯಾನಿ ಸ್ವಾದ ತುಂಬಾ ಇಷ್ಟವಾಯಿತು.`,
+      ],
+      MALAYALAM: [
+        `${bName}-ലെ ഭക്ഷണം വളരെ രുചികരവും ചൂടുള്ളതുമായിരുന്നു. കുടുംബത്തോടൊപ്പം കഴിക്കാൻ മികച്ച അന്തരീക്ഷം.`,
+        `വൃത്തിയുള്ള ഡൈനിംഗ് ഹാളും നല്ല സേവനവും രുചികರമായ വിഭവങ്ങളും ഏറെ ഇഷ്ടപ്പെട്ടു.`,
+      ],
+      ENGLISH: [
+        `Delicious food, fresh ingredients, and warm table service at ${bName}! Their ${tag.toLowerCase()} made our meal genuinely memorable.`,
+        `Super clean family dining hall with flavorful dishes served piping hot at ${bName}.`,
+        `Authentic taste, generous portions, and courteous staff at ${bName}. Really enjoyed the ${tag.toLowerCase()}.`,
       ],
     };
     const variants = byLang[targetLang] || byLang.ENGLISH;
@@ -6783,6 +6842,15 @@ export function synthesizeUniqueReviews(params: SynthesizerParams): SynthesizedR
           customNote,
           tagline,
           category,
+        })
+      : industry.type === "RESTAURANT_FOOD"
+      ? buildRestaurantFoodStyles({
+          businessName,
+          selectedTags: activeTags,
+          customNote,
+          tagline,
+          category,
+          location,
         })
       : [
     {

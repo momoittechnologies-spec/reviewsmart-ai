@@ -179,6 +179,7 @@ export const DOMAIN_FENCES: Record<IndustryType, DomainFenceConfig> = {
       /\b(haircuts?|facials?|stylings?)\b/i,
       /\b(dentals?|doctors?|clinics?)\b/i,
       /\b(software|developers?|clean\s*code)\b/i,
+      /\b(throughout\s+the\s+process|final\s+output|final\s+outcome|crisp\s+output|turnaround(\s+was\s+fast)?|did\s+with\s+our|rush\s+any\s+stage|neat\s+execution|neat\s+work|initial\s+discussion|timely\s+delivery)\b/i,
     ],
     positiveIdentifiers: [
       /\b(food|taste|delicious|flavors?|dish(es)?|biryani|meals?|dining|kitchens?|restaurants?|services?|spices?|starters?|curry|curries)\b/i,

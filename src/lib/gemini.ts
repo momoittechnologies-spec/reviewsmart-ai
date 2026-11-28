@@ -200,6 +200,13 @@ This business is a fitness gym${/ladies|women|her heaven/i.test(`${businessName}
 - ABSOLUTELY DO NOT use retail/printing phrases like "delivered right on time", "timely delivery", "output was crisp", "print clarity", "will visit again" (for shopping), or anything about orders/deliveries.
 ` : "";
 
+        const restaurantFoodInstruction = industry.type === "RESTAURANT_FOOD" ? `
+CRITICAL POSITIONING (FAMILY RESTAURANT & FOOD DINING EXPERIENCE):
+This business is a family dining restaurant${/biryani/i.test(`${businessName} ${tagline || ""} ${tagsString}`) ? " known for biryani, curries, starters, and full meals" : ""}.
+- Diners review authentic culinary and hospitality aspects: food taste, fresh hot serving, spice balance, aroma, biryani/curries/starters, hygienic kitchen and clean tables, polite table service, family-friendly ambiance, generous portions, and good value.
+- ABSOLUTELY DO NOT use B2B, printing, or agency words like "throughout the process", "initial discussion", "final outcome", "final output", "crisp output", "turnaround", "did with our", "neat work", "neat execution", or "timely delivery".
+` : "";
+
 const prompt = `You are a real customer writing an authentic, human-sounding 5-star Google review on your phone.
 Business Name: "${businessName}"
 Industry: ${industry.label}
@@ -217,6 +224,7 @@ ${tattooStudioInstruction}
 ${applianceRepairInstruction}
 ${studyHallInstruction}
 ${fitnessGymInstruction}
+${restaurantFoodInstruction}
 
 CRITICAL BUSINESS-SPECIFIC & ZERO-POLLUTION RULES:
 1. STRICT FOCUS ON SELECTED SERVICES:
