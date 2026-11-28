@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { MessageCircle, Sparkles, Clock } from "lucide-react";
 import { getAppUrl, getCleanLogoUrl, getAbsoluteLogoUrl } from "@/lib/utils";
 import { detectIndustry } from "@/lib/industry";
-import { getHubToggleLabel, getShortEntityLabel } from "@/lib/portal-helpers";
+import { getHubCompactLabel, getHubToggleLabel, getShortEntityLabel } from "@/lib/portal-helpers";
 
 // Cache dynamic business review portal with 60s ISR for instant mobile tap performance
 export const revalidate = 60;
@@ -121,6 +121,7 @@ export default async function PublicReviewPage({
       label: industry.label,
       shortEntity: getShortEntityLabel(industry.type),
       hubToggleLabel: getHubToggleLabel(industry.type),
+      hubCompactLabel: getHubCompactLabel(industry.type),
       placeholder: industry.placeholder,
       defaultTags: industry.tags,
     },

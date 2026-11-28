@@ -3,7 +3,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import {
-  ArrowLeft,
   ArrowRight,
   Check,
   CheckCircle2,
@@ -17,6 +16,7 @@ import {
   MapPin,
   MessageCircle,
   Mic,
+  Navigation,
   Phone,
   Send,
   ShieldCheck,
@@ -91,9 +91,10 @@ export default function MerchantPortalShell({
   const [privateError, setPrivateError] = useState<string | null>(null);
   const [whatsAppOpenedNote, setWhatsAppOpenedNote] = useState(false);
 
-  // Optional Hub modals
+  // Optional Hub modals & keyboard/scroll UX
   const [showUpiModal, setShowUpiModal] = useState(false);
   const [showRewardCard, setShowRewardCard] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const recognitionRef = useRef<any>(null);
   const starButtonRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -418,86 +419,113 @@ export default function MerchantPortalShell({
   const callLabel = `Call ${shortEntity}`;
 
   return (
-    <div className="w-full max-w-md mx-auto px-3 sm:px-4 py-3 sm:py-6 flex flex-col gap-3.5 text-slate-100">
-      {/* ─── COMPACT PERSISTENT MERCHANT HEADER ─────────────────────────────── */}
-      <header className="w-full bg-slate-900/90 backdrop-blur-md border border-white/10 rounded-2xl p-3.5 sm:p-4 shadow-xl">
-        <div className="flex items-start gap-3">
-          {/* Crisp Logo Badge */}
-          <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white border border-white/80 p-1 flex items-center justify-center shrink-0 shadow-md overflow-hidden">
-            {business.logoUrl && !logoError ? (
-              <img
-                src={business.logoUrl}
-                alt={business.name}
-                className="w-full h-full object-contain"
-                loading="eager"
-                decoding="async"
-                onError={() => setLogoError(true)}
-              />
-            ) : (
-              <span
-                className="text-base font-black"
-                style={{ color: business.primaryColor || "#d97706" }}
-              >
-                {business.name.slice(0, 2).toUpperCase()}
-              </span>
-            )}
+    <div
+      className="w-full max-w-md mx-auto px-3 sm:px-4 pt-2 sm:pt-5 pb-24 md:pb-8 flex flex-col gap-3.5 text-slate-100"
+      onFocusCapture={(e) => {
+        const tag = (e.target as HTMLElement)?.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA") setIsInputFocused(true);
+      }}
+      onBlurCapture={() => {
+        setTimeout(() => {
+          const activeTag = document.activeElement?.tagName;
+          if (activeTag !== "INPUT" && activeTag !== "TEXTAREA") {
+            setIsInputFocused(false);
+          }
+        }, 60);
+      }}
+    >
+      {/* ─── STICKY TOP IDENTITY & TWO-SCREEN SEGMENTED NAVIGATION ─────────── */}
+      <header className="sticky top-0 z-30 -mx-3 sm:-mx-4 px-3 sm:px-4 pt-1 pb-1.5 bg-slate-950/90 backdrop-blur-xl rounded-b-2xl">
+        <div className="bg-slate-900/95 border border-white/10 rounded-2xl p-3 sm:p-3.5 shadow-xl space-y-2.5">
+          <div className="flex items-center gap-3">
+            {/* Crisp Logo Badge */}
+            <div className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white border border-white/80 p-1 flex items-center justify-center shrink-0 shadow-md overflow-hidden">
+              {business.logoUrl && !logoError ? (
+                <img
+                  src={business.logoUrl}
+                  alt={business.name}
+                  className="w-full h-full object-contain"
+                  loading="eager"
+                  decoding="async"
+                  onError={() => setLogoError(true)}
+                />
+              ) : (
+                <span
+                  className="text-sm font-black"
+                  style={{ color: business.primaryColor || "#d97706" }}
+                >
+                  {business.name.slice(0, 2).toUpperCase()}
+                </span>
+              )}
+            </div>
+
+            {/* Name & Location — wraps cleanly for long business names */}
+            <div className="min-w-0 flex-1 text-left">
+              <div className="flex items-center gap-1.5">
+                <h1 className="text-sm sm:text-base font-extrabold text-white leading-snug break-words">
+                  {business.name}
+                </h1>
+                <CheckCircle2
+                  className="w-3.5 h-3.5 text-emerald-400 shrink-0"
+                  aria-label="Verified merchant"
+                />
+              </div>
+              {business.googleAddress ? (
+                <p className="text-[11px] text-slate-300 mt-0.5 leading-snug line-clamp-1 flex items-center gap-1">
+                  <MapPin className="w-3 h-3 text-amber-400 shrink-0" />
+                  <span className="truncate">{business.googleAddress}</span>
+                </p>
+              ) : business.category ? (
+                <p className="text-[11px] text-slate-300 mt-0.5 truncate">{business.category}</p>
+              ) : null}
+            </div>
           </div>
 
-          {/* Name & Location — wraps cleanly for long business names */}
-          <div className="min-w-0 flex-1 text-left">
-            <h1 className="text-base sm:text-lg font-extrabold text-white leading-snug break-words">
-              {business.name}
-            </h1>
-            {business.googleAddress ? (
-              <p className="text-[11px] text-slate-300 mt-0.5 leading-snug line-clamp-2 flex items-start gap-1">
-                <MapPin className="w-3 h-3 text-amber-400 shrink-0 mt-0.5" />
-                <span>{business.googleAddress}</span>
-              </p>
-            ) : business.category ? (
-              <p className="text-[11px] text-slate-300 mt-0.5 truncate">{business.category}</p>
-            ) : null}
-          </div>
-        </div>
+          {/* Balanced Two-Tab Switcher (Works seamlessly on Desktop & Mobile at any scroll position) */}
+          <nav
+            aria-label="Portal sections"
+            className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-slate-950/90 border border-slate-800"
+          >
+            <a
+              href={reviewHref}
+              aria-current={view === "review" ? "page" : undefined}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateView("review");
+              }}
+              className={`min-h-[40px] px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 ${
+                view === "review"
+                  ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800/70"
+              }`}
+            >
+              <Star className={`w-3.5 h-3.5 shrink-0 ${view === "review" ? "fill-slate-950" : "text-amber-400"}`} />
+              <span className="truncate">Review</span>
+              {rating > 0 && view === "hub" && (
+                <span className="ml-0.5 px-1.5 py-0.2 rounded-full bg-amber-400/20 text-amber-300 text-[10px]">
+                  {rating}★
+                </span>
+              )}
+            </a>
 
-        {/* Clean View Switcher Strip */}
-        <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between gap-2">
-          {view === "review" ? (
-            <>
-              <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                Verified page
-              </span>
-              <a
-                href={hubHref}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateView("hub");
-                }}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-300 hover:text-amber-200 px-2.5 py-1.5 rounded-lg bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-              >
-                <Store className="w-3.5 h-3.5 shrink-0" />
-                <span>{business.industryMeta.hubToggleLabel}</span>
-              </a>
-            </>
-          ) : (
-            <>
-              <span className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                Verified info &amp; links
-              </span>
-              <a
-                href={reviewHref}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateView("review");
-                }}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-200 hover:text-white px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
-              >
-                <ArrowLeft className="w-3.5 h-3.5 shrink-0" />
-                <span>Back to review</span>
-              </a>
-            </>
-          )}
+            <a
+              href={hubHref}
+              aria-current={view === "hub" ? "page" : undefined}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateView("hub");
+              }}
+              className={`min-h-[40px] px-2.5 py-1.5 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 ${
+                view === "hub"
+                  ? "bg-amber-400 text-slate-950 shadow-sm font-extrabold"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800/70"
+              }`}
+            >
+              <Store className="w-3.5 h-3.5 shrink-0" />
+              <span className="sm:hidden whitespace-nowrap">{business.industryMeta.hubCompactLabel}</span>
+              <span className="hidden sm:inline whitespace-nowrap">{business.industryMeta.hubToggleLabel}</span>
+            </a>
+          </nav>
         </div>
       </header>
 
@@ -1034,9 +1062,94 @@ export default function MerchantPortalShell({
       )}
 
       {/* Quiet Footer */}
-      <footer className="pt-2 pb-2 text-center">
+      <footer className="pt-2 pb-4 text-center">
         <p className="text-[11px] text-slate-500">Powered by ReviewSmart AI</p>
       </footer>
+
+      {/* ─── MOBILE THUMB-ZONE BOTTOM NAVIGATION BAR (Hides cleanly when typing) ─── */}
+      {!isInputFocused && !showUpiModal && !showRewardCard && (
+        <nav
+          aria-label="Quick portal navigation"
+          className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-white/10 shadow-[0_-8px_28px_rgba(0,0,0,0.55)]"
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        >
+          <div className="max-w-md mx-auto grid grid-cols-4 items-center gap-1 px-2 py-1.5">
+            <a
+              href={reviewHref}
+              aria-current={view === "review" ? "page" : undefined}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateView("review");
+              }}
+              className={`min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[11px] font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 ${
+                view === "review" ? "bg-amber-400/15 text-amber-300" : "text-slate-300 hover:text-white"
+              }`}
+            >
+              <Star className={`w-4 h-4 shrink-0 ${view === "review" ? "fill-amber-300 text-amber-300" : ""}`} />
+              <span>Review</span>
+            </a>
+
+            <a
+              href={hubHref}
+              aria-current={view === "hub" ? "page" : undefined}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateView("hub");
+              }}
+              className={`min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[11px] font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 ${
+                view === "hub" ? "bg-amber-400/15 text-amber-300" : "text-slate-300 hover:text-white"
+              }`}
+            >
+              <Store className="w-4 h-4 shrink-0" />
+              <span>{menuDestination ? "Menu" : "Info"}</span>
+            </a>
+
+            <a
+              href={directionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("DIRECTIONS_CLICK")}
+              className="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[11px] font-semibold text-slate-300 hover:text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"
+            >
+              <Navigation className="w-4 h-4 text-blue-400 shrink-0" />
+              <span>Directions</span>
+            </a>
+
+            {primaryCallPhone ? (
+              <a
+                href={primaryCallPhone.tel}
+                onClick={() => trackEvent("CALL_CLICK")}
+                className="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[11px] font-semibold text-slate-300 hover:text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+              >
+                <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>Call</span>
+              </a>
+            ) : waChatUrl ? (
+              <a
+                href={waChatUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("WHATSAPP_OUTBOUND_CLICK")}
+                className="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[11px] font-semibold text-slate-300 hover:text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+              >
+                <MessageCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>WhatsApp</span>
+              </a>
+            ) : (
+              <a
+                href={googleReviewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleGoogleOutboundClick}
+                className="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 px-1 py-1 text-[11px] font-semibold text-slate-300 hover:text-white transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+              >
+                <ExternalLink className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Google</span>
+              </a>
+            )}
+          </div>
+        </nav>
+      )}
     </div>
   );
 }

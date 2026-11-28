@@ -5,6 +5,7 @@ export interface IndustryPortalMeta {
   label: string;
   shortEntity: string;
   hubToggleLabel: string;
+  hubCompactLabel: string;
   placeholder: string;
   defaultTags: string[];
 }
@@ -228,6 +229,14 @@ export function getHubToggleLabel(industryType: string): string {
   if (industryType === "FITNESS_GYM") return "Gym info & contact";
   if (industryType === "HEALTHCARE_CLINIC") return "Clinic info & contact";
   return "Business info & links";
+}
+
+export function getHubCompactLabel(industryType: string): string {
+  if (industryType === "RESTAURANT_FOOD") return "Menu & info";
+  if (industryType === "SALON_BEAUTY") return "Salon & info";
+  if (industryType === "FITNESS_GYM") return "Gym & info";
+  if (industryType === "HEALTHCARE_CLINIC") return "Clinic & info";
+  return "Info & links";
 }
 
 export interface MenuDestination {

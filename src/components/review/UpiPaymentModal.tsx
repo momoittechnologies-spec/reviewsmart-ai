@@ -46,6 +46,14 @@ export default function UpiPaymentModal({
   );
 
   useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
+
+  useEffect(() => {
     if (!upiBundle?.qrPayload) return;
     QRCode.toDataURL(upiBundle.qrPayload, {
       margin: 1,
@@ -63,8 +71,12 @@ export default function UpiPaymentModal({
       role="dialog"
       aria-modal="true"
       aria-label={`UPI payment for ${businessName}`}
+      onClick={onClose}
     >
-      <div className="bg-slate-900 border border-emerald-500/40 rounded-3xl p-5 sm:p-6 max-w-sm w-full shadow-2xl relative space-y-4 text-center max-h-[92vh] overflow-y-auto">
+      <div
+        className="bg-slate-900 border border-emerald-500/40 rounded-3xl p-5 sm:p-6 max-w-sm w-full shadow-2xl relative space-y-4 text-center max-h-[92vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           type="button"
           onClick={onClose}
@@ -182,6 +194,14 @@ export default function UpiPaymentModal({
             PhonePe · GPay · Paytm
           </span>
         </div>
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="w-full min-h-[42px] py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+        >
+          Back to hub
+        </button>
       </div>
     </div>
   );
