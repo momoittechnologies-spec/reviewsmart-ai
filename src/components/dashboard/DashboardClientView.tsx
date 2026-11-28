@@ -359,10 +359,10 @@ export default function DashboardClientView({
           <p className="text-[11px] text-slate-400 mt-0.5">Kept off Google Maps</p>
         </div>
 
-        {/* Google Redirects */}
+        {/* Google Review Taps (Outbound clicks, not confirmed submissions) */}
         <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">Google Redirects</span>
+            <span className="text-xs font-semibold text-slate-500">Google Link Taps</span>
             <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
               <Star className="w-4 h-4" />
             </div>
@@ -372,7 +372,7 @@ export default function DashboardClientView({
               {metrics.googleRedirects}
             </span>
           </div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Sent directly to Google</p>
+          <p className="text-[11px] text-slate-400 mt-0.5">Outbound clicks to Google</p>
         </div>
       </div>
 

@@ -19,6 +19,8 @@ export async function POST(req: NextRequest) {
       tagChips: directTagChips,
       spokenLanguage,
       isVoiceInput,
+      rating,
+      strictGrounded = false,
     } = body;
 
     let businessName = directName || "Our Store";
@@ -66,6 +68,8 @@ export async function POST(req: NextRequest) {
       languageMode,
       spokenLanguage,
       isVoiceInput: Boolean(isVoiceInput),
+      rating: typeof rating === "number" ? rating : undefined,
+      strictGrounded: Boolean(strictGrounded),
     });
 
     // Log analytics in the background if business exists
@@ -74,8 +78,8 @@ export async function POST(req: NextRequest) {
         .create({
           data: {
             businessId: foundBusinessId,
-            eventType: "AI_GENERATED",
-            rating: 5,
+            eventType: strictGrounded ? "AI_PHRASE_HELP" : "AI_GENERATED",
+            rating: typeof rating === "number" ? rating : 5,
             deviceType: "mobile",
           },
         })

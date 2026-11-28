@@ -38,6 +38,8 @@ interface GenerateReviewParams {
   imageMimeType?: string;
   spokenLanguage?: string;
   isVoiceInput?: boolean;
+  rating?: number;
+  strictGrounded?: boolean;
 }
 
 export interface ReviewOption {
@@ -67,6 +69,8 @@ export async function generateAiReviews(params: GenerateReviewParams): Promise<R
     imageMimeType,
     spokenLanguage,
     isVoiceInput = false,
+    rating,
+    strictGrounded = false,
   } = params;
 
   // 1. Fetch recent review memory from database to enforce zero-repetition
@@ -207,6 +211,51 @@ This business is a family dining restaurant${/biryani/i.test(`${businessName} ${
 - ABSOLUTELY DO NOT use B2B, printing, or agency words like "throughout the process", "initial discussion", "final outcome", "final output", "crisp output", "turnaround", "did with our", "neat work", "neat execution", or "timely delivery".
 ` : "";
 
+    // Strict grounded mode: optional "Help me phrase this" preserving customer's exact rating & details
+    if (strictGrounded && (customNote?.trim() || (rating && rating <= 3))) {
+      const targetRating = rating || 5;
+      const safeNote = (englishSafeNote || customNote || "").trim();
+      const groundedPrompt = `Help a customer phrase their honest review cleanly for "${businessName}" (${industry.label}).
+Rating selected by customer: ${targetRating} out of 5 stars.
+${safeNote ? `Customer's own words: "${safeNote}"` : ""}
+${activeTags.length > 0 ? `Selected aspects: ${activeTags.join(", ")}` : ""}
+${languageInstruction}
+
+STRICT RULES:
+1. Preserve the customer's exact meaning and ${targetRating}/5 sentiment (if 1-3 stars, write politely/constructively without fake praise; if 4-5 stars, keep warmth proportional to what they actually wrote).
+2. NEVER invent dishes, items, staff interactions, prices, or claims that the customer did not write or select.
+3. Return ONLY a JSON array of 3 slightly varied phrasings:
+[
+  { "id": 1, "headline": "Clear & Natural", "text": "...", "tone": "grounded", "languageMix": "${languageMode}" },
+  { "id": 2, "headline": "Concise", "text": "...", "tone": "grounded", "languageMix": "${languageMode}" },
+  { "id": 3, "headline": "Detailed", "text": "...", "tone": "grounded", "languageMix": "${languageMode}" }
+]`;
+      for (const model of modelsToTry) {
+        try {
+          const client = new GoogleGenAI({ apiKey });
+          const response = await client.models.generateContent({
+            model,
+            contents: groundedPrompt,
+            config: { temperature: 0.45, responseMimeType: "application/json" },
+          });
+          const cleaned = (response.text || "").replace(/```json/gi, "").replace(/```/gi, "").trim();
+          const parsed = JSON.parse(cleaned);
+          if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.text) {
+            return parsed.slice(0, 3).map((item: any, idx: number) => ({
+              id: idx + 1,
+              headline: item.headline || "Suggested Phrasing",
+              text: String(item.text || "").trim(),
+              tone: "grounded",
+              writingStyle: "grounded_phrase_help",
+              languageMix: item.languageMix || languageMode,
+            }));
+          }
+        } catch {
+          // Try next model or deterministic grounded phrasing
+        }
+      }
+    }
+
 const prompt = `You are a real customer writing an authentic, human-sounding 5-star Google review on your phone.
 Business Name: "${businessName}"
 Industry: ${industry.label}
@@ -323,6 +372,38 @@ Output strictly a JSON array without markdown formatting:
         // Proceed to next model or synthesizer fallback
       }
     }
+  }
+
+  // Deterministic grounded phrasing when user asks for "Help me phrase this" with low rating or explicit words
+  if (strictGrounded && (customNote?.trim() || (rating && rating <= 3))) {
+    const safeNote = (englishSafeNote || customNote || "").trim();
+    const effectiveRating = rating || 5;
+    const ended = safeNote ? (/[.!?]$/.test(safeNote) ? safeNote : `${safeNote}.`) : "";
+    const tagSummary = selectedTags.map((t) => t.toLowerCase()).join(", ");
+    let baseText = "";
+    if (ended) {
+      baseText =
+        effectiveRating >= 4
+          ? `Visited ${businessName}. ${ended}`
+          : effectiveRating === 3
+          ? `Shared feedback about ${businessName}: ${ended}`
+          : `My experience at ${businessName}: ${ended}`;
+    } else {
+      baseText =
+        effectiveRating >= 4
+          ? `Visited ${businessName} — appreciated the ${tagSummary}.`
+          : `Feedback for ${businessName} regarding ${tagSummary}.`;
+    }
+    return [
+      {
+        id: 1,
+        headline: "Clear & Natural",
+        text: baseText,
+        tone: "grounded",
+        writingStyle: "grounded_phrase_help",
+        languageMix: languageMode,
+      },
+    ];
   }
 
   // 3. High-entropy, Domain-Fenced Combinatorial Synthesizer Fallback

@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import ReviewExperience from "@/components/review/ReviewExperience";
-import SmartHubExperience from "@/components/review/SmartHubExperience";
+import MerchantPortalShell, { PortalViewMode } from "@/components/review/MerchantPortalShell";
 import type { Metadata } from "next";
 import { MessageCircle, Sparkles, Clock } from "lucide-react";
 import { getAppUrl, getCleanLogoUrl, getAbsoluteLogoUrl } from "@/lib/utils";
+import { detectIndustry } from "@/lib/industry";
+import { getHubToggleLabel, getShortEntityLabel } from "@/lib/portal-helpers";
 
 // Cache dynamic business review portal with 60s ISR for instant mobile tap performance
 export const revalidate = 60;
@@ -56,7 +57,7 @@ export default async function PublicReviewPage({
   searchParams,
 }: {
   params: { slug: string };
-  searchParams?: { staff?: string; cust?: string; service?: string; demo?: string };
+  searchParams?: { staff?: string; cust?: string; service?: string; demo?: string; view?: string };
 }) {
   const business = await prisma.business.findUnique({
     where: { slug: params.slug },
@@ -109,11 +110,23 @@ export default async function PublicReviewPage({
     notFound();
   }
 
+  const industry = detectIndustry(business.name, business.category || "", business.tagline || "");
+
   // Sanitize logoUrl to prevent heavy Base64 strings from entering HTML & RSC payloads
   const sanitizedBusiness = {
     ...business,
     logoUrl: getCleanLogoUrl(business),
+    industryMeta: {
+      type: industry.type,
+      label: industry.label,
+      shortEntity: getShortEntityLabel(industry.type),
+      hubToggleLabel: getHubToggleLabel(industry.type),
+      placeholder: industry.placeholder,
+      defaultTags: industry.tags,
+    },
   };
+
+  const initialView: PortalViewMode = searchParams?.view === "hub" ? "hub" : "review";
 
   const now = new Date();
   const isDemoActive =
@@ -202,25 +215,15 @@ export default async function PublicReviewPage({
         </div>
       )}
 
-      {/* Review card or Smart Hub — blurred when unpaid and demo not active */}
+      {/* Focused Review / Compact Hub Portal Shell */}
       <div className={showWatermark ? "w-full max-w-full blur-sm brightness-50 pointer-events-none select-none overflow-x-hidden" : "w-full max-w-full overflow-x-hidden"}>
-        {business.qrMode === "SMART_HUB" ? (
-          <SmartHubExperience
-            business={sanitizedBusiness}
-            staff={searchParams?.staff || null}
-            customerName={searchParams?.cust || null}
-            serviceName={searchParams?.service || null}
-            isDemo={isDemoParam}
-          />
-        ) : (
-          <ReviewExperience
-            business={sanitizedBusiness}
-            staff={searchParams?.staff || null}
-            customerName={searchParams?.cust || null}
-            serviceName={searchParams?.service || null}
-            isDemo={isDemoParam}
-          />
-        )}
+        <MerchantPortalShell
+          business={sanitizedBusiness}
+          initialView={initialView}
+          customerName={searchParams?.cust || null}
+          serviceName={searchParams?.service || null}
+          isDemo={isDemoParam}
+        />
       </div>
 
       {/* Payment / Expiry Watermark Overlay */}

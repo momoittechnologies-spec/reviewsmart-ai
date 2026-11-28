@@ -112,11 +112,23 @@ export default async function DashboardOverviewPage({
   const reviewUrl = `${appUrl}/r/${business.slug}`;
   const qrDataUrl = await generateQrDataUrl(reviewUrl);
 
-  // Compute metrics from analytics events
-  const totalViews = business.analytics?.filter((a: any) => a.eventType === "VIEW").length || 0;
-  const aiGenerations = business.analytics?.filter((a: any) => a.eventType === "AI_GENERATE").length || 0;
-  const shieldSaves = business.analytics?.filter((a: any) => a.eventType === "SHIELD_INTERCEPT").length || 0;
-  const googleRedirects = business.analytics?.filter((a: any) => a.eventType === "GOOGLE_REDIRECT").length || 0;
+  // Compute metrics from analytics events (distinguishing outbound clicks from submitted feedback)
+  const totalViews =
+    business.analytics?.filter((a: any) =>
+      ["PAGE_VIEW", "REVIEW_VIEW", "HUB_VIEW", "VIEW"].includes(a.eventType)
+    ).length || 0;
+  const aiGenerations =
+    business.analytics?.filter((a: any) =>
+      ["AI_PHRASE_HELP", "AI_GENERATED", "AI_GENERATE"].includes(a.eventType)
+    ).length || 0;
+  const shieldSaves =
+    business.analytics?.filter((a: any) =>
+      ["FEEDBACK_SUBMITTED", "SHIELD_INTERCEPT"].includes(a.eventType)
+    ).length || 0;
+  const googleRedirects =
+    business.analytics?.filter((a: any) =>
+      ["GOOGLE_OUTBOUND_CLICK", "GOOGLE_REDIRECT"].includes(a.eventType)
+    ).length || 0;
 
   const merchantOwnerName = business.user?.name || user.name || "Store Owner";
   const merchantPhone = business.user?.phone || user.phone || business.phone || "Not set";
